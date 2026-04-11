@@ -103,11 +103,12 @@ const navLinks = [
     var menuIcon = document.getElementById('menu-icon');
     var closeIcon = document.getElementById('close-icon');
 
-    // Scroll morph
+    // Scroll morph — higher threshold on mobile so the full name is visible longer
     if (header) {
       var scrolled = false;
+      var threshold = window.innerWidth < 768 ? 150 : 60;
       function onScroll() {
-        var past = window.scrollY > 60;
+        var past = window.scrollY > threshold;
         if (past !== scrolled) {
           scrolled = past;
           header.classList.toggle('header-scrolled', past);

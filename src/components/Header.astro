@@ -116,15 +116,14 @@ const navLinks = [
     onScroll();
   }
 
-  // Mobile menu toggle
+  // Mobile menu toggle — uses inline styles to avoid CSS specificity issues
   if (menuBtn && mobileMenu && menuIcon && closeIcon) {
     let open = false;
     menuBtn.addEventListener('click', () => {
       open = !open;
-      mobileMenu.classList.toggle('mobile-menu-closed', !open);
-      mobileMenu.classList.toggle('mobile-menu-open', open);
-      menuIcon.classList.toggle('mobile-menu-closed', open);
-      closeIcon.classList.toggle('mobile-menu-closed', !open);
+      mobileMenu.style.display = open ? 'block' : 'none';
+      menuIcon.style.display = open ? 'none' : 'block';
+      closeIcon.style.display = open ? 'block' : 'none';
       menuBtn.setAttribute('aria-expanded', String(open));
     });
   }

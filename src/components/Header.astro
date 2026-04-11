@@ -57,7 +57,7 @@ const navLinks = [
       <svg id="menu-icon" class="w-5 h-5 text-text-2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
       </svg>
-      <svg id="close-icon" class="w-5 h-5 text-text-2 pointer-events-none mobile-menu-closed" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+      <svg id="close-icon" class="w-5 h-5 text-text-2 pointer-events-none" style="display:none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
@@ -94,37 +94,37 @@ const navLinks = [
   </nav>
 </header>
 
-<!-- Scroll-triggered brand morph + mobile menu toggle -->
-<script>
-  const header = document.getElementById('site-header');
-  const menuBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
+<!-- Scroll morph + mobile menu — is:inline so Astro doesn't bundle/deduplicate -->
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function() {
+    var header = document.getElementById('site-header');
+    var menuBtn = document.getElementById('mobile-menu-btn');
+    var mobileMenu = document.getElementById('mobile-menu');
+    var menuIcon = document.getElementById('menu-icon');
+    var closeIcon = document.getElementById('close-icon');
 
-  // Scroll morph
-  if (header) {
-    let scrolled = false;
-    const onScroll = () => {
-      const past = window.scrollY > 60;
-      if (past !== scrolled) {
-        scrolled = past;
-        header.classList.toggle('header-scrolled', past);
+    // Scroll morph
+    if (header) {
+      var scrolled = false;
+      function onScroll() {
+        var past = window.scrollY > 60;
+        if (past !== scrolled) {
+          scrolled = past;
+          header.classList.toggle('header-scrolled', past);
+        }
       }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
 
-  // Mobile menu toggle — uses inline styles to avoid CSS specificity issues
-  if (menuBtn && mobileMenu && menuIcon && closeIcon) {
-    let open = false;
-    menuBtn.addEventListener('click', () => {
-      open = !open;
-      mobileMenu.style.display = open ? 'block' : 'none';
-      menuIcon.style.display = open ? 'none' : 'block';
-      closeIcon.style.display = open ? 'block' : 'none';
-      menuBtn.setAttribute('aria-expanded', String(open));
-    });
-  }
+    // Mobile menu toggle
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', function() {
+        var open = mobileMenu.style.display === 'block';
+        mobileMenu.style.display = open ? 'none' : 'block';
+        if (menuIcon) menuIcon.style.display = open ? 'block' : 'none';
+        if (closeIcon) closeIcon.style.display = open ? 'block' : 'none';
+      });
+    }
+  });
 </script>

@@ -62,6 +62,12 @@ a {
   line-height: 1;
 }
 
+@media (max-width: 640px) {
+  .brand-text {
+    font-size: 36px;
+  }
+}
+
 /* Inline-block gap between DAVID and LUKY — collapses on scroll */
 .brand-gap {
   display: inline-block;

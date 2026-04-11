@@ -29,13 +29,13 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="David Luky" />
-    <meta property="og:image" content={new URL("/og-image.svg", Astro.site)} />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.site)} />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL("/og-image.svg", Astro.site)} />
+    <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

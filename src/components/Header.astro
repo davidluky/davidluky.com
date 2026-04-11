@@ -7,9 +7,8 @@ const { currentPath = "" } = Astro.props;
 
 const navLinks = [
   { href: "/projects", label: "Projects", i18n: "nav_projects" },
-  { href: "/temp", label: "Temp", i18n: "nav_temp" },
   { href: "/gaming", label: "Gaming", i18n: "nav_gaming" },
-  { href: "/#about", label: "About", i18n: "nav_about" },
+  { href: "/about", label: "About", i18n: "nav_about" },
 ];
 ---
 
@@ -24,7 +23,7 @@ const navLinks = [
     </a>
 
     <!-- Navigation -->
-    <nav class="flex items-center gap-8 max-sm:gap-3">
+    <nav class="flex items-center gap-8 max-md:gap-4 max-sm:gap-2">
       {navLinks.map(({ href, label, i18n }) => (
         <a
           href={href}
@@ -42,7 +41,7 @@ const navLinks = [
         target="_blank"
         rel="noopener noreferrer"
         data-i18n="nav_play"
-        class="rounded-md bg-accent px-4 py-2 text-[13px] font-medium text-bg no-underline transition-opacity hover:opacity-90"
+        class="rounded-md bg-accent px-4 py-2 text-[13px] font-medium text-bg no-underline transition-opacity hover:opacity-90 max-sm:px-2.5 max-sm:py-1.5 max-sm:text-[11px]"
       >
         Play The Room
       </a>

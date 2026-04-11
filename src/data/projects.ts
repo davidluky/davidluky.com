@@ -1,8 +1,10 @@
 export interface Project {
   name: string;
   description: string;
+  descriptionPt: string;
   tech: string[];
   tag: string;
+  tagPt: string;
   link: string | null;
 }
 
@@ -11,96 +13,132 @@ export const projects: Project[] = [
     name: "The Room",
     description:
       "Multiplayer social platform with 13 games, a full turn-based RPG (7 zones, endgame boss), real-time chat, 239 achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.",
+    descriptionPt:
+      "Plataforma social multiplayer com 13 jogos, um RPG por turnos completo (7 zonas, boss endgame), chat em tempo real, 239 conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.",
     tech: ["C++17", "Firebase", "libcurl", "Windows API"],
     tag: "Game Platform",
+    tagPt: "Plataforma de Jogos",
     link: null,
   },
   {
     name: "The Room — Web Client",
     description:
       "Full React web companion to The Room, sharing the same Firebase backend. 40 routes, 3 visual themes (Terminal, Hybrid, Modern), bilingual (EN/PT-BR), PWA-ready.",
+    descriptionPt:
+      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. 40 rotas, 3 temas visuais (Terminal, Híbrido, Moderno), bilíngue (EN/PT-BR), pronto para PWA.",
     tech: ["React 19", "TypeScript", "Tailwind", "Firebase", "Vite"],
     tag: "Web App",
+    tagPt: "App Web",
     link: "https://play.davidluky.com",
   },
   {
     name: "Tibia Services",
     description:
       "Marketplace for Tibia game services — hunting, quests, bestiary, PK. Booking system with in-chat, character verification via TibiaData API, reviews, dispute resolution, and featured listings.",
+    descriptionPt:
+      "Marketplace para serviços de Tibia — hunts, quests, bestiário, PK. Sistema de reservas com chat, verificação de personagem via TibiaData API, avaliações, resolução de disputas e destaques.",
     tech: ["Next.js 14", "Supabase", "TypeScript", "Tailwind"],
     tag: "Marketplace",
+    tagPt: "Marketplace",
     link: "https://tibia-services.vercel.app",
   },
   {
     name: "Game Library",
     description:
       "Desktop app that aggregates game libraries from Steam, Xbox, Epic, GOG, PlayStation, Nintendo, Game Pass, and more into a single unified view. FTS5 search, game deduplication, encrypted tokens, 3 themes.",
+    descriptionPt:
+      "App desktop que agrega bibliotecas de jogos de Steam, Xbox, Epic, GOG, PlayStation, Nintendo, Game Pass e mais em uma única visualização. Busca FTS5, deduplicação de jogos, tokens criptografados, 3 temas.",
     tech: ["Electron", "React 19", "SQLite", "Zustand", "Vite"],
     tag: "Desktop App",
+    tagPt: "App Desktop",
     link: null,
   },
   {
     name: "Gym Check-in Bot",
     description:
       "WhatsApp bot that tracks gym training via message reactions in a group chat. Posts daily, weekly, and monthly reports in PT-BR. Auto-detects members and reconciles check-ins.",
+    descriptionPt:
+      "Bot de WhatsApp que rastreia treinos na academia via reações em grupo. Publica relatórios diários, semanais e mensais em PT-BR. Detecta membros automaticamente e reconcilia check-ins.",
     tech: ["Node.js", "whatsapp-web.js", "SQLite", "PM2"],
     tag: "Bot",
+    tagPt: "Bot",
     link: null,
   },
   {
     name: "WhatsApp Exporter",
     description:
       "Desktop app for exporting WhatsApp conversations to HTML/PDF with full media support. QR-based login, optional ZIP backup merge, rich styled output with lightbox and reactions.",
+    descriptionPt:
+      "App desktop para exportar conversas do WhatsApp em HTML/PDF com suporte completo de mídia. Login por QR code, merge opcional de backup ZIP, saída estilizada com lightbox e reações.",
     tech: ["Electron", "React 19", "Puppeteer", "Vite"],
     tag: "Desktop App",
+    tagPt: "App Desktop",
     link: null,
   },
   {
     name: "Local IA",
     description:
       "Personal AI workstation for running open-weight models locally via Ollama with intelligent cloud escalation. Claude Code-like CLI, custom MCP servers, skill library, benchmark framework, and cost tracking.",
+    descriptionPt:
+      "Estação de trabalho pessoal de IA para rodar modelos open-weight localmente via Ollama com escalação inteligente para nuvem. CLI estilo Claude Code, servidores MCP customizados, biblioteca de skills, framework de benchmark e rastreamento de custos.",
     tech: ["TypeScript", "Ollama", "OpenClaude", "MCP"],
     tag: "AI Tooling",
+    tagPt: "Ferramentas de IA",
     link: null,
   },
   {
     name: "GFWL Achievement Unlocker",
     description:
       "Proxy DLL that hijacks xlive.dll to unlock Games for Windows Live achievements in BioShock 2 and other GFWL titles. Watcher thread polls a file for achievement IDs to fire.",
+    descriptionPt:
+      "DLL proxy que intercepta xlive.dll para desbloquear conquistas do Games for Windows Live no BioShock 2 e outros títulos GFWL. Thread watcher que monitora um arquivo para disparar IDs de conquistas.",
     tech: ["C", "Windows API", "Python", "MinGW"],
     tag: "Reverse Engineering",
+    tagPt: "Engenharia Reversa",
     link: null,
   },
   {
     name: "Frank's Stories",
     description:
       "Family storytelling platform with decade-based timeline, DOCX/PDF upload, auto-image extraction, password-gated reader access, and admin dashboard.",
+    descriptionPt:
+      "Plataforma de histórias familiares com timeline por década, upload de DOCX/PDF, extração automática de imagens, acesso de leitura protegido por senha e painel admin.",
     tech: ["Next.js 14", "SQLite", "Tailwind", "mammoth.js"],
     tag: "Web App",
+    tagPt: "App Web",
     link: null,
   },
   {
     name: "Games Downloader",
     description:
       "Automated preservation system for retro game collections — 200 Xbox 360 titles (1.66 TB) and 1,199 Nintendo 3DS games (347 GB) from archive.org. Batch downloads, ZIP integrity checks, duplicate tracking.",
+    descriptionPt:
+      "Sistema automatizado de preservação de coleções retro — 200 títulos de Xbox 360 (1,66 TB) e 1.199 jogos de Nintendo 3DS (347 GB) do archive.org. Downloads em lote, verificação de integridade ZIP, rastreamento de duplicatas.",
     tech: ["Bash", "Python", "Selenium", "curl"],
     tag: "Automation",
+    tagPt: "Automação",
     link: null,
   },
   {
     name: "Midjourney Relay",
     description:
       "Discord bot that multiplexes a single Midjourney subscription across multiple users. Relays /imagine prompts and returns generated images to a shared channel.",
+    descriptionPt:
+      "Bot do Discord que multiplexa uma única assinatura do Midjourney entre vários usuários. Retransmite prompts /imagine e retorna imagens geradas em um canal compartilhado.",
     tech: ["Python", "discord.py"],
     tag: "Bot",
+    tagPt: "Bot",
     link: null,
   },
   {
     name: "davidluky.com",
     description:
       "This website. Personal hub for projects, gaming profiles, and bio. Static site with blackletter brand morph, bilingual toggle, and zero JS besides scroll animation.",
+    descriptionPt:
+      "Este site. Hub pessoal para projetos, perfis de jogos e bio. Site estático com morph blackletter, alternância bilíngue e zero JS além da animação de scroll.",
     tech: ["Astro", "Tailwind", "TypeScript", "Cloudflare"],
     tag: "Website",
+    tagPt: "Website",
     link: "/",
   },
 ];

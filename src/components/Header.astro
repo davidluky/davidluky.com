@@ -66,7 +66,7 @@ const navLinks = [
   <!-- Mobile menu panel -->
   <nav
     id="mobile-menu"
-    class="hidden max-md:hidden border-t border-border/20 bg-bg/95 backdrop-blur-xl"
+    class="mobile-menu-closed border-t border-border/20 bg-bg/95 backdrop-blur-xl"
   >
     <div class="mx-auto max-w-[1280px] px-6 py-5 flex flex-col gap-4">
       {navLinks.map(({ href, label, i18n }) => (
@@ -121,7 +121,8 @@ const navLinks = [
     let open = false;
     menuBtn.addEventListener('click', () => {
       open = !open;
-      mobileMenu.classList.toggle('max-md:hidden', !open);
+      mobileMenu.classList.toggle('mobile-menu-closed', !open);
+      mobileMenu.classList.toggle('mobile-menu-open', open);
       menuIcon.classList.toggle('hidden', open);
       closeIcon.classList.toggle('hidden', !open);
       menuBtn.setAttribute('aria-expanded', String(open));

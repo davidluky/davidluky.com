@@ -124,6 +124,15 @@ a {
   letter-spacing: 0.08em;
 }
 
+/* ── Mobile menu ── */
+.mobile-menu-closed {
+  display: none;
+}
+
+.mobile-menu-open {
+  display: block;
+}
+
 /* ── Animations ── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }

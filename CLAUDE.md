@@ -48,7 +48,7 @@
 ## Related Sites
 - **play.davidluky.com** — The Room web client (Cloudflare Workers)
 - **tibia.davidluky.com** — Tibia Services marketplace (Vercel, CNAME)
-- **tibia-services.vercel.app** — Tibia Services direct URL
+- **tibia-services.vercel.app** — Tibia Services direct URL (fallback)
 
 ## Documentation
 | Doc | Purpose |

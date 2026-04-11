@@ -40,7 +40,7 @@ export const projects: Project[] = [
     tech: ["Next.js 14", "Supabase", "TypeScript", "Tailwind"],
     tag: "Marketplace",
     tagPt: "Marketplace",
-    link: "https://tibia-services.vercel.app",
+    link: "https://tibia.davidluky.com",
   },
   {
     name: "Game Library",

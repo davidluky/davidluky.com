@@ -1,49 +1,49 @@
 # Session Handoff — 2026-04-11
 
 ## What was done
-- **Gaming page rebuilt** with real data from Steam profile API, TibiaData API, and game-library seed DB
-  - Overview section: 6 cross-platform stat cards (1,337+ games, 7,600+ hours, 1,658 achievements, 4 platforms, 16 years, Lvl 627 Tibia)
-  - 4 platform cards (Steam, Xbox, Tibia, Epic Games) with per-platform stats and profile links
-  - Recently Played list from Steam recent activity
-  - Library Highlights: 12 tracked games from game-library app with playtime
-  - Hardware section (Xbox Series X, Nintendo Switch, PC)
-- **Gaming handles populated**: Steam "David Luky", Xbox "David Luky", Epic "David Luky", Tibia "David Luky Pobre"
-- **Header.astro**: fixed duplicate `</a>` tag (line 25)
-- **OG image**: created `public/og-image.svg`, updated Base.astro meta tags to reference it
-- **Removed 3 unused components**: StatsBar.astro, BodySection.astro, SectionLink.astro
-- **Temp page**: gaming stats moved to /gaming, temp now only holds projects shortlist + about section
-- **Build**: 0 errors, 0 warnings, 0 hints. 5 pages, 654ms.
+- **Gaming page rebuilt** with real data from Steam API, TibiaData API, and game-library DB
+  - Overview: 6 stat cards, 4 platform cards, recently played, library highlights, hardware
+  - PT-BR translations added (reads from homepage language toggle via localStorage)
+- **Projects page expanded** to all 12 projects from the Programas folder
+  - Shared data source (`src/data/projects.ts`) — homepage + projects page auto-sync
+  - Color-coded category tags, stats cards computed dynamically
+- **Tibia Services deployed** to Vercel at tibia-services.vercel.app
+  - Fixed Resend crash (lazy-init), created GitHub repo, scrubbed leaked Supabase keys from git history, rotated service_role key
+- **GitHub repo created** for davidluky.com at github.com/davidluky/davidluky.com (public)
+- **Header.astro** fixed duplicate `</a>` tag
+- **OG image** created as `public/og-image.svg`, meta tags updated
+- **Removed 3 unused components** (StatsBar, BodySection, SectionLink)
+- **Footer** links to Tibia Services (live) and The Room Web
+
+Commits: 39c342b (main feature commit) + c97fbbc (i18n)
 
 ## What's in progress
-- Nothing mid-flight. All changes are uncommitted but complete.
+- Nothing mid-flight. All changes committed and pushed.
 
 ## What's next (priority order)
-1. **Commit current changes** — 7 files changed, clean build
-2. **Create GitHub repo** — `davidluky.com`, push main branch
-3. **Cloudflare deployment** — connect GitHub repo via Cloudflare Builds, point `davidluky.com` domain
-4. **OG image PNG** — SVG works for some platforms but Twitter/Discord/Slack need PNG. Generate a raster version.
-5. **Temp page decision** — projects shortlist and about section need permanent homes (homepage sections? dedicated /about page?)
-6. **Homepage polish** — the landing page is functional but minimal (hero + intro + stats). Could add more sections.
-7. **i18n for /gaming** — gaming page has no PT-BR translations yet (homepage has full i18n)
-8. **Mobile responsive audit** — haven't tested mobile layouts
+1. **Deploy davidluky.com to Cloudflare** — `npx wrangler login` then `npx wrangler deploy`. Domain routing in Cloudflare dashboard.
+2. **OG image PNG** — SVG works for some platforms but Twitter/Discord need PNG. Generate a raster version.
+3. **Temp page decision** — still holds projects shortlist + about section. Move to homepage or dedicated /about page.
+4. **Mobile responsive audit** — not tested on mobile yet
+5. **Projects page i18n** — no PT-BR translations yet
+6. **Tibia Services custom domain** — could be tibia.davidluky.com or similar
 
 ## Current state
 - Builds clean: `npm run build` + `npm run check` pass
-- Preview: `npm run preview` serves at localhost:4321
-- No git remote yet — 7 commits on local main
-- Cloudflare domain not pointed here yet
-- `wrangler.toml` configured and ready for `npx wrangler deploy`
+- GitHub: github.com/davidluky/davidluky.com (public, 9 commits on main)
+- Cloudflare: wrangler.toml configured, not yet deployed (needs `wrangler login`)
+- Tibia Services: live at tibia-services.vercel.app, GitHub repo public (secrets scrubbed)
 
 ## Decisions made
-- PlayStation removed from gaming page (David doesn't use PSN)
-- Epic Games added as 4th platform
-- Gaming stats live on /gaming (not homepage or temp)
-- Game library data used as "Library Highlights" section with attribution link
-- Tibia character "David Luky Pobre" — Level 627 Elder Druid on Jadebra, guild Jadebraland Encore
-- Steam profile: 1,337 games, Level 30, 16 years, Dota 2 (6,338h), Terraria (1,238h)
+- PlayStation removed, Epic Games added as 4th platform
+- Gaming stats live on /gaming (not homepage)
+- Shared projects data in `src/data/projects.ts` for single source of truth
+- Tibia Services repo made public after scrubbing Supabase keys from git history
+- New Supabase service_role key rotated (name: `vercel`)
 
-## Real gaming handles
-- Steam: `David Luky` (steamcommunity.com/id/DavidLuky)
-- Xbox: `David Luky`
-- Epic Games: `David Luky`
-- Tibia: `David Luky Pobre` (Jadebra server)
+## Key URLs
+- davidluky.com site repo: github.com/davidluky/davidluky.com
+- Tibia Services: tibia-services.vercel.app (repo: github.com/davidluky/tibia-services)
+- The Room Web: play.davidluky.com
+- Steam: steamcommunity.com/id/DavidLuky
+- Tibia: David Luky Pobre (Jadebra)

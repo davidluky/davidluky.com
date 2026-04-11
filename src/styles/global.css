@@ -179,5 +179,10 @@ a {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  /* Brand morph is exempt — it's a small, user-triggered text transition */
+  .brand-mid, .brand-gap, .brand-keep, .brand-text,
+  .brand-mark .brand-mid, .brand-mark .brand-gap, .brand-mark .brand-keep {
+    transition-duration: revert !important;
+  }
   html { scroll-behavior: auto; }
 }

@@ -35,13 +35,14 @@ const columns = [
       <div class="flex gap-16 max-md:gap-8">
         {columns.map(({ title, links }) => (
           <div>
-            <h5 class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">
+            <div class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">
               {title}
-            </h5>
+            </div>
             {links.map(({ label, href }) => (
               <a
                 href={href}
                 class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text"
+                {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
                 {label}
               </a>
@@ -58,6 +59,8 @@ const columns = [
       </span>
       <a
         href="https://github.com/davidluky"
+        target="_blank"
+        rel="noopener noreferrer"
         class="text-[13px] text-text-3 no-underline transition-colors hover:text-text-2"
       >
         GitHub

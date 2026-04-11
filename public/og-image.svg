@@ -1,0 +1,11 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0a0a09"/>
+  <!-- Subtle gold accent line -->
+  <rect x="80" y="280" width="60" height="3" rx="1.5" fill="#c4a35a"/>
+  <!-- Name -->
+  <text x="80" y="350" fill="#faf8f1" font-family="Inter, system-ui, sans-serif" font-size="72" font-weight="300" letter-spacing="-2">David Luky</text>
+  <!-- Tagline -->
+  <text x="80" y="405" fill="#b0a998" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="400">Developer. Gamer. Builder of things.</text>
+  <!-- URL -->
+  <text x="80" y="560" fill="#6a6458" font-family="JetBrains Mono, monospace" font-size="18" font-weight="400">davidluky.com</text>
+</svg>

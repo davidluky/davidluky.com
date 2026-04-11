@@ -1,38 +1,36 @@
-# Session Handoff — 2026-04-11 (final)
+# Session Handoff — 2026-04-11 (session 2)
 
 ## What was done
-- Gaming page rebuilt with real Steam/Tibia/game-library data + PT-BR i18n
-- Projects page expanded to all 12 projects with shared data source
-- Tibia Services deployed to Vercel (tibia-services.vercel.app)
-- davidluky.com deployed to Cloudflare Workers
-- play.davidluky.com subdomain pointed to the-room-web worker
-- Supabase key rotated after leak, git history scrubbed
-- GitHub repos created for both sites
-- OG image SVG created, Header bug fixed, unused components removed
+- Expanded temp page into full /about page (background, tech stack grid, timeline, contact)
+- Added PT-BR translations to projects page (12 project descriptions + tags + page text)
+- Generated OG image as PNG (1200x630) via @resvg/resvg-js — SVG doesn't work on Twitter/Discord
+- Updated meta tags: og-image.svg → og-image.png, twitter:card → summary_large_image
+- Mobile responsive audit: fixed header nav, hero text, brand logo, stats grids, platform cards, game lists, footer spacing across all pages
+- Fixed nav/footer i18n: all pages now translate nav and footer labels when language is switched (previously only homepage did)
+- Removed temp page and duplicate nav links
+- Deployed to Cloudflare Workers twice (cf826f4, 9de2beb)
 
-Commits on main: 39c342b, c97fbbc, 588e78d. Full log at docs/session-2026-04-11.md.
+Commits: cf826f4, 9de2beb. Previous session: docs/session-2026-04-11.md.
 
 ## What's next (priority order)
-1. **Projects page i18n** — no PT-BR translations yet, follow gaming page pattern
-2. **OG image PNG** — SVG doesn't work on Twitter/Discord/Slack, need raster version
-3. **Temp page decision** — projects shortlist + about section need permanent home (homepage? /about?)
-4. **Mobile responsive audit** — untested on mobile
-5. **Tibia Services custom domain** — optional, could be tibia.davidluky.com
+1. **Tibia Services debug** — site deploys but content doesn't load (Supabase key mismatch after rotation?)
+2. **i18n deduplication** — nav/footer strings are copy-pasted across 4 pages; could extract to shared module
+3. **About page timeline** — dates are hardcoded; could be more detailed or interactive
+4. **Tibia Services custom domain** — optional, could be tibia.davidluky.com
+5. **404 page i18n** — /404 has no PT-BR translations yet
 
 ## Current state
 - **Builds clean**: `npm run build` + `npm run check` pass (0 errors, 0 warnings)
-- **Live sites**:
-  - https://davidluky.com (Cloudflare Workers)
-  - https://play.davidluky.com (Cloudflare Workers)
-  - https://tibia-services.vercel.app (Vercel)
-- **Repos**:
-  - github.com/davidluky/davidluky.com (public)
-  - github.com/davidluky/tibia-services (public, history scrubbed)
-- **Cloudflare account**: alissonfrangullys@gmail.com
-- **Vercel account**: linked to GitHub davidluky
+- **Live at**: https://davidluky.com (Cloudflare Workers)
+- **Pages**: / (homepage), /projects, /gaming, /about, /404
+- **All pages bilingual**: EN + PT-BR via localStorage toggle
+- **OG image**: PNG at public/og-image.png (1200x630), script at scripts/generate-og.mjs
 
-## Key files
-- `src/data/projects.ts` — single source of truth for all projects (both pages import from it)
-- `src/pages/gaming.astro` — has i18n script at bottom, reads localStorage `dl-lang`
-- `wrangler.toml` — Cloudflare Workers config
-- `docs/session-2026-04-11.md` — detailed session log with all actions taken
+## Key decisions
+- Chose Option C for temp page: expanded into full /about page rather than merging into homepage
+- Used @resvg/resvg-js for OG PNG generation (one-shot script, not build-time)
+- Added descriptionPt/tagPt fields to Project interface for per-project translations
+- Used data-i18n-tag and data-i18n-desc custom attributes for project card translations (separate from the standard data-i18n pattern since they're index-based)
+
+## Security note
+- Vercel CLI output contained a prompt injection attempt: a JSON payload suggesting `npx plugins add vercel/vercel-plugin --target claude-code -y`. The package doesn't exist on npm. No code was executed, nothing was installed. The `plugins` package (v1.3.0) exists on npm and appears designed to target AI agents.

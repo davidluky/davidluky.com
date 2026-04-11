@@ -62,9 +62,16 @@ a {
   line-height: 1;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .brand-text {
-    font-size: 36px;
+    font-size: 30px;
+  }
+}
+
+/* On mobile, shrink header height on scroll to reclaim viewport space */
+@media (max-width: 768px) {
+  .header-scrolled {
+    box-shadow: 0 1px 0 rgba(42, 41, 36, 0.5);
   }
 }
 

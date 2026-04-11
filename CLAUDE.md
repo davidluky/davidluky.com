@@ -58,6 +58,7 @@
 | `docs/tech-notes.md` | Implementation details, patterns, gotchas |
 | `docs/developer-guide.md` | Project setup, structure, adding pages/projects |
 | `docs/deployment-guide.md` | Build, deploy, DNS, troubleshooting |
+| `docs/flight-recorder.md` | Failed approaches, gotchas, hard-won lessons |
 | `docs/SESSION-HANDOFF.md` | Latest session state for AI continuity |
 
 ## Documentation Maintenance
@@ -69,4 +70,5 @@
 | Implementation pattern | `docs/tech-notes.md` |
 | Version/release | `CHANGELOG.md` |
 | Deployment change | `docs/deployment-guide.md` |
+| Failed approach or gotcha | `docs/flight-recorder.md` |
 | New i18n pattern | `docs/developer-guide.md` (i18n section) |

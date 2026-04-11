@@ -125,6 +125,23 @@ a {
 }
 
 /* ── Mobile menu ── */
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: -0.5rem;
+  cursor: pointer;
+  background: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
 .mobile-menu-closed {
   display: none;
 }

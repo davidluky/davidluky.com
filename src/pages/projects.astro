@@ -1,0 +1,96 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const projects = [
+  {
+    name: "The Room",
+    description:
+      "A multiplayer RPG platform with 13 games, real-time chat, achievements, economy, and tournaments. The original C++ desktop client that started it all.",
+    tech: ["C++", "SDL2", "Firebase"],
+    tag: "Game",
+    link: null,
+  },
+  {
+    name: "The Room — Web Client",
+    description:
+      "Full web companion to The Room. Real-time multiplayer, three visual themes (Terminal, Hybrid, Modern), bilingual (EN/PT-BR). Shares the same Firebase backend.",
+    tech: ["React 19", "TypeScript", "Tailwind", "Firebase"],
+    tag: "Web App",
+    link: "https://play.davidluky.com",
+  },
+  {
+    name: "Gym Check-in Bot",
+    description:
+      "WhatsApp bot that automates gym check-in scheduling. Sends reminders, handles natural language, runs on a GCP VM.",
+    tech: ["Node.js", "WhatsApp API", "GCP"],
+    tag: "Bot",
+    link: null,
+  },
+  {
+    name: "GFWL Achievement Unlocker",
+    description:
+      "GPD patching tool for unlocking Xbox achievements on legacy Games for Windows Live titles. Reverse-engineered binary format.",
+    tech: ["C++", "Binary Patching"],
+    tag: "Tool",
+    link: null,
+  },
+];
+---
+
+<Base title="Projects — David Luky" description="Things I've built: multiplayer games, bots, reverse engineering tools, and more.">
+  <Header currentPath="/projects" />
+
+  <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-24">
+    <div class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
+      Projects
+    </div>
+    <h1 class="mb-6 max-w-[620px] text-[42px] font-light leading-tight tracking-tight max-md:text-3xl">
+      Things I've built
+    </h1>
+    <p class="max-w-[560px] text-[17px] leading-relaxed text-text-2">
+      Most of what I build starts as something I want to use myself. Here's a look at the projects I'm most proud of.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
+    <div class="space-y-0">
+      {projects.map((project) => (
+        <article class="border-t border-border py-12">
+          <div class="mb-3 text-[11px] font-medium uppercase tracking-wider text-accent">
+            {project.tag}
+          </div>
+          <div class="flex items-start justify-between gap-12 max-md:flex-col max-md:gap-4">
+            <div class="max-w-[540px]">
+              <h2 class="mb-3 text-xl font-medium">
+                {project.link ? (
+                  <a
+                    href={project.link}
+                    class="border-b border-accent/30 no-underline transition-colors hover:border-accent"
+                  >
+                    {project.name}
+                  </a>
+                ) : (
+                  project.name
+                )}
+              </h2>
+              <p class="text-[16px] leading-relaxed text-text-2">
+                {project.description}
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {project.tech.map((t) => (
+                <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <Footer />
+</Base>

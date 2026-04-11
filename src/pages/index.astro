@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Footer from "../components/Footer.astro";
+import { projects } from "../data/projects";
 ---
 
 <Base>
@@ -43,7 +44,7 @@ import Footer from "../components/Footer.astro";
       <!-- Right: 2x2 stats grid -->
       <div class="grid grid-cols-2 gap-6 shrink-0 max-md:w-full md:w-[320px]">
         <div class="rounded-xl bg-[#0f0f0e] p-6">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">4</div>
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{projects.length}</div>
           <div data-i18n="stat_projects" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Active Projects</div>
         </div>
         <div class="rounded-xl bg-[#0f0f0e] p-6">

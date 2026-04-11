@@ -2,44 +2,26 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { projects } from "../data/projects";
 
-const projects = [
-  {
-    name: "The Room",
-    description:
-      "A multiplayer RPG platform with 13 games, real-time chat, achievements, economy, and tournaments. The original C++ desktop client that started it all.",
-    tech: ["C++", "SDL2", "Firebase"],
-    tag: "Game",
-    link: null,
-  },
-  {
-    name: "The Room — Web Client",
-    description:
-      "Full web companion to The Room. Real-time multiplayer, three visual themes (Terminal, Hybrid, Modern), bilingual (EN/PT-BR). Shares the same Firebase backend.",
-    tech: ["React 19", "TypeScript", "Tailwind", "Firebase"],
-    tag: "Web App",
-    link: "https://play.davidluky.com",
-  },
-  {
-    name: "Gym Check-in Bot",
-    description:
-      "WhatsApp bot that automates gym check-in scheduling. Sends reminders, handles natural language, runs on a GCP VM.",
-    tech: ["Node.js", "WhatsApp API", "GCP"],
-    tag: "Bot",
-    link: null,
-  },
-  {
-    name: "GFWL Achievement Unlocker",
-    description:
-      "GPD patching tool for unlocking Xbox achievements on legacy Games for Windows Live titles. Reverse-engineered binary format.",
-    tech: ["C++", "Binary Patching"],
-    tag: "Tool",
-    link: null,
-  },
-];
+const liveSites = projects.filter(p => p.link).length;
+const desktopApps = projects.filter(p => p.tag === "Desktop App").length;
+const langs = new Set(projects.flatMap(p => p.tech)).size;
+
+const tagColors: Record<string, string> = {
+  "Game Platform": "text-accent",
+  "Web App": "text-[#66c0f4]",
+  "Marketplace": "text-[#f0c040]",
+  "Desktop App": "text-[#a78bfa]",
+  "Bot": "text-[#34d399]",
+  "AI Tooling": "text-[#f472b6]",
+  "Reverse Engineering": "text-[#fb923c]",
+  "Automation": "text-[#38bdf8]",
+  "Website": "text-accent",
+};
 ---
 
-<Base title="Projects — David Luky" description="Things I've built: multiplayer games, bots, reverse engineering tools, and more.">
+<Base title="Projects — David Luky" description="Everything I've built: multiplayer games, marketplaces, desktop apps, bots, AI tooling, and more.">
   <Header currentPath="/projects" />
 
   <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-24">
@@ -50,23 +32,47 @@ const projects = [
       Things I've built
     </h1>
     <p class="max-w-[560px] text-[17px] leading-relaxed text-text-2">
-      Most of what I build starts as something I want to use myself. Here's a look at the projects I'm most proud of.
+      Most of what I build starts as something I want to use myself. Here's the full collection — from multiplayer games to automation bots to reverse engineering tools.
     </p>
+  </section>
+
+  <!-- Stats -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-14 max-md:px-6">
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{projects.length}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Projects</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{langs}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Technologies</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{liveSites}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{desktopApps}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Desktop Apps</div>
+      </div>
+    </div>
   </section>
 
   <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
     <div class="space-y-0">
       {projects.map((project) => (
-        <article class="py-12">
-          <div class="mb-3 text-[11px] font-medium uppercase tracking-wider text-accent">
+        <article class="py-10 border-b border-border/30 last:border-0">
+          <div class={`mb-3 text-[11px] font-medium uppercase tracking-wider ${tagColors[project.tag] || "text-accent"}`}>
             {project.tag}
           </div>
           <div class="flex items-start justify-between gap-12 max-md:flex-col max-md:gap-4">
-            <div class="max-w-[540px]">
+            <div class="max-w-[560px]">
               <h2 class="mb-3 text-xl font-medium">
                 {project.link ? (
                   <a
                     href={project.link}
+                    target={project.link.startsWith("http") ? "_blank" : undefined}
+                    rel={project.link.startsWith("http") ? "noopener noreferrer" : undefined}
                     class="border-b border-accent/30 no-underline transition-colors hover:border-accent"
                   >
                     {project.name}
@@ -75,11 +81,11 @@ const projects = [
                   project.name
                 )}
               </h2>
-              <p class="text-[16px] leading-relaxed text-text-2">
+              <p class="text-[15px] leading-relaxed text-text-2">
                 {project.description}
               </p>
             </div>
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap gap-2 shrink-0 md:max-w-[200px] md:justify-end">
               {project.tech.map((t) => (
                 <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
                   {t}

@@ -3,48 +3,44 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 
-/*
- * Gaming platform profiles.
- * Update the `handle` fields with actual usernames once provided.
- * `profileUrl` is optional — set to null if no public profile page exists.
- */
-const platforms = [
-  {
-    name: "Steam",
-    handle: "—",
-    profileUrl: null,
-    color: { bg: "#1b2838", text: "#66c0f4" },
-    icon: "S",
-    description: "PC gaming library, achievements, and community.",
-  },
-  {
-    name: "Xbox",
-    handle: "—",
-    profileUrl: null,
-    color: { bg: "#107c10", text: "#ffffff" },
-    icon: "X",
-    description: "Xbox Gamertag for Game Pass, multiplayer, and achievements.",
-  },
-  {
-    name: "PlayStation",
-    handle: "—",
-    profileUrl: null,
-    color: { bg: "#003087", text: "#ffffff" },
-    icon: "P",
-    description: "PlayStation Network ID for PS4/PS5 games and trophies.",
-  },
-  {
-    name: "Tibia",
-    handle: "—",
-    profileUrl: null,
-    color: { bg: "#4a2800", text: "#f0c040" },
-    icon: "T",
-    description: "Classic MMORPG character. Exploring the lands since day one.",
-  },
+const recentGames = [
+  { name: "Dota 2",           platform: "Steam", hours: 6338 },
+  { name: "Terraria",         platform: "Steam", hours: 1238 },
+  { name: "Street Fighter 6", platform: "Steam", hours: 45 },
+  { name: "BioShock 2",       platform: "Steam", hours: 8 },
 ];
+
+const libraryGames = [
+  { name: "The Witcher 3: Wild Hunt", platform: "Steam", hours: 140 },
+  { name: "Stardew Valley",           platform: "Steam", hours: 84 },
+  { name: "Elden Ring",               platform: "Steam", hours: 72 },
+  { name: "Cyberpunk 2077",           platform: "Both",  hours: 56 },
+  { name: "Hades",                    platform: "Steam", hours: 46 },
+  { name: "Hollow Knight",            platform: "Steam", hours: 30 },
+  { name: "DOOM Eternal",             platform: "Steam", hours: 24 },
+  { name: "Halo Infinite",            platform: "Xbox",  hours: 20 },
+  { name: "Deep Rock Galactic",       platform: "Steam", hours: 16 },
+  { name: "Forza Horizon 5",          platform: "Xbox",  hours: 15 },
+  { name: "Sea of Thieves",           platform: "Xbox",  hours: 12 },
+  { name: "Gears 5",                  platform: "Xbox",  hours: 8 },
+];
+
+const platformColors: Record<string, string> = {
+  Steam: "#1b2838",
+  Xbox: "#107c10",
+  Both: "#1a1a2e",
+  Tibia: "#4a2800",
+};
+
+const platformTextColors: Record<string, string> = {
+  Steam: "#66c0f4",
+  Xbox: "#fff",
+  Both: "#c4a35a",
+  Tibia: "#f0c040",
+};
 ---
 
-<Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, PlayStation, and Tibia gaming profiles.">
+<Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, Epic Games, and Tibia gaming profiles.">
   <Header currentPath="/gaming" />
 
   <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-24">
@@ -55,37 +51,201 @@ const platforms = [
       Where I play
     </h1>
     <p class="max-w-[560px] text-[17px] leading-relaxed text-text-2">
-      Gaming is what got me into programming. Here are the platforms where you can find me.
+      Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.
     </p>
   </section>
 
-  <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-      {platforms.map((platform) => (
-        <div class="group rounded-xl border border-border bg-bg-card p-7 transition-colors hover:border-text-3 hover:bg-[#22211e]">
-          <div class="mb-5 flex items-center gap-4">
-            <div
-              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-lg font-bold"
-              style={`background: ${platform.color.bg}; color: ${platform.color.text};`}
-            >
-              {platform.icon}
-            </div>
-            <div>
-              <h2 class="text-[15px] font-medium">{platform.name}</h2>
-              <span class="font-mono text-[13px] text-text-2">{platform.handle}</span>
-            </div>
+  <!-- Overview -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-14 max-md:px-6">
+    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Overview
+    </h3>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">1,337+</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Total Games</div>
+        <div class="mt-2 text-[11px] text-text-3">Steam + Xbox + Epic</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">7,600+</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Hours Played</div>
+        <div class="mt-2 text-[11px] text-text-3">Across all platforms</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">1,658</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
+        <div class="mt-2 text-[11px] text-text-3">Steam only</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">4</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Platforms</div>
+        <div class="mt-2 text-[11px] text-text-3">Steam, Xbox, Epic, Tibia</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">16</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Years Gaming</div>
+        <div class="mt-2 text-[11px] text-text-3">On Steam since 2010</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">627</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Tibia Level</div>
+        <div class="mt-2 text-[11px] text-text-3">Elder Druid, Jadebra</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform breakdown -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <div class="grid gap-5 md:grid-cols-2">
+      <!-- Steam -->
+      <div class="rounded-xl border border-border bg-bg-card p-7">
+        <div class="mb-5 flex items-center gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#1b2838] text-lg font-bold text-[#66c0f4]">S</div>
+          <div>
+            <h3 class="text-[15px] font-medium">Steam</h3>
+            <a href="https://steamcommunity.com/id/DavidLuky" class="font-mono text-[13px] text-text-2 no-underline hover:text-accent transition-colors">David Luky</a>
           </div>
-          <p class="text-sm leading-relaxed text-text-2">{platform.description}</p>
-          {platform.profileUrl && (
-            <a
-              href={platform.profileUrl}
-              class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-accent no-underline"
-            >
-              View profile &rarr;
-            </a>
-          )}
+          <div class="ml-auto text-right">
+            <div class="text-lg font-light text-text">Lvl 30</div>
+            <div class="text-[11px] text-text-3">1,337 games</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
+          <span>Dota 2 <span class="text-text-2">6,338h</span></span>
+          <span class="text-border">&middot;</span>
+          <span>Terraria <span class="text-text-2">1,238h</span></span>
+          <span class="text-border">&middot;</span>
+          <span>2 perfect games</span>
+          <span class="text-border">&middot;</span>
+          <span>96 friends</span>
+        </div>
+      </div>
+
+      <!-- Xbox -->
+      <div class="rounded-xl border border-border bg-bg-card p-7">
+        <div class="mb-5 flex items-center gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#107c10] text-lg font-bold text-white">X</div>
+          <div>
+            <h3 class="text-[15px] font-medium">Xbox</h3>
+            <span class="font-mono text-[13px] text-text-2">David Luky</span>
+          </div>
+          <div class="ml-auto text-right">
+            <div class="text-lg font-light text-text">Series X</div>
+            <div class="text-[11px] text-text-3">Game Pass</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
+          <span>5 tracked games</span>
+          <span class="text-border">&middot;</span>
+          <span>59h played</span>
+          <span class="text-border">&middot;</span>
+          <span>8 Game Pass titles</span>
+        </div>
+      </div>
+
+      <!-- Tibia -->
+      <div class="rounded-xl border border-border bg-bg-card p-7">
+        <div class="mb-5 flex items-center gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#4a2800] text-lg font-bold text-[#f0c040]">T</div>
+          <div>
+            <h3 class="text-[15px] font-medium">Tibia</h3>
+            <a href="https://www.tibia.com/community/?subtopic=characters&name=David+Luky+Pobre" class="font-mono text-[13px] text-text-2 no-underline hover:text-accent transition-colors">David Luky Pobre</a>
+          </div>
+          <div class="ml-auto text-right">
+            <div class="text-lg font-light text-text">Lvl 627</div>
+            <div class="text-[11px] text-text-3">Elder Druid</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
+          <span>Jadebra</span>
+          <span class="text-border">&middot;</span>
+          <span>Jadebraland Encore</span>
+          <span class="text-border">&middot;</span>
+          <span>234 achievement pts</span>
+          <span class="text-border">&middot;</span>
+          <span>Since 2014</span>
+          <span class="text-border">&middot;</span>
+          <span>23 titles</span>
+        </div>
+      </div>
+
+      <!-- Epic Games -->
+      <div class="rounded-xl border border-border bg-bg-card p-7">
+        <div class="mb-5 flex items-center gap-4">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#2a2a2a] text-lg font-bold text-white">E</div>
+          <div>
+            <h3 class="text-[15px] font-medium">Epic Games</h3>
+            <span class="font-mono text-[13px] text-text-2">David Luky</span>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
+          <span>Free game collector since the early giveaways</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recently played -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Recently Played
+    </h3>
+    <div class="space-y-0">
+      {recentGames.map((game, i) => (
+        <div class="flex items-center gap-5 border-b border-border/50 py-4 last:border-0">
+          <span class="w-6 shrink-0 text-right font-mono text-[13px] text-text-3">{i + 1}</span>
+          <div class="flex-1">
+            <span class="text-[15px] font-medium">{game.name}</span>
+          </div>
+          <span
+            class="rounded px-2 py-0.5 text-[11px] font-medium"
+            style={`background: ${platformColors[game.platform]}; color: ${platformTextColors[game.platform]};`}
+          >
+            {game.platform}
+          </span>
+          <span class="w-16 shrink-0 text-right font-mono text-[14px] text-text-2">{game.hours.toLocaleString()}h</span>
         </div>
       ))}
+    </div>
+  </section>
+
+  <!-- Library highlights -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Library Highlights
+    </h3>
+    <p class="mb-5 text-[13px] text-text-3">Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.</p>
+    <div class="space-y-0">
+      {libraryGames.map((game, i) => (
+        <div class="flex items-center gap-5 border-b border-border/50 py-3.5 last:border-0">
+          <span class="w-6 shrink-0 text-right font-mono text-[13px] text-text-3">{i + 1}</span>
+          <div class="flex-1">
+            <span class="text-[14px]">{game.name}</span>
+          </div>
+          <span
+            class="rounded px-2 py-0.5 text-[11px] font-medium"
+            style={`background: ${platformColors[game.platform]}; color: ${platformTextColors[game.platform]};`}
+          >
+            {game.platform}
+          </span>
+          <span class="w-14 shrink-0 text-right font-mono text-[13px] text-text-2">{game.hours}h</span>
+        </div>
+      ))}
+    </div>
+    <div class="mt-4 text-[12px] text-text-3">
+      523 total tracked hours across Steam + Xbox
+    </div>
+  </section>
+
+  <!-- Hardware -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
+    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Hardware
+    </h3>
+    <div class="flex flex-wrap gap-3">
+      <span class="rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm text-text-2">Xbox Series X</span>
+      <span class="rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm text-text-2">Nintendo Switch</span>
+      <span class="rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm text-text-2">PC</span>
     </div>
   </section>
 

@@ -1,0 +1,30 @@
+---
+interface Stat {
+  value: string | number;
+  label: string;
+}
+
+interface Props {
+  stats: Stat[];
+}
+
+const { stats } = Astro.props;
+---
+
+<div class="border-y border-border bg-bg-alt py-14">
+  <div class="mx-auto flex max-w-[1280px] px-12 max-md:flex-col max-md:px-6">
+    {stats.map((stat, i) => (
+      <div
+        class:list={[
+          "flex-1 py-0 text-center max-md:border-b max-md:border-border max-md:py-5 max-md:last:border-b-0",
+          i < stats.length - 1 ? "border-r border-border max-md:border-r-0" : "",
+        ]}
+      >
+        <div class="mb-1.5 text-4xl font-light tracking-tight text-text">
+          {stat.value}
+        </div>
+        <div class="text-[13px] text-text-3">{stat.label}</div>
+      </div>
+    ))}
+  </div>
+</div>

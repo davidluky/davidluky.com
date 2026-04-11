@@ -1,0 +1,67 @@
+---
+const currentYear = new Date().getFullYear();
+
+const columns = [
+  {
+    title: "Projects",
+    links: [
+      { label: "All Projects", href: "/projects" },
+      { label: "The Room Web", href: "https://play.davidluky.com" },
+    ],
+  },
+  {
+    title: "Gaming",
+    links: [
+      { label: "Profiles", href: "/gaming" },
+    ],
+  },
+  {
+    title: "Connect",
+    links: [
+      { label: "Email", href: "mailto:davidluky@davidluky.com" },
+      { label: "GitHub", href: "https://github.com/davidluky" },
+    ],
+  },
+];
+---
+
+<footer class="border-t border-border bg-bg-alt">
+  <div class="mx-auto max-w-[1280px] px-12 pt-12 pb-8 max-md:px-6">
+    <!-- Top: brand + link columns -->
+    <div class="mb-12 flex justify-between max-md:flex-col max-md:gap-8">
+      <span class="text-xs font-semibold uppercase tracking-[2px] text-text-3">
+        David Luky
+      </span>
+      <div class="flex gap-16 max-md:gap-8">
+        {columns.map(({ title, links }) => (
+          <div>
+            <h5 class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">
+              {title}
+            </h5>
+            {links.map(({ label, href }) => (
+              <a
+                href={href}
+                class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom: copyright -->
+    <div class="flex items-center justify-between border-t border-border pt-5">
+      <span class="text-[13px] text-text-3">
+        &copy; {currentYear} David Luky
+      </span>
+      <a
+        href="https://github.com/davidluky"
+        class="text-[13px] text-text-3 no-underline transition-colors hover:text-text-2"
+      >
+        GitHub
+      </a>
+    </div>
+  </div>
+</footer>

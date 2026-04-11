@@ -1,6 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 ---
 <Base>
-  <h1>David Luky</h1>
+  <Header currentPath="/" />
+  <main><h1 class="p-12 text-3xl">Landing page content here</h1></main>
+  <Footer />
 </Base>

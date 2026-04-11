@@ -1,0 +1,52 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "" } = Astro.props;
+
+const navLinks = [
+  { href: "/projects", label: "Projects" },
+  { href: "/gaming", label: "Gaming" },
+  { href: "/#about", label: "About" },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-border/40 bg-bg/90 backdrop-blur-xl"
+>
+  <div class="mx-auto flex h-[60px] max-w-[1280px] items-center justify-between px-12 max-md:px-6">
+    <!-- Brand mark: DL monogram + name -->
+    <a href="/" class="group flex items-center gap-2.5 no-underline">
+      <span
+        class="flex h-7 w-7 items-center justify-center rounded-md bg-accent/10 font-mono text-xs font-semibold text-accent transition-colors group-hover:bg-accent/20"
+      >
+        DL
+      </span>
+      <span class="text-[13px] font-semibold uppercase tracking-[2px] text-text">
+        David Luky
+      </span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="flex items-center gap-8 max-md:gap-4">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={[
+            "text-sm no-underline transition-colors max-md:hidden",
+            currentPath === href ? "text-text" : "text-text-2 hover:text-text",
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+      <a
+        href="https://play.davidluky.com"
+        class="rounded-md bg-accent px-4 py-2 text-[13px] font-medium text-bg no-underline transition-opacity hover:opacity-90"
+      >
+        Play The Room
+      </a>
+    </nav>
+  </div>
+</header>

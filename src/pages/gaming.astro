@@ -44,51 +44,51 @@ const platformTextColors: Record<string, string> = {
   <Header currentPath="/gaming" />
 
   <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-24">
-    <div class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
+    <div data-i18n="g_label" class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
       Gaming
     </div>
-    <h1 class="mb-6 max-w-[620px] text-[42px] font-light leading-tight tracking-tight max-md:text-3xl">
+    <h1 data-i18n="g_title" class="mb-6 max-w-[620px] text-[42px] font-light leading-tight tracking-tight max-md:text-3xl">
       Where I play
     </h1>
-    <p class="max-w-[560px] text-[17px] leading-relaxed text-text-2">
+    <p data-i18n="g_subtitle" class="max-w-[560px] text-[17px] leading-relaxed text-text-2">
       Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.
     </p>
   </section>
 
   <!-- Overview -->
   <section class="mx-auto max-w-[1280px] px-12 pb-14 max-md:px-6">
-    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h3 data-i18n="g_overview" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Overview
     </h3>
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">1,337+</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Total Games</div>
+        <div data-i18n="g_stat_games" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Total Games</div>
         <div class="mt-2 text-[11px] text-text-3">Steam + Xbox + Epic</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">7,600+</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Hours Played</div>
-        <div class="mt-2 text-[11px] text-text-3">Across all platforms</div>
+        <div data-i18n="g_stat_hours" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Hours Played</div>
+        <div data-i18n="g_stat_hours_sub" class="mt-2 text-[11px] text-text-3">Across all platforms</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">1,658</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
-        <div class="mt-2 text-[11px] text-text-3">Steam only</div>
+        <div data-i18n="g_stat_achievements" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
+        <div data-i18n="g_stat_achievements_sub" class="mt-2 text-[11px] text-text-3">Steam only</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">4</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Platforms</div>
+        <div data-i18n="g_stat_platforms" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Platforms</div>
         <div class="mt-2 text-[11px] text-text-3">Steam, Xbox, Epic, Tibia</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">16</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Years Gaming</div>
-        <div class="mt-2 text-[11px] text-text-3">On Steam since 2010</div>
+        <div data-i18n="g_stat_years" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Years Gaming</div>
+        <div data-i18n="g_stat_years_sub" class="mt-2 text-[11px] text-text-3">On Steam since 2010</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">627</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">Tibia Level</div>
+        <div data-i18n="g_stat_tibia" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Tibia Level</div>
         <div class="mt-2 text-[11px] text-text-3">Elder Druid, Jadebra</div>
       </div>
     </div>
@@ -187,7 +187,7 @@ const platformTextColors: Record<string, string> = {
 
   <!-- Recently played -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h3 data-i18n="g_recent" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Recently Played
     </h3>
     <div class="space-y-0">
@@ -211,10 +211,10 @@ const platformTextColors: Record<string, string> = {
 
   <!-- Library highlights -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h3 data-i18n="g_library" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Library Highlights
     </h3>
-    <p class="mb-5 text-[13px] text-text-3">Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.</p>
+    <p data-i18n="g_library_desc" class="mb-5 text-[13px] text-text-3">Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.</p>
     <div class="space-y-0">
       {libraryGames.map((game, i) => (
         <div class="flex items-center gap-5 border-b border-border/50 py-3.5 last:border-0">
@@ -232,14 +232,14 @@ const platformTextColors: Record<string, string> = {
         </div>
       ))}
     </div>
-    <div class="mt-4 text-[12px] text-text-3">
+    <div data-i18n="g_library_total" class="mt-4 text-[12px] text-text-3">
       523 total tracked hours across Steam + Xbox
     </div>
   </section>
 
   <!-- Hardware -->
   <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
-    <h3 class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h3 data-i18n="g_hardware" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Hardware
     </h3>
     <div class="flex flex-wrap gap-3">
@@ -251,3 +251,57 @@ const platformTextColors: Record<string, string> = {
 
   <Footer />
 </Base>
+
+<script>
+  const strings: Record<string, Record<string, string>> = {
+    en: {
+      g_label: 'Gaming',
+      g_title: 'Where I play',
+      g_subtitle: 'Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.',
+      g_overview: 'Overview',
+      g_stat_games: 'Total Games',
+      g_stat_hours: 'Hours Played',
+      g_stat_hours_sub: 'Across all platforms',
+      g_stat_achievements: 'Achievements',
+      g_stat_achievements_sub: 'Steam only',
+      g_stat_platforms: 'Platforms',
+      g_stat_years: 'Years Gaming',
+      g_stat_years_sub: 'On Steam since 2010',
+      g_stat_tibia: 'Tibia Level',
+      g_recent: 'Recently Played',
+      g_library: 'Library Highlights',
+      g_library_desc: 'Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.',
+      g_library_total: '523 total tracked hours across Steam + Xbox',
+      g_hardware: 'Hardware',
+    },
+    pt: {
+      g_label: 'Jogos',
+      g_title: 'Onde eu jogo',
+      g_subtitle: 'Jogos foram o que me levaram à programação — eu queria entender como as coisas que eu amava eram feitas, e essa curiosidade nunca foi embora.',
+      g_overview: 'Visão Geral',
+      g_stat_games: 'Total de Jogos',
+      g_stat_hours: 'Horas Jogadas',
+      g_stat_hours_sub: 'Em todas as plataformas',
+      g_stat_achievements: 'Conquistas',
+      g_stat_achievements_sub: 'Apenas Steam',
+      g_stat_platforms: 'Plataformas',
+      g_stat_years: 'Anos Jogando',
+      g_stat_years_sub: 'Na Steam desde 2010',
+      g_stat_tibia: 'Nível no Tibia',
+      g_recent: 'Jogados Recentemente',
+      g_library: 'Destaques da Biblioteca',
+      g_library_desc: 'Rastreado via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — um app desktop que eu construí para agregar jogos de várias plataformas.',
+      g_library_total: '523 horas rastreadas no total entre Steam + Xbox',
+      g_hardware: 'Hardware',
+    },
+  };
+
+  const lang = localStorage.getItem('dl-lang') || 'en';
+  const s = strings[lang];
+  if (s) {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n')!;
+      if (key in s) el.innerHTML = s[key];
+    });
+  }
+</script>

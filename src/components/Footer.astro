@@ -1,31 +1,8 @@
 ---
 const currentYear = new Date().getFullYear();
-
-const columns = [
-  {
-    title: "Projects",
-    links: [
-      { label: "All Projects", href: "/projects" },
-      { label: "The Room Web", href: "https://play.davidluky.com" },
-    ],
-  },
-  {
-    title: "Gaming",
-    links: [
-      { label: "Profiles", href: "/gaming" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { label: "Email", href: "mailto:davidluky@davidluky.com" },
-      { label: "GitHub", href: "https://github.com/davidluky" },
-    ],
-  },
-];
 ---
 
-<footer class="border-t border-border bg-bg-alt">
+<footer>
   <div class="mx-auto max-w-[1280px] px-12 pt-12 pb-8 max-md:px-6">
     <!-- Top: brand + link columns -->
     <div class="mb-12 flex justify-between max-md:flex-col max-md:gap-8">
@@ -33,27 +10,25 @@ const columns = [
         David Luky
       </span>
       <div class="flex gap-16 max-md:gap-8">
-        {columns.map(({ title, links }) => (
-          <div>
-            <div class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">
-              {title}
-            </div>
-            {links.map(({ label, href }) => (
-              <a
-                href={href}
-                class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text"
-                {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-        ))}
+        <div>
+          <div data-i18n="footer_projects" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Projects</div>
+          <a href="/projects" data-i18n="footer_all_projects" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">All Projects</a>
+          <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">The Room Web</a>
+        </div>
+        <div>
+          <div data-i18n="footer_gaming" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Gaming</div>
+          <a href="/gaming" data-i18n="footer_profiles" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Profiles</a>
+        </div>
+        <div>
+          <div data-i18n="footer_connect" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Connect</div>
+          <a href="mailto:davidluky@davidluky.com" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Email</a>
+          <a href="https://github.com/davidluky" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">GitHub</a>
+        </div>
       </div>
     </div>
 
     <!-- Bottom: copyright -->
-    <div class="flex items-center justify-between border-t border-border pt-5">
+    <div class="flex items-center justify-between pt-5">
       <span class="text-[13px] text-text-3">
         &copy; {currentYear} David Luky
       </span>

@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="4" fill="#111110"/>
-  <text x="4" y="23" font-family="system-ui, sans-serif" font-size="18" font-weight="600" fill="#c4a35a">DL</text>
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#111110"/>
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="5.25" stroke="#c4a35a" stroke-opacity="0.35" stroke-width="1.5"/>
+  <path d="M9 7v18M9 7h3.5c5 0 8 3.2 8 9s-3 9-8 9H9" stroke="#c4a35a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16.5 10v14h5.5" stroke="#faf8f1" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

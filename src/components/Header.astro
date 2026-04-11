@@ -29,12 +29,12 @@ const navLinks = [
     </a>
 
     <!-- Navigation -->
-    <nav class="flex items-center gap-8 max-md:gap-4">
+    <nav class="flex items-center gap-8 max-sm:gap-3">
       {navLinks.map(({ href, label }) => (
         <a
           href={href}
           class:list={[
-            "text-sm no-underline transition-colors max-md:hidden",
+            "text-sm no-underline transition-colors max-sm:text-xs",
             currentPath === href ? "text-text" : "text-text-2 hover:text-text",
           ]}
         >
@@ -43,6 +43,8 @@ const navLinks = [
       ))}
       <a
         href="https://play.davidluky.com"
+        target="_blank"
+        rel="noopener noreferrer"
         class="rounded-md bg-accent px-4 py-2 text-[13px] font-medium text-bg no-underline transition-opacity hover:opacity-90"
       >
         Play The Room

@@ -86,8 +86,8 @@ No CI/CD is configured — deploys are manual via `npx wrangler deploy`. Could a
 ## Related Services
 
 ### Vercel (Tibia Services)
-- **URL**: https://tibia-services.vercel.app
-- **Custom domain**: tibia.davidluky.com (CNAME to `cname.vercel-dns.com`)
+- **URL**: https://tibia.davidluky.com
+- **Direct URL**: https://tibia-services.vercel.app (Vercel default)
 - **Repo**: github.com/davidluky/tibia-services
 - **Account**: linked to GitHub `davidluky`
 

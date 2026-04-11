@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 280" fill="none">
+  <!-- Background with subtle gradient -->
+  <rect width="1200" height="280" rx="16" fill="#0f0f0e"/>
+  <rect x="0.5" y="0.5" width="1199" height="279" rx="15.5" stroke="#2a2924" stroke-opacity="0.5"/>
+
+  <!-- Subtle gold accent line at top -->
+  <rect x="80" y="0" width="200" height="1.5" fill="#c4a35a" fill-opacity="0.3" rx="1"/>
+
+  <!-- Stat 1: Active Projects -->
+  <text x="150" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="200" fill="#faf8f1" letter-spacing="-2">4</text>
+  <text x="150" y="165" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2" text-transform="uppercase">ACTIVE</text>
+  <text x="150" y="185" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">PROJECTS</text>
+
+  <!-- Stat 2: Games in The Room -->
+  <text x="450" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="200" fill="#faf8f1" letter-spacing="-2">13</text>
+  <text x="450" y="165" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">GAMES IN</text>
+  <text x="450" y="185" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#c4a35a" fill-opacity="0.7" letter-spacing="2">THE ROOM</text>
+
+  <!-- Stat 3: Gaming Platforms -->
+  <text x="750" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="200" fill="#faf8f1" letter-spacing="-2">4</text>
+  <text x="750" y="165" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">GAMING</text>
+  <text x="750" y="185" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">PLATFORMS</text>
+
+  <!-- Stat 4: Languages -->
+  <text x="1050" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="72" font-weight="200" fill="#faf8f1" letter-spacing="-2">2</text>
+  <text x="1050" y="165" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">LANGUAGES</text>
+  <text x="1050" y="185" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="500" fill="#6a6458" letter-spacing="2">EN / PT-BR</text>
+
+  <!-- Subtle vertical separators -->
+  <line x1="300" y1="80" x2="300" y2="200" stroke="#2a2924" stroke-opacity="0.4" stroke-width="1"/>
+  <line x1="600" y1="80" x2="600" y2="200" stroke="#2a2924" stroke-opacity="0.4" stroke-width="1"/>
+  <line x1="900" y1="80" x2="900" y2="200" stroke="#2a2924" stroke-opacity="0.4" stroke-width="1"/>
+
+  <!-- Bottom accent dots -->
+  <circle cx="575" cy="250" r="2" fill="#c4a35a" fill-opacity="0.2"/>
+  <circle cx="595" cy="250" r="2" fill="#c4a35a" fill-opacity="0.35"/>
+  <circle cx="615" cy="250" r="2" fill="#c4a35a" fill-opacity="0.2"/>
+</svg>

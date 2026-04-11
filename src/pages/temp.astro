@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base title="Temp — David Luky">
+  <Header currentPath="/temp" />
+
+  <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-24">
+    <div class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
+      Temp
+    </div>
+    <h1 class="mb-12 max-w-[620px] text-[42px] font-light leading-tight tracking-tight max-md:text-3xl">
+      Work in progress
+    </h1>
+
+    <div class="flex flex-wrap gap-5">
+      <div class="min-w-[220px] flex-1 pt-5">
+        <h3 class="mb-1 text-[15px] font-medium">The Room</h3>
+        <span class="text-sm text-text-2">Multiplayer RPG &middot; C++ &middot; Web</span>
+      </div>
+      <div class="min-w-[220px] flex-1 pt-5">
+        <h3 class="mb-1 text-[15px] font-medium">The Room Web</h3>
+        <span class="text-sm text-text-2">React &middot; TypeScript &middot; Firebase</span>
+      </div>
+      <div class="min-w-[220px] flex-1 pt-5">
+        <h3 class="mb-1 text-[15px] font-medium">Gym Bot</h3>
+        <span class="text-sm text-text-2">WhatsApp &middot; Node.js &middot; GCP</span>
+      </div>
+      <div class="min-w-[220px] flex-1 pt-5">
+        <h3 class="mb-1 text-[15px] font-medium">GFWL Unlocker</h3>
+        <span class="text-sm text-text-2">C++ &middot; Binary Patching</span>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <a
+        href="/projects"
+        class="inline-flex items-center gap-2 text-[15px] font-medium text-accent no-underline transition-[gap] hover:gap-3"
+      >
+        All projects <span>&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-12 py-[88px] max-md:px-6 max-md:py-16">
+    <div class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
+      Gaming
+    </div>
+    <h2 class="mb-5 max-w-[620px] text-[30px] font-light leading-snug tracking-tight">
+      When I'm not coding, I'm usually playing something.
+    </h2>
+    <p class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      You'll find me on
+      <em class="not-italic font-medium text-text">Steam</em>,
+      <em class="not-italic font-medium text-text">Xbox</em>,
+      <em class="not-italic font-medium text-text">PlayStation</em>,
+      and occasionally wandering the lands of
+      <em class="not-italic font-medium text-text">Tibia</em>.
+      Gaming is what got me into programming in the first place — I wanted to understand how the things I loved were made, and that curiosity never went away.
+    </p>
+    <div class="mt-8">
+      <a href="/gaming" class="inline-flex items-center gap-2 text-[15px] font-medium text-accent no-underline transition-[gap] hover:gap-3">
+        Gaming profiles <span>&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-12 py-[88px] max-md:px-6 max-md:py-16">
+    <div class="mb-7 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">
+      About
+    </div>
+    <h2 class="mb-5 max-w-[620px] text-[30px] font-light leading-snug tracking-tight">
+      A bit about me
+    </h2>
+    <p class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      I'm David — a developer and lifelong gamer from Brazil. I build things that interest me, from multiplayer RPGs to automation bots to achievement unlockers. Most of my work lives on
+      <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.
+    </p>
+    <p class="mt-4 max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      Want to reach out?
+      <a href="mailto:davidluky@davidluky.com" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">davidluky@davidluky.com</a>
+    </p>
+  </section>
+
+  <Footer />
+</Base>

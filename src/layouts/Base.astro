@@ -41,15 +41,15 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=UnifrakturMaguntia&display=swap"
       rel="stylesheet"
     />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Styles -->
-    <style>
+    <!-- Styles (is:global because brand scroll effects cross component boundaries) -->
+    <style is:global>
       @import "../styles/global.css";
     </style>
   </head>

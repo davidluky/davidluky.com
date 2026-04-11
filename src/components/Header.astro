@@ -6,33 +6,30 @@ interface Props {
 const { currentPath = "" } = Astro.props;
 
 const navLinks = [
-  { href: "/projects", label: "Projects" },
-  { href: "/gaming", label: "Gaming" },
-  { href: "/#about", label: "About" },
+  { href: "/projects", label: "Projects", i18n: "nav_projects" },
+  { href: "/temp", label: "Temp", i18n: "nav_temp" },
+  { href: "/gaming", label: "Gaming", i18n: "nav_gaming" },
+  { href: "/#about", label: "About", i18n: "nav_about" },
 ];
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-border/40 bg-bg/90 backdrop-blur-xl"
+  id="site-header"
+  class="sticky top-0 z-50 bg-bg/90 backdrop-blur-xl transition-all duration-300"
 >
   <div class="mx-auto flex h-[60px] max-w-[1280px] items-center justify-between px-12 max-md:px-6">
-    <!-- Brand mark: DL monogram + name -->
-    <a href="/" class="group flex items-center gap-2.5 no-underline">
-      <span
-        class="flex h-7 w-7 items-center justify-center rounded-md bg-accent/10 font-mono text-xs font-semibold text-accent transition-colors group-hover:bg-accent/20"
-      >
-        DL
-      </span>
-      <span class="text-[13px] font-semibold uppercase tracking-[2px] text-text">
-        David Luky
-      </span>
+    <!-- Brand: "DAVID LUKY" morphs to "DL" on scroll -->
+    <a href="/" class="brand-mark group no-underline">
+      <span class="brand-text"><span class="brand-keep">D</span><span class="brand-mid">avid</span><span class="brand-gap"></span><span class="brand-keep">L</span><span class="brand-mid">uky</span></span>
+    </a>
     </a>
 
     <!-- Navigation -->
     <nav class="flex items-center gap-8 max-sm:gap-3">
-      {navLinks.map(({ href, label }) => (
+      {navLinks.map(({ href, label, i18n }) => (
         <a
           href={href}
+          data-i18n={i18n}
           class:list={[
             "text-sm no-underline transition-colors max-sm:text-xs",
             currentPath === href ? "text-text" : "text-text-2 hover:text-text",
@@ -45,6 +42,7 @@ const navLinks = [
         href="https://play.davidluky.com"
         target="_blank"
         rel="noopener noreferrer"
+        data-i18n="nav_play"
         class="rounded-md bg-accent px-4 py-2 text-[13px] font-medium text-bg no-underline transition-opacity hover:opacity-90"
       >
         Play The Room
@@ -52,3 +50,20 @@ const navLinks = [
     </nav>
   </div>
 </header>
+
+<!-- Scroll-triggered brand morph: "David Luky" → "DL" -->
+<script>
+  const header = document.getElementById('site-header');
+  if (header) {
+    let scrolled = false;
+    const onScroll = () => {
+      const past = window.scrollY > 60;
+      if (past !== scrolled) {
+        scrolled = past;
+        header.classList.toggle('header-scrolled', past);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+</script>

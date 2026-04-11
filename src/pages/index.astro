@@ -41,19 +41,27 @@ import { projects } from "../data/projects";
         </p>
       </div>
 
-      <!-- Right: 2x2 stats grid -->
+      <!-- Right: 2x3 stats grid -->
       <div class="grid grid-cols-2 gap-6 shrink-0 max-md:w-full max-sm:gap-4 md:w-[320px]">
-        <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <a href="/projects" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">{projects.length}</div>
           <div data-i18n="stat_projects" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Active Projects</div>
-        </div>
-        <div class="rounded-xl bg-[#0f0f0e] p-6">
+        </a>
+        <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">13</div>
           <div class="text-[12px] font-medium uppercase tracking-wider text-accent/70">Games in The Room</div>
-        </div>
-        <div class="rounded-xl bg-[#0f0f0e] p-6">
+        </a>
+        <a href="/gaming" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">4</div>
           <div data-i18n="stat_gaming" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Gaming Platforms</div>
+        </a>
+        <div class="rounded-xl bg-[#0f0f0e] p-6">
+          <div class="text-4xl font-light tracking-tight text-text mb-2">3</div>
+          <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
+        </div>
+        <div class="rounded-xl bg-[#0f0f0e] p-6">
+          <div class="text-4xl font-light tracking-tight text-text mb-2">239</div>
+          <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
         </div>
         <!-- Language toggle card -->
         <button id="lang-toggle" class="rounded-xl bg-[#0f0f0e] p-6 text-left cursor-pointer transition-colors hover:bg-[#141413] group">
@@ -86,6 +94,8 @@ import { projects } from "../data/projects";
       intro_p2: 'I also build smaller things when a problem catches my attention: a <em class="not-italic font-medium text-text">WhatsApp bot</em> for automating gym check-ins, a tool for <em class="not-italic font-medium text-text">reverse engineering</em> game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.',
       stat_projects: 'Active Projects',
       stat_gaming: 'Gaming Platforms',
+      stat_sites: 'Live Sites',
+      stat_achievements: 'Achievements',
       stat_lang: 'Languages',
     },
     pt: {
@@ -98,6 +108,8 @@ import { projects } from "../data/projects";
       intro_p2: 'Também construo coisas menores quando um problema chama minha atenção: um <em class="not-italic font-medium text-text">bot de WhatsApp</em> para automatizar check-ins na academia, uma ferramenta para <em class="not-italic font-medium text-text">engenharia reversa</em> de dados de conquistas em plataformas legadas, e vários experimentos que nunca saem da fase de protótipo.',
       stat_projects: 'Projetos Ativos',
       stat_gaming: 'Plataformas de Jogos',
+      stat_sites: 'Sites Online',
+      stat_achievements: 'Conquistas',
       stat_lang: 'Idiomas',
     },
   };

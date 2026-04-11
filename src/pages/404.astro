@@ -9,10 +9,11 @@ import Footer from "../components/Footer.astro";
 
   <section class="mx-auto max-w-[1280px] px-12 py-40 text-center max-md:px-6 max-md:py-24">
     <div class="mb-4 text-6xl font-light text-text-3">404</div>
-    <h1 class="mb-4 text-2xl font-light">Page not found</h1>
-    <p class="mb-8 text-text-2">The page you're looking for doesn't exist or has been moved.</p>
+    <h1 data-i18n="e_title" class="mb-4 text-2xl font-light">Page not found</h1>
+    <p data-i18n="e_desc" class="mb-8 text-text-2">The page you're looking for doesn't exist or has been moved.</p>
     <a
       href="/"
+      data-i18n="e_back"
       class="inline-flex items-center gap-2 text-sm font-medium text-accent no-underline transition-[gap] hover:gap-3"
     >
       &larr; Back to home
@@ -21,3 +22,19 @@ import Footer from "../components/Footer.astro";
 
   <Footer />
 </Base>
+
+<script>
+  import { applyI18n } from '../i18n/shared';
+  applyI18n({
+    en: {
+      e_title: 'Page not found',
+      e_desc: 'The page you\'re looking for doesn\'t exist or has been moved.',
+      e_back: '&larr; Back to home',
+    },
+    pt: {
+      e_title: 'Página não encontrada',
+      e_desc: 'A página que você procura não existe ou foi movida.',
+      e_back: '&larr; Voltar ao início',
+    },
+  });
+</script>

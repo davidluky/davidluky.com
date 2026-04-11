@@ -107,10 +107,9 @@ const timeline = [
 </Base>
 
 <script>
-  const strings: Record<string, Record<string, string>> = {
+  import { applyI18n } from '../i18n/shared';
+  applyI18n({
     en: {
-      nav_projects: 'Projects', nav_gaming: 'Gaming', nav_about: 'About', nav_play: 'Play The Room',
-      footer_projects: 'Projects', footer_all_projects: 'All Projects', footer_gaming: 'Gaming', footer_profiles: 'Profiles', footer_connect: 'Connect',
       a_label: 'About',
       a_title: 'A bit about me',
       a_intro: 'I\'m David — a developer and lifelong gamer from Brazil. I build things that interest me, from multiplayer RPGs to automation bots to achievement unlockers. Most of my work lives on <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.',
@@ -124,8 +123,6 @@ const timeline = [
       a_contact_text: 'Want to reach out? Send me an email at <a href="mailto:davidluky@davidluky.com" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">davidluky@davidluky.com</a> or find me on <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.',
     },
     pt: {
-      nav_projects: 'Projetos', nav_gaming: 'Jogos', nav_about: 'Sobre', nav_play: 'Jogar The Room',
-      footer_projects: 'Projetos', footer_all_projects: 'Todos os Projetos', footer_gaming: 'Jogos', footer_profiles: 'Perfis', footer_connect: 'Contato',
       a_label: 'Sobre',
       a_title: 'Um pouco sobre mim',
       a_intro: 'Eu sou o David — desenvolvedor e gamer de longa data do Brasil. Eu construo coisas que me interessam, de RPGs multiplayer a bots de automação e desbloqueadores de conquistas. A maioria do meu trabalho está no <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.',
@@ -138,14 +135,5 @@ const timeline = [
       a_contact_label: 'Entre em contato',
       a_contact_text: 'Quer entrar em contato? Me mande um email em <a href="mailto:davidluky@davidluky.com" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">davidluky@davidluky.com</a> ou me encontre no <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.',
     },
-  };
-
-  const lang = localStorage.getItem('dl-lang') || 'en';
-  const s = strings[lang];
-  if (s) {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n')!;
-      if (key in s) el.innerHTML = s[key];
-    });
-  }
+  });
 </script>

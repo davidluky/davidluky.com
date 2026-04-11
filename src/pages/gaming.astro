@@ -253,10 +253,9 @@ const platformTextColors: Record<string, string> = {
 </Base>
 
 <script>
-  const strings: Record<string, Record<string, string>> = {
+  import { applyI18n } from '../i18n/shared';
+  applyI18n({
     en: {
-      nav_projects: 'Projects', nav_gaming: 'Gaming', nav_about: 'About', nav_play: 'Play The Room',
-      footer_projects: 'Projects', footer_all_projects: 'All Projects', footer_gaming: 'Gaming', footer_profiles: 'Profiles', footer_connect: 'Connect',
       g_label: 'Gaming',
       g_title: 'Where I play',
       g_subtitle: 'Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.',
@@ -277,8 +276,6 @@ const platformTextColors: Record<string, string> = {
       g_hardware: 'Hardware',
     },
     pt: {
-      nav_projects: 'Projetos', nav_gaming: 'Jogos', nav_about: 'Sobre', nav_play: 'Jogar The Room',
-      footer_projects: 'Projetos', footer_all_projects: 'Todos os Projetos', footer_gaming: 'Jogos', footer_profiles: 'Perfis', footer_connect: 'Contato',
       g_label: 'Jogos',
       g_title: 'Onde eu jogo',
       g_subtitle: 'Jogos foram o que me levaram à programação — eu queria entender como as coisas que eu amava eram feitas, e essa curiosidade nunca foi embora.',
@@ -298,14 +295,5 @@ const platformTextColors: Record<string, string> = {
       g_library_total: '523 horas rastreadas no total entre Steam + Xbox',
       g_hardware: 'Hardware',
     },
-  };
-
-  const lang = localStorage.getItem('dl-lang') || 'en';
-  const s = strings[lang];
-  if (s) {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n')!;
-      if (key in s) el.innerHTML = s[key];
-    });
-  }
+  });
 </script>

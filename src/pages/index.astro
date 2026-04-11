@@ -1,10 +1,92 @@
 ---
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import StatsBar from "../components/StatsBar.astro";
+import BodySection from "../components/BodySection.astro";
+import SectionLink from "../components/SectionLink.astro";
 import Footer from "../components/Footer.astro";
+
+const stats = [
+  { value: "4", label: "Active Projects" },
+  { value: "13", label: "Games in The Room" },
+  { value: "4", label: "Gaming Platforms" },
+  { value: "2", label: "Languages (EN/PT)" },
+];
 ---
+
 <Base>
   <Header currentPath="/" />
-  <main><h1 class="p-12 text-3xl">Landing page content here</h1></main>
+
+  <Hero
+    title="Developer. Gamer.<br>Builder of things."
+    subtitle="Building multiplayer games and small tools that solve problems I care about. Based in Brazil."
+    cta={{ label: "Continue reading", href: "#intro" }}
+  />
+
+  <StatsBar stats={stats} />
+
+  <BodySection id="intro" label="Introduction" heading="Most of what I build starts as something I want to use myself.">
+    <p class="mb-4 max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>
+      is a multiplayer RPG platform — 13 games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a
+      <em class="not-italic font-medium text-text">full web client</em>
+      built with React, TypeScript, and Firebase.
+    </p>
+    <p class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      I also build smaller things when a problem catches my attention: a
+      <em class="not-italic font-medium text-text">WhatsApp bot</em>
+      for automating gym check-ins, a tool for
+      <em class="not-italic font-medium text-text">reverse engineering</em>
+      game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.
+    </p>
+
+    <!-- Wide project row (spans full container, like Glasswing's logo grid) -->
+    <div class="mt-12 flex flex-wrap gap-5">
+      <div class="min-w-[220px] flex-1 border-t border-border pt-5">
+        <h4 class="mb-1 text-[15px] font-medium">The Room</h4>
+        <span class="text-sm text-text-2">Multiplayer RPG &middot; C++ &middot; Web</span>
+      </div>
+      <div class="min-w-[220px] flex-1 border-t border-border pt-5">
+        <h4 class="mb-1 text-[15px] font-medium">The Room Web</h4>
+        <span class="text-sm text-text-2">React &middot; TypeScript &middot; Firebase</span>
+      </div>
+      <div class="min-w-[220px] flex-1 border-t border-border pt-5">
+        <h4 class="mb-1 text-[15px] font-medium">Gym Bot</h4>
+        <span class="text-sm text-text-2">WhatsApp &middot; Node.js &middot; GCP</span>
+      </div>
+      <div class="min-w-[220px] flex-1 border-t border-border pt-5">
+        <h4 class="mb-1 text-[15px] font-medium">GFWL Unlocker</h4>
+        <span class="text-sm text-text-2">C++ &middot; Binary Patching</span>
+      </div>
+    </div>
+
+    <SectionLink href="/projects" label="All projects" />
+  </BodySection>
+
+  <BodySection label="Gaming" heading="When I'm not coding, I'm usually playing something.">
+    <p class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      You'll find me on
+      <em class="not-italic font-medium text-text">Steam</em>,
+      <em class="not-italic font-medium text-text">Xbox</em>,
+      <em class="not-italic font-medium text-text">PlayStation</em>,
+      and occasionally wandering the lands of
+      <em class="not-italic font-medium text-text">Tibia</em>.
+      Gaming is what got me into programming in the first place — I wanted to understand how the things I loved were made, and that curiosity never went away.
+    </p>
+    <SectionLink href="/gaming" label="Gaming profiles" />
+  </BodySection>
+
+  <BodySection id="about" label="About" heading="A bit about me">
+    <p class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      I'm David — a developer and lifelong gamer from Brazil. I build things that interest me, from multiplayer RPGs to automation bots to achievement unlockers. Most of my work lives on
+      <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.
+    </p>
+    <p class="mt-4 max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+      Want to reach out?
+      <a href="mailto:davidluky@davidluky.com" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">davidluky@davidluky.com</a>
+    </p>
+  </BodySection>
+
   <Footer />
 </Base>

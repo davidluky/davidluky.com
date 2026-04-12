@@ -49,7 +49,7 @@ import { projects } from "../data/projects";
         </a>
         <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">13</div>
-          <div class="text-[12px] font-medium uppercase tracking-wider text-accent/70">Games in The Room</div>
+          <div data-i18n="stat_games_room" class="text-[12px] font-medium uppercase tracking-wider text-accent/70">Games in The Room</div>
         </a>
         <a href="/gaming" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">4</div>
@@ -94,6 +94,7 @@ import { projects } from "../data/projects";
       intro_p1: '<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> is a multiplayer RPG platform — 13 games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a <em class="not-italic font-medium text-text">full web client</em> built with React, TypeScript, and Firebase.',
       intro_p2: 'I also build smaller things when a problem catches my attention: a <em class="not-italic font-medium text-text">WhatsApp bot</em> for automating gym check-ins, a tool for <em class="not-italic font-medium text-text">reverse engineering</em> game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.',
       stat_projects: 'Active Projects',
+      stat_games_room: 'Games in The Room',
       stat_gaming: 'Gaming Platforms',
       stat_sites: 'Live Sites',
       stat_achievements: 'Achievements',
@@ -109,6 +110,7 @@ import { projects } from "../data/projects";
       intro_p1: '<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> é uma plataforma RPG multiplayer — 13 jogos, conquistas, economia e torneios. Começou como um aplicativo desktop em C++ e desde então se expandiu para um <em class="not-italic font-medium text-text">cliente web completo</em> feito com React, TypeScript e Firebase.',
       intro_p2: 'Também construo coisas menores quando um problema chama minha atenção: um <em class="not-italic font-medium text-text">bot de WhatsApp</em> para automatizar check-ins na academia, uma ferramenta para <em class="not-italic font-medium text-text">engenharia reversa</em> de dados de conquistas em plataformas legadas, e vários experimentos que nunca saem da fase de protótipo.',
       stat_projects: 'Projetos Ativos',
+      stat_games_room: 'Jogos em The Room',
       stat_gaming: 'Plataformas de Jogos',
       stat_sites: 'Sites Online',
       stat_achievements: 'Conquistas',
@@ -123,6 +125,8 @@ import { projects } from "../data/projects";
     const shared = lang === 'pt' ? sharedStrings.pt : sharedStrings.en;
     const page = pageStrings[lang as keyof typeof pageStrings];
     const s = { ...shared, ...page };
+
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n')!;

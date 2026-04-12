@@ -29,6 +29,8 @@ export function applyI18n(pageStrings: Record<string, Record<string, string>>) {
   const page = pageStrings[lang] || {};
   const merged = { ...shared, ...page };
 
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n')!;
     if (key in merged) el.innerHTML = merged[key as keyof typeof merged];

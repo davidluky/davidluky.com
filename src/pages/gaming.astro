@@ -64,7 +64,7 @@ const platformTextColors: Record<string, string> = {
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">1,337+</div>
         <div data-i18n="g_stat_games" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Total Games</div>
-        <div class="mt-2 text-[11px] text-text-3">Steam + Xbox + Epic</div>
+        <div data-i18n="g_stat_games_sub" class="mt-2 text-[11px] text-text-3">Steam + Xbox + Epic</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">7,600+</div>
@@ -79,7 +79,7 @@ const platformTextColors: Record<string, string> = {
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">4</div>
         <div data-i18n="g_stat_platforms" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Platforms</div>
-        <div class="mt-2 text-[11px] text-text-3">Steam, Xbox, Epic, Tibia</div>
+        <div data-i18n="g_stat_platforms_sub" class="mt-2 text-[11px] text-text-3">Steam, Xbox, Epic, Tibia</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">16</div>
@@ -89,7 +89,7 @@ const platformTextColors: Record<string, string> = {
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">627</div>
         <div data-i18n="g_stat_tibia" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Tibia Level</div>
-        <div class="mt-2 text-[11px] text-text-3">Elder Druid, Jadebra</div>
+        <div data-i18n="g_stat_tibia_sub" class="mt-2 text-[11px] text-text-3">Elder Druid, Jadebra</div>
       </div>
     </div>
   </section>
@@ -107,7 +107,7 @@ const platformTextColors: Record<string, string> = {
           </div>
           <div class="ml-auto text-right">
             <div class="text-lg font-light text-text">Lvl 30</div>
-            <div class="text-[11px] text-text-3">1,337 games</div>
+            <div data-i18n="g_steam_count" class="text-[11px] text-text-3">1,337 games</div>
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
@@ -115,9 +115,9 @@ const platformTextColors: Record<string, string> = {
           <span class="text-border">&middot;</span>
           <span>Terraria <span class="text-text-2">1,238h</span></span>
           <span class="text-border">&middot;</span>
-          <span>2 perfect games</span>
+          <span data-i18n="g_steam_perfect">2 perfect games</span>
           <span class="text-border">&middot;</span>
-          <span>96 friends</span>
+          <span data-i18n="g_steam_friends">96 friends</span>
         </div>
       </div>
 
@@ -135,11 +135,11 @@ const platformTextColors: Record<string, string> = {
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
-          <span>5 tracked games</span>
+          <span data-i18n="g_xbox_tracked">5 tracked games</span>
           <span class="text-border">&middot;</span>
-          <span>59h played</span>
+          <span data-i18n="g_xbox_played">59h played</span>
           <span class="text-border">&middot;</span>
-          <span>8 Game Pass titles</span>
+          <span data-i18n="g_xbox_gp">8 Game Pass titles</span>
         </div>
       </div>
 
@@ -161,11 +161,11 @@ const platformTextColors: Record<string, string> = {
           <span class="text-border">&middot;</span>
           <span>Jadebraland Encore</span>
           <span class="text-border">&middot;</span>
-          <span>234 achievement pts</span>
+          <span data-i18n="g_tibia_pts">234 achievement pts</span>
           <span class="text-border">&middot;</span>
-          <span>Since 2014</span>
+          <span data-i18n="g_tibia_since">Since 2014</span>
           <span class="text-border">&middot;</span>
-          <span>23 titles</span>
+          <span data-i18n="g_tibia_titles">23 titles</span>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ const platformTextColors: Record<string, string> = {
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
-          <span>Free game collector since the early giveaways</span>
+          <span data-i18n="g_epic_desc">Free game collector since the early giveaways</span>
         </div>
       </div>
     </div>
@@ -261,14 +261,27 @@ const platformTextColors: Record<string, string> = {
       g_subtitle: 'Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.',
       g_overview: 'Overview',
       g_stat_games: 'Total Games',
+      g_stat_games_sub: 'Steam + Xbox + Epic',
       g_stat_hours: 'Hours Played',
       g_stat_hours_sub: 'Across all platforms',
       g_stat_achievements: 'Achievements',
       g_stat_achievements_sub: 'Steam only',
       g_stat_platforms: 'Platforms',
+      g_stat_platforms_sub: 'Steam, Xbox, Epic, Tibia',
       g_stat_years: 'Years Gaming',
       g_stat_years_sub: 'On Steam since 2010',
       g_stat_tibia: 'Tibia Level',
+      g_stat_tibia_sub: 'Elder Druid, Jadebra',
+      g_steam_count: '1,337 games',
+      g_steam_perfect: '2 perfect games',
+      g_steam_friends: '96 friends',
+      g_xbox_tracked: '5 tracked games',
+      g_xbox_played: '59h played',
+      g_xbox_gp: '8 Game Pass titles',
+      g_tibia_pts: '234 achievement pts',
+      g_tibia_since: 'Since 2014',
+      g_tibia_titles: '23 titles',
+      g_epic_desc: 'Free game collector since the early giveaways',
       g_recent: 'Recently Played',
       g_library: 'Library Highlights',
       g_library_desc: 'Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.',
@@ -281,14 +294,27 @@ const platformTextColors: Record<string, string> = {
       g_subtitle: 'Jogos foram o que me levaram à programação — eu queria entender como as coisas que eu amava eram feitas, e essa curiosidade nunca foi embora.',
       g_overview: 'Visão Geral',
       g_stat_games: 'Total de Jogos',
+      g_stat_games_sub: 'Steam + Xbox + Epic',
       g_stat_hours: 'Horas Jogadas',
       g_stat_hours_sub: 'Em todas as plataformas',
       g_stat_achievements: 'Conquistas',
       g_stat_achievements_sub: 'Apenas Steam',
       g_stat_platforms: 'Plataformas',
+      g_stat_platforms_sub: 'Steam, Xbox, Epic, Tibia',
       g_stat_years: 'Anos Jogando',
       g_stat_years_sub: 'Na Steam desde 2010',
       g_stat_tibia: 'Nível no Tibia',
+      g_stat_tibia_sub: 'Druida Ancião, Jadebra',
+      g_steam_count: '1.337 jogos',
+      g_steam_perfect: '2 jogos perfeitos',
+      g_steam_friends: '96 amigos',
+      g_xbox_tracked: '5 jogos rastreados',
+      g_xbox_played: '59h jogadas',
+      g_xbox_gp: '8 títulos do Game Pass',
+      g_tibia_pts: '234 pts de conquistas',
+      g_tibia_since: 'Desde 2014',
+      g_tibia_titles: '23 títulos',
+      g_epic_desc: 'Coletor de jogos grátis desde as primeiras promoções',
       g_recent: 'Jogados Recentemente',
       g_library: 'Destaques da Biblioteca',
       g_library_desc: 'Rastreado via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — um app desktop que eu construí para agregar jogos de várias plataformas.',

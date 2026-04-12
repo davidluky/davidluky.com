@@ -164,6 +164,42 @@ a {
   display: block;
 }
 
+/* ── Achievements tooltip ── */
+.achievements-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-2);
+  white-space: normal;
+  width: max-content;
+  max-width: 240px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.achievements-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+}
+
+.achievements-tile:hover .achievements-tooltip,
+.achievements-tile:active .achievements-tooltip {
+  display: block;
+}
+
 /* ── Animations ── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }

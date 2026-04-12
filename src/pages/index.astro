@@ -59,9 +59,10 @@ import { projects } from "../data/projects";
           <div class="text-4xl font-light tracking-tight text-text mb-2">3</div>
           <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
         </div>
-        <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="achievements-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">239</div>
           <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
+          <div id="achievements-tooltip" class="achievements-tooltip" data-i18n="stat_achievements_tip">The real achievements are the traumas we acquired along the way!</div>
         </div>
         <!-- Language toggle card -->
         <button id="lang-toggle" class="rounded-xl bg-[#0f0f0e] p-6 text-left cursor-pointer transition-colors hover:bg-[#141413] group">
@@ -96,6 +97,7 @@ import { projects } from "../data/projects";
       stat_gaming: 'Gaming Platforms',
       stat_sites: 'Live Sites',
       stat_achievements: 'Achievements',
+      stat_achievements_tip: 'The real achievements are the traumas we acquired along the way!',
       stat_lang: 'Languages',
     },
     pt: {
@@ -110,6 +112,7 @@ import { projects } from "../data/projects";
       stat_gaming: 'Plataformas de Jogos',
       stat_sites: 'Sites Online',
       stat_achievements: 'Conquistas',
+      stat_achievements_tip: 'As verdadeiras conquistas são os traumas que adquirimos pelo caminho!',
       stat_lang: 'Idiomas',
     },
   };

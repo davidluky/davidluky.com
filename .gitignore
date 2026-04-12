@@ -6,3 +6,14 @@ dist/
 .env
 .env.*
 !.env.example
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Secrets & certificates
+*.pem
+*.key
+*.p12
+*service-account*.json

@@ -37,7 +37,7 @@ export const projects: Project[] = [
       "Marketplace for Tibia game services — hunting, quests, bestiary, PK. Booking system with in-chat, character verification via TibiaData API, reviews, dispute resolution, and featured listings.",
     descriptionPt:
       "Marketplace para serviços de Tibia — hunts, quests, bestiário, PK. Sistema de reservas com chat, verificação de personagem via TibiaData API, avaliações, resolução de disputas e destaques.",
-    tech: ["Next.js 14", "Supabase", "TypeScript", "Tailwind"],
+    tech: ["Next.js 15", "Supabase", "TypeScript", "Tailwind"],
     tag: "Marketplace",
     tagPt: "Marketplace",
     link: "https://tibia.davidluky.com",
@@ -81,7 +81,7 @@ export const projects: Project[] = [
       "Personal AI workstation for running open-weight models locally via Ollama with intelligent cloud escalation. Claude Code-like CLI, custom MCP servers, skill library, benchmark framework, and cost tracking.",
     descriptionPt:
       "Estação de trabalho pessoal de IA para rodar modelos open-weight localmente via Ollama com escalação inteligente para nuvem. CLI estilo Claude Code, servidores MCP customizados, biblioteca de skills, framework de benchmark e rastreamento de custos.",
-    tech: ["TypeScript", "Ollama", "OpenClaude", "MCP"],
+    tech: ["Python", "Ollama", "MCP", "Claude Code"],
     tag: "AI Tooling",
     tagPt: "Ferramentas de IA",
     link: null,
@@ -103,7 +103,7 @@ export const projects: Project[] = [
       "Family storytelling platform with decade-based timeline, DOCX/PDF upload, auto-image extraction, password-gated reader access, and admin dashboard.",
     descriptionPt:
       "Plataforma de histórias familiares com timeline por década, upload de DOCX/PDF, extração automática de imagens, acesso de leitura protegido por senha e painel admin.",
-    tech: ["Next.js 14", "SQLite", "Tailwind", "mammoth.js"],
+    tech: ["Next.js 15", "SQLite", "Tailwind", "mammoth.js"],
     tag: "Web App",
     tagPt: "App Web",
     link: null,
@@ -128,6 +128,28 @@ export const projects: Project[] = [
     tech: ["Python", "discord.py"],
     tag: "Bot",
     tagPt: "Bot",
+    link: null,
+  },
+  {
+    name: "Gemini Pixel Art Generator",
+    description:
+      "Batch sprite generation pipeline using Google Gemini via Vertex AI. Region rotation for quota management, post-processing (resize, transparency, palette normalization), and dry-run mode. Built to generate RPG sprites for The Room.",
+    descriptionPt:
+      "Pipeline de geração de sprites em lote usando Google Gemini via Vertex AI. Rotação de regiões para gestão de quota, pós-processamento (redimensionamento, transparência, normalização de paleta) e modo dry-run. Feito para gerar sprites de RPG para o The Room.",
+    tech: ["Python", "Vertex AI", "Gemini API", "PIL"],
+    tag: "AI Tooling",
+    tagPt: "Ferramentas de IA",
+    link: null,
+  },
+  {
+    name: "Megaman X",
+    description:
+      "Game engine and remake project built from scratch with raylib. Content-driven architecture with JSON-based level and entity definitions, custom physics, and sprite animation system.",
+    descriptionPt:
+      "Engine de jogo e projeto de remake feito do zero com raylib. Arquitetura orientada a conteúdo com definições de níveis e entidades em JSON, física customizada e sistema de animação de sprites.",
+    tech: ["C++17", "raylib", "CMake", "JSON"],
+    tag: "Game Dev",
+    tagPt: "Desenvolvimento de Jogos",
     link: null,
   },
   {

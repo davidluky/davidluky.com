@@ -5,9 +5,9 @@ import Footer from "../components/Footer.astro";
 
 const techStack = {
   Languages: ["TypeScript", "C++17", "C", "Python", "Bash", "SQL"],
-  Frontend: ["React 19", "Astro", "Tailwind CSS", "Vite", "Electron"],
+  Frontend: ["React 19", "Astro", "Tailwind CSS", "Vite", "Electron", "raylib"],
   Backend: ["Node.js", "Next.js", "Firebase", "Supabase", "SQLite"],
-  Tools: ["Git", "Cloudflare Workers", "Vercel", "PM2", "Ollama", "MCP"],
+  Tools: ["Git", "Cloudflare Workers", "Vercel", "PM2", "Ollama", "MCP", "Vertex AI"],
 };
 
 const timeline = [
@@ -16,6 +16,7 @@ const timeline = [
   { year: "2020", text: "Built The Room — a multiplayer RPG platform in C++ with 13 games" },
   { year: "2024", text: "Expanded The Room to a full React web client with Firebase" },
   { year: "2025", text: "Built Tibia Services, Game Library, Local IA, and this site" },
+  { year: "2026", text: "Started Megaman X remake with raylib, built Gemini-powered sprite generation for The Room" },
 ];
 ---
 
@@ -49,7 +50,7 @@ const timeline = [
         My main project is <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, a multiplayer RPG platform with 13 games, 239 achievements, a full economy, and tournaments. It started as a C++ desktop application and grew into a React web client sharing the same Firebase backend.
       </p>
       <p data-i18n="a_bg_p3" class="text-[15px] leading-[1.85] text-text-2">
-        Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, and various experiments with local AI models.
+        Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, AI-powered sprite generation via Gemini, and a Megaman X remake from scratch with raylib.
       </p>
     </div>
   </section>
@@ -116,7 +117,7 @@ const timeline = [
       a_bg_label: 'Background',
       a_bg_p1: 'Gaming is what got me into programming. I wanted to understand how the things I loved were made — that curiosity turned into building my own games, tools, and platforms.',
       a_bg_p2: 'My main project is <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, a multiplayer RPG platform with 13 games, 239 achievements, a full economy, and tournaments. It started as a C++ desktop application and grew into a React web client sharing the same Firebase backend.',
-      a_bg_p3: 'Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, and various experiments with local AI models.',
+      a_bg_p3: 'Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, AI-powered sprite generation via Gemini, and a Megaman X remake from scratch with raylib.',
       a_tech_label: 'What I work with',
       a_timeline_label: 'Timeline',
       a_contact_label: 'Get in touch',
@@ -129,7 +130,7 @@ const timeline = [
       a_bg_label: 'Trajetória',
       a_bg_p1: 'Jogos foram o que me levaram à programação. Eu queria entender como as coisas que eu amava eram feitas — essa curiosidade se transformou em construir meus próprios jogos, ferramentas e plataformas.',
       a_bg_p2: 'Meu projeto principal é o <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, uma plataforma RPG multiplayer com 13 jogos, 239 conquistas, economia completa e torneios. Começou como um aplicativo desktop em C++ e cresceu para um cliente web em React compartilhando o mesmo backend Firebase.',
-      a_bg_p3: 'Fora isso, construo o que chama minha atenção — um bot de WhatsApp para rastrear check-ins na academia, um marketplace para serviços de Tibia, uma ferramenta para engenharia reversa de dados de conquistas do Xbox, e vários experimentos com modelos de IA locais.',
+      a_bg_p3: 'Fora isso, construo o que chama minha atenção — um bot de WhatsApp para rastrear check-ins na academia, um marketplace para serviços de Tibia, uma ferramenta para engenharia reversa de dados de conquistas do Xbox, geração de sprites com IA via Gemini, e um remake do Megaman X feito do zero com raylib.',
       a_tech_label: 'Com o que trabalho',
       a_timeline_label: 'Linha do tempo',
       a_contact_label: 'Entre em contato',

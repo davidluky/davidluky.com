@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MMX Phase 4 — Fall investigation</title>
+  <title>MMX Phase 4 — Fall investigation (corrected)</title>
   <meta name="robots" content="noindex" />
   <style>
     :root {
       --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
-      --warn: #ffcc66; --good: #88e07c; --panel: #12151c; --panel2: #1a1f2a;
+      --warn: #ffcc66; --good: #88e07c; --bad: #ff7a7a; --panel: #12151c; --panel2: #1a1f2a;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; background: var(--bg); color: var(--fg);
@@ -18,10 +18,6 @@
     h2 { margin: 28px 0 8px; font-size: 17px; color: var(--accent); }
     .sub { color: var(--muted); font-size: 13px; }
     main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
-    .summary { background: var(--panel); border: 1px solid #222; border-radius: 10px;
-      padding: 14px 18px; margin: 16px 0 8px; }
-    .summary p { margin: 6px 0; }
-    .kv { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--muted); }
     code { background: var(--panel2); padding: 1px 5px; border-radius: 4px; color: var(--warn); font-size: 13px; }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -32,18 +28,16 @@
     .cell .ram { padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace;
       font-size: 11px; line-height: 1.35; color: var(--muted); }
     .cell .ram .frame { color: var(--fg); font-weight: 600; }
-    .cell.event { border-color: var(--warn); box-shadow: 0 0 0 1px rgba(255,204,102,.25); }
-    .cell.event .ram .frame { color: var(--warn); }
+    .cell.event-death { border-color: var(--bad); box-shadow: 0 0 0 1px rgba(255,122,122,.3); }
+    .cell.event-death .ram .frame { color: var(--bad); }
+    .cell.event-respawn { border-color: var(--good); box-shadow: 0 0 0 1px rgba(136,224,124,.25); }
+    .cell.event-respawn .ram .frame { color: var(--good); }
+    .cell.event-xtransition { border-color: var(--warn); box-shadow: 0 0 0 1px rgba(255,204,102,.25); }
+    .cell.event-xtransition .ram .frame { color: var(--warn); }
 
-    .legend { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted);
-      font-size: 12px; margin-top: 6px; }
-    .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px;
-      border-radius: 2px; margin-right: 6px; vertical-align: middle; background: #333; }
-    .legend .ev::before { background: var(--warn); }
-
-    .question { background: linear-gradient(180deg, #18202e, #131823); border-left: 3px solid var(--accent);
+    .correction { background: linear-gradient(180deg, #2a1b1b, #1a1010); border-left: 3px solid var(--bad);
       padding: 12px 16px; margin: 12px 0 18px; border-radius: 6px; }
-    .question em { color: var(--accent); font-style: normal; font-weight: 600; }
+    .correction em { color: var(--bad); font-style: normal; font-weight: 600; }
     .verdict { background: linear-gradient(180deg, #14241a, #0f1714); border-left: 3px solid var(--good);
       padding: 12px 16px; margin: 12px 0 18px; border-radius: 6px; }
     .verdict em { color: var(--good); font-style: normal; font-weight: 600; }
@@ -53,7 +47,9 @@
     table.ram-table th, table.ram-table td { text-align: left; padding: 4px 8px;
       border-bottom: 1px solid #1e2330; }
     table.ram-table th { color: var(--accent); font-weight: 600; }
-    table.ram-table tr.event td { background: rgba(255,204,102,.08); color: var(--warn); }
+    table.ram-table tr.death td { background: rgba(255,122,122,.08); color: var(--bad); }
+    table.ram-table tr.respawn td { background: rgba(136,224,124,.08); color: var(--good); }
+    table.ram-table tr.xtransition td { background: rgba(255,204,102,.08); color: var(--warn); }
 
     details { margin-top: 10px; background: var(--panel); border: 1px solid #1e2330;
       border-radius: 8px; padding: 10px 14px; }
@@ -64,93 +60,89 @@
   <header>
     <h1>MMX Phase 4 — Fall investigation</h1>
     <p class="sub">Chill Penguin, <code>chill_penguin_post_dash.mss</code> fixture.
-      Schedule: hold right, jump every 40f, L-dash every 25f.
-      248 screenshots captured with per-frame RAM snapshots.</p>
+      248 screenshots + per-frame RAM.
+      <strong style="color:var(--bad)">Corrected 2026-04-17 after David spotted the real death</strong>
+      that the first version of this page missed.</p>
   </header>
 
   <main>
     <section>
-      <div class="question">
-        <em>David's question:</em> &ldquo;Maybe X really fell into a pit but hit something we
-        couldn't see on screen — can I see the images?&rdquo;
+      <div class="correction">
+        <em>Correction (my mistake, caught by David):</em> The first version of this page said
+        &ldquo;X did not die, both events are screen transitions.&rdquo; That was wrong &mdash; I
+        was looking at the wrong time window. The <strong>real death</strong> happened at
+        frames ~300-520 (Event 0, below), BEFORE the two screen transitions I originally
+        focused on. Extra-lives counter <code>$7E1F80</code> drops <code>2 → 1</code> between
+        frames 400 and 420 and X respawns at frame 520.
       </div>
 
       <div class="verdict">
-        <em>Verdict (from RAM trace):</em> player_y stayed at <strong>~1183</strong>
-        (ground level) through <em>both</em> camera-X resets. X did not fall.
-        What looked like &ldquo;death&rdquo; in the aggregate data was two separate
-        <strong>screen transitions</strong>. Screenshots below confirm.
-      </div>
-
-      <div class="legend">
-        <span>normal capture (every 20 frames)</span>
-        <span class="ev">dense capture around a camera-reset event</span>
+        <em>Now-correct timeline:</em>
+        <ol style="margin:6px 0 0 18px;">
+          <li><strong>Event 0</strong> (frames ~280-560): <span style="color:var(--bad)">X falls and dies.</span>
+            y_16 goes off-ground, anim freezes at 79, life drops 2→1, full screen black, respawn at x=32768/y=1024.</li>
+          <li><strong>Event A</strong> (frames 810-830): <span style="color:var(--warn)">screen boundary wrap.</span>
+            player_x_16 u16 wraps 65376→216 while y stays at ground 1183. Not a death.</li>
+          <li><strong>Event B</strong> (frames 940-960): <span style="color:var(--warn)">segment boundary.</span>
+            camera_x_16 wraps 65280→0 while player_x_16 keeps advancing (no player wrap).
+            y stays at 1163-1167 (ground). Not a death.</li>
+        </ol>
       </div>
     </section>
 
     <section>
-      <h2>Event A — first camera reset (frames 810-830)</h2>
+      <h2 style="color:var(--bad)">Event 0 — the actual death (frames 280-560)</h2>
+      <p class="sub">
+        Sparse capture (every 20 frames) because my original dense windows missed this.
+        Even sparse, the story is clear: X is frozen at <code>x=18496, y=768, anim=79</code>
+        for ~140 frames (classic "fallen off screen, dying" state), then life decrements,
+        then screen goes black for ~80 frames, then respawn. A dense re-capture probe
+        for this window is queued if we want the frame-by-frame fall.
+      </p>
+      <div class="grid" id="grid-death"></div>
+    </section>
+
+    <section>
+      <h2>Event A — screen boundary wrap (frames 810-830, POST-RESPAWN)</h2>
       <p class="sub">
         <code>player_x_16</code> wraps <code>65376&nbsp;→&nbsp;216</code> at frame
-        814→815. <code>player_y_16 = 1183</code> (ground) throughout.
-        Classic MMX screen-boundary u16 wrap: X was at pixel 255 of screen N, becomes pixel 0 of screen N+1.
-        Camera continues advancing on the new screen without resetting.
+        814→815. <code>player_y_16 = 1183</code> (ground) throughout. Classic u16
+        wrap as X hits pixel 255 on the current segment and starts over at pixel 0 of the next.
       </p>
       <div class="grid" id="grid-a"></div>
     </section>
 
     <section>
-      <h2>Event B — second camera reset (frames 940-960)</h2>
+      <h2>Event B — segment boundary (frames 940-960, POST-RESPAWN)</h2>
       <p class="sub">
-        <code>camera_x_16</code> wraps <code>65280&nbsp;→&nbsp;0</code> at frame
-        946→947, but this time <code>player_x_16</code> does <strong>not</strong> wrap
-        (32582&nbsp;→&nbsp;32958, continuous). Suggests MMX uses variable-size
-        stage segments, not fixed 256-px screens. <code>player_y_16 = ~1165</code>
-        (ground) throughout. Anim state shifts between walk (167-170) and
-        dash-related (209-212), consistent with continuous movement.
+        <code>camera_x_16</code> wraps <code>65280&nbsp;→&nbsp;0</code> at frame 946→947,
+        but <code>player_x_16</code> doesn't wrap (32582→32958, continuous). MMX uses
+        variable-size stage segments that don't always align with the player-X 256-px
+        wrap. y stays ~1165 (ground).
       </p>
       <div class="grid" id="grid-b"></div>
     </section>
 
     <section>
-      <h2>Aftermath (frames 1000-1060)</h2>
-      <p class="sub">
-        After Event B, X continues rightward on the new segment. camera_x
-        advances from ~0 to ~21000+. No deaths, no fade-to-black. If X had died,
-        this is where the respawn sequence would show.
-      </p>
-      <div class="grid" id="grid-aftermath"></div>
-    </section>
-
-    <section>
       <h2>Baseline (every 20 frames, for comparison)</h2>
-      <p class="sub">Sparse capture across the rest of the run. X is continuously alive throughout.</p>
+      <p class="sub">Sparse capture across the rest of the run.</p>
       <div class="grid" id="grid-baseline"></div>
     </section>
 
     <section>
-      <h2>RAM trace at the two events</h2>
-      <details open>
-        <summary>Frame-by-frame RAM around Event A (frame 815)</summary>
-        <table class="ram-table" id="ram-a"></table>
-      </details>
-      <details>
-        <summary>Frame-by-frame RAM around Event B (frame 946-947)</summary>
-        <table class="ram-table" id="ram-b"></table>
-      </details>
+      <h2>RAM trace — the death sequence</h2>
+      <table class="ram-table" id="ram-death"></table>
     </section>
 
     <section>
-      <h2>What I'd like you to check</h2>
-      <ul>
-        <li>In the <strong>Event A</strong> grid — do you see X just walking off the
-          right edge of one screen and onto the left edge of the next? Or does it
-          look like a death/pit-fall?</li>
-        <li>In the <strong>Event B</strong> grid — does the environment look
-          different between frame 946 (before reset) and frame 947 (after)?
-          If yes: a new palette zone / segment boundary. If no: something weirder.</li>
-        <li>Any frame where the sprite looks wrong / glitched / damaged?</li>
-      </ul>
+      <h2>Lesson for me</h2>
+      <p>I used <code>$7E1F80</code> as "life counter" in the RAM trace &mdash; it was informative
+      (did drop 2→1 at the death) &mdash; but I wrote the webpage looking only at the 800s and 900s
+      windows I had dense-captured. The death was at frame ~400, outside those windows.
+      KB-027 (flight-recorder) already warned against this class of error: &ldquo;aggregates
+      lie when primitives collide.&rdquo; I violated my own KB entry by picking the wrong
+      time window and then confidently claiming no death occurred. Updating KB-027 with the
+      follow-up lesson: <strong>also check the right window.</strong></p>
     </section>
   </main>
 
@@ -164,9 +156,9 @@
       });
 
       const inRange = (r, a, b) => r.frame >= a && r.frame <= b;
-      const mk = (r, isEvent) => {
+      const mk = (r, eventClass) => {
         const cell = document.createElement("div");
-        cell.className = "cell" + (isEvent ? " event" : "");
+        cell.className = "cell" + (eventClass ? " event-" + eventClass : "");
         const img = document.createElement("img");
         img.src = "shots/" + r.fn;
         img.loading = "lazy";
@@ -183,38 +175,50 @@
         return cell;
       };
 
-      const putInto = (id, rows, isEventFn) => {
+      const putInto = (id, rows, classify) => {
         const g = document.getElementById(id);
-        for (const r of rows) g.appendChild(mk(r, isEventFn(r)));
+        for (const r of rows) g.appendChild(mk(r, classify(r)));
       };
+
+      // DEATH: frames 280-560
+      putInto("grid-death",
+        rows.filter(r => inRange(r, 260, 600)),
+        r => {
+          if (r.frame >= 400 && r.frame <= 440) return "death";
+          if (r.frame >= 460 && r.frame <= 520) return "death";
+          if (r.frame >= 540 && r.frame <= 580) return "respawn";
+          return null;
+        });
 
       putInto("grid-a",
         rows.filter(r => inRange(r, 805, 835)),
-        r => r.frame === 814 || r.frame === 815);
+        r => (r.frame === 814 || r.frame === 815) ? "xtransition" : null);
       putInto("grid-b",
         rows.filter(r => inRange(r, 935, 965)),
-        r => r.frame === 946 || r.frame === 947);
-      putInto("grid-aftermath",
-        rows.filter(r => inRange(r, 1000, 1060)),
-        () => false);
+        r => (r.frame === 946 || r.frame === 947) ? "xtransition" : null);
+      // Baseline is sparse stuff NOT in the dense windows and NOT the death
       putInto("grid-baseline",
-        rows.filter(r => r.frame < 800 || (r.frame > 1060 && r.frame <= 1200)),
-        () => false);
+        rows.filter(r => r.frame > 600 && r.frame < 800).concat(
+          rows.filter(r => r.frame > 1060 && r.frame <= 1200)),
+        () => null);
 
-      // RAM tables
-      const mkTable = (id, range) => {
-        const tbl = document.getElementById(id);
-        const inR = rows.filter(r => inRange(r, range[0], range[1]));
-        tbl.innerHTML = "<tr><th>frame</th><th>player_x_16</th><th>player_y_16</th><th>anim</th><th>camera_x_16</th><th>life_1f80</th></tr>" +
-          inR.map(r => {
-            const ev = (range[2] || []).includes(r.frame) ? ' class="event"' : "";
-            return `<tr${ev}><td>${r.frame}</td><td>${r.px} (${Math.floor(r.px/256)}px)</td>` +
-              `<td>${r.py} (${Math.floor(r.py/256)}px)</td><td>${r.anim}</td>` +
-              `<td>${r.cx} (${Math.floor(r.cx/256)}px)</td><td>${r.life}</td></tr>`;
-          }).join("");
-      };
-      mkTable("ram-a", [808, 822, [814, 815]]);
-      mkTable("ram-b", [942, 956, [946, 947]]);
+      // RAM table for death
+      const tbl = document.getElementById("ram-death");
+      const inR = rows.filter(r => inRange(r, 260, 600));
+      tbl.innerHTML = "<tr><th>frame</th><th>player_x_16</th><th>player_y_16 (px)</th><th>anim</th><th>camera_x_16</th><th>life</th><th>notes</th></tr>" +
+        inR.map(r => {
+          let cls = "", note = "";
+          if (r.frame === 420) { cls = "death"; note = "life: 2→1"; }
+          else if (r.py === 0 && r.px === 0) { cls = "death"; note = "game-over / black"; }
+          else if (r.frame === 520) { cls = "respawn"; note = "respawn starts"; }
+          else if (r.py === 768 && r.anim === 79) { note = "frozen, falling"; }
+          const pyPx = r.py > 0 ? Math.floor(r.py/256) : 0;
+          const pyLabel = r.py === 768 ? "pixel 3 (HIGH / airborne)" :
+                          r.py === 1183 ? "pixel 4 (ground)" :
+                          r.py === 1024 ? "pixel 4 (ground, respawn)" :
+                          `pixel ${pyPx}`;
+          return `<tr${cls ? ' class="'+cls+'"' : ''}><td>${r.frame}</td><td>${r.px}</td><td>${r.py} &nbsp;${pyLabel}</td><td>${r.anim}</td><td>${r.cx}</td><td>${r.life}</td><td>${note}</td></tr>`;
+        }).join("");
     }
     load();
   </script>

@@ -67,11 +67,14 @@
 </header>
 
 <main>
-  <div class="verdict">
-    <em>Finding:</em> <strong>X's palette is CGRAM row 9</strong> (colors 144..159, bytes 288..319).
-    The small colour swatches under each screenshot show row 9 decoded from that capture's CGRAM.
-    Watch bytes 292..319 shift across captures while 288..291 (X's core body blue-white) stay
-    constant.
+  <div class="verdict" style="border-left-color: var(--bad); background: linear-gradient(180deg, #241414, #171010);">
+    <em style="color:var(--bad);">Finding WITHDRAWN.</em> First pass claimed row 9 is X's sprite palette because
+    its bytes changed on some SELECT taps. David spotted the problem visually: across all 10
+    shots <strong>X's sprite looks identical</strong> — no weapon tint ever. The armor writes
+    worked (you see helmet/chest/boots) but the weapon-acquired bit alone wasn't enough to
+    make SELECT cycle weapons, so X stayed on buster the whole run. The row-9 byte changes
+    are likely HUD weapon-icon flicker, not X. Waiting on an authentic password-entry
+    fixture before re-running P3.
   </div>
 
   <div class="caution">

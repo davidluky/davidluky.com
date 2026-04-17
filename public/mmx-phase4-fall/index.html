@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MMX Phase 4 — Fall investigation</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
+      --warn: #ffcc66; --good: #88e07c; --panel: #12151c; --panel2: #1a1f2a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg);
+      font: 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    header { padding: 28px 24px 12px; max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0 0 4px; font-size: 22px; letter-spacing: 0.2px; }
+    h2 { margin: 28px 0 8px; font-size: 17px; color: var(--accent); }
+    .sub { color: var(--muted); font-size: 13px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+    .summary { background: var(--panel); border: 1px solid #222; border-radius: 10px;
+      padding: 14px 18px; margin: 16px 0 8px; }
+    .summary p { margin: 6px 0; }
+    .kv { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--muted); }
+    code { background: var(--panel2); padding: 1px 5px; border-radius: 4px; color: var(--warn); font-size: 13px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px; margin-top: 10px; }
+    .cell { background: var(--panel); border: 1px solid #1e2330; border-radius: 8px;
+      overflow: hidden; }
+    .cell img { width: 100%; display: block; image-rendering: pixelated; background: #000; }
+    .cell .ram { padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; line-height: 1.35; color: var(--muted); }
+    .cell .ram .frame { color: var(--fg); font-weight: 600; }
+    .cell.event { border-color: var(--warn); box-shadow: 0 0 0 1px rgba(255,204,102,.25); }
+    .cell.event .ram .frame { color: var(--warn); }
+
+    .legend { display: flex; gap: 18px; flex-wrap: wrap; color: var(--muted);
+      font-size: 12px; margin-top: 6px; }
+    .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px;
+      border-radius: 2px; margin-right: 6px; vertical-align: middle; background: #333; }
+    .legend .ev::before { background: var(--warn); }
+
+    .question { background: linear-gradient(180deg, #18202e, #131823); border-left: 3px solid var(--accent);
+      padding: 12px 16px; margin: 12px 0 18px; border-radius: 6px; }
+    .question em { color: var(--accent); font-style: normal; font-weight: 600; }
+    .verdict { background: linear-gradient(180deg, #14241a, #0f1714); border-left: 3px solid var(--good);
+      padding: 12px 16px; margin: 12px 0 18px; border-radius: 6px; }
+    .verdict em { color: var(--good); font-style: normal; font-weight: 600; }
+
+    table.ram-table { border-collapse: collapse; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; margin: 12px 0; width: 100%; }
+    table.ram-table th, table.ram-table td { text-align: left; padding: 4px 8px;
+      border-bottom: 1px solid #1e2330; }
+    table.ram-table th { color: var(--accent); font-weight: 600; }
+    table.ram-table tr.event td { background: rgba(255,204,102,.08); color: var(--warn); }
+
+    details { margin-top: 10px; background: var(--panel); border: 1px solid #1e2330;
+      border-radius: 8px; padding: 10px 14px; }
+    summary { cursor: pointer; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MMX Phase 4 — Fall investigation</h1>
+    <p class="sub">Chill Penguin, <code>chill_penguin_post_dash.mss</code> fixture.
+      Schedule: hold right, jump every 40f, L-dash every 25f.
+      248 screenshots captured with per-frame RAM snapshots.</p>
+  </header>
+
+  <main>
+    <section>
+      <div class="question">
+        <em>David's question:</em> &ldquo;Maybe X really fell into a pit but hit something we
+        couldn't see on screen — can I see the images?&rdquo;
+      </div>
+
+      <div class="verdict">
+        <em>Verdict (from RAM trace):</em> player_y stayed at <strong>~1183</strong>
+        (ground level) through <em>both</em> camera-X resets. X did not fall.
+        What looked like &ldquo;death&rdquo; in the aggregate data was two separate
+        <strong>screen transitions</strong>. Screenshots below confirm.
+      </div>
+
+      <div class="legend">
+        <span>normal capture (every 20 frames)</span>
+        <span class="ev">dense capture around a camera-reset event</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Event A — first camera reset (frames 810-830)</h2>
+      <p class="sub">
+        <code>player_x_16</code> wraps <code>65376&nbsp;→&nbsp;216</code> at frame
+        814→815. <code>player_y_16 = 1183</code> (ground) throughout.
+        Classic MMX screen-boundary u16 wrap: X was at pixel 255 of screen N, becomes pixel 0 of screen N+1.
+        Camera continues advancing on the new screen without resetting.
+      </p>
+      <div class="grid" id="grid-a"></div>
+    </section>
+
+    <section>
+      <h2>Event B — second camera reset (frames 940-960)</h2>
+      <p class="sub">
+        <code>camera_x_16</code> wraps <code>65280&nbsp;→&nbsp;0</code> at frame
+        946→947, but this time <code>player_x_16</code> does <strong>not</strong> wrap
+        (32582&nbsp;→&nbsp;32958, continuous). Suggests MMX uses variable-size
+        stage segments, not fixed 256-px screens. <code>player_y_16 = ~1165</code>
+        (ground) throughout. Anim state shifts between walk (167-170) and
+        dash-related (209-212), consistent with continuous movement.
+      </p>
+      <div class="grid" id="grid-b"></div>
+    </section>
+
+    <section>
+      <h2>Aftermath (frames 1000-1060)</h2>
+      <p class="sub">
+        After Event B, X continues rightward on the new segment. camera_x
+        advances from ~0 to ~21000+. No deaths, no fade-to-black. If X had died,
+        this is where the respawn sequence would show.
+      </p>
+      <div class="grid" id="grid-aftermath"></div>
+    </section>
+
+    <section>
+      <h2>Baseline (every 20 frames, for comparison)</h2>
+      <p class="sub">Sparse capture across the rest of the run. X is continuously alive throughout.</p>
+      <div class="grid" id="grid-baseline"></div>
+    </section>
+
+    <section>
+      <h2>RAM trace at the two events</h2>
+      <details open>
+        <summary>Frame-by-frame RAM around Event A (frame 815)</summary>
+        <table class="ram-table" id="ram-a"></table>
+      </details>
+      <details>
+        <summary>Frame-by-frame RAM around Event B (frame 946-947)</summary>
+        <table class="ram-table" id="ram-b"></table>
+      </details>
+    </section>
+
+    <section>
+      <h2>What I'd like you to check</h2>
+      <ul>
+        <li>In the <strong>Event A</strong> grid — do you see X just walking off the
+          right edge of one screen and onto the left edge of the next? Or does it
+          look like a death/pit-fall?</li>
+        <li>In the <strong>Event B</strong> grid — does the environment look
+          different between frame 946 (before reset) and frame 947 (after)?
+          If yes: a new palette zone / segment boundary. If no: something weirder.</li>
+        <li>Any frame where the sprite looks wrong / glitched / damaged?</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    async function load() {
+      const resp = await fetch("meta.csv");
+      const text = await resp.text();
+      const rows = text.trim().split("\n").slice(1).map(l => {
+        const [frame, px, py, anim, cx, life, fn] = l.split(",");
+        return { frame: +frame, px: +px, py: +py, anim: +anim, cx: +cx, life: +life, fn };
+      });
+
+      const inRange = (r, a, b) => r.frame >= a && r.frame <= b;
+      const mk = (r, isEvent) => {
+        const cell = document.createElement("div");
+        cell.className = "cell" + (isEvent ? " event" : "");
+        const img = document.createElement("img");
+        img.src = "shots/" + r.fn;
+        img.loading = "lazy";
+        img.alt = "Frame " + r.frame;
+        cell.appendChild(img);
+        const ram = document.createElement("div");
+        ram.className = "ram";
+        ram.innerHTML = `<div class="frame">frame ${r.frame}</div>
+          px=${r.px} (${Math.floor(r.px/256)}px)<br>
+          py=${r.py} (${Math.floor(r.py/256)}px)<br>
+          cam=${r.cx} (${Math.floor(r.cx/256)}px)<br>
+          anim=${r.anim}  life=${r.life}`;
+        cell.appendChild(ram);
+        return cell;
+      };
+
+      const putInto = (id, rows, isEventFn) => {
+        const g = document.getElementById(id);
+        for (const r of rows) g.appendChild(mk(r, isEventFn(r)));
+      };
+
+      putInto("grid-a",
+        rows.filter(r => inRange(r, 805, 835)),
+        r => r.frame === 814 || r.frame === 815);
+      putInto("grid-b",
+        rows.filter(r => inRange(r, 935, 965)),
+        r => r.frame === 946 || r.frame === 947);
+      putInto("grid-aftermath",
+        rows.filter(r => inRange(r, 1000, 1060)),
+        () => false);
+      putInto("grid-baseline",
+        rows.filter(r => r.frame < 800 || (r.frame > 1060 && r.frame <= 1200)),
+        () => false);
+
+      // RAM tables
+      const mkTable = (id, range) => {
+        const tbl = document.getElementById(id);
+        const inR = rows.filter(r => inRange(r, range[0], range[1]));
+        tbl.innerHTML = "<tr><th>frame</th><th>player_x_16</th><th>player_y_16</th><th>anim</th><th>camera_x_16</th><th>life_1f80</th></tr>" +
+          inR.map(r => {
+            const ev = (range[2] || []).includes(r.frame) ? ' class="event"' : "";
+            return `<tr${ev}><td>${r.frame}</td><td>${r.px} (${Math.floor(r.px/256)}px)</td>` +
+              `<td>${r.py} (${Math.floor(r.py/256)}px)</td><td>${r.anim}</td>` +
+              `<td>${r.cx} (${Math.floor(r.cx/256)}px)</td><td>${r.life}</td></tr>`;
+          }).join("");
+      };
+      mkTable("ram-a", [808, 822, [814, 815]]);
+      mkTable("ram-b", [942, 956, [946, 947]]);
+    }
+    load();
+  </script>
+</body>
+</html>

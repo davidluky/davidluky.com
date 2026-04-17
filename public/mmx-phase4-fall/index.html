@@ -60,72 +60,60 @@
   <header>
     <h1>MMX Phase 4 — Fall investigation</h1>
     <p class="sub">Chill Penguin, <code>chill_penguin_post_dash.mss</code> fixture.
-      248 screenshots + per-frame RAM.
-      <strong style="color:var(--bad)">Corrected 2026-04-17 after David spotted the real death</strong>
-      that the first version of this page missed.</p>
+      147 screenshots (dense every 4 frames across the death window, sparse elsewhere)
+      plus per-frame RAM including the newly-discovered HP byte at <code>$7E0BCF</code>.
+      <strong style="color:var(--good)">Phase 4 P2 — Session 23, 2026-04-17.</strong></p>
   </header>
 
   <main>
     <section>
       <div class="correction">
-        <em>Correction (my mistake, caught by David):</em> The first version of this page said
-        &ldquo;X did not die, both events are screen transitions.&rdquo; That was wrong &mdash; I
-        was looking at the wrong time window. The <strong>real death</strong> happened at
-        frames ~300-520 (Event 0, below), BEFORE the two screen transitions I originally
-        focused on. Extra-lives counter <code>$7E1F80</code> drops <code>2 → 1</code> between
-        frames 400 and 420 and X respawns at frame 520.
+        <em>Correction (caught by David):</em> The first version of this page focused on
+        two "camera reset" windows at frames 810-830 and 940-960 and concluded
+        &ldquo;no death happened.&rdquo; That was wrong &mdash; the <strong>real death</strong>
+        happens at frames ~220-520, BEFORE those windows. Session 23 re-captures the full
+        death arc every 4 frames with the newly-discovered HP byte in the RAM trace.
       </div>
 
       <div class="verdict">
-        <em>Now-correct timeline:</em>
+        <em>Verified timeline:</em>
         <ol style="margin:6px 0 0 18px;">
-          <li><strong>Event 0</strong> (frames ~280-560): <span style="color:var(--bad)">X falls and dies.</span>
-            y_16 goes off-ground, anim freezes at 79, life drops 2→1, full screen black, respawn at x=32768/y=1024.</li>
-          <li><strong>Event A</strong> (frames 810-830): <span style="color:var(--warn)">screen boundary wrap.</span>
-            player_x_16 u16 wraps 65376→216 while y stays at ground 1183. Not a death.</li>
-          <li><strong>Event B</strong> (frames 940-960): <span style="color:var(--warn)">segment boundary.</span>
-            camera_x_16 wraps 65280→0 while player_x_16 keeps advancing (no player wrap).
-            y stays at 1163-1167 (ground). Not a death.</li>
+          <li><strong>f200</strong>: <code>HP=13</code>, X mid-jump (<code>anim=215</code>), <code>Y_hi=2</code> (airborne).</li>
+          <li><strong>f204</strong>: <span style="color:var(--warn)">contact damage.</span> <code>anim 215→157</code> (hurt-knockback).</li>
+          <li><strong>f220</strong>: <span style="color:var(--bad)">HP drops 13→0</span> as <code>Y_hi</code> crosses <code>2→3</code> (below-screen kill line).</li>
+          <li><strong>f224</strong>: <span style="color:var(--bad)">anim→79</span> (locked-dying, ~190 frames).</li>
+          <li><strong>f412</strong>: <span style="color:var(--bad)">life counter 2→1</span> at $7E1F80.</li>
+          <li><strong>f444</strong>: <span style="color:var(--bad)">full-zero / black fade</span> (px, py, anim all 0).</li>
+          <li><strong>f452</strong>: <code>HP=160</code> transient (respawn bookkeeping, not real HP).</li>
+          <li><strong>f512</strong>: <span style="color:var(--good)">Y_hi=4 respawn</span> at <code>px=32768</code>.</li>
+          <li><strong>f532</strong>: <span style="color:var(--good)">HP=16</span> restored (full bar on second life).</li>
+          <li><strong>f696+</strong>: X walking right again; takes more damage around f840 (HP 16→12), second death cycle begins near f1200.</li>
         </ol>
       </div>
     </section>
 
     <section>
-      <h2 style="color:var(--bad)">Event 0 — the actual death (frames 280-560)</h2>
+      <h2 style="color:var(--bad)">The death sequence — every 4 frames</h2>
       <p class="sub">
-        Sparse capture (every 20 frames) because my original dense windows missed this.
-        Even sparse, the story is clear: X is frozen at <code>x=18496, y=768, anim=79</code>
-        for ~140 frames (classic "fallen off screen, dying" state), then life decrements,
-        then screen goes black for ~80 frames, then respawn. A dense re-capture probe
-        for this window is queued if we want the frame-by-frame fall.
+        Dense re-capture (Phase 4 P2, Session 23). The HP byte was discovered at
+        <code>$7E0BCF</code> so it's now shown in the per-frame RAM, alongside the life
+        counter <code>$7E1F80</code> and animation state <code>$7E0BBC</code>.
+        Key transitions to watch:
+        f204 <span style="color:var(--warn)">anim 215→157</span> (contact damage, X starts hurt-falling)
+        · f220 <span style="color:var(--bad)">HP 13→0</span> (crossed kill zone)
+        · f224 <span style="color:var(--bad)">anim→79</span> (locked-dying)
+        · f412 <span style="color:var(--bad)">life 2→1</span>
+        · f444 <span style="color:var(--bad)">full-zero state</span>
+        · f512 <span style="color:var(--good)">Y_hi=4 respawn</span>
+        · f532 <span style="color:var(--good)">HP 16 restored</span>
+        · f696 anim resumes walking (X controllable again)
       </p>
       <div class="grid" id="grid-death"></div>
     </section>
 
     <section>
-      <h2>Event A — screen boundary wrap (frames 810-830, POST-RESPAWN)</h2>
-      <p class="sub">
-        <code>player_x_16</code> wraps <code>65376&nbsp;→&nbsp;216</code> at frame
-        814→815. <code>player_y_16 = 1183</code> (ground) throughout. Classic u16
-        wrap as X hits pixel 255 on the current segment and starts over at pixel 0 of the next.
-      </p>
-      <div class="grid" id="grid-a"></div>
-    </section>
-
-    <section>
-      <h2>Event B — segment boundary (frames 940-960, POST-RESPAWN)</h2>
-      <p class="sub">
-        <code>camera_x_16</code> wraps <code>65280&nbsp;→&nbsp;0</code> at frame 946→947,
-        but <code>player_x_16</code> doesn't wrap (32582→32958, continuous). MMX uses
-        variable-size stage segments that don't always align with the player-X 256-px
-        wrap. y stays ~1165 (ground).
-      </p>
-      <div class="grid" id="grid-b"></div>
-    </section>
-
-    <section>
-      <h2>Baseline (every 20 frames, for comparison)</h2>
-      <p class="sub">Sparse capture across the rest of the run.</p>
+      <h2>Sparse context (frames 700-1200)</h2>
+      <p class="sub">Every 30 frames after respawn — X keeps walking, takes more damage, starts a second death cycle near frame 1200.</p>
       <div class="grid" id="grid-baseline"></div>
     </section>
 
@@ -151,8 +139,10 @@
       const resp = await fetch("meta.csv");
       const text = await resp.text();
       const rows = text.trim().split("\n").slice(1).map(l => {
-        const [frame, px, py, anim, cx, life, fn] = l.split(",");
-        return { frame: +frame, px: +px, py: +py, anim: +anim, cx: +cx, life: +life, fn };
+        const parts = l.split(",");
+        // meta.csv now: frame,player_x_16,player_y_16,anim,camera_x_16,life_1f80,hp_0bcf,filename
+        const [frame, px, py, anim, cx, life, hp, fn] = parts;
+        return { frame: +frame, px: +px, py: +py, anim: +anim, cx: +cx, life: +life, hp: +hp, fn };
       });
 
       const inRange = (r, a, b) => r.frame >= a && r.frame <= b;
@@ -169,8 +159,7 @@
         ram.innerHTML = `<div class="frame">frame ${r.frame}</div>
           px=${r.px} (${Math.floor(r.px/256)}px)<br>
           py=${r.py} (${Math.floor(r.py/256)}px)<br>
-          cam=${r.cx} (${Math.floor(r.cx/256)}px)<br>
-          anim=${r.anim}  life=${r.life}`;
+          anim=${r.anim}  life=${r.life}  <strong>hp=${r.hp}</strong>`;
         cell.appendChild(ram);
         return cell;
       };
@@ -180,44 +169,44 @@
         for (const r of rows) g.appendChild(mk(r, classify(r)));
       };
 
-      // DEATH: frames 280-560
+      // DEATH: frames 200-700 dense
       putInto("grid-death",
-        rows.filter(r => inRange(r, 260, 600)),
+        rows.filter(r => inRange(r, 200, 700)),
         r => {
-          if (r.frame >= 400 && r.frame <= 440) return "death";
-          if (r.frame >= 460 && r.frame <= 520) return "death";
-          if (r.frame >= 540 && r.frame <= 580) return "respawn";
+          if (r.frame >= 200 && r.frame <= 216) return null;                       // pre-hit
+          if (r.frame >= 220 && r.frame <= 440) return "death";                    // hurt-fall through black
+          if (r.frame >= 444 && r.frame <= 508) return "death";                    // full-zero / fade
+          if (r.frame >= 512 && r.frame <= 536) return "respawn";                  // respawn frames
           return null;
         });
 
-      putInto("grid-a",
-        rows.filter(r => inRange(r, 805, 835)),
-        r => (r.frame === 814 || r.frame === 815) ? "xtransition" : null);
-      putInto("grid-b",
-        rows.filter(r => inRange(r, 935, 965)),
-        r => (r.frame === 946 || r.frame === 947) ? "xtransition" : null);
-      // Baseline is sparse stuff NOT in the dense windows and NOT the death
       putInto("grid-baseline",
-        rows.filter(r => r.frame > 600 && r.frame < 800).concat(
-          rows.filter(r => r.frame > 1060 && r.frame <= 1200)),
+        rows.filter(r => r.frame > 700 && r.frame <= 1200),
         () => null);
 
       // RAM table for death
       const tbl = document.getElementById("ram-death");
-      const inR = rows.filter(r => inRange(r, 260, 600));
-      tbl.innerHTML = "<tr><th>frame</th><th>player_x_16</th><th>player_y_16 (px)</th><th>anim</th><th>camera_x_16</th><th>life</th><th>notes</th></tr>" +
+      const inR = rows.filter(r => inRange(r, 200, 560));
+      tbl.innerHTML = "<tr><th>frame</th><th>player_x_16</th><th>player_y_16 (px)</th><th>anim</th><th>hp</th><th>life</th><th>notes</th></tr>" +
         inR.map(r => {
           let cls = "", note = "";
-          if (r.frame === 420) { cls = "death"; note = "life: 2→1"; }
-          else if (r.py === 0 && r.px === 0) { cls = "death"; note = "game-over / black"; }
-          else if (r.frame === 520) { cls = "respawn"; note = "respawn starts"; }
-          else if (r.py === 768 && r.anim === 79) { note = "frozen, falling"; }
+          if (r.frame === 220) { cls = "death"; note = "HP 13→0, Y_hi crosses kill line"; }
+          else if (r.frame === 224) { cls = "death"; note = "anim→79 (locked-dying)"; }
+          else if (r.frame === 412) { cls = "death"; note = "life counter 2→1"; }
+          else if (r.frame === 444) { cls = "death"; note = "full-zero / fade to black"; }
+          else if (r.frame === 452) { cls = "death"; note = "HP=160 transient (respawn marker)"; }
+          else if (r.frame === 512) { cls = "respawn"; note = "Y_hi=4 respawn position"; }
+          else if (r.frame === 532) { cls = "respawn"; note = "HP=16 restored (full bar)"; }
+          else if (r.frame >= 204 && r.frame <= 216) { note = "hurt-fall anim 157→160→163"; }
+          else if (r.frame >= 224 && r.frame < 412 && r.anim === 79) { note = "locked dying"; }
           const pyPx = r.py > 0 ? Math.floor(r.py/256) : 0;
-          const pyLabel = r.py === 768 ? "pixel 3 (HIGH / airborne)" :
-                          r.py === 1183 ? "pixel 4 (ground)" :
-                          r.py === 1024 ? "pixel 4 (ground, respawn)" :
+          const yHi = r.py >> 8;
+          const pyLabel = r.py === 0 ? "zero (fade)" :
+                          yHi === 3 ? `y_hi=3 (below screen)` :
+                          yHi === 4 ? `y_hi=4 (ground)` :
+                          yHi === 2 ? `y_hi=2 (air/jump)` :
                           `pixel ${pyPx}`;
-          return `<tr${cls ? ' class="'+cls+'"' : ''}><td>${r.frame}</td><td>${r.px}</td><td>${r.py} &nbsp;${pyLabel}</td><td>${r.anim}</td><td>${r.cx}</td><td>${r.life}</td><td>${note}</td></tr>`;
+          return `<tr${cls ? ' class="'+cls+'"' : ''}><td>${r.frame}</td><td>${r.px}</td><td>${r.py} &nbsp;${pyLabel}</td><td>${r.anim}</td><td>${r.hp}</td><td>${r.life}</td><td>${note}</td></tr>`;
         }).join("");
     }
     load();

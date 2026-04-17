@@ -2,6 +2,11 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-04-17
+
+### Added
+- **`/mmx-phase4-weapons/`** viewer. Static HTML + JSON companion to the megaman-x Phase 4 P3 work: 10 SNES screenshots from `weapon_palette_probe.lua`, each decorated with CGRAM-row-9 colour swatches decoded from the capture's `.bin`. Sidebar table flags each SELECT-tap transition as clean / zero-change / scroll-event. Noindex; same dark aesthetic as `mmx-phase4-fall`.
+
 ## [1.0.0] — 2026-04-11
 
 ### Added

@@ -1,0 +1,203 @@
+{
+  "enemy_id": "lo_enemy_b5B",
+  "slot_field_layout_ref": "knowledge_base/mmx1/ram_map.json#enemy_slot_layout",
+  "trace_run": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon",
+  "observed_in_slot": 5,
+  "lifetime": {
+    "first_frame": 185,
+    "last_frame": 1110,
+    "total_rows": 926
+  },
+  "position": {
+    "x_world_pixels": {
+      "min": 225,
+      "max": 225,
+      "range": 0
+    },
+    "y_world_pixels": {
+      "min": 0,
+      "max": 0,
+      "range": 0
+    },
+    "pos_field_offsets": {
+      "x": "0x1C:0x1D u16le 8.8 FP",
+      "y": "0x17:0x18 u16le 8.8 FP"
+    },
+    "archetype_classification": "mobile",
+    "measurement_window": "all active rows except state=0 init frames; pos offsets from find_pos_per_archetype.py (variance-filtered)"
+  },
+  "identity_constants_within_lifetime": {
+    "b00": "00",
+    "b01": "00",
+    "b02": "00",
+    "b03": "00",
+    "b04": "00",
+    "b05": "00",
+    "b06": "00",
+    "b07": "00",
+    "b08": "01",
+    "b0B": "00",
+    "b0C": "00",
+    "b0D": "9F",
+    "b0E": "01",
+    "b0F": "00",
+    "b10": "A0",
+    "b11": "01",
+    "b12": "5B",
+    "b13": "01",
+    "b14": "16",
+    "b15": "FA",
+    "b18": "00"
+  },
+  "states": [
+    {
+      "state_id": "0",
+      "name": null,
+      "instances": 1,
+      "duration_frames": {
+        "min": 1,
+        "max": 1,
+        "mean": 1,
+        "stdev": 0
+      },
+      "entry_facing_byte_0F_hist": {
+        "00": 1
+      },
+      "dx_observed_within_state": [],
+      "dy_observed_within_state": []
+    },
+    {
+      "state_id": "2",
+      "name": null,
+      "instances": 2,
+      "duration_frames": {
+        "min": 40,
+        "max": 756,
+        "mean": 398,
+        "stdev": 506.3
+      },
+      "entry_facing_byte_0F_hist": {
+        "00": 2
+      },
+      "dx_observed_within_state": [],
+      "dy_observed_within_state": [
+        1
+      ]
+    },
+    {
+      "state_id": "4",
+      "name": null,
+      "instances": 2,
+      "duration_frames": {
+        "min": 2,
+        "max": 48,
+        "mean": 25,
+        "stdev": 32.5
+      },
+      "entry_facing_byte_0F_hist": {
+        "00": 2
+      },
+      "dx_observed_within_state": [],
+      "dy_observed_within_state": [
+        1
+      ]
+    },
+    {
+      "state_id": "6",
+      "name": null,
+      "instances": 2,
+      "duration_frames": {
+        "min": 8,
+        "max": 71,
+        "mean": 39.5,
+        "stdev": 44.5
+      },
+      "entry_facing_byte_0F_hist": {
+        "00": 2
+      },
+      "dx_observed_within_state": [],
+      "dy_observed_within_state": []
+    }
+  ],
+  "transitions": [
+    {
+      "from_state": "0",
+      "to_state": "2",
+      "trigger": {
+        "type": "single_sample",
+        "duration": 1,
+        "instances": 1
+      },
+      "sample_frames": [
+        186
+      ]
+    },
+    {
+      "from_state": "2",
+      "to_state": "6",
+      "trigger": {
+        "type": "single_sample",
+        "duration": 40,
+        "instances": 1
+      },
+      "sample_frames": [
+        226
+      ]
+    },
+    {
+      "from_state": "6",
+      "to_state": "4",
+      "trigger": {
+        "type": "timer_variable",
+        "durations_observed": [
+          8,
+          71
+        ],
+        "instances": 2,
+        "note": "duration spread exceeds tolerance \u2014 likely multi-branch or external trigger"
+      },
+      "sample_frames": [
+        234,
+        353
+      ]
+    },
+    {
+      "from_state": "4",
+      "to_state": "6",
+      "trigger": {
+        "type": "probabilistic_branch",
+        "frames": 48,
+        "spread": 0,
+        "instances": 1,
+        "probability": 0.5,
+        "total_instances_from_state": 2,
+        "note": "one of multiple branches leaving this state; use probability to pick stochastically or fall back to dominant branch"
+      },
+      "sample_frames": [
+        282
+      ]
+    },
+    {
+      "from_state": "4",
+      "to_state": "2",
+      "trigger": {
+        "type": "probabilistic_branch",
+        "frames": 2,
+        "spread": 0,
+        "instances": 1,
+        "probability": 0.5,
+        "total_instances_from_state": 2,
+        "note": "one of multiple branches leaving this state; use probability to pick stochastically or fall back to dominant branch"
+      },
+      "sample_frames": [
+        355
+      ]
+    }
+  ],
+  "provenance": {
+    "extractor": "tools/oracle/post/behavior_extractor.py",
+    "extractor_version": "1.1",
+    "slots_csv": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon\\slots.csv",
+    "variance_tolerance": 3
+  }
+}

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MMX Phase 3 — atlas QA</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; padding: 1.5rem;
+    font-family: -apple-system, system-ui, sans-serif;
+    background: #0a0a09; color: #faf8f1;
+    max-width: 1200px; margin-inline: auto;
+  }
+  h1 { font-size: 1.3rem; margin: 0 0 .25rem; color: #c4a35a; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; color: #c4a35a; }
+  p  { line-height: 1.5; max-width: 70ch; }
+  .hint { opacity: .7; font-size: .88rem; }
+  figure { margin: 1rem 0; padding: .75rem; background: #141411; border: 1px solid #2a2a26; border-radius: 6px; }
+  figure img { display: block; max-width: 100%; height: auto; image-rendering: pixelated; background: #222; }
+  figcaption { margin-top: .5rem; font-size: .85rem; opacity: .85; }
+  .samples { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: .5rem; margin-top: 1rem; }
+  .samples img { width: 100%; height: auto; image-rendering: pixelated; background: #222; border: 1px solid #2a2a26; }
+  code { background: #222; padding: .1rem .35rem; border-radius: 3px; font-size: .88em; }
+</style>
+</head>
+<body>
+
+<h1>MMX Phase 3 — X Sprite Catalog QA</h1>
+<p class="hint">Private WIP view. Two decoded sprite atlases side-by-side so you can assess catalog quality from mobile before the next session.</p>
+
+<h2>Atlas v8 — two-fixture merge (real dash on post-dash save)</h2>
+<figure>
+  <img src="atlas-v8-real-dash.png" alt="v8 atlas with real dash" loading="lazy">
+  <figcaption>
+    David caught a labeling bug in v7: the "dash_*" rows were actually X's damage/knockback animation — the pre-capsule fixture doesn't have dash unlocked, so pressing A+right did nothing while nearby enemies hit him. Fix: split capture into two drivers. <code>x_safe_cycle.lua</code> runs on <code>chill_penguin_pre_capsule.mss</code> for walk/jump/charge/shoot (no dash attempts). <code>x_dash_short.lua</code> runs on <code>chill_penguin_post_dash.mss</code> with a tight 300-frame schedule that exercises dash_right / dash_left / dash_jump before X can fall off the alcove. Classifier merges both runs transparently. 93 unique sprites, 58 actions. <code>dash_right</code> / <code>dash_left</code> rows now show the real low-profile lean pose with trailing dust-cloud tiles.
+  </figcaption>
+</figure>
+
+<h2>Atlas v7 — action-grouped layout (pre-dash-fix)</h2>
+<figure>
+  <img src="atlas-v7-action-grouped.png" alt="v7 action-grouped atlas" loading="lazy">
+  <figcaption>
+    Same 55 poses as v6, re-laid-out one action per row. Reads like a storyboard. Mislabel: the dash_* rows here are actually damage animation (see v8).
+  </figcaption>
+</figure>
+
+<h2>Atlas v6 — chronological (by first-appearance)</h2>
+<figure>
+  <img src="atlas-v6-perceptual-dedup.png" alt="v6 atlas" loading="lazy">
+  <figcaption>
+    Two more fixes on top of v5:
+    <ul>
+      <li><strong>Bbox-centered crop</strong> — after rendering the OBJ layer, find the actual silhouette's bounding box and paste it centered on a 96×104 canvas. X is always centered regardless of his screen position, so dedup doesn't get fooled by 1-pixel positional drift. Also means X can't be cut off at screen edges (previous 80×96 window was too tight).</li>
+      <li><strong>Perceptual hash dedup</strong> — byte-exact hashing treats a 1-pixel shift as a new frame. Perceptual hash (downscale to 16×16, coarse color + alpha signature) collapses near-identical frames while still separating genuinely different poses (idle-breathing-in vs idle-breathing-out, charging blue flash vs normal).</li>
+    </ul>
+    Result: <strong>55 unique crops</strong> from 1,466 raw frames. Reference has 62 (hand-curated). The atlas now shows complete action vocabulary: idle, walk cycle, turn, dash (low-profile lean), wall-slide, jump (ascend/apex/descend), charge-L3 release sparkle (gold flash), charge-flash blue overlay. Ready to consume.
+  </figcaption>
+</figure>
+
+<h2>Atlas v5 — per-frame VRAM + palette+tile filter</h2>
+<figure>
+  <img src="atlas-v5-per-frame-vram.png" alt="v5 atlas per-frame VRAM" loading="lazy">
+  <figcaption>
+    Fixes three compounding bugs at once:
+    <ul>
+      <li><strong>Per-frame OBJ-VRAM snapshot</strong> — previous atlases decoded every frame of a 300-frame segment against the segment-START VRAM, but MMX streams new animation tiles into VRAM mid-segment. So only the first frame of each segment was rendered correctly; the rest were garbage-that-happened-to-hash-consistently. <code>sprite_catalog.lua</code> now dumps the 16 KB OBJ bank every frame into <code>obj_vram_stream.bin</code>.</li>
+      <li><strong>Render-time X filter</strong> — <code>only_palettes={1}, only_tile_range=(0,32)</code>. X's body tiles empirically occupy palette 1 / tiles 0-31 and nothing else on this stage. HP bar (palette 4/5), enemies (palette 2/3), buster projectiles (palette 2+) all drop out cleanly.</li>
+      <li><strong>New fixture + safe schedule</strong> — <code>chill_penguin_pre_capsule.mss</code> with oscillating walk/dash/jump so X never walks off a ledge and never dies. 1,496 alive frames captured.</li>
+    </ul>
+    Result: 406 unique crops, 49 action segments. The reference sheet has 62 frames because it's hand-curated; per-frame capture finds every micro-animation. Atlas is clean — every slot shows X.
+  </figcaption>
+</figure>
+
+<h2>Truth validation — Python-rendered OBJ layer (decode ground truth)</h2>
+<figure>
+  <img src="truth-full-scene.png" alt="Truth full scene" loading="lazy">
+  <figcaption>
+    Per-pose capture: scripted input to stage-start X, then at the peak
+    frame dump OAM + OBJ-VRAM + CGRAM. Python <code>render_obj_layer.py</code>
+    decodes those dumps into a transparent-BG 256×224 OBJ-only image
+    (magenta tint here shows transparency). This sidesteps Mesen's
+    mask-timing fight with MMX's per-frame $212C writes — the render is
+    pure math on the dumped state, deterministic, immune to race
+    conditions. The alive-X poses (idle, walk_right_a, turn_right,
+    charge_L2, charge_L3, etc.) show clean, recognizable X sprites
+    with correct colors and silhouettes. <strong>This confirms the
+    decoder is correct.</strong> Poses with px=0 py=0 are fixture
+    casualties (X died to Chill Penguin's early gauntlet) — they're
+    not decode failures.
+  </figcaption>
+</figure>
+
+<h2>Truth thumbnails — cropped to X</h2>
+<figure>
+  <img src="truth-rendered.png" alt="Truth cropped grid" loading="lazy">
+  <figcaption>
+    Same data, cropped to a 80×96 window around the player's RAM
+    position. Clean X in idle, walk variants, turn-right,
+    charge_L2/L3.
+  </figcaption>
+</figure>
+
+<h2>Atlas v4 — Min cluster 6 (filters out partial-X from falling/respawn)</h2>
+<figure>
+  <img src="atlas-v4-min-cluster.png" alt="v4 atlas min cluster 6" loading="lazy">
+  <figcaption>
+    Added <code>MIN_CLUSTER_SIZE=6</code>. Diagnosis: the post-dash fixture puts X in a tight alcove, so scripted walk_right/walk_left pushes him off a ledge into falling/death/respawn loops. During those hundreds of frames, only 3-6 of X's tiles are on-screen (the rest clipped). That's where the "fragment" frames were coming from — not a decode bug, not VRAM transition — just X literally half-off-screen. 59 character frames survive the filter, all complete poses. Reference has 62 for comparison.
+  </figcaption>
+</figure>
+
+<h2>Atlas v3 — Global palette lock</h2>
+<figure>
+  <img src="atlas-v3-global-palette.png" alt="v3 atlas global palette lock" loading="lazy">
+  <figcaption>
+    Merged runs + <code>CHAR_RADIUS=44</code> + <strong>globally-locked palette</strong>.
+    209 unique tiles, 85 character frames, 55 actions. Palette histogram: pal 1 (X) = 33K, pal 2 = 5K, pal 4 = 18K, others minor —
+    globally obvious, but the old per-frame palette-mode detector was flipping to the wrong palette in ~15% of frames (when capsule or
+    projectiles out-counted X in the Y-band for that instant), dragging in their sprites. Locking X's palette once across the entire
+    run eliminates that flip entirely. The classic KB-019 "VRAM in transition" hypothesis turned out to be WRONG (every segment has 19-31
+    sprite-like tiles at 0xC000 pal 1 — plenty of X data). The real bug was the palette detector.
+  </figcaption>
+</figure>
+
+<h2>Atlas B* — Pre-fix (per-frame palette detector)</h2>
+<figure>
+  <img src="atlas-main-fixed.png" alt="Main catalog, radius fixed" loading="lazy">
+  <figcaption>
+    Merged runs + <code>CHAR_RADIUS=44</code>, still using per-frame palette-mode detection. 242 unique tiles, 88 character frames.
+    Rows 4–9 show clean X; rows 1–3 have the capsule/hologram fragments that v3 eliminates.
+  </figcaption>
+</figure>
+
+<h2>Atlas A* — Stage-start fixture (READY-screen noise)</h2>
+<figure>
+  <img src="atlas-fixed.png" alt="Stage-start X atlas" loading="lazy">
+  <figcaption>
+    Run: <code>x_action_walk.lua</code> against <code>chill_penguin_start.mss</code>, with the radius fix. X looks whole but the atlas is contaminated with "READY" text sprites and transport-beam pillars — stage-start is NOT a clean fixture after all. 41 unique character frames, 136 tiles.
+  </figcaption>
+</figure>
+
+<h2>Reference — MMX X sprite sheet (for comparison)</h2>
+<figure>
+  <img src="atlas-reference.png" alt="Reference X sheet" loading="lazy">
+  <figcaption>
+    From <code>content/x1/sprites/x_spritesheet.png</code>. Hand-ripped, 70×70 per frame, 62 frames. Goal: our auto-extracted catalog should match this in content (action vocabulary) and per-frame coherence.
+  </figcaption>
+</figure>
+
+<h2>Atlas A — Clean-X diagnostic (PRE-fix, body detached from legs)</h2>
+<figure>
+  <img src="atlas-clean.png" alt="Pre-fix X atlas" loading="lazy">
+  <figcaption>
+    Run: same as above but with <code>CHAR_RADIUS=28</code>. Notice how X's body silhouettes look truncated — the head is missing from most frames because the Y-band filter was tighter than X's own height.
+  </figcaption>
+</figure>
+
+<h2>Atlas B — Main catalog (polluted by capsule adjacency, PRE-fix)</h2>
+<figure>
+  <img src="atlas-main.png" alt="Main X atlas" loading="lazy">
+  <figcaption>
+    Run: merged <code>x_action_walk.lua</code> (post-dash fixture) + <code>x_action_left.lua</code> (pre-capsule westward). 230 unique tiles, 99 character frames, 55 actions. Upper-left rows carry capsule fragments from early-segment VRAM still in transition; rows 2–10 onward show legitimate X poses. Will be regenerated with the fix applied + a cleaner fixture next session.
+  </figcaption>
+</figure>
+
+<h2>First 6 character frames from the clean run (close-up)</h2>
+<div class="samples">
+  <img src="xf_0000.png" alt="xf_0000" loading="lazy">
+  <img src="xf_0001.png" alt="xf_0001" loading="lazy">
+  <img src="xf_0002.png" alt="xf_0002" loading="lazy">
+  <img src="xf_0003.png" alt="xf_0003" loading="lazy">
+  <img src="xf_0004.png" alt="xf_0004" loading="lazy">
+  <img src="xf_0005.png" alt="xf_0005" loading="lazy">
+</div>
+
+<p class="hint" style="margin-top:2rem">
+  Context: <code>docs/mmx-kb/retro-phase-3.md</code>, KB-017/018/019 in the flight recorder.
+  Next-session priorities in <code>docs/SESSION-HANDOFF.md</code>.
+</p>
+
+</body>
+</html>

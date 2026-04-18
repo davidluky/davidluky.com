@@ -1,0 +1,26 @@
+{
+  "enemy_id": "lo_enemy_b4A",
+  "observed_in_slot": 9,
+  "trace_run": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon",
+  "frame_level": {
+    "total_frames_evaluated": 177,
+    "agree": 177,
+    "disagree": 0,
+    "agreement_percent": 100.0,
+    "interpretation": "Frame-level agreement is sensitive to one-frame initial-duration differences that cascade. Use structural agreement (below) as the primary correctness metric."
+  },
+  "structural_level": {
+    "observation": "For each observed state run, does the FSM's default branch predict the correct next state?",
+    "total_transitions_evaluated": 0,
+    "correct_next_predictions": 0,
+    "wrong_next_predictions": 0,
+    "agreement_percent": 0,
+    "mismatches": []
+  },
+  "branch_strategy": "dominant",
+  "default_transitions": {},
+  "first_divergence": null,
+  "divergence_histogram": {},
+  "divergence_samples": [],
+  "interpretation": "Structural agreement is the headline metric for FSM correctness. Frame-level agreement is reported as a supplement; it's dominated by phase drift (the model's default branch timer is right but the first state entry is shorter than subsequent entries, cascading into permanent misalignment)."
+}

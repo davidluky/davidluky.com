@@ -1,0 +1,52 @@
+{
+  "screenshot": "knowledge_base\\mmx1\\_phase7_runs\\chill_penguin\\post_dash_recon\\shot_f1080.png",
+  "oam": "knowledge_base\\mmx1\\_phase7_runs\\chill_penguin\\post_dash_recon\\oam_f1080.bin",
+  "pal_row": 6,
+  "on_screen_pal_usage": {
+    "2": 5,
+    "6": 13,
+    "1": 14,
+    "7": 30,
+    "4": 8
+  },
+  "candidates": [
+    {
+      "index": 0,
+      "pal_row": 6,
+      "core_bbox_y0x0y1x1": [
+        40,
+        137,
+        80,
+        156
+      ],
+      "padded_bbox_y0x0y1x1": [
+        36,
+        133,
+        84,
+        160
+      ],
+      "size_wh": [
+        28,
+        49
+      ],
+      "oam_slots": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "oam_slot_count": 13,
+      "opaque_pixels": 359,
+      "file": "enemy_00_pal6_x133_y36_28x49.png"
+    }
+  ]
+}

@@ -268,18 +268,19 @@
         102,
         103,
         104,
+        105,
         106,
         107,
         119
       ],
       "oam_bbox_screen": {
         "x_min": 25,
-        "x_max": 73,
+        "x_max": 79,
         "y_min": 112,
         "y_max": 135
       },
-      "sprite_count": 14,
-      "per_frame_stragglers_dropped": 1
+      "sprite_count": 15,
+      "per_frame_stragglers_dropped": 0
     },
     "4": {
       "frame": 370,
@@ -289,19 +290,21 @@
         72,
         73,
         74,
+        75,
         87,
         88,
         89,
+        90,
         119
       ],
       "oam_bbox_screen": {
         "x_min": 230,
-        "x_max": 258,
+        "x_max": 262,
         "y_min": 104,
         "y_max": 135
       },
-      "sprite_count": 11,
-      "per_frame_stragglers_dropped": 15
+      "sprite_count": 14,
+      "per_frame_stragglers_dropped": 12
     },
     "8": {
       "frame": 700,

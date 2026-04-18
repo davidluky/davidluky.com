@@ -111,24 +111,24 @@
       <div class="intro good">
         <strong>Zero-dependency capture.</strong>
         <code>highway_from_boot.lua</code> boots the ROM fresh, taps START for
-        1800 frames to clear Capcom + title + intro, then walks X right for
-        1800 frames while dumping OAM + VRAM + CGRAM every 10 frames and
-        screenshots at the same cadence. 180 screenshots across the walk
-        &mdash; 6&times; denser than earlier captures &mdash; gives the voter
-        plenty of per-state candidate frames to converge on.
+        30&thinsp;s to clear the title and intro, then walks X right for
+        60&thinsp;s while interleaving Y on a 45-frame cadence to trigger
+        hurt / death transitions. 360 screenshots at the OAM dump cadence.
+        Display uses raw OAM-bbox crops so rim pixels sharing stage BG
+        colors aren't trimmed off (per user feedback on the first pass);
+        the matcher still runs on CGRAM-refined silhouettes for accuracy.
       </div>
     </section>
 
     <section>
       <div class="intro warn">
-        <strong>New: vote-confidence bars.</strong> The bar under each state
-        shows <code>k&nbsp;/&nbsp;N</code> &mdash; how many of the state's
-        candidate frames agreed on the winning canonical position. High
-        agreement = robust identity claim. Low agreement = the silhouette is
-        bouncing between multiple canonical regions, often because the sprite
-        animates wildly OR the extractor is contaminated by neighbor pixels.
-        Runners-up (other canonical positions that collected votes) are listed
-        so suspicious matches are inspectable.
+        <strong>Vote-confidence bars.</strong> The bar under each state shows
+        <code>k&nbsp;/&nbsp;N</code> &mdash; how many candidate frames agreed
+        on the winning canonical position. Runners-up are listed so
+        suspicious matches are inspectable. Left pane is the full OAM-bbox
+        crop (what the enemy renders in that state, rim included); right
+        pane is the matched canonical region expanded outward until every
+        border is pure BG (the sprite's natural &quot;imaginary black box&quot;).
       </div>
     </section>
 
@@ -138,25 +138,26 @@
       <!-- ========== SLOT 3 ========== -->
       <div class="card verified">
         <h3><code>highway_enemy_slot3</code> &middot; b12=0x15 &middot; palette row 4
-          <span class="tag strong">VERIFIED 0.898</span></h3>
+          <span class="tag strong">VERIFIED across 2 states</span></h3>
         <div class="sub">
-          Small recurring enemy. Active frames 308&ndash;1593 (274 rows),
-          states {0,&nbsp;2}. State 0 transient; only state 2 captured.
-          FSM agreement 100% structural (3&nbsp;/&nbsp;3) + 100% frame-level
-          (274&nbsp;/&nbsp;274).
+          Small recurring enemy. Re-captured with 60&thinsp;s walk + interleaved
+          firing (Y tapped every 45 frames) so hurt/death transitions surface.
+          State&nbsp;2 idle cleanly matches; state&nbsp;4 (new this re-capture)
+          hit a different canonical sheet &mdash; this enemy has a death
+          animation on <code>enemies_31593.png</code>.
         </div>
 
         <div class="state-block">
           <h3 style="color: var(--good);">state 2 &mdash; J = 0.898
             <span class="vote-bar"><span class="vote-bar-fill" style="width: 22.2%"></span></span>
-            <span class="vote-label">4&nbsp;/&nbsp;18 frames agreed</span></h3>
+            <span class="vote-label">4&nbsp;/&nbsp;20 frames agreed</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_composite.png?v=3" alt="slot3 state 2 OAM-composed"></div>
-              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_visual.png?v=4" alt="slot3 state 2 OAM-composed"></div>
+              <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_ref.png?v=3" alt="canonical reference crop"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_ref.png?v=4" alt="canonical reference crop"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (101,&nbsp;1153)</figcaption>
             </figure>
           </div>
@@ -173,6 +174,33 @@
             <dt>vote bucket</dt><dd>24&times;24 px spatial clustering</dd>
           </dl>
         </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--warn);">state 4 &mdash; J = 0.849
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 100%; background: var(--warn);"></span></span>
+            <span class="vote-label">1&nbsp;/&nbsp;1 frames agreed (new, low confidence)</span></h3>
+          <div class="sub">
+            New state discovered by interleaved firing during the walk
+            capture. Only 1 candidate frame existed because the hurt/death
+            window is brief &mdash; more passes would tighten the verdict.
+          </div>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_visual.png?v=4" alt="slot3 state 4 OAM-bbox"></div>
+              <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_ref.png?v=4" alt="canonical"></div>
+              <figcaption>canonical: <code>enemies_31593.png</code> @ (412,&nbsp;1165)</figcaption>
+            </figure>
+          </div>
+          <dl class="facts">
+            <dt>sheet</dt><dd><code>enemies_31593.png</code></dd>
+            <dt>match position</dt><dd>(412, 1165) normal</dd>
+            <dt>best Jaccard</dt><dd><strong>0.849</strong></dd>
+            <dt>composite size</dt><dd>16&times;16 (visual 22&times;22 with rim)</dd>
+          </dl>
+        </div>
       </div>
 
       <!-- ========== SLOT 5 ========== -->
@@ -187,15 +215,15 @@
 
         <div class="state-block">
           <h3 style="color: var(--accent);">state 2 &mdash; J = 0.848
-            <span class="vote-bar"><span class="vote-bar-fill" style="width: 28.9%"></span></span>
-            <span class="vote-label">11&nbsp;/&nbsp;38 frames agreed (strongest consensus)</span></h3>
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 28.6%"></span></span>
+            <span class="vote-label">16&nbsp;/&nbsp;56 frames agreed (strongest consensus)</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_composite.png?v=3" alt="slot5 state 2"></div>
-              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_visual.png?v=4" alt="slot5 state 2"></div>
+              <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_ref.png?v=3" alt="canonical"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_ref.png?v=4" alt="canonical"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (82,&nbsp;811)</figcaption>
             </figure>
           </div>
@@ -213,8 +241,8 @@
 
         <div class="state-block">
           <h3 style="color: var(--warn);">state 4 &mdash; J = 0.851
-            <span class="vote-bar"><span class="vote-bar-fill" style="width: 35.7%; background: var(--warn);"></span></span>
-            <span class="vote-label">5&nbsp;/&nbsp;14 frames agreed</span>
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 40.0%; background: var(--warn);"></span></span>
+            <span class="vote-label">6&nbsp;/&nbsp;15 frames agreed</span>
             <span class="tag flagged" style="margin-left: 8px;">user-flagged WRONG</span></h3>
           <div class="user-flag">
             <strong>Known-wrong match.</strong> User visual inspection:
@@ -228,11 +256,11 @@
           </div>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_composite.png?v=3" alt="slot5 state 4"></div>
-              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_visual.png?v=4" alt="slot5 state 4"></div>
+              <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_ref.png?v=3" alt="canonical (wrong)"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_ref.png?v=4" alt="canonical (wrong)"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808) &mdash; wrong canonical</figcaption>
             </figure>
           </div>
@@ -249,17 +277,17 @@
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--good);">state 6 &mdash; J = 0.898
-            <span class="vote-bar"><span class="vote-bar-fill" style="width: 25.0%"></span></span>
-            <span class="vote-label">4&nbsp;/&nbsp;16 frames agreed</span></h3>
+          <h3 style="color: var(--warn);">state 6 &mdash; J = 0.851
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 38.1%"></span></span>
+            <span class="vote-label">8&nbsp;/&nbsp;21 frames agreed</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_composite.png?v=3" alt="slot5 state 6"></div>
-              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_visual.png?v=4" alt="slot5 state 6"></div>
+              <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_ref.png?v=3" alt="canonical"></div>
-              <figcaption>canonical: <code>enemies_31592.png</code> @ (147,&nbsp;808)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_ref.png?v=4" alt="canonical"></div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808)</figcaption>
             </figure>
           </div>
           <div class="runners">
@@ -313,19 +341,19 @@
       <h2>Recon screenshots</h2>
       <div class="recon-grid">
         <div class="recon-cell">
-          <img src="assets/recon/shot_f0300.png" loading="lazy" alt="f0300">
+          <img src="assets/recon/shot_f0300.png?v=4" loading="lazy" alt="f0300">
           <figcaption>f0300 &middot; first enemy approaching</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f0600.png" loading="lazy" alt="f0600">
+          <img src="assets/recon/shot_f0600.png?v=4" loading="lazy" alt="f0600">
           <figcaption>f0600 &middot; slot 5 large enemy (37 OAM entries)</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f1500.png" loading="lazy" alt="f1500">
+          <img src="assets/recon/shot_f1500.png?v=4" loading="lazy" alt="f1500">
           <figcaption>f1500 &middot; recurring slot 3 small enemy</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f1800.png" loading="lazy" alt="f1800">
+          <img src="assets/recon/shot_f1800.png?v=4" loading="lazy" alt="f1800">
           <figcaption>f1800 &middot; end of walk window</figcaption>
         </div>
       </div>

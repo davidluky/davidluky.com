@@ -38,6 +38,7 @@
     .tag.strong { background: rgba(122,192,255,0.22); color: var(--accent); }
     .tag.weak { background: rgba(255,204,102,0.22); color: var(--warn); }
     .tag.flagged { background: rgba(255,140,136,0.22); color: var(--bad); }
+    .tag.silhouette { background: rgba(255,204,102,0.22); color: var(--warn); }
 
     .card { background: var(--panel); border: 1px solid var(--border);
       border-radius: 10px; padding: 16px 18px; margin-top: 14px; }
@@ -153,11 +154,11 @@
             <span class="vote-label">4&nbsp;/&nbsp;20 frames agreed</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_visual.png?v=9" alt="slot3 state 2 OAM-composed"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_visual.png?v=10" alt="slot3 state 2 OAM-composed"></div>
               <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_ref.png?v=9" alt="canonical reference crop"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_ref.png?v=10" alt="canonical reference crop"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (101,&nbsp;1153)</figcaption>
             </figure>
           </div>
@@ -186,11 +187,11 @@
           </div>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_visual.png?v=9" alt="slot3 state 4 OAM-bbox"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_visual.png?v=10" alt="slot3 state 4 OAM-bbox"></div>
               <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_ref.png?v=9" alt="canonical"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_4_ref.png?v=10" alt="canonical"></div>
               <figcaption>canonical: <code>enemies_31593.png</code> @ (412,&nbsp;1165)</figcaption>
             </figure>
           </div>
@@ -214,16 +215,23 @@
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.848
-            <span class="vote-bar"><span class="vote-bar-fill" style="width: 28.6%"></span></span>
-            <span class="vote-label">16&nbsp;/&nbsp;56 frames agreed (strongest consensus)</span></h3>
+          <h3 style="color: var(--warn);">state 2 &mdash; J = 0.848
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 28.6%; background: var(--warn);"></span></span>
+            <span class="vote-label">16&nbsp;/&nbsp;56 frames agreed</span>
+            <span class="tag silhouette" style="margin-left: 8px;">silhouette_only</span></h3>
+          <div class="user-flag">
+            <strong>SILHOUETTE-ONLY (auto-detected).</strong> Silhouette
+            Jaccard 0.848 but pixel-content rate is <strong>0.000</strong>
+            — same canonical position as state 4 (same false match); the
+            voter hit this bucket 16 times but the pixel gate rejects it.
+          </div>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_visual.png?v=9" alt="slot5 state 2"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_visual.png?v=10" alt="slot5 state 2"></div>
               <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_ref.png?v=9" alt="canonical"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_ref.png?v=10" alt="canonical"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (82,&nbsp;811)</figcaption>
             </figure>
           </div>
@@ -243,24 +251,24 @@
           <h3 style="color: var(--warn);">state 4 &mdash; J = 0.851
             <span class="vote-bar"><span class="vote-bar-fill" style="width: 40.0%; background: var(--warn);"></span></span>
             <span class="vote-label">6&nbsp;/&nbsp;15 frames agreed</span>
-            <span class="tag flagged" style="margin-left: 8px;">user-flagged WRONG</span></h3>
+            <span class="tag silhouette" style="margin-left: 8px;">silhouette_only</span></h3>
           <div class="user-flag">
-            <strong>Known-wrong match.</strong> User visual inspection:
-            canonical crop at (81,&nbsp;808) on <code>enemies_31592.png</code>
-            does not depict this enemy. Silhouette happened to match a different
-            sprite with similar outline proportions &mdash; a false positive that
-            survived voting because 5 of 14 candidate frames' extractions ALL
-            landed on the same wrong bucket (systematic extraction contamination,
-            not per-frame coincidence). Next: cross-check via VRAM tile IDs
-            against canonical pixel content to reject silhouette-only matches.
+            <strong>SILHOUETTE-ONLY (auto-detected).</strong> Silhouette
+            Jaccard 0.851, but the 5-bit quantized pixel-content rate is
+            <strong>0.000</strong> &mdash; the masks line up but none of
+            the palette colors match the canonical region's pixels. The
+            pipeline now pairs Jaccard with a pixel cross-check and gates
+            any match where silhouette agrees + pixel content disagrees
+            as <code>silhouette_only</code>. This catches user visual-
+            flagged false positives automatically.
           </div>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_visual.png?v=9" alt="slot5 state 4"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_visual.png?v=10" alt="slot5 state 4"></div>
               <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_ref.png?v=9" alt="canonical (wrong)"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_ref.png?v=10" alt="canonical (wrong)"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808) &mdash; wrong canonical</figcaption>
             </figure>
           </div>
@@ -277,16 +285,16 @@
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--warn);">state 6 &mdash; J = 0.986
+          <h3 style="color: var(--warn);">state 6 &mdash; J = 0.986  <span class="tag strong" style="margin-left: 8px;">STRONG + pixel-verified</span>
             <span class="vote-bar"><span class="vote-bar-fill" style="width: 38.1%"></span></span>
             <span class="vote-label">8&nbsp;/&nbsp;21 frames agreed</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_visual.png?v=9" alt="slot5 state 6"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_visual.png?v=10" alt="slot5 state 6"></div>
               <figcaption>OAM-bbox on-screen crop (4&times;) &mdash; full rim</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_ref.png?v=9" alt="canonical"></div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_ref.png?v=10" alt="canonical"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808)</figcaption>
             </figure>
           </div>
@@ -309,22 +317,21 @@
       <div class="method">
         <ol>
           <li>
-            <strong>Voting beats single-frame top-1 in principle but inherits
-            systematic extraction errors.</strong> With 14 state-4 frames
-            voting, 5 of them landed on the same wrong canonical region
-            because the per-frame extractor consistently included contamination
-            (probably neighbor sprites sharing palette row 5). Voting rejected
-            single-frame coincidences but can't tell the difference between
-            "5 correct frames" and "5 wrong frames agreeing on the same mistake."
+            <strong>Pixel-content cross-check shipped.</strong> Silhouette
+            Jaccard alone let voting-stable false positives through (slot 5
+            states 2 and 4 landed on the same wrong canonical with 16 and
+            6 votes respectively). Added a 5-bit-quantized pixel comparison
+            at the match position — if the silhouettes align but palette
+            colors disagree, the verdict becomes <code>silhouette_only</code>
+            instead of <code>verified</code>. Quantizing to 5-bit absorbs
+            the bit-replication vs linear 5→8 expansion discrepancy between
+            Mesen renders and Spriters Resource sheets (KB-056).
           </li>
           <li>
-            <strong>Next layer: tile-ID cross-check.</strong> Each state
-            carries a list of OAM tile IDs. The canonical sheet is itself
-            derived from the ROM's VRAM. Decoding those tiles and pixel-
-            comparing to the reference crop at (match_x,&nbsp;match_y)
-            promotes matches from "silhouette agreement" to "content
-            agreement." A wrong canonical region will disagree on pixel
-            content even when the silhouette matches. Queued for next session.
+            <strong>Pixel gate catches user-flagged false positives automatically.</strong>
+            slot5 state 4 (user said "wrong") now comes back as
+            silhouette_only without needing human annotation: J=0.851,
+            qpx=0.000. slot5 state 6 passes: J=0.986, qpx=1.000 — clean.
           </li>
           <li>
             <strong>180 screenshots / 1800 frames gives enough candidates
@@ -341,19 +348,19 @@
       <h2>Recon screenshots</h2>
       <div class="recon-grid">
         <div class="recon-cell">
-          <img src="assets/recon/shot_f0300.png?v=9" loading="lazy" alt="f0300">
+          <img src="assets/recon/shot_f0300.png?v=10" loading="lazy" alt="f0300">
           <figcaption>f0300 &middot; first enemy approaching</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f0600.png?v=9" loading="lazy" alt="f0600">
+          <img src="assets/recon/shot_f0600.png?v=10" loading="lazy" alt="f0600">
           <figcaption>f0600 &middot; slot 5 large enemy (37 OAM entries)</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f1500.png?v=9" loading="lazy" alt="f1500">
+          <img src="assets/recon/shot_f1500.png?v=10" loading="lazy" alt="f1500">
           <figcaption>f1500 &middot; recurring slot 3 small enemy</figcaption>
         </div>
         <div class="recon-cell">
-          <img src="assets/recon/shot_f1800.png?v=9" loading="lazy" alt="f1800">
+          <img src="assets/recon/shot_f1800.png?v=10" loading="lazy" alt="f1800">
           <figcaption>f1800 &middot; end of walk window</figcaption>
         </div>
       </div>

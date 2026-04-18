@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MMX Phase 7 — Launch Octopus enemy catalog</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
+      --warn: #ffcc66; --good: #88e07c; --bad: #ff7a7a;
+      --panel: #12151c; --panel2: #1a1f2a; --border: #1e2330;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg);
+      font: 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    header { padding: 28px 24px 12px; max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0 0 4px; font-size: 22px; letter-spacing: 0.2px; }
+    h2 { margin: 28px 0 8px; font-size: 17px; color: var(--accent); }
+    h3 { margin: 16px 0 6px; font-size: 15px; color: var(--fg); }
+    .sub { color: var(--muted); font-size: 13px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+    code, .mono { background: var(--panel2); padding: 1px 5px; border-radius: 4px;
+      color: var(--warn); font-size: 13px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .mono-plain { font-family: ui-monospace, Menlo, Consolas, monospace;
+      background: none; color: var(--muted); padding: 0; }
+
+    /* Enemy cards */
+    .enemy-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 12px; }
+    @media (min-width: 900px) { .enemy-grid { grid-template-columns: repeat(3, 1fr); } }
+    .enemy-card { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+    .enemy-card.status-full { border-left: 3px solid var(--good); }
+    .enemy-card.status-partial { border-left: 3px solid var(--warn); }
+    .enemy-card.status-pending { border-left: 3px solid var(--muted); opacity: 0.85; }
+    .enemy-card h3 { margin: 0; font-family: ui-monospace, Menlo, Consolas, monospace;
+      color: var(--accent); }
+    .enemy-card .tag { display: inline-block; font-size: 11px; padding: 2px 6px;
+      border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.4px; }
+    .tag.full { background: rgba(136,224,124,0.15); color: var(--good); }
+    .tag.partial { background: rgba(255,204,102,0.15); color: var(--warn); }
+    .tag.pending { background: rgba(138,146,162,0.15); color: var(--muted); }
+    .enemy-card .atlas { background: #000; border: 1px solid var(--border);
+      border-radius: 4px; min-height: 80px; display: flex; align-items: center;
+      justify-content: center; padding: 6px; }
+    .enemy-card .atlas img { image-rendering: pixelated; max-width: 100%; }
+    .enemy-card .atlas .placeholder { color: var(--muted); font-size: 12px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; text-align: center; padding: 20px 10px; }
+    .enemy-card .summary { font-size: 13px; color: var(--fg); }
+    .enemy-card .summary dl { margin: 0; display: grid;
+      grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12px; }
+    .enemy-card .summary dt { color: var(--muted);
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .enemy-card .summary dd { margin: 0; }
+    .enemy-card .notes { font-size: 12px; color: var(--muted); max-height: 200px;
+      overflow-y: auto; background: var(--panel2); padding: 8px 10px; border-radius: 4px;
+      border: 1px solid var(--border); }
+    .enemy-card .notes h4 { margin: 6px 0 4px; color: var(--accent); font-size: 12px; }
+    .enemy-card .notes table { border-collapse: collapse; font-size: 11px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; width: 100%; }
+    .enemy-card .notes table th, .enemy-card .notes table td {
+      text-align: left; padding: 2px 6px; border-bottom: 1px solid var(--border); }
+    .enemy-card .notes table th { color: var(--accent); font-weight: 600; }
+    .enemy-card .fingerprint { font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); background: var(--panel2);
+      padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border);
+      word-break: break-all; }
+    .enemy-card .fingerprint strong { color: var(--warn); }
+
+    /* Screenshot gallery */
+    .shot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px; margin-top: 10px; }
+    .shot-cell { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden; }
+    .shot-cell img { width: 100%; display: block; image-rendering: pixelated; background: #000; }
+    .shot-cell .label { padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); }
+
+    /* Pipeline */
+    .pipeline { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px; margin-top: 10px; }
+    .pipeline ul { margin: 6px 0; padding-left: 20px; font-size: 13px; }
+    .pipeline li { margin: 3px 0; }
+    .pipeline .status-dot { display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+    .pipeline .status-dot.full { background: var(--good); }
+    .pipeline .status-dot.partial { background: var(--warn); }
+    .pipeline .status-dot.pending { background: var(--muted); }
+    .pipeline .note { color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+    .intro { background: linear-gradient(180deg, #12151c, #0e1117);
+      border-left: 3px solid var(--accent); padding: 12px 16px; margin: 12px 0 8px;
+      border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MMX Phase 7 — Launch Octopus enemy catalog</h1>
+    <p class="sub">
+      Data-driven enemy knowledge base for MMX1 Launch Octopus stage.
+      VRAM-time sprite atlases, FSM behavior models, HP/damage data, and
+      identity-fingerprint bytes — auto-generated from Mesen 2 traces by
+      <code>tools/oracle/post/</code>. Live build; data fields populate as
+      the parallel capture/extraction session commits new JSON.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <div class="intro">
+        This viewer is a <strong>live mirror</strong> of work happening in the
+        <code>megaman-x</code> repo. Three enemy slots are tracked for the
+        Launch Octopus recon run: <code>lo_enemy_b20</code> (5-state FSM, slot 7),
+        <code>lo_enemy_b5B</code> (4-state FSM, slot 5), and
+        <code>lo_enemy_b4A</code> (recon-only, slot varied). Fields that don't yet
+        exist in the source repo render as placeholders below.
+      </div>
+    </section>
+
+    <section>
+      <h2>Enemy catalog</h2>
+      <div class="enemy-grid" id="enemy-grid"></div>
+    </section>
+
+    <section>
+      <h2>Recon screenshots</h2>
+      <p class="sub">
+        Representative frames from
+        <code>knowledge_base/mmx1/_phase7_runs/launch_octopus/recon/</code>.
+        Every 6th capture selected across the full ~1080-frame run.
+      </p>
+      <div class="shot-grid" id="shot-grid"></div>
+    </section>
+
+    <section>
+      <h2>Pipeline status</h2>
+      <div class="pipeline" id="pipeline"></div>
+    </section>
+  </main>
+
+  <script>
+    // Catalog definition. Status reflects what's been committed to the
+    // megaman-x repo at the time this page was built.
+    const enemies = [
+      {
+        id: "lo_enemy_b20",
+        slot: "7 (primary)",
+        description: "5-state FSM, full FSM coverage",
+        dataDir: "assets/enemies/lo_enemy_b20/",
+        has: { behavior: true, hp: true, notes: true, atlas: false, fsm: true }
+      },
+      {
+        id: "lo_enemy_b5B",
+        slot: "5 (primary)",
+        description: "4-state FSM",
+        dataDir: "assets/enemies/lo_enemy_b5B/",
+        has: { behavior: false, hp: false, notes: false, atlas: false, fsm: false }
+      },
+      {
+        id: "lo_enemy_b4A",
+        slot: "varied (recon-only)",
+        description: "1-state, recon-only",
+        dataDir: "assets/enemies/lo_enemy_b4A/",
+        has: { behavior: false, hp: false, notes: false, atlas: false, fsm: false }
+      }
+    ];
+
+    const screenshots = [
+      { file: "shot_f0060.png", frame: 60, note: "stage entry" },
+      { file: "shot_f0240.png", frame: 240, note: "early encounter" },
+      { file: "shot_f0420.png", frame: 420, note: "mid recon" },
+      { file: "shot_f0660.png", frame: 660, note: "combat window" },
+      { file: "shot_f0900.png", frame: 900, note: "late window" },
+      { file: "shot_f1080.png", frame: 1080, note: "run end" }
+    ];
+
+    // Very small markdown -> HTML converter: headings, lists, tables, bold,
+    // inline code, and paragraphs. Enough for auto-generated notes.md.
+    function mdToHtml(md) {
+      const lines = md.replace(/\r\n/g, "\n").split("\n");
+      const out = [];
+      let i = 0;
+      const inlineFmt = (s) =>
+        s
+          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+          .replace(/`([^`]+)`/g, '<code>$1</code>')
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      while (i < lines.length) {
+        const line = lines[i];
+        // Heading
+        const h = /^(#{1,6})\s+(.*)$/.exec(line);
+        if (h) {
+          const level = Math.min(6, h[1].length + 2);
+          out.push(`<h${level}>${inlineFmt(h[2])}</h${level}>`);
+          i++; continue;
+        }
+        // Table: header | --- | rows
+        if (/^\|.*\|$/.test(line) && i + 1 < lines.length &&
+            /^\|\s*-+/.test(lines[i+1])) {
+          const header = line.slice(1, -1).split("|").map(c => c.trim());
+          const rows = [];
+          i += 2;
+          while (i < lines.length && /^\|.*\|$/.test(lines[i])) {
+            rows.push(lines[i].slice(1, -1).split("|").map(c => c.trim()));
+            i++;
+          }
+          out.push(
+            "<table><tr>" +
+            header.map(c => `<th>${inlineFmt(c)}</th>`).join("") +
+            "</tr>" +
+            rows.map(r => "<tr>" +
+              r.map(c => `<td>${inlineFmt(c)}</td>`).join("") +
+              "</tr>").join("") +
+            "</table>");
+          continue;
+        }
+        // List
+        if (/^\s*[-*]\s+/.test(line)) {
+          const items = [];
+          while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+            items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
+            i++;
+          }
+          out.push("<ul>" + items.map(it => `<li>${inlineFmt(it)}</li>`).join("") + "</ul>");
+          continue;
+        }
+        // Blank line
+        if (/^\s*$/.test(line)) { i++; continue; }
+        // Paragraph
+        const para = [line];
+        i++;
+        while (i < lines.length && !/^\s*$/.test(lines[i]) &&
+               !/^#{1,6}\s/.test(lines[i]) && !/^\s*[-*]\s+/.test(lines[i]) &&
+               !/^\|.*\|$/.test(lines[i])) {
+          para.push(lines[i]); i++;
+        }
+        out.push(`<p>${inlineFmt(para.join(" "))}</p>`);
+      }
+      return out.join("\n");
+    }
+
+    async function tryFetch(path) {
+      try {
+        const r = await fetch(path);
+        if (!r.ok) return null;
+        return await r.text();
+      } catch (e) { return null; }
+    }
+
+    function fingerprintFromBehavior(b) {
+      const ic = b.identity_constants_within_lifetime;
+      if (!ic) return null;
+      const pairs = Object.entries(ic).sort((a, b) => a[0].localeCompare(b[0]));
+      return pairs.map(([k, v]) => `${k}=<strong>${v}</strong>`).join(" ");
+    }
+
+    function summarizeBehavior(b) {
+      const states = (b.states || []).length;
+      const transitions = (b.transitions || []).length;
+      const archetype = b.position && b.position.archetype_classification;
+      const slot = b.observed_in_slot;
+      const lifetime = b.lifetime &&
+        `f${b.lifetime.first_frame}–f${b.lifetime.last_frame} (${b.lifetime.total_rows} rows)`;
+      return { states, transitions, archetype, slot, lifetime };
+    }
+
+    function summarizeHp(hp) {
+      if (!hp) return null;
+      if (hp.initial_hp_unknown) return "unpinned — discovery pending";
+      const parts = [];
+      if (hp.hp != null) parts.push(`HP=${hp.hp}`);
+      if (hp.candidate_hp_bytes && hp.candidate_hp_bytes.length)
+        parts.push(`candidates: ${hp.candidate_hp_bytes.join(", ")}`);
+      if (hp.damage_model) parts.push(`damage: ${hp.damage_model}`);
+      return parts.length ? parts.join(" · ") : "data present";
+    }
+
+    async function renderEnemy(e) {
+      const card = document.createElement("div");
+      card.className = "enemy-card";
+
+      // Fetch in parallel; tolerant of 404s.
+      const [behaviorText, hpText, notesText] = await Promise.all([
+        tryFetch(e.dataDir + "behavior.json"),
+        tryFetch(e.dataDir + "hp.json"),
+        tryFetch(e.dataDir + "notes.md")
+      ]);
+
+      const behavior = behaviorText ? JSON.parse(behaviorText) : null;
+      const hp = hpText ? JSON.parse(hpText) : null;
+
+      const has = {
+        behavior: !!behavior,
+        hp: !!hp,
+        notes: !!notesText,
+        atlas: false // checked below via HEAD-style fetch
+      };
+      // Atlas probe
+      const atlasResp = await fetch(e.dataDir + "atlas.png", { method: "GET" })
+        .catch(() => null);
+      if (atlasResp && atlasResp.ok) has.atlas = true;
+
+      // Status classification
+      let statusClass = "status-pending", statusTag = "pending", statusLabel = "pending";
+      const haveCount = Object.values(has).filter(Boolean).length;
+      if (haveCount === 0) {
+        statusClass = "status-pending"; statusTag = "pending"; statusLabel = "pending capture";
+      } else if (haveCount >= 3) {
+        statusClass = "status-full"; statusTag = "full"; statusLabel = "data available";
+      } else {
+        statusClass = "status-partial"; statusTag = "partial"; statusLabel = "partial";
+      }
+      card.classList.add(statusClass);
+
+      // Header
+      const hdr = document.createElement("div");
+      hdr.innerHTML =
+        `<h3>${e.id} <span class="tag ${statusTag}">${statusLabel}</span></h3>
+         <div class="sub">slot ${e.slot} — ${e.description}</div>`;
+      card.appendChild(hdr);
+
+      // Atlas slot
+      const atlasDiv = document.createElement("div");
+      atlasDiv.className = "atlas";
+      if (has.atlas) {
+        const img = document.createElement("img");
+        img.src = e.dataDir + "atlas.png";
+        img.alt = `${e.id} atlas`;
+        atlasDiv.appendChild(img);
+      } else {
+        atlasDiv.innerHTML =
+          `<div class="placeholder">pending capture — atlas.png<br>not yet generated</div>`;
+      }
+      card.appendChild(atlasDiv);
+
+      // Behavior / HP summary
+      const sum = document.createElement("div");
+      sum.className = "summary";
+      if (behavior) {
+        const s = summarizeBehavior(behavior);
+        const hpSummary = summarizeHp(hp);
+        sum.innerHTML =
+          `<dl>
+             <dt>states</dt><dd>${s.states}</dd>
+             <dt>transitions</dt><dd>${s.transitions}</dd>
+             <dt>archetype</dt><dd>${s.archetype || "—"}</dd>
+             <dt>observed slot</dt><dd>${s.slot != null ? s.slot : "—"}</dd>
+             <dt>lifetime</dt><dd>${s.lifetime || "—"}</dd>
+             <dt>hp</dt><dd>${hpSummary || "pending"}</dd>
+           </dl>`;
+      } else {
+        sum.innerHTML = `<div class="mono-plain">pending capture — behavior.json not yet generated</div>`;
+      }
+      card.appendChild(sum);
+
+      // Identity fingerprint (from spawns.json if available, otherwise
+      // from behavior.json's identity_constants_within_lifetime).
+      const fp = document.createElement("div");
+      fp.className = "fingerprint";
+      let fpBytes = null;
+      // Attempt to pull from spawns.json (stage-level) for this enemy id
+      const spawnsText = await tryFetch("assets/spawns.json");
+      if (spawnsText) {
+        try {
+          const spawns = JSON.parse(spawnsText);
+          const match = Array.isArray(spawns)
+            ? spawns.find(x => x.enemy_id === e.id)
+            : (spawns.enemies && spawns.enemies[e.id]);
+          if (match && (match.fingerprint || match.identity_bytes)) {
+            const bytes = match.fingerprint || match.identity_bytes;
+            fpBytes = Object.entries(bytes).sort((a, b) => a[0].localeCompare(b[0]))
+              .map(([k, v]) => `${k}=<strong>${v}</strong>`).join(" ");
+          }
+        } catch (_) {}
+      }
+      if (!fpBytes && behavior) fpBytes = fingerprintFromBehavior(behavior);
+      fp.innerHTML = fpBytes
+        ? `<div class="sub" style="margin-bottom:4px;">identity fingerprint:</div>${fpBytes}`
+        : `pending — spawns.json / identity bytes not yet generated`;
+      card.appendChild(fp);
+
+      // Notes
+      if (notesText) {
+        const notes = document.createElement("div");
+        notes.className = "notes";
+        notes.innerHTML = mdToHtml(notesText);
+        card.appendChild(notes);
+      }
+
+      return { card, has };
+    }
+
+    async function renderAll() {
+      const grid = document.getElementById("enemy-grid");
+      const results = [];
+      for (const e of enemies) {
+        const { card, has } = await renderEnemy(e);
+        grid.appendChild(card);
+        results.push({ e, has });
+      }
+
+      // Screenshot gallery
+      const shotGrid = document.getElementById("shot-grid");
+      for (const s of screenshots) {
+        const cell = document.createElement("div");
+        cell.className = "shot-cell";
+        cell.innerHTML =
+          `<img src="assets/screenshots/${s.file}" loading="lazy" alt="frame ${s.frame}">
+           <div class="label">frame ${s.frame} — ${s.note}</div>`;
+        shotGrid.appendChild(cell);
+      }
+
+      // Pipeline
+      const pipeline = document.getElementById("pipeline");
+      const items = results.map(({ e, has }) => {
+        const fields = [
+          ["behavior.json", has.behavior],
+          ["hp.json", has.hp],
+          ["notes.md", has.notes],
+          ["atlas.png", has.atlas]
+        ];
+        const missing = fields.filter(([, ok]) => !ok).map(([n]) => n);
+        const present = fields.filter(([, ok]) => ok).map(([n]) => n);
+        const haveCount = present.length;
+        let dot = "pending";
+        if (haveCount === 0) dot = "pending";
+        else if (haveCount >= 3) dot = "full";
+        else dot = "partial";
+        const state = haveCount === 0 ? "pending capture"
+                    : haveCount >= 3  ? "data available"
+                    :                   "partial";
+        return `<li>
+          <span class="status-dot ${dot}"></span>
+          <code>${e.id}</code> — <strong>${state}</strong>
+          ${present.length ? ` · have: ${present.map(n => `<code>${n}</code>`).join(", ")}` : ""}
+          ${missing.length ? ` · missing: ${missing.map(n => `<code>${n}</code>`).join(", ")}` : ""}
+        </li>`;
+      }).join("");
+      pipeline.innerHTML =
+        `<ul>${items}</ul>
+         <div class="note">
+           Page rendered at build time; missing fields are probed per-enemy and
+           degrade to placeholder cards. Recapture by the parallel session
+           will fill these in on the next deploy.
+         </div>`;
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

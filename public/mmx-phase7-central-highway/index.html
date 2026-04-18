@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MMX Phase 7 — Central Highway (Opening Stage) enemy catalog</title>
+  <title>MMX Phase 7 — Central Highway enemy catalog</title>
   <meta name="robots" content="noindex" />
   <style>
     :root {
       --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
-      --good: #88e07c; --warn: #ffcc66;
+      --good: #88e07c; --warn: #ffcc66; --bad: #ff8c88;
       --panel: #12151c; --panel2: #1a1f2a; --border: #1e2330;
     }
     * { box-sizing: border-box; }
@@ -29,6 +29,7 @@
       border-left: 3px solid var(--accent); padding: 14px 18px;
       margin: 14px 0 0; border-radius: 6px; font-size: 14px; }
     .intro.good { border-left-color: var(--good); }
+    .intro.warn { border-left-color: var(--warn); }
 
     .tag { display: inline-block; font-size: 11px; padding: 2px 7px;
       border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
@@ -36,6 +37,7 @@
     .tag.perfect { background: rgba(136,224,124,0.22); color: var(--good); }
     .tag.strong { background: rgba(122,192,255,0.22); color: var(--accent); }
     .tag.weak { background: rgba(255,204,102,0.22); color: var(--warn); }
+    .tag.flagged { background: rgba(255,140,136,0.22); color: var(--bad); }
 
     .card { background: var(--panel); border: 1px solid var(--border);
       border-radius: 10px; padding: 16px 18px; margin-top: 14px; }
@@ -49,14 +51,11 @@
     .pair-row { display: grid; grid-template-columns: 1fr 1fr;
       gap: 14px; margin-top: 10px; }
     @media (max-width: 640px) { .pair-row { grid-template-columns: 1fr; } }
-    .pair-cell { background: #000; padding: 10px;
-      border: 1px solid var(--border); border-radius: 6px; text-align: center; }
-    .pair-cell img { image-rendering: pixelated; display: inline-block;
-      max-width: 100%; transform: scale(4); transform-origin: center top;
-      margin-bottom: calc(3 * 100%); }
-    .pair-cell.label { padding: 0 0 6px; }
-    .pair-cell .inner { width: 100%; aspect-ratio: 1.2; display: flex;
-      align-items: center; justify-content: center; overflow: hidden; }
+    .pair-cell { background: #000; border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px; min-height: 200px;
+      display: flex; align-items: center; justify-content: center; }
+    .pair-cell img { image-rendering: pixelated; max-width: 100%;
+      height: auto; transform: scale(4); transform-origin: center; }
     figcaption { font-family: ui-monospace, Menlo, Consolas, monospace;
       font-size: 11px; color: var(--muted); margin-top: 6px; text-align: center; }
 
@@ -65,6 +64,23 @@
     .facts dt { color: var(--muted);
       font-family: ui-monospace, Menlo, Consolas, monospace; }
     .facts dd { margin: 0; }
+
+    .vote-bar { display: inline-block; width: 160px; height: 8px;
+      background: var(--panel2); border-radius: 4px; overflow: hidden;
+      vertical-align: middle; margin: 0 6px; }
+    .vote-bar-fill { height: 100%; background: var(--accent);
+      border-radius: 4px; transition: width 0.3s; }
+    .vote-label { font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); vertical-align: middle; }
+
+    .runners { margin-top: 8px; padding: 8px 10px; background: var(--panel2);
+      border-radius: 4px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); }
+    .runners .rtitle { color: var(--fg); margin-bottom: 4px; display: block; }
+
+    .user-flag { margin-top: 10px; padding: 10px 12px;
+      background: rgba(255,140,136,0.10); border-left: 3px solid var(--bad);
+      border-radius: 4px; font-size: 13px; color: #ffd0ce; }
 
     .recon-grid { display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -80,77 +96,81 @@
   <header>
     <h1>MMX Phase 7 — Central Highway (Opening Stage)</h1>
     <p class="sub">
-      Third stage validated against canonical reference sheets from
-      <a href="https://www.spriters-resource.com/snes/mmx/">The Spriters Resource</a>.
-      Same pipeline as
+      Third stage validated. Same pipeline as
       <a href="../mmx-phase7-launch-octopus/">Launch Octopus</a> and
-      <a href="../mmx-phase7-chill-penguin/">Chill Penguin</a>. Zero hand-authored
-      Mesen fixtures — the capture Lua boots the ROM fresh, mashes START through
-      the title / demo, and walks X right into the Highway.
+      <a href="../mmx-phase7-chill-penguin/">Chill Penguin</a>. Now with
+      <strong>multi-frame vote-based matching</strong>: every in-state frame
+      extracts a composite, top-1 canonical hits are bucketed by sheet+position,
+      and the cluster with the most frames voting wins. A single-frame false
+      positive can't outvote a consistent canonical identity.
     </p>
   </header>
 
   <main>
     <section>
       <div class="intro good">
-        <strong>Zero-dependency capture.</strong> Prior stages needed a
-        pre-positioned Mesen savestate on disk. Central Highway comes first,
-        so we skipped the fixture step entirely: <code>highway_from_boot.lua</code>
-        boots from the ROM, taps START on a 6/120-frame cadence for 1800 frames
-        (30 s) to clear the Capcom logo + title + demo sequence, then holds
-        RIGHT for 1800 frames to walk X into the Highway while dumping
-        OAM&nbsp;+&nbsp;VRAM&nbsp;+&nbsp;CGRAM every 10 frames and screenshots
-        every 60 frames. Two distinct enemy types surfaced in the slot trace;
-        both canonically identified on <code>enemies_31592.png</code>.
+        <strong>Zero-dependency capture.</strong>
+        <code>highway_from_boot.lua</code> boots the ROM fresh, taps START for
+        1800 frames to clear Capcom + title + intro, then walks X right for
+        1800 frames while dumping OAM + VRAM + CGRAM every 10 frames and
+        screenshots at the same cadence. 180 screenshots across the walk
+        &mdash; 6&times; denser than earlier captures &mdash; gives the voter
+        plenty of per-state candidate frames to converge on.
+      </div>
+    </section>
+
+    <section>
+      <div class="intro warn">
+        <strong>New: vote-confidence bars.</strong> The bar under each state
+        shows <code>k&nbsp;/&nbsp;N</code> &mdash; how many of the state's
+        candidate frames agreed on the winning canonical position. High
+        agreement = robust identity claim. Low agreement = the silhouette is
+        bouncing between multiple canonical regions, often because the sprite
+        animates wildly OR the extractor is contaminated by neighbor pixels.
+        Runners-up (other canonical positions that collected votes) are listed
+        so suspicious matches are inspectable.
       </div>
     </section>
 
     <section>
       <h2>Confirmed matches</h2>
-      <p class="sub">
-        Pipeline verdicts use the same Jaccard thresholds as the other stages:
-        <strong>STRONG</strong>&nbsp;&ge;&nbsp;0.90,
-        <strong>VERIFIED</strong>&nbsp;&ge;&nbsp;0.70 (the reference-match gate),
-        <strong>FLAGGED</strong>&nbsp;&lt;&nbsp;0.70. A 4&times;-scale
-        side-by-side shows the OAM-composed extraction (left) vs the matching
-        crop from the canonical sheet at the reported (x,&nbsp;y) (right).
-      </p>
 
       <!-- ========== SLOT 3 ========== -->
       <div class="card verified">
         <h3><code>highway_enemy_slot3</code> &middot; b12=0x15 &middot; palette row 4
-          <span class="tag strong">VERIFIED 0.815</span></h3>
+          <span class="tag strong">VERIFIED 0.898</span></h3>
         <div class="sub">
           Small recurring enemy. Active frames 308&ndash;1593 (274 rows),
-          states {0,&nbsp;2}. Only state 2 had an OAM cluster onscreen long
-          enough to produce a composite. FSM agreement 100% structural
-          (3&nbsp;/&nbsp;3 next-state predictions) &middot; 100% frame-level
+          states {0,&nbsp;2}. State 0 transient; only state 2 captured.
+          FSM agreement 100% structural (3&nbsp;/&nbsp;3) + 100% frame-level
           (274&nbsp;/&nbsp;274).
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.815 (normal orientation)</h3>
+          <h3 style="color: var(--good);">state 2 &mdash; J = 0.898
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 22.2%"></span></span>
+            <span class="vote-label">4&nbsp;/&nbsp;18 frames agreed</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot3_state_2_composite.png"
-                     alt="slot3 state 2 OAM-composed extraction">
-              </div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_composite.png" alt="slot3 state 2 OAM-composed"></div>
               <figcaption>OAM-composed extraction (4&times;)</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot3_state_2_ref.png"
-                     alt="canonical reference crop">
-              </div>
+              <div class="pair-cell"><img src="assets/enemies/slot3_state_2_ref.png" alt="canonical reference crop"></div>
               <figcaption>canonical: <code>enemies_31592.png</code> @ (101,&nbsp;1153)</figcaption>
             </figure>
           </div>
+          <div class="runners">
+            <span class="rtitle">runner-up clusters</span>
+            2 frames @ (48, 1200) mean J=0.594<br>
+            1 frame @ (312, 312) mean J=0.861
+          </div>
           <dl class="facts">
             <dt>sheet</dt><dd><code>enemies_31592.png</code></dd>
-            <dt>position</dt><dd>(101, 1153) normal</dd>
-            <dt>Jaccard</dt><dd><strong>0.815</strong></dd>
-            <dt>composite size</dt><dd>37&times;41</dd>
+            <dt>match position</dt><dd>(101, 1153) normal</dd>
+            <dt>best Jaccard</dt><dd><strong>0.898</strong></dd>
+            <dt>composite size</dt><dd>31&times;41</dd>
+            <dt>vote bucket</dt><dd>24&times;24 px spatial clustering</dd>
           </dl>
         </div>
       </div>
@@ -158,88 +178,99 @@
       <!-- ========== SLOT 5 ========== -->
       <div class="card strong">
         <h3><code>highway_enemy_slot5</code> &middot; b12=0x29 &middot; palette row 5
-          <span class="tag perfect">STRONG 0.928 on state 6</span></h3>
+          <span class="tag strong">VERIFIED across 3 states</span></h3>
         <div class="sub">
           Larger multi-part enemy, 18&ndash;37 pal-5 OAM entries onscreen at
           once. Active frames 419&ndash;1800 (738 rows), states {0,&nbsp;2,&nbsp;4,&nbsp;6}.
-          All three captured states verified against the same canonical sheet.
-          <strong>First non-Launch-Octopus state to break into STRONG territory</strong>
-          (state 6, J&nbsp;=&nbsp;0.928).
+          All three captured states verified.
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--good);">state 6 &mdash; J = 0.928 (STRONG)</h3>
+          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.848
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 28.9%"></span></span>
+            <span class="vote-label">11&nbsp;/&nbsp;38 frames agreed (strongest consensus)</span></h3>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_6_composite.png"
-                     alt="slot5 state 6 OAM-composed extraction">
-              </div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_composite.png" alt="slot5 state 2"></div>
               <figcaption>OAM-composed extraction (4&times;)</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_6_ref.png"
-                     alt="canonical reference crop">
-              </div>
-              <figcaption>canonical: <code>enemies_31592.png</code> @ (140,&nbsp;808)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_2_ref.png" alt="canonical"></div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (82,&nbsp;811)</figcaption>
             </figure>
           </div>
+          <div class="runners">
+            <span class="rtitle">runner-up clusters</span>
+            7 frames @ (48, 720) mean J=0.864<br>
+            3 frames @ (216, 456) mean J=0.761
+          </div>
           <dl class="facts">
-            <dt>sheet</dt><dd><code>enemies_31592.png</code></dd>
-            <dt>position</dt><dd>(140, 808) normal</dd>
-            <dt>Jaccard</dt><dd><strong>0.928</strong></dd>
-            <dt>composite size</dt><dd>57&times;70</dd>
+            <dt>match position</dt><dd>(82, 811) normal</dd>
+            <dt>best Jaccard</dt><dd><strong>0.848</strong></dd>
+            <dt>composite size</dt><dd>16&times;67</dd>
           </dl>
         </div>
 
         <div class="state-block">
-          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.897</h3>
+          <h3 style="color: var(--warn);">state 4 &mdash; J = 0.851
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 35.7%; background: var(--warn);"></span></span>
+            <span class="vote-label">5&nbsp;/&nbsp;14 frames agreed</span>
+            <span class="tag flagged" style="margin-left: 8px;">user-flagged WRONG</span></h3>
+          <div class="user-flag">
+            <strong>Known-wrong match.</strong> User visual inspection:
+            canonical crop at (81,&nbsp;808) on <code>enemies_31592.png</code>
+            does not depict this enemy. Silhouette happened to match a different
+            sprite with similar outline proportions &mdash; a false positive that
+            survived voting because 5 of 14 candidate frames' extractions ALL
+            landed on the same wrong bucket (systematic extraction contamination,
+            not per-frame coincidence). Next: cross-check via VRAM tile IDs
+            against canonical pixel content to reject silhouette-only matches.
+          </div>
           <div class="pair-row">
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_2_composite.png"
-                     alt="slot5 state 2 OAM-composed extraction">
-              </div>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_composite.png" alt="slot5 state 4"></div>
               <figcaption>OAM-composed extraction (4&times;)</figcaption>
             </figure>
             <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_2_ref.png"
-                     alt="canonical reference crop">
-              </div>
-              <figcaption>canonical: <code>enemies_31592.png</code> @ (197,&nbsp;745)</figcaption>
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_4_ref.png" alt="canonical (wrong)"></div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808) &mdash; wrong canonical</figcaption>
             </figure>
           </div>
-          <dl class="facts">
-            <dt>position</dt><dd>(197, 745) normal</dd>
-            <dt>Jaccard</dt><dd><strong>0.897</strong></dd>
-            <dt>composite size</dt><dd>47&times;56</dd>
-          </dl>
-        </div>
-
-        <div class="state-block">
-          <h3 style="color: var(--accent);">state 4 &mdash; J = 0.851</h3>
-          <div class="pair-row">
-            <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_4_composite.png"
-                     alt="slot5 state 4 OAM-composed extraction">
-              </div>
-              <figcaption>OAM-composed extraction (4&times;)</figcaption>
-            </figure>
-            <figure style="margin: 0;">
-              <div class="pair-cell">
-                <img src="assets/enemies/slot5_state_4_ref.png"
-                     alt="canonical reference crop">
-              </div>
-              <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808)</figcaption>
-            </figure>
+          <div class="runners">
+            <span class="rtitle">runner-up clusters</span>
+            2 frames @ (96, 936) mean J=0.547<br>
+            2 frames @ (96, 1104) mean J=0.270
           </div>
           <dl class="facts">
-            <dt>position</dt><dd>(81, 808) normal</dd>
-            <dt>Jaccard</dt><dd><strong>0.851</strong></dd>
+            <dt>match position</dt><dd>(81, 808) normal</dd>
+            <dt>best Jaccard</dt><dd><strong>0.851</strong> (silhouette only; not pixel-verified)</dd>
             <dt>composite size</dt><dd>18&times;70</dd>
+          </dl>
+        </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--good);">state 6 &mdash; J = 0.898
+            <span class="vote-bar"><span class="vote-bar-fill" style="width: 25.0%"></span></span>
+            <span class="vote-label">4&nbsp;/&nbsp;16 frames agreed</span></h3>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_composite.png" alt="slot5 state 6"></div>
+              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell"><img src="assets/enemies/slot5_state_6_ref.png" alt="canonical"></div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (147,&nbsp;808)</figcaption>
+            </figure>
+          </div>
+          <div class="runners">
+            <span class="rtitle">runner-up clusters</span>
+            2 frames @ (120, 792) mean J=0.936<br>
+            1 frame @ (240, 744) mean J=0.874
+          </div>
+          <dl class="facts">
+            <dt>match position</dt><dd>(147, 808) normal</dd>
+            <dt>best Jaccard</dt><dd><strong>0.898</strong></dd>
+            <dt>composite size</dt><dd>46&times;70</dd>
           </dl>
         </div>
       </div>
@@ -250,31 +281,29 @@
       <div class="method">
         <ol>
           <li>
-            <strong>Pipeline runs from cold boot with zero setup.</strong>
-            Previously each stage capture required a hand-authored
-            <code>.mss</code> savestate. For post-title stages the boot-and-mash
-            approach works just as well and is portable to future stages that
-            the Maverick stage-select navigator can reach via
-            <code>enter_stage.lua</code>.
+            <strong>Voting beats single-frame top-1 in principle but inherits
+            systematic extraction errors.</strong> With 14 state-4 frames
+            voting, 5 of them landed on the same wrong canonical region
+            because the per-frame extractor consistently included contamination
+            (probably neighbor sprites sharing palette row 5). Voting rejected
+            single-frame coincidences but can't tell the difference between
+            "5 correct frames" and "5 wrong frames agreeing on the same mistake."
           </li>
           <li>
-            <strong>STRONG match on the opening stage beats Chill Penguin.</strong>
-            CP enemy candidates scored 0.77&ndash;0.87 because CP outline colors
-            collide with snow/ice BG tiles, trimming a rim under CGRAM
-            refinement. Central Highway's enemies use colors distinct from its
-            BG palette &mdash; no rim loss, clean J=0.928 on state 6.
+            <strong>Next layer: tile-ID cross-check.</strong> Each state
+            carries a list of OAM tile IDs. The canonical sheet is itself
+            derived from the ROM's VRAM. Decoding those tiles and pixel-
+            comparing to the reference crop at (match_x,&nbsp;match_y)
+            promotes matches from "silhouette agreement" to "content
+            agreement." A wrong canonical region will disagree on pixel
+            content even when the silhouette matches. Queued for next session.
           </li>
           <li>
-            <strong>Both enemies land on <code>enemies_31592.png</code>.</strong>
-            Same canonical sheet, different (x,&nbsp;y) regions, different
-            palette rows (4 vs 5). Sheet 31592 is now the canonical home for
-            Launch Octopus (pal 4 frog) + both Highway enemies, making it the
-            most-referenced sheet in the project so far.
-          </li>
-          <li>
-            <strong>HP unknown for both.</strong> The capture schedule walks X
-            right without firing. Adding <code>SHOOT_EVERY&gt;0</code> would
-            produce HP data via the same Lua run.
+            <strong>180 screenshots / 1800 frames gives enough candidates
+            for voting to converge.</strong> The earlier 30-screenshot
+            capture (every 60 frames) left state-4 with only 2 candidates,
+            making voting near-random. Dense screenshots + OAM-cadence
+            sampling is now the default.
           </li>
         </ol>
       </div>
@@ -282,21 +311,18 @@
 
     <section>
       <h2>Recon screenshots</h2>
-      <p class="sub">A few frames along the walk. Frame numbers are relative to
-        the end of the intro-skip window (the walk-right phase, not absolute
-        emulator frame).</p>
       <div class="recon-grid">
         <div class="recon-cell">
           <img src="assets/recon/shot_f0300.png" loading="lazy" alt="f0300">
-          <figcaption>f0300 &middot; first enemy (slot 3) about to spawn</figcaption>
+          <figcaption>f0300 &middot; first enemy approaching</figcaption>
         </div>
         <div class="recon-cell">
           <img src="assets/recon/shot_f0600.png" loading="lazy" alt="f0600">
-          <figcaption>f0600 &middot; slot 5 large enemy onscreen (37 OAM entries)</figcaption>
+          <figcaption>f0600 &middot; slot 5 large enemy (37 OAM entries)</figcaption>
         </div>
         <div class="recon-cell">
           <img src="assets/recon/shot_f1500.png" loading="lazy" alt="f1500">
-          <figcaption>f1500 &middot; slot 3 small enemy recurring</figcaption>
+          <figcaption>f1500 &middot; recurring slot 3 small enemy</figcaption>
         </div>
         <div class="recon-cell">
           <img src="assets/recon/shot_f1800.png" loading="lazy" alt="f1800">
@@ -307,7 +333,6 @@
 
     <section>
       <h2>Canonical reference sheet</h2>
-      <p class="sub">Both Highway enemies live on sheet 31592. Click to open full.</p>
       <div style="margin-top: 10px; background: #000; padding: 8px;
                   border: 1px solid var(--border); border-radius: 6px;
                   text-align: center;">

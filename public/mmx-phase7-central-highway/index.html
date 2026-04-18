@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MMX Phase 7 — Central Highway (Opening Stage) enemy catalog</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
+      --good: #88e07c; --warn: #ffcc66;
+      --panel: #12151c; --panel2: #1a1f2a; --border: #1e2330;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg);
+      font: 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    header { padding: 28px 24px 4px; max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0 0 6px; font-size: 24px; letter-spacing: 0.2px; }
+    h2 { margin: 32px 0 10px; font-size: 18px; color: var(--accent); }
+    h3 { margin: 0 0 6px; font-size: 15px; color: var(--fg); }
+    .sub { color: var(--muted); font-size: 13px; }
+    main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+    code { background: var(--panel2); padding: 1px 5px; border-radius: 4px;
+      color: var(--warn); font-size: 12.5px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    a { color: var(--accent); }
+
+    .intro { background: linear-gradient(180deg, #12151c, #0e1117);
+      border-left: 3px solid var(--accent); padding: 14px 18px;
+      margin: 14px 0 0; border-radius: 6px; font-size: 14px; }
+    .intro.good { border-left-color: var(--good); }
+
+    .tag { display: inline-block; font-size: 11px; padding: 2px 7px;
+      border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.4px; vertical-align: middle; }
+    .tag.perfect { background: rgba(136,224,124,0.22); color: var(--good); }
+    .tag.strong { background: rgba(122,192,255,0.22); color: var(--accent); }
+    .tag.weak { background: rgba(255,204,102,0.22); color: var(--warn); }
+
+    .card { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; padding: 16px 18px; margin-top: 14px; }
+    .card.verified { border-left: 4px solid var(--good); }
+    .card.strong { border-left: 4px solid var(--accent); }
+
+    .state-block { margin-top: 14px; padding-top: 14px;
+      border-top: 1px dashed var(--border); }
+    .state-block:first-of-type { margin-top: 6px; padding-top: 6px; border-top: 0; }
+
+    .pair-row { display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin-top: 10px; }
+    @media (max-width: 640px) { .pair-row { grid-template-columns: 1fr; } }
+    .pair-cell { background: #000; padding: 10px;
+      border: 1px solid var(--border); border-radius: 6px; text-align: center; }
+    .pair-cell img { image-rendering: pixelated; display: inline-block;
+      max-width: 100%; transform: scale(4); transform-origin: center top;
+      margin-bottom: calc(3 * 100%); }
+    .pair-cell.label { padding: 0 0 6px; }
+    .pair-cell .inner { width: 100%; aspect-ratio: 1.2; display: flex;
+      align-items: center; justify-content: center; overflow: hidden; }
+    figcaption { font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); margin-top: 6px; text-align: center; }
+
+    .facts { display: grid; grid-template-columns: auto 1fr;
+      gap: 3px 14px; margin: 10px 0 0; font-size: 12px; }
+    .facts dt { color: var(--muted);
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .facts dd { margin: 0; }
+
+    .recon-grid { display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px; margin-top: 10px; }
+    .recon-cell img { image-rendering: pixelated; width: 100%; display: block;
+      background: #000; border: 1px solid var(--border); border-radius: 6px; }
+
+    .method ol { padding-left: 22px; line-height: 1.7; font-size: 13px; }
+    .method li { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MMX Phase 7 — Central Highway (Opening Stage)</h1>
+    <p class="sub">
+      Third stage validated against canonical reference sheets from
+      <a href="https://www.spriters-resource.com/snes/mmx/">The Spriters Resource</a>.
+      Same pipeline as
+      <a href="../mmx-phase7-launch-octopus/">Launch Octopus</a> and
+      <a href="../mmx-phase7-chill-penguin/">Chill Penguin</a>. Zero hand-authored
+      Mesen fixtures — the capture Lua boots the ROM fresh, mashes START through
+      the title / demo, and walks X right into the Highway.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <div class="intro good">
+        <strong>Zero-dependency capture.</strong> Prior stages needed a
+        pre-positioned Mesen savestate on disk. Central Highway comes first,
+        so we skipped the fixture step entirely: <code>highway_from_boot.lua</code>
+        boots from the ROM, taps START on a 6/120-frame cadence for 1800 frames
+        (30 s) to clear the Capcom logo + title + demo sequence, then holds
+        RIGHT for 1800 frames to walk X into the Highway while dumping
+        OAM&nbsp;+&nbsp;VRAM&nbsp;+&nbsp;CGRAM every 10 frames and screenshots
+        every 60 frames. Two distinct enemy types surfaced in the slot trace;
+        both canonically identified on <code>enemies_31592.png</code>.
+      </div>
+    </section>
+
+    <section>
+      <h2>Confirmed matches</h2>
+      <p class="sub">
+        Pipeline verdicts use the same Jaccard thresholds as the other stages:
+        <strong>STRONG</strong>&nbsp;&ge;&nbsp;0.90,
+        <strong>VERIFIED</strong>&nbsp;&ge;&nbsp;0.70 (the reference-match gate),
+        <strong>FLAGGED</strong>&nbsp;&lt;&nbsp;0.70. A 4&times;-scale
+        side-by-side shows the OAM-composed extraction (left) vs the matching
+        crop from the canonical sheet at the reported (x,&nbsp;y) (right).
+      </p>
+
+      <!-- ========== SLOT 3 ========== -->
+      <div class="card verified">
+        <h3><code>highway_enemy_slot3</code> &middot; b12=0x15 &middot; palette row 4
+          <span class="tag strong">VERIFIED 0.815</span></h3>
+        <div class="sub">
+          Small recurring enemy. Active frames 308&ndash;1593 (274 rows),
+          states {0,&nbsp;2}. Only state 2 had an OAM cluster onscreen long
+          enough to produce a composite. FSM agreement 100% structural
+          (3&nbsp;/&nbsp;3 next-state predictions) &middot; 100% frame-level
+          (274&nbsp;/&nbsp;274).
+        </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.815 (normal orientation)</h3>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot3_state_2_composite.png"
+                     alt="slot3 state 2 OAM-composed extraction">
+              </div>
+              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot3_state_2_ref.png"
+                     alt="canonical reference crop">
+              </div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (101,&nbsp;1153)</figcaption>
+            </figure>
+          </div>
+          <dl class="facts">
+            <dt>sheet</dt><dd><code>enemies_31592.png</code></dd>
+            <dt>position</dt><dd>(101, 1153) normal</dd>
+            <dt>Jaccard</dt><dd><strong>0.815</strong></dd>
+            <dt>composite size</dt><dd>37&times;41</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- ========== SLOT 5 ========== -->
+      <div class="card strong">
+        <h3><code>highway_enemy_slot5</code> &middot; b12=0x29 &middot; palette row 5
+          <span class="tag perfect">STRONG 0.928 on state 6</span></h3>
+        <div class="sub">
+          Larger multi-part enemy, 18&ndash;37 pal-5 OAM entries onscreen at
+          once. Active frames 419&ndash;1800 (738 rows), states {0,&nbsp;2,&nbsp;4,&nbsp;6}.
+          All three captured states verified against the same canonical sheet.
+          <strong>First non-Launch-Octopus state to break into STRONG territory</strong>
+          (state 6, J&nbsp;=&nbsp;0.928).
+        </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--good);">state 6 &mdash; J = 0.928 (STRONG)</h3>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_6_composite.png"
+                     alt="slot5 state 6 OAM-composed extraction">
+              </div>
+              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_6_ref.png"
+                     alt="canonical reference crop">
+              </div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (140,&nbsp;808)</figcaption>
+            </figure>
+          </div>
+          <dl class="facts">
+            <dt>sheet</dt><dd><code>enemies_31592.png</code></dd>
+            <dt>position</dt><dd>(140, 808) normal</dd>
+            <dt>Jaccard</dt><dd><strong>0.928</strong></dd>
+            <dt>composite size</dt><dd>57&times;70</dd>
+          </dl>
+        </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--accent);">state 2 &mdash; J = 0.897</h3>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_2_composite.png"
+                     alt="slot5 state 2 OAM-composed extraction">
+              </div>
+              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_2_ref.png"
+                     alt="canonical reference crop">
+              </div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (197,&nbsp;745)</figcaption>
+            </figure>
+          </div>
+          <dl class="facts">
+            <dt>position</dt><dd>(197, 745) normal</dd>
+            <dt>Jaccard</dt><dd><strong>0.897</strong></dd>
+            <dt>composite size</dt><dd>47&times;56</dd>
+          </dl>
+        </div>
+
+        <div class="state-block">
+          <h3 style="color: var(--accent);">state 4 &mdash; J = 0.851</h3>
+          <div class="pair-row">
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_4_composite.png"
+                     alt="slot5 state 4 OAM-composed extraction">
+              </div>
+              <figcaption>OAM-composed extraction (4&times;)</figcaption>
+            </figure>
+            <figure style="margin: 0;">
+              <div class="pair-cell">
+                <img src="assets/enemies/slot5_state_4_ref.png"
+                     alt="canonical reference crop">
+              </div>
+              <figcaption>canonical: <code>enemies_31592.png</code> @ (81,&nbsp;808)</figcaption>
+            </figure>
+          </div>
+          <dl class="facts">
+            <dt>position</dt><dd>(81, 808) normal</dd>
+            <dt>Jaccard</dt><dd><strong>0.851</strong></dd>
+            <dt>composite size</dt><dd>18&times;70</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Takeaways for the pipeline</h2>
+      <div class="method">
+        <ol>
+          <li>
+            <strong>Pipeline runs from cold boot with zero setup.</strong>
+            Previously each stage capture required a hand-authored
+            <code>.mss</code> savestate. For post-title stages the boot-and-mash
+            approach works just as well and is portable to future stages that
+            the Maverick stage-select navigator can reach via
+            <code>enter_stage.lua</code>.
+          </li>
+          <li>
+            <strong>STRONG match on the opening stage beats Chill Penguin.</strong>
+            CP enemy candidates scored 0.77&ndash;0.87 because CP outline colors
+            collide with snow/ice BG tiles, trimming a rim under CGRAM
+            refinement. Central Highway's enemies use colors distinct from its
+            BG palette &mdash; no rim loss, clean J=0.928 on state 6.
+          </li>
+          <li>
+            <strong>Both enemies land on <code>enemies_31592.png</code>.</strong>
+            Same canonical sheet, different (x,&nbsp;y) regions, different
+            palette rows (4 vs 5). Sheet 31592 is now the canonical home for
+            Launch Octopus (pal 4 frog) + both Highway enemies, making it the
+            most-referenced sheet in the project so far.
+          </li>
+          <li>
+            <strong>HP unknown for both.</strong> The capture schedule walks X
+            right without firing. Adding <code>SHOOT_EVERY&gt;0</code> would
+            produce HP data via the same Lua run.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2>Recon screenshots</h2>
+      <p class="sub">A few frames along the walk. Frame numbers are relative to
+        the end of the intro-skip window (the walk-right phase, not absolute
+        emulator frame).</p>
+      <div class="recon-grid">
+        <div class="recon-cell">
+          <img src="assets/recon/shot_f0300.png" loading="lazy" alt="f0300">
+          <figcaption>f0300 &middot; first enemy (slot 3) about to spawn</figcaption>
+        </div>
+        <div class="recon-cell">
+          <img src="assets/recon/shot_f0600.png" loading="lazy" alt="f0600">
+          <figcaption>f0600 &middot; slot 5 large enemy onscreen (37 OAM entries)</figcaption>
+        </div>
+        <div class="recon-cell">
+          <img src="assets/recon/shot_f1500.png" loading="lazy" alt="f1500">
+          <figcaption>f1500 &middot; slot 3 small enemy recurring</figcaption>
+        </div>
+        <div class="recon-cell">
+          <img src="assets/recon/shot_f1800.png" loading="lazy" alt="f1800">
+          <figcaption>f1800 &middot; end of walk window</figcaption>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Canonical reference sheet</h2>
+      <p class="sub">Both Highway enemies live on sheet 31592. Click to open full.</p>
+      <div style="margin-top: 10px; background: #000; padding: 8px;
+                  border: 1px solid var(--border); border-radius: 6px;
+                  text-align: center;">
+        <a href="assets/reference/enemies_31592.png" target="_blank">
+          <img src="assets/reference/enemies_31592.png"
+               style="image-rendering: pixelated; max-width: 100%; display: inline-block;"
+               alt="enemies 31592">
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

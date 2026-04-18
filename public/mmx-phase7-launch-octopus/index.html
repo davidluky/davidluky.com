@@ -120,6 +120,17 @@
     </section>
 
     <section>
+      <h2>Palette-row diagnostic</h2>
+      <p class="sub">
+        Four frames from the recon with every onscreen OAM sprite outlined by
+        its palette row. Helps identify which palette each enemy actually uses
+        when the default pipeline produces the wrong atlas. Color key is baked
+        into each image. 3x nearest-neighbor upscale.
+      </p>
+      <div class="shot-grid" id="palette-scan-grid" style="grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));"></div>
+    </section>
+
+    <section>
       <h2>Enemy catalog</h2>
       <div class="enemy-grid" id="enemy-grid"></div>
     </section>
@@ -390,6 +401,43 @@
         card.appendChild(notes);
       }
 
+      // Debug overlays — per-state focus crops (if present). One PNG per
+      // observed state: red boxes = OAM slots the pipeline selected as the
+      // enemy, green boxes = every other onscreen sprite. Each image has its
+      // own legend baked in (frame / crop / bbox / palette / slots / tile IDs).
+      if (behavior && behavior.states) {
+        const stateKeys = Object.keys(behavior.states).sort((a, b) => Number(a) - Number(b));
+        const debugImgs = [];
+        for (const st of stateKeys) {
+          const url = e.dataDir + `debug_state${st}_focus.png`;
+          const head = await fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
+          if (head) debugImgs.push({ state: st, url });
+        }
+        if (debugImgs.length) {
+          const dbg = document.createElement("div");
+          dbg.className = "debug";
+          dbg.style.marginTop = "10px";
+          dbg.style.paddingTop = "10px";
+          dbg.style.borderTop = "1px dashed var(--border)";
+          dbg.innerHTML =
+            `<div class="sub" style="margin-bottom:6px; color: var(--accent); font-size: 12px;">
+               debug — OAM slot selection per state
+             </div>
+             <div class="debug-grid" style="display: grid; gap: 8px;">
+               ${debugImgs.map(d => `
+                 <figure style="margin: 0;">
+                   <img src="${d.url}" alt="${e.id} state ${d.state} OAM overlay"
+                        style="image-rendering: pixelated; max-width: 100%; border: 1px solid var(--border); display: block;">
+                   <figcaption style="font-size: 11px; color: var(--muted); margin-top: 4px;
+                                       font-family: ui-monospace, Menlo, Consolas, monospace;">
+                     state ${d.state} — red = selected enemy OAM slots; green = other onscreen sprites; legend baked into image.
+                   </figcaption>
+                 </figure>`).join("")}
+             </div>`;
+          card.appendChild(dbg);
+        }
+      }
+
       return { card, has };
     }
 
@@ -400,6 +448,22 @@
         const { card, has } = await renderEnemy(e);
         grid.appendChild(card);
         results.push({ e, has });
+      }
+
+      // Palette-row diagnostic scans
+      const palGrid = document.getElementById("palette-scan-grid");
+      const palFrames = [60, 120, 240, 300, 420, 480, 600, 660, 780, 840, 960, 1020];
+      for (const f of palFrames) {
+        const url = `assets/palette_scan/pal_scan_f${String(f).padStart(4,"0")}.png`;
+        const head = await fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
+        if (!head) continue;
+        const cell = document.createElement("div");
+        cell.className = "shot-cell";
+        cell.innerHTML =
+          `<img src="${url}" loading="lazy" alt="palette scan f${f}"
+                style="image-rendering: pixelated; width: 100%; border: 1px solid var(--border);">
+           <div class="label">palette-row scan, frame ${f}</div>`;
+        palGrid.appendChild(cell);
       }
 
       // Screenshot gallery

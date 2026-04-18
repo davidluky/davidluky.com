@@ -1,0 +1,13 @@
+{
+  "enemy_id": "lo_enemy_b4A",
+  "initial_hp_unknown": true,
+  "candidate_hp_bytes": [
+    {
+      "offset": "0x10",
+      "init_value": 181,
+      "final_value": 173,
+      "delta": 8
+    }
+  ],
+  "note": "HP discovery pending \u2014 run extractor against a trace that includes X shooting this enemy. Any byte in the slot that decreases monotonically as the enemy takes damage is the HP field."
+}

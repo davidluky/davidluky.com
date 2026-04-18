@@ -1,0 +1,115 @@
+{
+  "enemy_id": "lo_enemy_b5B",
+  "observed_in_slot": 5,
+  "trace_run": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon",
+  "frame_level": {
+    "total_frames_evaluated": 926,
+    "agree": 72,
+    "disagree": 854,
+    "agreement_percent": 7.78,
+    "interpretation": "Frame-level agreement is sensitive to one-frame initial-duration differences that cascade. Use structural agreement (below) as the primary correctness metric."
+  },
+  "structural_level": {
+    "observation": "For each observed state run, does the FSM's default branch predict the correct next state?",
+    "total_transitions_evaluated": 6,
+    "correct_next_predictions": 5,
+    "wrong_next_predictions": 1,
+    "agreement_percent": 83.33,
+    "mismatches": [
+      {
+        "from": "4",
+        "predicted_next": "6",
+        "observed_next": "2",
+        "at_frame": 355
+      }
+    ]
+  },
+  "branch_strategy": "dominant",
+  "default_transitions": {
+    "0": {
+      "to": "2",
+      "after_frames": 1,
+      "name": "state 0 -> state 2"
+    },
+    "2": {
+      "to": "6",
+      "after_frames": 40,
+      "name": "state 2 -> state 6"
+    },
+    "6": {
+      "to": "4",
+      "after_frames": 71,
+      "name": "state 6 -> state 4"
+    },
+    "4": {
+      "to": "6",
+      "after_frames": 48,
+      "name": "state 4 -> state 6"
+    }
+  },
+  "first_divergence": {
+    "frame": 234,
+    "predicted": "6",
+    "observed": "4",
+    "frames_in_state": 8
+  },
+  "divergence_histogram": {
+    "pred=6(obs=2)": 468,
+    "pred=4(obs=2)": 288,
+    "pred=6(obs=4)": 50,
+    "pred=4(obs=6)": 48
+  },
+  "divergence_samples": [
+    {
+      "frame": 234,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 235,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 236,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 237,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 238,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 239,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 240,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 241,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 242,
+      "predicted": "6",
+      "observed": "4"
+    },
+    {
+      "frame": 243,
+      "predicted": "6",
+      "observed": "4"
+    }
+  ],
+  "interpretation": "Structural agreement is the headline metric for FSM correctness. Frame-level agreement is reported as a supplement; it's dominated by phase drift (the model's default branch timer is right but the first state entry is shorter than subsequent entries, cascading into permanent misalignment)."
+}

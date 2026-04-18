@@ -1,0 +1,81 @@
+{
+  "enemy_id": "lo_enemy_b4A",
+  "slot_field_layout_ref": "knowledge_base/mmx1/ram_map.json#enemy_slot_layout",
+  "trace_run": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon",
+  "observed_in_slot": 9,
+  "lifetime": {
+    "first_frame": 420,
+    "last_frame": 985,
+    "total_rows": 177
+  },
+  "position": {
+    "x_world_pixels": {
+      "min": 0,
+      "max": 0,
+      "range": 0
+    },
+    "y_world_pixels": {
+      "min": 128,
+      "max": 137,
+      "range": 9
+    },
+    "pos_field_offsets": {
+      "x": "0x14:0x15 u16le 8.8 FP",
+      "y": "0x1E:0x1F u16le 8.8 FP"
+    },
+    "archetype_classification": "stationary",
+    "measurement_window": "all active rows except state=0 init frames; pos offsets from find_pos_per_archetype.py (variance-filtered)"
+  },
+  "identity_constants_within_lifetime": {
+    "b01": "00",
+    "b02": "00",
+    "b03": "00",
+    "b04": "00",
+    "b05": "00",
+    "b06": "00",
+    "b07": "00",
+    "b08": "01",
+    "b09": "02",
+    "b0A": "00",
+    "b0B": "00",
+    "b0C": "00",
+    "b0F": "00",
+    "b11": "01",
+    "b12": "4A",
+    "b13": "00",
+    "b14": "00",
+    "b15": "00",
+    "b18": "00",
+    "b19": "35",
+    "b1A": "00",
+    "b1D": "B6",
+    "b1E": "25"
+  },
+  "states": [
+    {
+      "state_id": "2",
+      "name": null,
+      "instances": 1,
+      "duration_frames": {
+        "min": 566,
+        "max": 566,
+        "mean": 566,
+        "stdev": 0
+      },
+      "entry_facing_byte_0F_hist": {
+        "00": 1
+      },
+      "dx_observed_within_state": [],
+      "dy_observed_within_state": [
+        9
+      ]
+    }
+  ],
+  "transitions": [],
+  "provenance": {
+    "extractor": "tools/oracle/post/behavior_extractor.py",
+    "extractor_version": "1.1",
+    "slots_csv": "knowledge_base\\mmx1\\_phase7_runs\\launch_octopus\\recon\\slots.csv",
+    "variance_tolerance": 3
+  }
+}

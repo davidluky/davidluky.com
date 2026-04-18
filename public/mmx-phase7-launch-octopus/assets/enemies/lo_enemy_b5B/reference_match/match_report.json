@@ -1,0 +1,604 @@
+{
+  "extracted": "knowledge_base\\mmx1\\enemies\\lo_enemy_b5B\\atlas.png",
+  "reference_dir": "knowledge_base\\mmx1\\_reference_sprites\\spriters_resource",
+  "frame_count": 1,
+  "frames": [
+    {
+      "index": 0,
+      "bbox_y0x0y1x1": [
+        0,
+        0,
+        27,
+        55
+      ],
+      "size_wh": [
+        56,
+        28
+      ],
+      "crop": "frame_000.png",
+      "verdict": "MISS",
+      "matches": [
+        {
+          "reference_sheet": "enemies_31592.png",
+          "orientation": "normal",
+          "silhouette_jaccard": 0.4448,
+          "match_y": 751,
+          "match_x": 330,
+          "foreground_pixels": 298,
+          "exact_color_matches": 0,
+          "exact_match_rate": 0.0,
+          "top_disagreements": [
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 36
+            },
+            {
+              "extracted_rgb": [
+                165,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 16
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 15
+            },
+            {
+              "extracted_rgb": [
+                173,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 13
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                0,
+                80,
+                120
+              ],
+              "count": 13
+            },
+            {
+              "extracted_rgb": [
+                255,
+                198,
+                247
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 10
+            },
+            {
+              "extracted_rgb": [
+                189,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 9
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                112,
+                112,
+                112
+              ],
+              "count": 9
+            }
+          ]
+        },
+        {
+          "reference_sheet": "enemies_31595.png",
+          "orientation": "flip_h",
+          "silhouette_jaccard": 0.4444,
+          "match_y": 140,
+          "match_x": 20,
+          "foreground_pixels": 244,
+          "exact_color_matches": 0,
+          "exact_match_rate": 0.0,
+          "top_disagreements": [
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 29
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 20
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                88,
+                80,
+                80
+              ],
+              "count": 19
+            },
+            {
+              "extracted_rgb": [
+                189,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 15
+            },
+            {
+              "extracted_rgb": [
+                198,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 8
+            },
+            {
+              "extracted_rgb": [
+                49,
+                239,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 7
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                152,
+                136,
+                136
+              ],
+              "count": 6
+            },
+            {
+              "extracted_rgb": [
+                198,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                88,
+                80,
+                80
+              ],
+              "count": 5
+            }
+          ]
+        },
+        {
+          "reference_sheet": "enemies_31592.png",
+          "orientation": "normal",
+          "silhouette_jaccard": 0.4439,
+          "match_y": 752,
+          "match_x": 332,
+          "foreground_pixels": 281,
+          "exact_color_matches": 0,
+          "exact_match_rate": 0.0,
+          "top_disagreements": [
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 34
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 15
+            },
+            {
+              "extracted_rgb": [
+                189,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 12
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                0,
+                80,
+                120
+              ],
+              "count": 12
+            },
+            {
+              "extracted_rgb": [
+                198,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 9
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                240,
+                192,
+                160
+              ],
+              "count": 8
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                168,
+                168,
+                168
+              ],
+              "count": 8
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                0,
+                80,
+                120
+              ],
+              "count": 7
+            }
+          ]
+        },
+        {
+          "reference_sheet": "enemies_31595.png",
+          "orientation": "flip_h",
+          "silhouette_jaccard": 0.4422,
+          "match_y": 140,
+          "match_x": 19,
+          "foreground_pixels": 241,
+          "exact_color_matches": 0,
+          "exact_match_rate": 0.0,
+          "top_disagreements": [
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 29
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 20
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                88,
+                80,
+                80
+              ],
+              "count": 18
+            },
+            {
+              "extracted_rgb": [
+                189,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 14
+            },
+            {
+              "extracted_rgb": [
+                198,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 8
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                152,
+                136,
+                136
+              ],
+              "count": 7
+            },
+            {
+              "extracted_rgb": [
+                255,
+                198,
+                247
+              ],
+              "reference_rgb": [
+                40,
+                48,
+                32
+              ],
+              "count": 7
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                160,
+                80,
+                32
+              ],
+              "count": 6
+            }
+          ]
+        },
+        {
+          "reference_sheet": "enemies_31592.png",
+          "orientation": "normal",
+          "silhouette_jaccard": 0.4413,
+          "match_y": 752,
+          "match_x": 330,
+          "foreground_pixels": 297,
+          "exact_color_matches": 0,
+          "exact_match_rate": 0.0,
+          "top_disagreements": [
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 35
+            },
+            {
+              "extracted_rgb": [
+                41,
+                41,
+                41
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 17
+            },
+            {
+              "extracted_rgb": [
+                173,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 12
+            },
+            {
+              "extracted_rgb": [
+                189,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 10
+            },
+            {
+              "extracted_rgb": [
+                198,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 9
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                168,
+                168,
+                168
+              ],
+              "count": 8
+            },
+            {
+              "extracted_rgb": [
+                140,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                240,
+                192,
+                160
+              ],
+              "count": 7
+            },
+            {
+              "extracted_rgb": [
+                165,
+                255,
+                255
+              ],
+              "reference_rgb": [
+                32,
+                32,
+                40
+              ],
+              "count": 7
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

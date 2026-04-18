@@ -8,511 +8,246 @@
   <style>
     :root {
       --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
-      --warn: #ffcc66; --good: #88e07c; --bad: #ff7a7a;
+      --good: #88e07c; --warn: #ffcc66;
       --panel: #12151c; --panel2: #1a1f2a; --border: #1e2330;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; background: var(--bg); color: var(--fg);
       font: 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-    header { padding: 28px 24px 12px; max-width: 1100px; margin: 0 auto; }
-    h1 { margin: 0 0 4px; font-size: 22px; letter-spacing: 0.2px; }
-    h2 { margin: 28px 0 8px; font-size: 17px; color: var(--accent); }
-    h3 { margin: 16px 0 6px; font-size: 15px; color: var(--fg); }
+    header { padding: 28px 24px 4px; max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0 0 6px; font-size: 24px; letter-spacing: 0.2px; }
+    h2 { margin: 32px 0 10px; font-size: 18px; color: var(--accent); }
+    h3 { margin: 0 0 6px; font-size: 15px; color: var(--fg); }
     .sub { color: var(--muted); font-size: 13px; }
     main { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
-    code, .mono { background: var(--panel2); padding: 1px 5px; border-radius: 4px;
-      color: var(--warn); font-size: 13px;
+    code { background: var(--panel2); padding: 1px 5px; border-radius: 4px;
+      color: var(--warn); font-size: 12.5px;
       font-family: ui-monospace, Menlo, Consolas, monospace; }
-    .mono-plain { font-family: ui-monospace, Menlo, Consolas, monospace;
-      background: none; color: var(--muted); padding: 0; }
-
-    /* Enemy cards */
-    .enemy-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 12px; }
-    @media (min-width: 900px) { .enemy-grid { grid-template-columns: repeat(3, 1fr); } }
-    .enemy-card { background: var(--panel); border: 1px solid var(--border);
-      border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-    .enemy-card.status-full { border-left: 3px solid var(--good); }
-    .enemy-card.status-partial { border-left: 3px solid var(--warn); }
-    .enemy-card.status-pending { border-left: 3px solid var(--muted); opacity: 0.85; }
-    .enemy-card h3 { margin: 0; font-family: ui-monospace, Menlo, Consolas, monospace;
-      color: var(--accent); }
-    .enemy-card .tag { display: inline-block; font-size: 11px; padding: 2px 6px;
-      border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
-      text-transform: uppercase; letter-spacing: 0.4px; }
-    .tag.full { background: rgba(136,224,124,0.15); color: var(--good); }
-    .tag.partial { background: rgba(255,204,102,0.15); color: var(--warn); }
-    .tag.pending { background: rgba(138,146,162,0.15); color: var(--muted); }
-    .enemy-card .atlas { background: #000; border: 1px solid var(--border);
-      border-radius: 4px; min-height: 80px; display: flex; align-items: center;
-      justify-content: center; padding: 6px; }
-    .enemy-card .atlas img { image-rendering: pixelated; max-width: 100%; }
-    .enemy-card .atlas .placeholder { color: var(--muted); font-size: 12px;
-      font-family: ui-monospace, Menlo, Consolas, monospace; text-align: center; padding: 20px 10px; }
-    .enemy-card .summary { font-size: 13px; color: var(--fg); }
-    .enemy-card .summary dl { margin: 0; display: grid;
-      grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12px; }
-    .enemy-card .summary dt { color: var(--muted);
-      font-family: ui-monospace, Menlo, Consolas, monospace; }
-    .enemy-card .summary dd { margin: 0; }
-    .enemy-card .notes { font-size: 12px; color: var(--muted); max-height: 200px;
-      overflow-y: auto; background: var(--panel2); padding: 8px 10px; border-radius: 4px;
-      border: 1px solid var(--border); }
-    .enemy-card .notes h4 { margin: 6px 0 4px; color: var(--accent); font-size: 12px; }
-    .enemy-card .notes table { border-collapse: collapse; font-size: 11px;
-      font-family: ui-monospace, Menlo, Consolas, monospace; width: 100%; }
-    .enemy-card .notes table th, .enemy-card .notes table td {
-      text-align: left; padding: 2px 6px; border-bottom: 1px solid var(--border); }
-    .enemy-card .notes table th { color: var(--accent); font-weight: 600; }
-    .enemy-card .fingerprint { font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 11px; color: var(--muted); background: var(--panel2);
-      padding: 6px 8px; border-radius: 4px; border: 1px solid var(--border);
-      word-break: break-all; }
-    .enemy-card .fingerprint strong { color: var(--warn); }
-
-    /* Screenshot gallery */
-    .shot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 10px; margin-top: 10px; }
-    .shot-cell { background: var(--panel); border: 1px solid var(--border);
-      border-radius: 6px; overflow: hidden; }
-    .shot-cell img { width: 100%; display: block; image-rendering: pixelated; background: #000; }
-    .shot-cell .label { padding: 6px 8px; font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 11px; color: var(--muted); }
-
-    /* Pipeline */
-    .pipeline { background: var(--panel); border: 1px solid var(--border);
-      border-radius: 8px; padding: 12px 16px; margin-top: 10px; }
-    .pipeline ul { margin: 6px 0; padding-left: 20px; font-size: 13px; }
-    .pipeline li { margin: 3px 0; }
-    .pipeline .status-dot { display: inline-block; width: 8px; height: 8px;
-      border-radius: 50%; margin-right: 6px; vertical-align: middle; }
-    .pipeline .status-dot.full { background: var(--good); }
-    .pipeline .status-dot.partial { background: var(--warn); }
-    .pipeline .status-dot.pending { background: var(--muted); }
-    .pipeline .note { color: var(--muted); font-size: 12px; margin-top: 8px; }
+    a { color: var(--accent); }
 
     .intro { background: linear-gradient(180deg, #12151c, #0e1117);
-      border-left: 3px solid var(--accent); padding: 12px 16px; margin: 12px 0 8px;
-      border-radius: 6px; }
+      border-left: 3px solid var(--accent); padding: 14px 18px;
+      margin: 14px 0 0; border-radius: 6px; font-size: 14px; }
+
+    .tag { display: inline-block; font-size: 11px; padding: 2px 7px;
+      border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.4px; vertical-align: middle; }
+    .tag.perfect { background: rgba(136,224,124,0.18); color: var(--good); }
+    .tag.strong  { background: rgba(122,192,255,0.18); color: var(--accent); }
+
+    .card { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px 20px; margin-top: 16px; }
+    .card.b20 { border-left: 4px solid var(--good); }
+    .card.b5b { border-left: 4px solid var(--accent); }
+
+    .compare-row { display: grid; grid-template-columns: auto 1fr;
+      gap: 20px; align-items: start; margin-top: 12px; }
+    @media (max-width: 720px) {
+      .compare-row { grid-template-columns: 1fr; }
+    }
+    .compare-cell { background: #000; padding: 8px;
+      border: 1px solid var(--border); border-radius: 6px; }
+    .compare-cell img { image-rendering: pixelated; display: block; max-width: 100%; }
+    .compare-cell img.extracted { width: 256px; }
+    .compare-cell img.strip { width: 100%; }
+    figcaption { font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--muted); margin-top: 6px; text-align: center; }
+
+    .facts { display: grid; grid-template-columns: auto 1fr;
+      gap: 4px 16px; margin: 14px 0 0; font-size: 12.5px; }
+    .facts dt { color: var(--muted);
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .facts dd { margin: 0; }
+
+    .ref-grid { display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px; margin-top: 10px; }
+    .ref-cell { background: var(--panel); border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden; }
+    .ref-cell img { image-rendering: pixelated; width: 100%; display: block;
+      background: #000; }
+    .ref-cell .label { padding: 8px 10px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; color: var(--muted); }
+
+    .method { font-size: 13px; color: var(--fg); }
+    .method ol { padding-left: 22px; line-height: 1.75; }
+    .method li { margin: 4px 0; }
+    .method code { font-size: 12px; }
   </style>
 </head>
 <body>
   <header>
     <h1>MMX Phase 7 — Launch Octopus enemy catalog</h1>
     <p class="sub">
-      Data-driven enemy knowledge base for MMX1 Launch Octopus stage.
-      VRAM-time sprite atlases, FSM behavior models, HP/damage data, and
-      identity-fingerprint bytes — auto-generated from Mesen 2 traces by
-      <code>tools/oracle/post/</code>. Live build; data fields populate as
-      the parallel capture/extraction session commits new JSON.
+      VRAM + OAM-driven sprite identification. Reference match against
+      canonical sheets from
+      <a href="https://www.spriters-resource.com/snes/mmx/">The Spriters Resource</a>.
+      Two enemies confirmed for the Launch Octopus stage recon.
     </p>
   </header>
 
   <main>
     <section>
       <div class="intro">
-        This viewer is a <strong>live mirror</strong> of work happening in the
-        <code>megaman-x</code> repo. Three enemy slots are tracked for the
-        Launch Octopus recon run: <code>lo_enemy_b20</code> (5-state FSM, slot 7),
-        <code>lo_enemy_b5B</code> (4-state FSM, slot 5), and
-        <code>lo_enemy_b4A</code> (recon-only, slot varied). Fields that don't yet
-        exist in the source repo render as placeholders below.
+        <strong>Method in one sentence.</strong> For each recon frame, read
+        the SNES OAM table directly (128 entries, each tagged with its
+        palette row 0–7). Union the on-screen bboxes of every OAM entry
+        whose palette row matches the target. Intersect that mask with the
+        CGRAM color set for the same palette row (bit-replication 5→8 bit
+        conversion, matching Mesen output). Cross-correlate the resulting
+        silhouette against every canonical reference sheet via 2D FFT; pick
+        the top match by Jaccard (intersection ÷ union).
       </div>
     </section>
 
     <section>
-      <h2>Palette-row diagnostic</h2>
+      <h2>Confirmed matches</h2>
+
+      <div class="card b20">
+        <h3><code>lo_enemy_b20</code> — green frog (OBJ pal 4)
+          <span class="tag perfect">PERFECT 1.000</span></h3>
+        <div class="sub">
+          Hopping ground enemy. Matches <code>enemies_31593.png</code>
+          bottom region. David-confirmed visually.
+        </div>
+        <div class="compare-row">
+          <figure style="margin: 0;">
+            <div class="compare-cell">
+              <img class="extracted"
+                   src="assets/oam_extracted/f0300_pal4/enemy_00_pal4_x27_y108_60x24.png"
+                   alt="pal-4 frog extracted from f0300">
+            </div>
+            <figcaption>OAM-extracted (f0300, 4×)</figcaption>
+          </figure>
+          <figure style="margin: 0;">
+            <div class="compare-cell">
+              <img class="strip"
+                   src="assets/oam_extracted/f0300_pal4/ref_match_enemy_00_pal4_x27_y108_60x24/frame_000_compare.png"
+                   alt="frog compare strip">
+            </div>
+            <figcaption>extracted · top-3 reference crops from the 4 canonical sheets</figcaption>
+          </figure>
+        </div>
+        <dl class="facts">
+          <dt>palette row</dt><dd>4</dd>
+          <dt>on-screen bbox</dt><dd>60×24 @ (27, 108), full silhouette (fully on-screen, not edge-clipped)</dd>
+          <dt>best match</dt><dd><code>enemies_31593.png</code>, bottom of sheet 2, orientation <code>normal</code></dd>
+          <dt>silhouette Jaccard</dt><dd><strong>1.000</strong> (f0300 ground pose) · f0780 jump pose scores 0.971</dd>
+          <dt>sheet region</dt><dd>bottom of sheet 2 (David: "green one is on enemies 2 at the very bottom")</dd>
+        </dl>
+      </div>
+
+      <div class="card b5b">
+        <h3><code>lo_enemy_b5B</code> — big stationary right-side enemy (OBJ pal 7)
+          <span class="tag strong">STRONG 0.972</span></h3>
+        <div class="sub">
+          Static 78×55 sprite at screen-x 160 every frame, 18 OAM slots.
+          Matches <code>enemies_31594.png</code> top. David-confirmed
+          visually: <em>"cant spot the difference, but it is visibly the
+          same enemy."</em>
+        </div>
+        <div class="compare-row">
+          <figure style="margin: 0;">
+            <div class="compare-cell">
+              <img class="extracted"
+                   src="assets/oam_extracted/f0660_pal7/enemy_02_pal7_x160_y61_78x55.png"
+                   alt="pal-7 big enemy extracted from f0660">
+            </div>
+            <figcaption>OAM-extracted (f0660, 4×)</figcaption>
+          </figure>
+          <figure style="margin: 0;">
+            <div class="compare-cell">
+              <img class="strip"
+                   src="assets/oam_extracted/f0660_pal7/ref_match_enemy_02_pal7_x160_y61_78x55/frame_000_compare.png"
+                   alt="b5B compare strip">
+            </div>
+            <figcaption>extracted · top-3 reference crops</figcaption>
+          </figure>
+        </div>
+        <dl class="facts">
+          <dt>palette row</dt><dd>7</dd>
+          <dt>on-screen bbox</dt><dd>78×55 @ (160, 61), stationary across the entire recon</dd>
+          <dt>best match</dt><dd><code>enemies_31594.png</code> @ (x=1, y=67), orientation <code>normal</code></dd>
+          <dt>silhouette Jaccard</dt><dd><strong>0.972</strong> (0.979 on f0780 frame)</dd>
+          <dt>sheet region</dt><dd>top of sheet 3 (David: "other one is on enemies 3 at the top")</dd>
+          <dt>also fires</dt><dd>pal-7 projectiles at ~23×30 (tracked in <code>spawns.json</code> as satellite blobs)</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section>
+      <h2>Insight: multi-palette, multi-enemy</h2>
+      <div class="method">
+        <p>
+          Both enemies coexist on one screen at f0660 — the frog (pal 4)
+          lands on the ground while the stationary big enemy (pal 7) fires
+          its missile. This proves a recon frame can carry several
+          independent enemies under different OBJ palette rows. Previous
+          pipeline assumed one enemy class per capture; the new extractor
+          sweeps every palette row independently.
+        </p>
+        <p class="sub" style="margin-top: 8px;">
+          Related corrections baked into the tooling:
+        </p>
+        <ol class="sub">
+          <li>
+            <code>bgr555_to_rgb</code> now uses bit-replication
+            <code>(c&lt;&lt;3)|(c&gt;&gt;2)</code> instead of linear
+            <code>c*255/31</code>. Off-by-one on every channel was breaking
+            exact color comparisons against screenshots.
+          </li>
+          <li>
+            <code>spawns.json</code> note <em>"pal 2 = HUD/HP bar"</em> was
+            wrong. Pal 2 consistently produces a 22×92 block at (5, 8) every
+            frame with 7 OAM slots — that's <strong>X's body</strong>
+            merged with the HUD, not a standalone HUD palette.
+          </li>
+          <li>
+            Color-keying the screenshot alone produces false positives
+            because palettes share dark colors. OAM is authoritative for
+            "which pixels are which palette."
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2>Canonical reference sheets</h2>
       <p class="sub">
-        Four frames from the recon with every onscreen OAM sprite outlined by
-        its palette row. Helps identify which palette each enemy actually uses
-        when the default pipeline produces the wrong atlas. Color key is baked
-        into each image. 3x nearest-neighbor upscale.
+        Full MMX1 enemy sheets from The Spriters Resource. Click any to open
+        full-size.
       </p>
-      <div class="shot-grid" id="palette-scan-grid" style="grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));"></div>
+      <div class="ref-grid">
+        <div class="ref-cell">
+          <a href="assets/reference/enemies_31592.png" target="_blank"><img src="assets/reference/enemies_31592.png" loading="lazy" alt="Enemies 1"></a>
+          <div class="label">Enemies 1 · sheet 31592</div>
+        </div>
+        <div class="ref-cell">
+          <a href="assets/reference/enemies_31593.png" target="_blank"><img src="assets/reference/enemies_31593.png" loading="lazy" alt="Enemies 2"></a>
+          <div class="label">Enemies 2 · sheet 31593 — <code>lo_enemy_b20</code> at bottom</div>
+        </div>
+        <div class="ref-cell">
+          <a href="assets/reference/enemies_31594.png" target="_blank"><img src="assets/reference/enemies_31594.png" loading="lazy" alt="Enemies 3"></a>
+          <div class="label">Enemies 3 · sheet 31594 — <code>lo_enemy_b5B</code> at top</div>
+        </div>
+        <div class="ref-cell">
+          <a href="assets/reference/enemies_31595.png" target="_blank"><img src="assets/reference/enemies_31595.png" loading="lazy" alt="Enemies 4"></a>
+          <div class="label">Enemies 4 · sheet 31595</div>
+        </div>
+      </div>
     </section>
 
     <section>
-      <h2>Enemy catalog</h2>
-      <div class="enemy-grid" id="enemy-grid"></div>
-    </section>
-
-    <section>
-      <h2>Recon screenshots</h2>
-      <p class="sub">
-        Representative frames from
-        <code>knowledge_base/mmx1/_phase7_runs/launch_octopus/recon/</code>.
-        Every 6th capture selected across the full ~1080-frame run.
-      </p>
-      <div class="shot-grid" id="shot-grid"></div>
-    </section>
-
-    <section>
-      <h2>Pipeline status</h2>
-      <div class="pipeline" id="pipeline"></div>
+      <h2>Tooling</h2>
+      <div class="method">
+        <ol>
+          <li><code>tools/oracle/post/extract_enemy_from_oam.py</code> — OAM-driven per-palette extractor with CGRAM color refinement.</li>
+          <li><code>tools/oracle/post/sprite_reference_matcher.py</code> — FFT cross-correlation against every reference sheet, normal + horizontal-flip orientations, per-pixel color-disagreement report.</li>
+          <li><code>tools/oracle/post/extract_enemy_from_screenshot.py</code> — earlier color-key extractor, kept as a fallback for frames without an OAM dump.</li>
+        </ol>
+      </div>
     </section>
   </main>
-
-  <script>
-    // Catalog definition. Status reflects what's been committed to the
-    // megaman-x repo at the time this page was built.
-    const enemies = [
-      {
-        id: "lo_enemy_b20",
-        slot: "7 (primary)",
-        description: "5-state FSM, full FSM coverage",
-        dataDir: "assets/enemies/lo_enemy_b20/",
-        has: { behavior: true, hp: true, notes: true, atlas: false, fsm: true }
-      },
-      {
-        id: "lo_enemy_b5B",
-        slot: "5 (primary)",
-        description: "4-state FSM",
-        dataDir: "assets/enemies/lo_enemy_b5B/",
-        has: { behavior: false, hp: false, notes: false, atlas: false, fsm: false }
-      },
-      {
-        id: "lo_enemy_b4A",
-        slot: "varied (recon-only)",
-        description: "1-state, recon-only",
-        dataDir: "assets/enemies/lo_enemy_b4A/",
-        has: { behavior: false, hp: false, notes: false, atlas: false, fsm: false }
-      }
-    ];
-
-    const screenshots = [
-      { file: "shot_f0060.png", frame: 60, note: "stage entry" },
-      { file: "shot_f0240.png", frame: 240, note: "early encounter" },
-      { file: "shot_f0420.png", frame: 420, note: "mid recon" },
-      { file: "shot_f0660.png", frame: 660, note: "combat window" },
-      { file: "shot_f0900.png", frame: 900, note: "late window" },
-      { file: "shot_f1080.png", frame: 1080, note: "run end" }
-    ];
-
-    // Very small markdown -> HTML converter: headings, lists, tables, bold,
-    // inline code, and paragraphs. Enough for auto-generated notes.md.
-    function mdToHtml(md) {
-      const lines = md.replace(/\r\n/g, "\n").split("\n");
-      const out = [];
-      let i = 0;
-      const inlineFmt = (s) =>
-        s
-          .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*([^*]+)\*/g, '<em>$1</em>');
-      while (i < lines.length) {
-        const line = lines[i];
-        // Heading
-        const h = /^(#{1,6})\s+(.*)$/.exec(line);
-        if (h) {
-          const level = Math.min(6, h[1].length + 2);
-          out.push(`<h${level}>${inlineFmt(h[2])}</h${level}>`);
-          i++; continue;
-        }
-        // Table: header | --- | rows
-        if (/^\|.*\|$/.test(line) && i + 1 < lines.length &&
-            /^\|\s*-+/.test(lines[i+1])) {
-          const header = line.slice(1, -1).split("|").map(c => c.trim());
-          const rows = [];
-          i += 2;
-          while (i < lines.length && /^\|.*\|$/.test(lines[i])) {
-            rows.push(lines[i].slice(1, -1).split("|").map(c => c.trim()));
-            i++;
-          }
-          out.push(
-            "<table><tr>" +
-            header.map(c => `<th>${inlineFmt(c)}</th>`).join("") +
-            "</tr>" +
-            rows.map(r => "<tr>" +
-              r.map(c => `<td>${inlineFmt(c)}</td>`).join("") +
-              "</tr>").join("") +
-            "</table>");
-          continue;
-        }
-        // List
-        if (/^\s*[-*]\s+/.test(line)) {
-          const items = [];
-          while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-            items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
-            i++;
-          }
-          out.push("<ul>" + items.map(it => `<li>${inlineFmt(it)}</li>`).join("") + "</ul>");
-          continue;
-        }
-        // Blank line
-        if (/^\s*$/.test(line)) { i++; continue; }
-        // Paragraph
-        const para = [line];
-        i++;
-        while (i < lines.length && !/^\s*$/.test(lines[i]) &&
-               !/^#{1,6}\s/.test(lines[i]) && !/^\s*[-*]\s+/.test(lines[i]) &&
-               !/^\|.*\|$/.test(lines[i])) {
-          para.push(lines[i]); i++;
-        }
-        out.push(`<p>${inlineFmt(para.join(" "))}</p>`);
-      }
-      return out.join("\n");
-    }
-
-    async function tryFetch(path) {
-      try {
-        const r = await fetch(path);
-        if (!r.ok) return null;
-        return await r.text();
-      } catch (e) { return null; }
-    }
-
-    function fingerprintFromBehavior(b) {
-      const ic = b.identity_constants_within_lifetime;
-      if (!ic) return null;
-      const pairs = Object.entries(ic).sort((a, b) => a[0].localeCompare(b[0]));
-      return pairs.map(([k, v]) => `${k}=<strong>${v}</strong>`).join(" ");
-    }
-
-    function summarizeBehavior(b) {
-      const states = (b.states || []).length;
-      const transitions = (b.transitions || []).length;
-      const archetype = b.position && b.position.archetype_classification;
-      const slot = b.observed_in_slot;
-      const lifetime = b.lifetime &&
-        `f${b.lifetime.first_frame}–f${b.lifetime.last_frame} (${b.lifetime.total_rows} rows)`;
-      return { states, transitions, archetype, slot, lifetime };
-    }
-
-    function summarizeHp(hp) {
-      if (!hp) return null;
-      if (hp.initial_hp_unknown) return "unpinned — discovery pending";
-      const parts = [];
-      if (hp.hp != null) parts.push(`HP=${hp.hp}`);
-      if (hp.candidate_hp_bytes && hp.candidate_hp_bytes.length)
-        parts.push(`candidates: ${hp.candidate_hp_bytes.join(", ")}`);
-      if (hp.damage_model) parts.push(`damage: ${hp.damage_model}`);
-      return parts.length ? parts.join(" · ") : "data present";
-    }
-
-    async function renderEnemy(e) {
-      const card = document.createElement("div");
-      card.className = "enemy-card";
-
-      // Fetch in parallel; tolerant of 404s.
-      const [behaviorText, hpText, notesText] = await Promise.all([
-        tryFetch(e.dataDir + "behavior.json"),
-        tryFetch(e.dataDir + "hp.json"),
-        tryFetch(e.dataDir + "notes.md")
-      ]);
-
-      const behavior = behaviorText ? JSON.parse(behaviorText) : null;
-      const hp = hpText ? JSON.parse(hpText) : null;
-
-      const has = {
-        behavior: !!behavior,
-        hp: !!hp,
-        notes: !!notesText,
-        atlas: false // checked below via HEAD-style fetch
-      };
-      // Atlas probe
-      const atlasResp = await fetch(e.dataDir + "atlas.png", { method: "GET" })
-        .catch(() => null);
-      if (atlasResp && atlasResp.ok) has.atlas = true;
-
-      // Status classification
-      let statusClass = "status-pending", statusTag = "pending", statusLabel = "pending";
-      const haveCount = Object.values(has).filter(Boolean).length;
-      if (haveCount === 0) {
-        statusClass = "status-pending"; statusTag = "pending"; statusLabel = "pending capture";
-      } else if (haveCount >= 3) {
-        statusClass = "status-full"; statusTag = "full"; statusLabel = "data available";
-      } else {
-        statusClass = "status-partial"; statusTag = "partial"; statusLabel = "partial";
-      }
-      card.classList.add(statusClass);
-
-      // Header
-      const hdr = document.createElement("div");
-      hdr.innerHTML =
-        `<h3>${e.id} <span class="tag ${statusTag}">${statusLabel}</span></h3>
-         <div class="sub">slot ${e.slot} — ${e.description}</div>`;
-      card.appendChild(hdr);
-
-      // Atlas slot
-      const atlasDiv = document.createElement("div");
-      atlasDiv.className = "atlas";
-      if (has.atlas) {
-        const img = document.createElement("img");
-        img.src = e.dataDir + "atlas.png";
-        img.alt = `${e.id} atlas`;
-        atlasDiv.appendChild(img);
-      } else {
-        atlasDiv.innerHTML =
-          `<div class="placeholder">pending capture — atlas.png<br>not yet generated</div>`;
-      }
-      card.appendChild(atlasDiv);
-
-      // Behavior / HP summary
-      const sum = document.createElement("div");
-      sum.className = "summary";
-      if (behavior) {
-        const s = summarizeBehavior(behavior);
-        const hpSummary = summarizeHp(hp);
-        sum.innerHTML =
-          `<dl>
-             <dt>states</dt><dd>${s.states}</dd>
-             <dt>transitions</dt><dd>${s.transitions}</dd>
-             <dt>archetype</dt><dd>${s.archetype || "—"}</dd>
-             <dt>observed slot</dt><dd>${s.slot != null ? s.slot : "—"}</dd>
-             <dt>lifetime</dt><dd>${s.lifetime || "—"}</dd>
-             <dt>hp</dt><dd>${hpSummary || "pending"}</dd>
-           </dl>`;
-      } else {
-        sum.innerHTML = `<div class="mono-plain">pending capture — behavior.json not yet generated</div>`;
-      }
-      card.appendChild(sum);
-
-      // Identity fingerprint (from spawns.json if available, otherwise
-      // from behavior.json's identity_constants_within_lifetime).
-      const fp = document.createElement("div");
-      fp.className = "fingerprint";
-      let fpBytes = null;
-      // Attempt to pull from spawns.json (stage-level) for this enemy id
-      const spawnsText = await tryFetch("assets/spawns.json");
-      if (spawnsText) {
-        try {
-          const spawns = JSON.parse(spawnsText);
-          const match = Array.isArray(spawns)
-            ? spawns.find(x => x.enemy_id === e.id)
-            : (spawns.enemies && spawns.enemies[e.id]);
-          if (match && (match.fingerprint || match.identity_bytes)) {
-            const bytes = match.fingerprint || match.identity_bytes;
-            fpBytes = Object.entries(bytes).sort((a, b) => a[0].localeCompare(b[0]))
-              .map(([k, v]) => `${k}=<strong>${v}</strong>`).join(" ");
-          }
-        } catch (_) {}
-      }
-      if (!fpBytes && behavior) fpBytes = fingerprintFromBehavior(behavior);
-      fp.innerHTML = fpBytes
-        ? `<div class="sub" style="margin-bottom:4px;">identity fingerprint:</div>${fpBytes}`
-        : `pending — spawns.json / identity bytes not yet generated`;
-      card.appendChild(fp);
-
-      // Notes
-      if (notesText) {
-        const notes = document.createElement("div");
-        notes.className = "notes";
-        notes.innerHTML = mdToHtml(notesText);
-        card.appendChild(notes);
-      }
-
-      // Debug overlays — per-state focus crops (if present). One PNG per
-      // observed state: red boxes = OAM slots the pipeline selected as the
-      // enemy, green boxes = every other onscreen sprite. Each image has its
-      // own legend baked in (frame / crop / bbox / palette / slots / tile IDs).
-      if (behavior && behavior.states) {
-        const stateKeys = Object.keys(behavior.states).sort((a, b) => Number(a) - Number(b));
-        const debugImgs = [];
-        for (const st of stateKeys) {
-          const url = e.dataDir + `debug_state${st}_focus.png`;
-          const head = await fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
-          if (head) debugImgs.push({ state: st, url });
-        }
-        if (debugImgs.length) {
-          const dbg = document.createElement("div");
-          dbg.className = "debug";
-          dbg.style.marginTop = "10px";
-          dbg.style.paddingTop = "10px";
-          dbg.style.borderTop = "1px dashed var(--border)";
-          dbg.innerHTML =
-            `<div class="sub" style="margin-bottom:6px; color: var(--accent); font-size: 12px;">
-               debug — OAM slot selection per state
-             </div>
-             <div class="debug-grid" style="display: grid; gap: 8px;">
-               ${debugImgs.map(d => `
-                 <figure style="margin: 0;">
-                   <img src="${d.url}" alt="${e.id} state ${d.state} OAM overlay"
-                        style="image-rendering: pixelated; max-width: 100%; border: 1px solid var(--border); display: block;">
-                   <figcaption style="font-size: 11px; color: var(--muted); margin-top: 4px;
-                                       font-family: ui-monospace, Menlo, Consolas, monospace;">
-                     state ${d.state} — red = selected enemy OAM slots; green = other onscreen sprites; legend baked into image.
-                   </figcaption>
-                 </figure>`).join("")}
-             </div>`;
-          card.appendChild(dbg);
-        }
-      }
-
-      return { card, has };
-    }
-
-    async function renderAll() {
-      const grid = document.getElementById("enemy-grid");
-      const results = [];
-      for (const e of enemies) {
-        const { card, has } = await renderEnemy(e);
-        grid.appendChild(card);
-        results.push({ e, has });
-      }
-
-      // Palette-row diagnostic scans
-      const palGrid = document.getElementById("palette-scan-grid");
-      const palFrames = [60, 120, 240, 300, 420, 480, 600, 660, 780, 840, 960, 1020];
-      for (const f of palFrames) {
-        const url = `assets/palette_scan/pal_scan_f${String(f).padStart(4,"0")}.png`;
-        const head = await fetch(url, { method: "HEAD" }).then(r => r.ok).catch(() => false);
-        if (!head) continue;
-        const cell = document.createElement("div");
-        cell.className = "shot-cell";
-        cell.innerHTML =
-          `<img src="${url}" loading="lazy" alt="palette scan f${f}"
-                style="image-rendering: pixelated; width: 100%; border: 1px solid var(--border);">
-           <div class="label">palette-row scan, frame ${f}</div>`;
-        palGrid.appendChild(cell);
-      }
-
-      // Screenshot gallery
-      const shotGrid = document.getElementById("shot-grid");
-      for (const s of screenshots) {
-        const cell = document.createElement("div");
-        cell.className = "shot-cell";
-        cell.innerHTML =
-          `<img src="assets/screenshots/${s.file}" loading="lazy" alt="frame ${s.frame}">
-           <div class="label">frame ${s.frame} — ${s.note}</div>`;
-        shotGrid.appendChild(cell);
-      }
-
-      // Pipeline
-      const pipeline = document.getElementById("pipeline");
-      const items = results.map(({ e, has }) => {
-        const fields = [
-          ["behavior.json", has.behavior],
-          ["hp.json", has.hp],
-          ["notes.md", has.notes],
-          ["atlas.png", has.atlas]
-        ];
-        const missing = fields.filter(([, ok]) => !ok).map(([n]) => n);
-        const present = fields.filter(([, ok]) => ok).map(([n]) => n);
-        const haveCount = present.length;
-        let dot = "pending";
-        if (haveCount === 0) dot = "pending";
-        else if (haveCount >= 3) dot = "full";
-        else dot = "partial";
-        const state = haveCount === 0 ? "pending capture"
-                    : haveCount >= 3  ? "data available"
-                    :                   "partial";
-        return `<li>
-          <span class="status-dot ${dot}"></span>
-          <code>${e.id}</code> — <strong>${state}</strong>
-          ${present.length ? ` · have: ${present.map(n => `<code>${n}</code>`).join(", ")}` : ""}
-          ${missing.length ? ` · missing: ${missing.map(n => `<code>${n}</code>`).join(", ")}` : ""}
-        </li>`;
-      }).join("");
-      pipeline.innerHTML =
-        `<ul>${items}</ul>
-         <div class="note">
-           Page rendered at build time; missing fields are probed per-enemy and
-           degrade to placeholder cards. Recapture by the parallel session
-           will fill these in on the next deploy.
-         </div>`;
-    }
-
-    renderAll();
-  </script>
 </body>
 </html>

@@ -87,6 +87,28 @@
 
   <main>
     <section>
+      <div class="intro" style="border-left-color: var(--good);">
+        <strong>Update &middot; Session 32 (2026-04-18):</strong>
+        candidate &rarr; slot-trace bindings complete for three of the four
+        STRONG candidates, and the full pipeline has been integrated into
+        <code>sprites_ref_builder.py</code> so every new enemy KB entry now
+        carries an OAM-composed atlas + per-state Jaccard verdict by default.
+        <br><br>
+        <strong>Slot-to-candidate map</strong> (post_dash_recon slots.csv):
+        <ul style="margin: 6px 0 0;">
+          <li><strong>slot 3</strong> (b12=0x51) = candidate <strong>A</strong> &mdash; <code>cp_enemy_slot3/</code>, state 2 verified J=0.7324 vs <code>enemies_31593</code></li>
+          <li><strong>slot 5</strong> (b12=0x0B) = candidate <strong>B</strong> &mdash; <code>cp_enemy_slot5/</code>, state 4 verified J=0.7324 vs <code>enemies_31593</code></li>
+          <li><strong>slot 7</strong> (b12=0x19) = candidate <strong>C</strong> &mdash; <code>cp_enemy_slot7/</code>, states 2 + 4 verified (J=0.768 / 0.748) vs <code>enemies_31592</code>; state 6 death animation blocked on screenshot cadence</li>
+          <li><strong>candidate D is unbound</strong> &mdash; D sits at f1020 pal 7 (162, 108, 33&times;33), but neither pal-7 slot (3 or 5) lives at those coordinates. Likely a 4th enemy that lifecycles within the capture window without claiming a persistent slot, or an animation variant the S31 heuristic split off; needs longer / fresh recon.</li>
+        </ul>
+        <strong>Rim rescue:</strong> two variants tried to lift CP scores from the 0.77&ndash;0.87 band into canonical-strong (0.90+).
+        Variant A (multi-frame CGRAM union) returned <strong>null delta</strong> &mdash; direct CGRAM inspection confirmed CP pal 6/7 are static across the capture window, so the premise (palette-cycle animation drops rim colors) doesn't apply here.
+        Variant B (morphological dilation) <strong>regressed</strong> at N=1 by -0.136 because the dilation clamp spans adjacent palette-sharing enemies and the mask bleeds through the gap between them.
+        The CP rim gap is a structural RGB collision between enemy outlines and snow/ice BG, not a time problem; next attempt is Variant B-prime with per-candidate connected-component clustering before dilation.
+      </div>
+    </section>
+
+    <section>
       <div class="intro">
         <strong>Pipeline.</strong> For every recon frame, parse the SNES OAM
         table (128 entries, palette row 0..7 per entry). Skip pal 2 (HUD)

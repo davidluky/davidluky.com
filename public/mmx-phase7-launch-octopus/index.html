@@ -89,6 +89,23 @@
 
   <main>
     <section>
+      <div class="intro" style="border-left-color: var(--good);">
+        <strong>Update &middot; Session 32 (2026-04-18):</strong>
+        the OAM-driven pipeline that produced these two matches has been
+        integrated into <code>sprites_ref_builder.py</code>. Every enemy
+        KB entry now carries an OAM-composed <code>atlas.png</code> + a
+        per-state Jaccard verdict in <code>sprites_ref.json</code>, with
+        a best-frame-per-state picker that iterates every in-state
+        screenshot and keeps the highest unclipped canonical match. The
+        VRAM-decoded tile strip moved to <code>atlas_tilestrip.png</code>
+        so it coexists as a per-tile palette QA artifact without
+        clobbering the canonical-match anchor. The same pipeline ran on
+        three Chill Penguin enemies this session &mdash; see the
+        <a href="../mmx-phase7-chill-penguin/">Chill Penguin catalog</a>.
+      </div>
+    </section>
+
+    <section>
       <div class="intro">
         <strong>Method in one sentence.</strong> For each recon frame, read
         the SNES OAM table directly (128 entries, each tagged with its

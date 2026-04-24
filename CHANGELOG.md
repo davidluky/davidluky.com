@@ -2,6 +2,20 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-04-24
+
+### Fixed
+- **The Room** game count: 13 → 14 (Memory Match + Prank Call added in v1.69). Updated in `projects.ts` (EN + PT), `projects.astro` (PT map), and added raylib to tech stack.
+- **Glimmering Falcon** PT-BR translation missing in `projects.astro` `projectsPt` map — added entry '13', shifted davidluky.com to '14'.
+- `CLAUDE.md` project count: 12 → 15.
+
+## [Unreleased] — 2026-04-20
+
+### Added
+- **Glimmering Falcon** project entry in `src/data/projects.ts`. Reinforcement learning agent for Mega Man X SNES via PBT, distributed across 5080 workstation + Xeon server; bilingual description and "AI Tooling" tag (shares color with Local IA / Gemini Pixel Art).
+- `about.astro`: **PyTorch** added to the Tools tech stack.
+- `about.astro`: 2026 timeline entry extended to name Glimmering Falcon alongside Megaman X remake and Gemini sprite gen.
+
 ## [Unreleased] — 2026-04-17
 
 ### Added

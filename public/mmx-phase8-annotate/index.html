@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MMX Phase 8 — Sprite Annotation Tool</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #0b0d12; --fg: #e8ecf2; --muted: #8a92a2; --accent: #7ac0ff;
+      --good: #88e07c; --warn: #ffcc66; --bad: #ff6b7a;
+      --panel: #12151c; --panel2: #1a1f2a; --border: #1e2330;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg);
+      font: 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    header { padding: 28px 24px 4px; max-width: 1400px; margin: 0 auto; }
+    h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: 0.2px; }
+    h2 { margin: 24px 0 10px; font-size: 18px; color: var(--accent); }
+    h3 { margin: 0 0 6px; font-size: 15px; }
+    .sub { color: var(--muted); font-size: 13px; }
+    main { max-width: 1400px; margin: 0 auto; padding: 0 24px 80px; }
+    code { background: var(--panel2); padding: 1px 5px; border-radius: 4px;
+      color: var(--warn); font-size: 12.5px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+    .intro { background: linear-gradient(180deg, #12151c, #0e1117);
+      border-left: 3px solid var(--accent); padding: 14px 18px;
+      margin: 14px 0 18px; border-radius: 6px; font-size: 14px; }
+
+    .tag { display: inline-block; font-size: 11px; padding: 2px 7px;
+      border-radius: 3px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      text-transform: uppercase; letter-spacing: 0.4px; vertical-align: middle; }
+    .tag.flip { background: rgba(255,204,102,0.18); color: var(--warn); }
+    .tag.alias { background: rgba(136,224,124,0.15); color: var(--good); }
+    .tag.oid { background: rgba(122,192,255,0.18); color: var(--accent); }
+
+    .toolbar { position: sticky; top: 0; background: var(--bg);
+      padding: 12px 0; border-bottom: 1px solid var(--border); z-index: 50;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .toolbar button, .toolbar a.btn { background: var(--accent); color: #00111e;
+      border: 0; padding: 8px 14px; border-radius: 6px; font-weight: 600;
+      cursor: pointer; font-size: 13px; text-decoration: none; }
+    .toolbar button.secondary { background: var(--panel2); color: var(--fg);
+      border: 1px solid var(--border); }
+    .toolbar .progress { color: var(--muted); font-size: 13px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .toolbar .progress b { color: var(--good); }
+
+    .sheet-section { margin-top: 32px; }
+    .sheet-section h2 { display: flex; align-items: baseline; gap: 10px; }
+    .sheet-section h2 .count { font-size: 13px; color: var(--muted);
+      font-weight: normal; }
+
+    .layout { display: grid; grid-template-columns: minmax(300px, 1fr) 380px;
+      gap: 20px; align-items: start; }
+    @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+
+    .sheet-viewer { position: relative; background: var(--panel);
+      border: 1px solid var(--border); border-radius: 10px; overflow: auto;
+      max-height: 80vh; padding: 12px; }
+    .sheet-viewer img { display: block; max-width: 100%; height: auto; }
+
+    .region-list { display: flex; flex-direction: column; gap: 10px; }
+    .region-card { background: var(--panel); border: 1px solid var(--border);
+      border-left: 4px solid var(--border); border-radius: 8px;
+      padding: 12px 14px; transition: border-color 0.15s; }
+    .region-card.filled { border-left-color: var(--good); }
+    .region-card.pending { border-left-color: var(--warn); }
+    .region-card .row { display: flex; gap: 6px; flex-wrap: wrap;
+      align-items: center; margin-bottom: 8px; }
+    .region-card .coord { color: var(--muted); font-size: 12px;
+      font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .region-card label { display: block; font-size: 11px; color: var(--muted);
+      margin: 8px 0 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .region-card input[type=text] { width: 100%; background: var(--panel2);
+      border: 1px solid var(--border); color: var(--fg); padding: 7px 10px;
+      border-radius: 5px; font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px; }
+    .region-card input[type=text]:focus { outline: none;
+      border-color: var(--accent); }
+    .region-card .jac { color: var(--good); font-variant-numeric: tabular-nums; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--panel2);
+      border: 1px solid var(--accent); color: var(--fg); padding: 10px 14px;
+      border-radius: 6px; font-size: 13px; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none; z-index: 100; }
+    .toast.show { opacity: 1; }
+
+    .loading { color: var(--muted); padding: 40px; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MMX Phase 8 &mdash; Sprite Annotation Tool</h1>
+    <div class="sub">
+      Session 45 &mdash; Option A. Map each matched sprite region to a canonical
+      enemy name so the promoter can rename <code>oid_&lt;hex&gt;_pending/</code>
+      folders. <span class="sub">30 OIDs across 23 unique regions on 4 sheets.</span>
+    </div>
+    <div class="intro">
+      <b>How to use:</b>
+      <ol style="margin: 6px 0 0 18px; padding: 0;">
+        <li>Look at the red box for each region on the sheet (left).</li>
+        <li>Type the canonical name (e.g. <code>ray_trap</code>,
+            <code>batton_bone_g</code>, <code>rush_roader</code>) in the
+            matching card (right). Use <code>snake_case</code>. Your input
+            auto-saves to <code>localStorage</code>, so you can close the tab and resume.</li>
+        <li>Aliased regions (<span class="tag alias">alias</span>) apply the name to
+            all listed OIDs.</li>
+        <li>Click <b>Download annotations.json</b> when done.
+            Hand the file back to the session and the promoter ships it.</li>
+        <li>If you're unsure, leave it as <code>FILL_ME</code> &mdash; the promoter skips placeholders.</li>
+      </ol>
+    </div>
+    <div class="toolbar">
+      <button id="download-btn">Download annotations.json</button>
+      <button id="reset-btn" class="secondary">Reset local edits</button>
+      <a class="btn secondary" href="sheets/annotations.json" download>Download skeleton</a>
+      <span class="progress" id="progress">loading&hellip;</span>
+    </div>
+  </header>
+  <main id="main">
+    <div class="loading">Loading annotations.json&hellip;</div>
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const LS_KEY = "mmx_phase8_annotations_v1";
+    const SHEET_FILE_BY_NAME = {
+      "enemies_31592.png": "sheets/enemies_31592_annotated.png",
+      "enemies_31593.png": "sheets/enemies_31593_annotated.png",
+      "enemies_31594.png": "sheets/enemies_31594_annotated.png",
+      "enemies_31595.png": "sheets/enemies_31595_annotated.png",
+    };
+
+    async function loadData() {
+      const res = await fetch("sheets/annotations.json");
+      if (!res.ok) throw new Error("Failed to load annotations.json");
+      const data = await res.json();
+      mergeLocal(data);
+      return data;
+    }
+
+    function mergeLocal(data) {
+      try {
+        const stored = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+        if (!stored || !stored.sheets) return;
+        for (const [sheet, entries] of Object.entries(data.sheets)) {
+          const storedEntries = stored.sheets[sheet] || [];
+          entries.forEach((entry, i) => {
+            const se = storedEntries[i];
+            if (se && typeof se === "object") {
+              if (typeof se.name === "string") entry.name = se.name;
+              if (Array.isArray(se.aliases)) entry.aliases = se.aliases;
+              if (typeof se.notes === "string") entry.notes = se.notes;
+            }
+          });
+        }
+      } catch (e) { /* ignore corrupted localStorage */ }
+    }
+
+    function saveLocal(data) {
+      localStorage.setItem(LS_KEY, JSON.stringify(data));
+    }
+
+    function updateProgress(data) {
+      let total = 0, filled = 0;
+      for (const entries of Object.values(data.sheets)) {
+        for (const e of entries) {
+          total++;
+          if (e.name && e.name !== data.placeholder_name) filled++;
+        }
+      }
+      document.getElementById("progress").innerHTML =
+        `progress: <b>${filled}</b> / ${total} regions named`;
+    }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    function render(data) {
+      const main = document.getElementById("main");
+      main.innerHTML = "";
+      const placeholder = data.placeholder_name;
+
+      for (const [sheet, entries] of Object.entries(data.sheets)) {
+        const sec = document.createElement("section");
+        sec.className = "sheet-section";
+        const h2 = document.createElement("h2");
+        h2.innerHTML = `${sheet} <span class="count">${entries.length} regions</span>`;
+        sec.appendChild(h2);
+
+        const layout = document.createElement("div");
+        layout.className = "layout";
+
+        const viewer = document.createElement("div");
+        viewer.className = "sheet-viewer";
+        const img = document.createElement("img");
+        img.src = SHEET_FILE_BY_NAME[sheet];
+        img.alt = sheet;
+        viewer.appendChild(img);
+
+        const list = document.createElement("div");
+        list.className = "region-list";
+
+        entries.forEach((entry, idx) => {
+          const card = document.createElement("div");
+          card.className = "region-card " +
+            (entry.name && entry.name !== placeholder ? "filled" : "pending");
+          const row = document.createElement("div");
+          row.className = "row";
+          entry.oid_hints.forEach(o => {
+            const tag = document.createElement("span");
+            tag.className = "tag oid";
+            tag.textContent = o;
+            row.appendChild(tag);
+          });
+          if (entry.orientation !== "normal") {
+            const tag = document.createElement("span");
+            tag.className = "tag flip";
+            tag.textContent = entry.orientation;
+            row.appendChild(tag);
+          }
+          if (entry.oid_hints.length > 1) {
+            const tag = document.createElement("span");
+            tag.className = "tag alias";
+            tag.textContent = `alias ×${entry.oid_hints.length}`;
+            row.appendChild(tag);
+          }
+          const jac = document.createElement("span");
+          jac.className = "coord jac";
+          jac.textContent = `jac ${entry.match_jaccard}`;
+          row.appendChild(jac);
+          card.appendChild(row);
+
+          const coord = document.createElement("div");
+          coord.className = "coord";
+          const [x0,y0,x1,y1] = entry.bbox_x0y0x1y1;
+          coord.textContent = `bbox (${x0},${y0})→(${x1},${y1})  size ${x1-x0}×${y1-y0}`;
+          card.appendChild(coord);
+
+          const nameLabel = document.createElement("label");
+          nameLabel.textContent = "canonical name (snake_case)";
+          card.appendChild(nameLabel);
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.value = entry.name === placeholder ? "" : entry.name;
+          nameInput.placeholder = placeholder;
+          nameInput.spellcheck = false;
+          nameInput.addEventListener("input", () => {
+            const v = nameInput.value.trim();
+            entry.name = v || placeholder;
+            card.classList.toggle("filled", !!v);
+            card.classList.toggle("pending", !v);
+            saveLocal(data);
+            updateProgress(data);
+          });
+          card.appendChild(nameInput);
+
+          const aliasLabel = document.createElement("label");
+          aliasLabel.textContent = "aliases (comma-separated, optional)";
+          card.appendChild(aliasLabel);
+          const aliasInput = document.createElement("input");
+          aliasInput.type = "text";
+          aliasInput.value = (entry.aliases || []).join(", ");
+          aliasInput.placeholder = "e.g. rush_roader_var, wheeler";
+          aliasInput.spellcheck = false;
+          aliasInput.addEventListener("input", () => {
+            entry.aliases = aliasInput.value
+              .split(",").map(s => s.trim()).filter(Boolean);
+            saveLocal(data);
+          });
+          card.appendChild(aliasInput);
+
+          const notesLabel = document.createElement("label");
+          notesLabel.textContent = "notes (optional)";
+          card.appendChild(notesLabel);
+          const notesInput = document.createElement("input");
+          notesInput.type = "text";
+          notesInput.value = entry.notes || "";
+          notesInput.placeholder = "anything to remember";
+          notesInput.addEventListener("input", () => {
+            entry.notes = notesInput.value;
+            saveLocal(data);
+          });
+          card.appendChild(notesInput);
+
+          list.appendChild(card);
+        });
+
+        layout.appendChild(viewer);
+        layout.appendChild(list);
+        sec.appendChild(layout);
+        main.appendChild(sec);
+      }
+      updateProgress(data);
+    }
+
+    function downloadJson(data) {
+      const blob = new Blob(
+        [JSON.stringify(data, null, 2) + "\n"],
+        { type: "application/json" },
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "annotations.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      toast("annotations.json downloaded");
+    }
+
+    async function init() {
+      let data;
+      try {
+        data = await loadData();
+      } catch (e) {
+        document.getElementById("main").innerHTML =
+          `<div class="loading" style="color:var(--bad)">Failed to load: ${e.message}</div>`;
+        return;
+      }
+      render(data);
+      document.getElementById("download-btn").addEventListener("click", () => {
+        downloadJson(data);
+      });
+      document.getElementById("reset-btn").addEventListener("click", () => {
+        if (!confirm("Clear all local edits and reload the skeleton?")) return;
+        localStorage.removeItem(LS_KEY);
+        location.reload();
+      });
+    }
+    init();
+  </script>
+</body>
+</html>

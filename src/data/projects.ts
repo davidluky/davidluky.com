@@ -12,10 +12,10 @@ export const projects: Project[] = [
   {
     name: "The Room",
     description:
-      "Multiplayer social platform with 13 games, a full turn-based RPG (7 zones, endgame boss), real-time chat, 239 achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.",
+      "Multiplayer social platform with 14 games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, 239 achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.",
     descriptionPt:
-      "Plataforma social multiplayer com 13 jogos, um RPG por turnos completo (7 zonas, boss endgame), chat em tempo real, 239 conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.",
-    tech: ["C++17", "Firebase", "libcurl", "Windows API"],
+      "Plataforma social multiplayer com 14 jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, 239 conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.",
+    tech: ["C++17", "Firebase", "libcurl", "raylib", "Windows API"],
     tag: "Game Platform",
     tagPt: "Plataforma de Jogos",
     link: null,
@@ -150,6 +150,17 @@ export const projects: Project[] = [
     tech: ["C++17", "raylib", "CMake", "JSON"],
     tag: "Game Dev",
     tagPt: "Desenvolvimento de Jogos",
+    link: null,
+  },
+  {
+    name: "Glimmering Falcon",
+    description:
+      "Reinforcement learning agent that learns to play Mega Man X on SNES via population-based training. Distributed rollouts across an RTX 5080 workstation and a 32-thread Xeon server; findings feed back into the Megaman X knowledge base.",
+    descriptionPt:
+      "Agente de reinforcement learning que aprende a jogar Mega Man X no SNES via population-based training. Rollouts distribuídos entre uma workstation RTX 5080 e um servidor Xeon de 32 threads; as descobertas realimentam a knowledge base de Megaman X.",
+    tech: ["Python", "PyTorch", "Mesen2", "Lua"],
+    tag: "AI Tooling",
+    tagPt: "Ferramentas de IA",
     link: null,
   },
   {

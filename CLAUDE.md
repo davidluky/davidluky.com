@@ -10,7 +10,7 @@
 ## Project Structure
 - `src/pages/` — File-based routing: index, projects, gaming, about, 404
 - `src/components/` — Header.astro, Hero.astro, Footer.astro
-- `src/data/projects.ts` — Single source of truth for all 12 projects (EN + PT-BR)
+- `src/data/projects.ts` — Single source of truth for all 15 projects (EN + PT-BR)
 - `src/i18n/shared.ts` — Shared nav/footer i18n strings + applyI18n() helper
 - `src/layouts/Base.astro` — HTML shell with meta tags, fonts, OG image
 - `src/styles/global.css` — Tailwind imports + @theme (Warm Dark palette) + brand morph CSS

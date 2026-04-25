@@ -26,9 +26,9 @@ const GAME_LIBRARY_DB = "C:/Users/david/AppData/Roaming/game-library/library.db"
 const STEAM_CACHE = ".cache/steam-games.json";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-function fromGameLibrary(): GamingData | null {
+async function fromGameLibrary(): Promise<GamingData | null> {
   try {
-    const Database = require("better-sqlite3");
+    const { default: Database } = await import("better-sqlite3");
     const db = new Database(GAME_LIBRARY_DB, { readonly: true });
 
     const totalGames = db.prepare(
@@ -103,7 +103,8 @@ function fromGameLibrary(): GamingData | null {
       mostPlayed,
       distribution: { over100h: dist.a, h10to100: dist.b, h1to10: dist.c, under1h: dist.d },
     };
-  } catch {
+  } catch (err) {
+    console.error("[gaming.ts] fromGameLibrary failed:", (err as Error).message);
     return null;
   }
 }
@@ -214,7 +215,7 @@ function fallbackData(): GamingData {
 
 export async function loadGamingData(): Promise<GamingData> {
   // Priority: Game Library DB > Steam API > hardcoded fallback
-  const gl = fromGameLibrary();
+  const gl = await fromGameLibrary();
   if (gl) return gl;
 
   const steam = await fromSteamAPI();

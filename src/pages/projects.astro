@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { projects } from "../data/projects";
 
-const liveSites = projects.filter(p => p.link).length;
+const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).length;
 const desktopApps = projects.filter(p => p.tag === "Desktop App").length;
 const langs = new Set(projects.flatMap(p => p.tech)).size;
 
@@ -107,24 +107,7 @@ const tagColors: Record<string, string> = {
 
 <script>
   import { applyI18n } from '../i18n/shared';
-
-  const projectsPt: Record<string, { desc: string; tag: string }> = {
-    '0':  { tag: 'Plataforma de Jogos', desc: 'Plataforma social multiplayer com 14 jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, 239 conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.' },
-    '1':  { tag: 'App Web', desc: 'Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. 40 rotas, 3 temas visuais (Terminal, Híbrido, Moderno), bilíngue (EN/PT-BR), pronto para PWA.' },
-    '2':  { tag: 'Marketplace', desc: 'Marketplace para serviços de Tibia — hunts, quests, bestiário, PK. Sistema de reservas com chat, verificação de personagem via TibiaData API, avaliações, resolução de disputas e destaques.' },
-    '3':  { tag: 'App Desktop', desc: 'App desktop que agrega bibliotecas de jogos de Steam, Xbox, Epic, GOG, PlayStation, Nintendo, Game Pass e mais em uma única visualização. Busca FTS5, deduplicação de jogos, tokens criptografados, 3 temas.' },
-    '4':  { tag: 'Bot', desc: 'Bot de WhatsApp que rastreia treinos na academia via reações em grupo. Publica relatórios diários, semanais e mensais em PT-BR. Detecta membros automaticamente e reconcilia check-ins.' },
-    '5':  { tag: 'App Desktop', desc: 'App desktop para exportar conversas do WhatsApp em HTML/PDF com suporte completo de mídia. Login por QR code, merge opcional de backup ZIP, saída estilizada com lightbox e reações.' },
-    '6':  { tag: 'Ferramentas de IA', desc: 'Estação de trabalho pessoal de IA para rodar modelos open-weight localmente via Ollama com escalação inteligente para nuvem. CLI estilo Claude Code, servidores MCP customizados, biblioteca de skills, framework de benchmark e rastreamento de custos.' },
-    '7':  { tag: 'Engenharia Reversa', desc: 'DLL proxy que intercepta xlive.dll para desbloquear conquistas do Games for Windows Live no BioShock 2 e outros títulos GFWL. Thread watcher que monitora um arquivo para disparar IDs de conquistas.' },
-    '8':  { tag: 'App Web', desc: 'Plataforma de histórias familiares com timeline por década, upload de DOCX/PDF, extração automática de imagens, acesso de leitura protegido por senha e painel admin.' },
-    '9':  { tag: 'Automação', desc: 'Sistema automatizado de preservação de coleções retro — 200 títulos de Xbox 360 (1,66 TB) e 1.199 jogos de Nintendo 3DS (347 GB) do archive.org. Downloads em lote, verificação de integridade ZIP, rastreamento de duplicatas.' },
-    '10': { tag: 'Bot', desc: 'Bot do Discord que multiplexa uma única assinatura do Midjourney entre vários usuários. Retransmite prompts /imagine e retorna imagens geradas em um canal compartilhado.' },
-    '11': { tag: 'Ferramentas de IA', desc: 'Pipeline de geração de sprites em lote usando Google Gemini via Vertex AI. Rotação de regiões para gestão de quota, pós-processamento (redimensionamento, transparência, normalização de paleta) e modo dry-run. Feito para gerar sprites de RPG para o The Room.' },
-    '12': { tag: 'Desenvolvimento de Jogos', desc: 'Engine de jogo e projeto de remake feito do zero com raylib. Arquitetura orientada a conteúdo com definições de níveis e entidades em JSON, física customizada e sistema de animação de sprites.' },
-    '13': { tag: 'Ferramentas de IA', desc: 'Agente de reinforcement learning que aprende a jogar Mega Man X no SNES via population-based training. Rollouts distribuídos entre uma workstation RTX 5080 e um servidor Xeon de 32 threads; as descobertas realimentam a knowledge base de Megaman X.' },
-    '14': { tag: 'Website', desc: 'Este site. Hub pessoal para projetos, perfis de jogos e bio. Site estático com morph blackletter, alternância bilíngue e zero JS além da animação de scroll.' },
-  };
+  import { projects } from '../data/projects';
 
   const lang = applyI18n({
     en: {
@@ -149,12 +132,12 @@ const tagColors: Record<string, string> = {
 
   if (lang === 'pt') {
     document.querySelectorAll('[data-i18n-tag]').forEach(el => {
-      const idx = el.getAttribute('data-i18n-tag')!.replace('tag_', '');
-      if (idx in projectsPt) el.textContent = projectsPt[idx].tag;
+      const idx = Number(el.getAttribute('data-i18n-tag')!.replace('tag_', ''));
+      if (projects[idx]) el.textContent = projects[idx].tagPt;
     });
     document.querySelectorAll('[data-i18n-desc]').forEach(el => {
-      const idx = el.getAttribute('data-i18n-desc')!.replace('desc_', '');
-      if (idx in projectsPt) el.textContent = projectsPt[idx].desc;
+      const idx = Number(el.getAttribute('data-i18n-desc')!.replace('desc_', ''));
+      if (projects[idx]) el.textContent = projects[idx].descriptionPt;
     });
   }
 </script>

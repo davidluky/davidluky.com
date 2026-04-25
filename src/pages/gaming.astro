@@ -3,42 +3,33 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { stats } from "../data/stats";
+import { loadGamingData } from "../data/gaming";
 
-const recentGames = [
-  { name: "Dota 2",           platform: "Steam", hours: Number(stats.steamHoursDota.replace(",", "")) },
-  { name: "Terraria",         platform: "Steam", hours: Number(stats.steamHoursTerraria.replace(",", "")) },
-  { name: "Street Fighter 6", platform: "Steam", hours: 45 },
-  { name: "BioShock 2",       platform: "Steam", hours: 8 },
-];
+const gaming = await loadGamingData();
 
-const libraryGames = [
-  { name: "The Witcher 3: Wild Hunt", platform: "Steam", hours: 140 },
-  { name: "Stardew Valley",           platform: "Steam", hours: 84 },
-  { name: "Elden Ring",               platform: "Steam", hours: 72 },
-  { name: "Cyberpunk 2077",           platform: "Both",  hours: 56 },
-  { name: "Hades",                    platform: "Steam", hours: 46 },
-  { name: "Hollow Knight",            platform: "Steam", hours: 30 },
-  { name: "DOOM Eternal",             platform: "Steam", hours: 24 },
-  { name: "Halo Infinite",            platform: "Xbox",  hours: 20 },
-  { name: "Deep Rock Galactic",       platform: "Steam", hours: 16 },
-  { name: "Forza Horizon 5",          platform: "Xbox",  hours: 15 },
-  { name: "Sea of Thieves",           platform: "Xbox",  hours: 12 },
-  { name: "Gears 5",                  platform: "Xbox",  hours: 8 },
-];
+const fmt = (n: number) => n.toLocaleString("en-US");
 
 const platformColors: Record<string, string> = {
-  Steam: "#1b2838",
-  Xbox: "#107c10",
-  Both: "#1a1a2e",
-  Tibia: "#4a2800",
+  steam: "#1b2838",
+  xbox: "#107c10",
+  epic: "#2a2a2a",
+  tibia: "#4a2800",
 };
 
 const platformTextColors: Record<string, string> = {
-  Steam: "#66c0f4",
-  Xbox: "#fff",
-  Both: "#c4a35a",
-  Tibia: "#f0c040",
+  steam: "#66c0f4",
+  xbox: "#fff",
+  epic: "#fff",
+  tibia: "#f0c040",
 };
+
+const platformLabel = (p: string) => {
+  const map: Record<string, string> = { steam: "Steam", xbox: "Xbox", epic: "Epic", "gamepass-pc": "GP PC", "gamepass-xbox": "GP Xbox" };
+  return map[p] ?? p;
+};
+
+const mostPlayedTotal = gaming.mostPlayed.reduce((s, g) => s + g.hours, 0);
+const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to100 + gaming.distribution.h1to10 + gaming.distribution.under1h;
 ---
 
 <Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, Epic Games, and Tibia gaming profiles.">
@@ -63,19 +54,19 @@ const platformTextColors: Record<string, string> = {
     </h3>
     <div class="grid grid-cols-2 gap-4 max-sm:gap-3 md:grid-cols-4 lg:grid-cols-6">
       <div class="rounded-xl bg-[#0f0f0e] p-6">
-        <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.steamGames}</div>
-        <div data-i18n="g_stat_games" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Total Games</div>
-        <div data-i18n="g_stat_games_sub" class="mt-2 text-[11px] text-text-3">Steam + Xbox + Epic</div>
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{fmt(gaming.totalGames)}</div>
+        <div data-i18n="g_stat_games" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Games Owned</div>
+        <div data-i18n="g_stat_games_sub" class="mt-2 text-[11px] text-text-3">Steam + Epic</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
-        <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.totalHoursPlayed}</div>
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{fmt(gaming.totalHours)}</div>
         <div data-i18n="g_stat_hours" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Hours Played</div>
         <div data-i18n="g_stat_hours_sub" class="mt-2 text-[11px] text-text-3">Across all platforms</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
-        <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.steamAchievements}</div>
-        <div data-i18n="g_stat_achievements" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
-        <div data-i18n="g_stat_achievements_sub" class="mt-2 text-[11px] text-text-3">Steam only</div>
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{gamesWithHours}</div>
+        <div data-i18n="g_stat_played" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Games Played</div>
+        <div data-i18n="g_stat_played_sub" class="mt-2 text-[11px] text-text-3">With tracked hours</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.gamingPlatforms}</div>
@@ -108,7 +99,7 @@ const platformTextColors: Record<string, string> = {
           </div>
           <div class="ml-auto text-right">
             <div class="text-lg font-light text-text">Lvl {stats.steamLevel}</div>
-            <div data-i18n="g_steam_count" class="text-[11px] text-text-3">1,337 games</div>
+            <div data-i18n="g_steam_count" class="text-[11px] text-text-3">{fmt(gaming.ownedByPlatform.steam ?? 0)} games</div>
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
@@ -116,9 +107,9 @@ const platformTextColors: Record<string, string> = {
           <span class="text-border">&middot;</span>
           <span>Terraria <span class="text-text-2">{stats.steamHoursTerraria}h</span></span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_steam_perfect">2 perfect games</span>
+          <span data-i18n="g_steam_perfect">{stats.steamPerfectGames} perfect games</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_steam_friends">96 friends</span>
+          <span data-i18n="g_steam_friends">{stats.steamFriends} friends</span>
         </div>
       </div>
 
@@ -136,11 +127,11 @@ const platformTextColors: Record<string, string> = {
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
-          <span data-i18n="g_xbox_tracked">5 tracked games</span>
+          <span data-i18n="g_xbox_tracked">{stats.xboxTrackedGames} tracked games</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_xbox_played">59h played</span>
+          <span data-i18n="g_xbox_played">{stats.xboxHoursPlayed}h played</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_xbox_gp">8 Game Pass titles</span>
+          <span data-i18n="g_xbox_gp">{stats.xboxGamePassTitles} Game Pass titles</span>
         </div>
       </div>
 
@@ -162,11 +153,11 @@ const platformTextColors: Record<string, string> = {
           <span class="text-border">&middot;</span>
           <span>Jadebraland Encore</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_tibia_pts">234 achievement pts</span>
+          <span data-i18n="g_tibia_pts">{stats.tibiaAchievementPts} achievement pts</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_tibia_since">Since 2014</span>
+          <span data-i18n="g_tibia_since">Since {stats.tibiaStartYear}</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_tibia_titles">23 titles</span>
+          <span data-i18n="g_tibia_titles">{stats.tibiaTitles} titles</span>
         </div>
       </div>
 
@@ -177,6 +168,10 @@ const platformTextColors: Record<string, string> = {
           <div>
             <h3 class="text-[15px] font-medium">Epic Games</h3>
             <span class="font-mono text-[13px] text-text-2">David Luky</span>
+          </div>
+          <div class="ml-auto text-right">
+            <div class="text-lg font-light text-text">{fmt(gaming.ownedByPlatform.epic ?? 281)}</div>
+            <div data-i18n="g_epic_count" class="text-[11px] text-text-3">games</div>
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
@@ -192,49 +187,87 @@ const platformTextColors: Record<string, string> = {
       Recently Played
     </h3>
     <div class="space-y-0">
-      {recentGames.map((game, i) => (
+      {gaming.recentGames.map((game, i) => (
         <div class="flex items-center gap-5 max-sm:gap-3 border-b border-border/50 py-4 max-sm:py-2.5 last:border-0">
           <span class="w-6 shrink-0 text-right font-mono text-[13px] text-text-3">{i + 1}</span>
-          <div class="flex-1">
-            <span class="text-[15px] font-medium">{game.name}</span>
+          <div class="flex-1 min-w-0">
+            <span class="text-[15px] font-medium truncate block">{game.name}</span>
+            {game.lastPlayed && (
+              <span class="text-[11px] text-text-3">{game.lastPlayed}</span>
+            )}
           </div>
           <span
-            class="rounded px-2 py-0.5 text-[11px] font-medium"
-            style={`background: ${platformColors[game.platform]}; color: ${platformTextColors[game.platform]};`}
+            class="rounded px-2 py-0.5 text-[11px] font-medium shrink-0"
+            style={`background: ${platformColors[game.platform] ?? "#2a2a2a"}; color: ${platformTextColors[game.platform] ?? "#fff"};`}
           >
-            {game.platform}
+            {platformLabel(game.platform)}
           </span>
-          <span class="w-16 shrink-0 text-right font-mono text-[14px] text-text-2">{game.hours.toLocaleString()}h</span>
+          <span class="w-16 shrink-0 text-right font-mono text-[14px] text-text-2">{fmt(game.hours)}h</span>
         </div>
       ))}
     </div>
   </section>
 
-  <!-- Library highlights -->
+  <!-- Most played -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 data-i18n="g_library" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
-      Library Highlights
+    <h3 data-i18n="g_most_played" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Most Played
     </h3>
-    <p data-i18n="g_library_desc" class="mb-5 text-[13px] text-text-3">Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.</p>
+    <p data-i18n="g_most_played_desc" class="mb-5 text-[13px] text-text-3">
+      Top {gaming.mostPlayed.length} games by playtime — tracked via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, a desktop app I built to aggregate games across platforms.
+    </p>
     <div class="space-y-0">
-      {libraryGames.map((game, i) => (
-        <div class="flex items-center gap-5 max-sm:gap-3 border-b border-border/50 py-3.5 max-sm:py-2 last:border-0">
-          <span class="w-6 shrink-0 text-right font-mono text-[13px] text-text-3">{i + 1}</span>
-          <div class="flex-1">
-            <span class="text-[14px]">{game.name}</span>
+      {gaming.mostPlayed.map((game, i) => {
+        const barWidth = Math.max(2, Math.round((game.hours / gaming.mostPlayed[0].hours) * 100));
+        return (
+          <div class="flex items-center gap-5 max-sm:gap-3 border-b border-border/50 py-3.5 max-sm:py-2 last:border-0 group">
+            <span class="w-6 shrink-0 text-right font-mono text-[13px] text-text-3">{i + 1}</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-3">
+                <span class="text-[14px] truncate">{game.name}</span>
+              </div>
+              <div class="mt-1 h-[3px] rounded-full bg-white/[0.03]">
+                <div class="h-full rounded-full bg-accent/40" style={`width: ${barWidth}%`}></div>
+              </div>
+            </div>
+            <span
+              class="rounded px-2 py-0.5 text-[11px] font-medium shrink-0"
+              style={`background: ${platformColors[game.platform] ?? "#2a2a2a"}; color: ${platformTextColors[game.platform] ?? "#fff"};`}
+            >
+              {platformLabel(game.platform)}
+            </span>
+            <span class="w-16 shrink-0 text-right font-mono text-[13px] text-text-2">{fmt(game.hours)}h</span>
           </div>
-          <span
-            class="rounded px-2 py-0.5 text-[11px] font-medium"
-            style={`background: ${platformColors[game.platform]}; color: ${platformTextColors[game.platform]};`}
-          >
-            {game.platform}
-          </span>
-          <span class="w-14 shrink-0 text-right font-mono text-[13px] text-text-2">{game.hours}h</span>
-        </div>
-      ))}
+        );
+      })}
     </div>
-    <div data-i18n="g_library_total" class="mt-4 text-[12px] text-text-3">
-      523 hours across these 12 titles
+    <div data-i18n="g_most_played_total" class="mt-4 text-[12px] text-text-3">
+      {fmt(mostPlayedTotal)} hours across these {gaming.mostPlayed.length} titles
+    </div>
+  </section>
+
+  <!-- Playtime distribution -->
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <h3 data-i18n="g_distribution" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+      Playtime Distribution
+    </h3>
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-accent mb-1">{gaming.distribution.over100h}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">100+ hours</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.h10to100}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">10–100 hours</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.h1to10}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">1–10 hours</div>
+      </div>
+      <div class="rounded-xl bg-[#0f0f0e] p-6">
+        <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.under1h}</div>
+        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">&lt; 1 hour</div>
+      </div>
     </div>
   </section>
 
@@ -250,12 +283,35 @@ const platformTextColors: Record<string, string> = {
     </div>
   </section>
 
+  {gaming.source !== "fallback" && (
+    <div class="mx-auto max-w-[1280px] px-12 pb-8 max-md:px-6">
+      <p class="text-[11px] text-text-3/50">
+        Data sourced from {gaming.source === "game-library" ? "Game Library" : "Steam API"} at build time. Last synced: {new Date().toISOString().slice(0, 10)}.
+      </p>
+    </div>
+  )}
+
   <Footer />
 </Base>
 
+<script is:inline define:vars={{
+  totalGames: gaming.totalGames,
+  totalHours: gaming.totalHours,
+  gamesWithHours,
+  mostPlayedCount: gaming.mostPlayed.length,
+  mostPlayedTotal,
+  steamGames: gaming.ownedByPlatform.steam ?? 0,
+  epicGames: gaming.ownedByPlatform.epic ?? 281,
+}}>
+  window.__gaming = { totalGames, totalHours, gamesWithHours, mostPlayedCount, mostPlayedTotal, steamGames, epicGames };
+</script>
 <script>
   import { applyI18n } from '../i18n/shared';
   import { stats } from '../data/stats';
+
+  const g = (window as any).__gaming;
+  const fmt = (n: number) => n.toLocaleString('en-US');
+  const fmtPt = (n: number) => n.toLocaleString('pt-BR');
 
   applyI18n({
     en: {
@@ -263,19 +319,19 @@ const platformTextColors: Record<string, string> = {
       g_title: 'Where I play',
       g_subtitle: 'Gaming is what got me into programming — I wanted to understand how the things I loved were made, and that curiosity never went away.',
       g_overview: 'Overview',
-      g_stat_games: 'Total Games',
-      g_stat_games_sub: 'Steam + Xbox + Epic',
+      g_stat_games: 'Games Owned',
+      g_stat_games_sub: 'Steam + Epic',
       g_stat_hours: 'Hours Played',
       g_stat_hours_sub: 'Across all platforms',
-      g_stat_achievements: 'Achievements',
-      g_stat_achievements_sub: 'Steam only',
+      g_stat_played: 'Games Played',
+      g_stat_played_sub: 'With tracked hours',
       g_stat_platforms: 'Platforms',
       g_stat_platforms_sub: 'Steam, Xbox, Epic, Tibia',
       g_stat_years: 'Years Gaming',
       g_stat_years_sub: `On Steam since ${stats.steamStartYear}`,
       g_stat_tibia: 'Tibia Level',
       g_stat_tibia_sub: 'Elder Druid, Jadebra',
-      g_steam_count: `${stats.steamGames} games`,
+      g_steam_count: `${fmt(g.steamGames)} games`,
       g_steam_perfect: `${stats.steamPerfectGames} perfect games`,
       g_steam_friends: `${stats.steamFriends} friends`,
       g_xbox_tracked: `${stats.xboxTrackedGames} tracked games`,
@@ -284,11 +340,13 @@ const platformTextColors: Record<string, string> = {
       g_tibia_pts: `${stats.tibiaAchievementPts} achievement pts`,
       g_tibia_since: `Since ${stats.tibiaStartYear}`,
       g_tibia_titles: `${stats.tibiaTitles} titles`,
+      g_epic_count: 'games',
       g_epic_desc: 'Free game collector since the early giveaways',
       g_recent: 'Recently Played',
-      g_library: 'Library Highlights',
-      g_library_desc: 'Tracked via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — a desktop app I built to aggregate games across platforms.',
-      g_library_total: '523 hours across these 12 titles',
+      g_most_played: 'Most Played',
+      g_most_played_desc: `Top ${g.mostPlayedCount} games by playtime — tracked via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, a desktop app I built to aggregate games across platforms.`,
+      g_most_played_total: `${fmt(g.mostPlayedTotal)} hours across these ${g.mostPlayedCount} titles`,
+      g_distribution: 'Playtime Distribution',
       g_hardware: 'Hardware',
     },
     pt: {
@@ -296,19 +354,19 @@ const platformTextColors: Record<string, string> = {
       g_title: 'Onde eu jogo',
       g_subtitle: 'Jogos foram o que me levaram à programação — eu queria entender como as coisas que eu amava eram feitas, e essa curiosidade nunca foi embora.',
       g_overview: 'Visão Geral',
-      g_stat_games: 'Total de Jogos',
-      g_stat_games_sub: 'Steam + Xbox + Epic',
+      g_stat_games: 'Jogos Possuídos',
+      g_stat_games_sub: 'Steam + Epic',
       g_stat_hours: 'Horas Jogadas',
       g_stat_hours_sub: 'Em todas as plataformas',
-      g_stat_achievements: 'Conquistas',
-      g_stat_achievements_sub: 'Apenas Steam',
+      g_stat_played: 'Jogos Jogados',
+      g_stat_played_sub: 'Com horas rastreadas',
       g_stat_platforms: 'Plataformas',
       g_stat_platforms_sub: 'Steam, Xbox, Epic, Tibia',
       g_stat_years: 'Anos Jogando',
       g_stat_years_sub: `Na Steam desde ${stats.steamStartYear}`,
       g_stat_tibia: 'Nível no Tibia',
       g_stat_tibia_sub: 'Druida Ancião, Jadebra',
-      g_steam_count: `${stats.steamGamesPt} jogos`,
+      g_steam_count: `${fmtPt(g.steamGames)} jogos`,
       g_steam_perfect: `${stats.steamPerfectGames} jogos perfeitos`,
       g_steam_friends: `${stats.steamFriends} amigos`,
       g_xbox_tracked: `${stats.xboxTrackedGames} jogos rastreados`,
@@ -317,11 +375,13 @@ const platformTextColors: Record<string, string> = {
       g_tibia_pts: `${stats.tibiaAchievementPts} pts de conquistas`,
       g_tibia_since: `Desde ${stats.tibiaStartYear}`,
       g_tibia_titles: `${stats.tibiaTitles} títulos`,
+      g_epic_count: 'jogos',
       g_epic_desc: 'Coletor de jogos grátis desde as primeiras promoções',
       g_recent: 'Jogados Recentemente',
-      g_library: 'Destaques da Biblioteca',
-      g_library_desc: 'Rastreado via <a href="https://github.com/davidluky" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a> — um app desktop que eu construí para agregar jogos de várias plataformas.',
-      g_library_total: '523 horas nesses 12 títulos',
+      g_most_played: 'Mais Jogados',
+      g_most_played_desc: `Top ${g.mostPlayedCount} jogos por tempo de jogo — rastreado via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, um app desktop que eu construí para agregar jogos de várias plataformas.`,
+      g_most_played_total: `${fmtPt(g.mostPlayedTotal)} horas nesses ${g.mostPlayedCount} títulos`,
+      g_distribution: 'Distribuição de Tempo',
       g_hardware: 'Hardware',
     },
   });

@@ -1,4 +1,3 @@
-import { stats } from "./stats";
 
 export interface GameEntry {
   name: string;
@@ -36,15 +35,19 @@ function fromGameLibrary(): GamingData | null {
       "SELECT COUNT(DISTINCT pg.game_id) as c FROM platform_games pg JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'"
     ).get().c;
 
-    const steamMinutes = db.prepare("SELECT SUM(playtime_minutes) as t FROM game_stats WHERE platform = 'steam'").get().t || 0;
-    const steamHours = Math.round(steamMinutes / 60);
-    const xboxHours = stats.xboxHoursPlayed;
+    const playtimeByPlatform = db.prepare(
+      "SELECT platform, SUM(playtime_minutes) as t FROM game_stats GROUP BY platform"
+    ).all();
 
-    const hoursByPlatform: PlatformHours[] = [
-      { platform: "Steam", hours: steamHours },
-      { platform: "Xbox", hours: xboxHours },
-    ];
-    const totalHours = steamHours + xboxHours;
+    const hoursByPlatform: PlatformHours[] = [];
+    let totalHours = 0;
+    for (const p of playtimeByPlatform) {
+      const hours = Math.round((p.t || 0) / 60);
+      if (hours > 0) {
+        hoursByPlatform.push({ platform: p.platform.charAt(0).toUpperCase() + p.platform.slice(1), hours });
+        totalHours += hours;
+      }
+    }
 
     const platforms = db.prepare(
       `SELECT pg.platform, COUNT(DISTINCT pg.game_id) as c
@@ -143,14 +146,12 @@ async function fromSteamAPI(): Promise<GamingData | null> {
       .sort((a: any, b: any) => b.playtime_2weeks - a.playtime_2weeks);
 
     const steamHours = Math.round(totalMinutes / 60);
-    const xboxHours = stats.xboxHoursPlayed;
     const data: GamingData = {
       source: "steam-api",
       totalGames: games.length,
-      totalHours: steamHours + xboxHours,
+      totalHours: steamHours,
       hoursByPlatform: [
         { platform: "Steam", hours: steamHours },
-        { platform: "Xbox", hours: xboxHours },
       ],
       ownedByPlatform: { steam: games.length },
       recentGames: recentRaw.slice(0, 8).map(toEntry),

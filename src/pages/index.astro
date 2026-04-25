@@ -4,6 +4,9 @@ import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Footer from "../components/Footer.astro";
 import { projects } from "../data/projects";
+import { stats } from "../data/stats";
+
+const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).length;
 ---
 
 <Base>
@@ -11,7 +14,7 @@ import { projects } from "../data/projects";
 
   <Hero
     title="Developer. Gamer.<br>Builder of things."
-    subtitle="Building multiplayer games and small tools that solve problems I care about. Based in Brazil."
+    subtitle="Building multiplayer games and small tools that solve problems I care about. Based in the US."
     cta={{ label: "Continue reading", href: "#intro" }}
   />
 
@@ -28,7 +31,7 @@ import { projects } from "../data/projects";
         </h2>
         <p data-i18n="intro_p1" class="mb-4 max-w-[600px] text-[17px] leading-[1.85] text-text-2">
           <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>
-          is a multiplayer RPG platform — 13 games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a
+          is a multiplayer RPG platform — {stats.theRoomGames} games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a
           <em class="not-italic font-medium text-text">full web client</em>
           built with React, TypeScript, and Firebase.
         </p>
@@ -48,19 +51,19 @@ import { projects } from "../data/projects";
           <div data-i18n="stat_projects" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Active Projects</div>
         </a>
         <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">13</div>
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomGames}</div>
           <div data-i18n="stat_games_room" class="text-[12px] font-medium uppercase tracking-wider text-accent/70">Games in The Room</div>
         </a>
         <a href="/gaming" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">4</div>
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.gamingPlatforms}</div>
           <div data-i18n="stat_gaming" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Gaming Platforms</div>
         </a>
-        <div class="rounded-xl bg-[#0f0f0e] p-6">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">3</div>
+        <a href="/projects" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{liveSites}</div>
           <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
-        </div>
+        </a>
         <div class="achievements-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">239</div>
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomAchievements}</div>
           <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
           <div id="achievements-tooltip" class="achievements-tooltip" data-i18n="stat_achievements_tip">The real achievements are the traumas we acquired along the way!</div>
         </div>
@@ -80,18 +83,20 @@ import { projects } from "../data/projects";
   <Footer />
 </Base>
 
-<!-- Language toggle script -->
+<script is:inline define:vars={{ roomGames: stats.theRoomGames, roomAchievements: stats.theRoomAchievements }}>
+  window.__stats = { roomGames, roomAchievements };
+</script>
 <script>
-  import { sharedStrings } from '../i18n/shared';
+  import { applyI18n } from '../i18n/shared';
 
   const pageStrings = {
     en: {
       hero_title: 'Developer. Gamer.<br>Builder of things.',
-      hero_subtitle: 'Building multiplayer games and small tools that solve problems I care about. Based in Brazil.',
+      hero_subtitle: 'Building multiplayer games and small tools that solve problems I care about. Based in the US.',
       hero_cta: 'Continue reading',
       intro_label: 'Introduction',
       intro_heading: 'Most of what I build starts as something I want to use myself.',
-      intro_p1: '<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> is a multiplayer RPG platform — 13 games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a <em class="not-italic font-medium text-text">full web client</em> built with React, TypeScript, and Firebase.',
+      intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> is a multiplayer RPG platform — ${(window as any).__stats.roomGames} games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a <em class="not-italic font-medium text-text">full web client</em> built with React, TypeScript, and Firebase.`,
       intro_p2: 'I also build smaller things when a problem catches my attention: a <em class="not-italic font-medium text-text">WhatsApp bot</em> for automating gym check-ins, a tool for <em class="not-italic font-medium text-text">reverse engineering</em> game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.',
       stat_projects: 'Active Projects',
       stat_games_room: 'Games in The Room',
@@ -103,11 +108,11 @@ import { projects } from "../data/projects";
     },
     pt: {
       hero_title: 'Desenvolvedor. Gamer.<br>Construtor de coisas.',
-      hero_subtitle: 'Criando jogos multiplayer e pequenas ferramentas que resolvem problemas que me importam. Baseado no Brasil.',
+      hero_subtitle: 'Criando jogos multiplayer e pequenas ferramentas que resolvem problemas que me importam. Baseado nos EUA.',
       hero_cta: 'Continue lendo',
       intro_label: 'Introdução',
       intro_heading: 'A maioria do que eu construo começa como algo que eu mesmo quero usar.',
-      intro_p1: '<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> é uma plataforma RPG multiplayer — 13 jogos, conquistas, economia e torneios. Começou como um aplicativo desktop em C++ e desde então se expandiu para um <em class="not-italic font-medium text-text">cliente web completo</em> feito com React, TypeScript e Firebase.',
+      intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> é uma plataforma RPG multiplayer — ${(window as any).__stats.roomGames} jogos, conquistas, economia e torneios. Começou como um aplicativo desktop em C++ e desde então se expandiu para um <em class="not-italic font-medium text-text">cliente web completo</em> feito com React, TypeScript e Firebase.`,
       intro_p2: 'Também construo coisas menores quando um problema chama minha atenção: um <em class="not-italic font-medium text-text">bot de WhatsApp</em> para automatizar check-ins na academia, uma ferramenta para <em class="not-italic font-medium text-text">engenharia reversa</em> de dados de conquistas em plataformas legadas, e vários experimentos que nunca saem da fase de protótipo.',
       stat_projects: 'Projetos Ativos',
       stat_games_room: 'Jogos em The Room',
@@ -119,20 +124,8 @@ import { projects } from "../data/projects";
     },
   };
 
-  let lang = localStorage.getItem('dl-lang') || 'en';
-
-  function applyLang() {
-    const shared = lang === 'pt' ? sharedStrings.pt : sharedStrings.en;
-    const page = pageStrings[lang as keyof typeof pageStrings];
-    const s = { ...shared, ...page };
-
-    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n')!;
-      if (key in s) el.innerHTML = s[key as keyof typeof s];
-    });
-
+  function updateHeroAndPills(lang: string) {
+    const s = pageStrings[lang as keyof typeof pageStrings];
     const heroH1 = document.querySelector('section.text-center h1');
     const heroP = document.querySelector('section.text-center p');
     const heroCta = document.querySelector('section.text-center a');
@@ -154,11 +147,13 @@ import { projects } from "../data/projects";
     }
   }
 
+  let lang = applyI18n(pageStrings);
+  updateHeroAndPills(lang);
+
   document.getElementById('lang-toggle')?.addEventListener('click', () => {
     lang = lang === 'en' ? 'pt' : 'en';
     localStorage.setItem('dl-lang', lang);
-    applyLang();
+    applyI18n(pageStrings);
+    updateHeroAndPills(lang);
   });
-
-  applyLang();
 </script>

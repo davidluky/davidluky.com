@@ -60,9 +60,9 @@ Architectural and design choices for davidluky.com, with rationale.
 
 ## DD-005: Single Data Source for Projects
 
-**Decision**: All 12 projects defined in `src/data/projects.ts` with both EN and PT-BR descriptions.
+**Decision**: All 18 projects defined in `src/data/projects.ts` with both EN and PT-BR descriptions.
 
-**Rationale**: The homepage stat card ("12 Active Projects") and the projects page both need the project list. A single source of truth prevents count mismatches and makes adding/removing projects a one-file change.
+**Rationale**: The homepage stat card ("18 Active Projects") and the projects page both need the project list. A single source of truth prevents count mismatches and makes adding/removing projects a one-file change.
 
 **Interface**:
 ```typescript
@@ -124,3 +124,17 @@ interface Project {
 **Rationale**: The homepage is intentionally minimal — hero + intro + stats. Adding a full bio, tech stack, timeline, and contact section would make it too long and dilute the clean first impression. A dedicated `/about` page gives the content room to breathe and makes the nav structure clearer (Projects | Gaming | About).
 
 **Date**: 2026-04-11 (Session 2)
+
+---
+
+## DD-011: Centralized Stats via `src/data/stats.ts`
+
+**Decision**: Extract all hardcoded numeric stats (The Room game count, Steam hours, Tibia level, achievement counts, etc.) into a single `src/data/stats.ts` file, imported by all pages.
+
+**Rationale**: The same numbers (e.g., "14 games", "239 achievements", "Level 627") appeared on index, about, gaming, and projects pages — each hardcoded independently. When The Room grew from 13 to 14 games, only some pages were updated, creating visible inconsistency. A single source of truth eliminates the entire class of drift bugs.
+
+**Pattern**: `stats.ts` exports a `const` object with all values. Pages import and interpolate via Astro `{stats.field}` in templates and `${stats.field}` in i18n template literals. `yearsGaming` is computed from the current year, so it never goes stale.
+
+**Trade-off**: Server-side values that need to reach client-side i18n scripts must go through `define:vars` + `window.__stats` bridge (Astro limitation). This is a one-time wiring cost per page.
+
+**Date**: 2026-04-25

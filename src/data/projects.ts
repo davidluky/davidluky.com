@@ -1,3 +1,5 @@
+import { stats } from "./stats";
+
 export interface Project {
   name: string;
   description: string;
@@ -12,9 +14,9 @@ export const projects: Project[] = [
   {
     name: "The Room",
     description:
-      "Multiplayer social platform with 14 games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, 239 achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.",
+      `Multiplayer social platform with ${stats.theRoomGames} games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, ${stats.theRoomAchievements} achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.`,
     descriptionPt:
-      "Plataforma social multiplayer com 14 jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, 239 conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.",
+      `Plataforma social multiplayer com ${stats.theRoomGames} jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, ${stats.theRoomAchievements} conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.`,
     tech: ["C++17", "Firebase", "libcurl", "raylib", "Windows API"],
     tag: "Game Platform",
     tagPt: "Plataforma de Jogos",
@@ -161,6 +163,39 @@ export const projects: Project[] = [
     tech: ["Python", "PyTorch", "Mesen2", "Lua"],
     tag: "AI Tooling",
     tagPt: "Ferramentas de IA",
+    link: null,
+  },
+  {
+    name: "Power Monitor",
+    description:
+      "24/7 electricity usage logger for a home lab. Samples GPU, CPU, and wall draw every 10 seconds, stores in SQLite, and serves a live dashboard. Collector runs as a Windows Scheduled Task, API on Tailscale, dashboard on Vercel.",
+    descriptionPt:
+      "Logger de consumo de energia 24/7 para um home lab. Amostra GPU, CPU e consumo da tomada a cada 10 segundos, armazena em SQLite e serve um dashboard ao vivo. Coletor roda como Tarefa Agendada do Windows, API via Tailscale, dashboard na Vercel.",
+    tech: ["Python", "FastAPI", "Next.js 16", "SQLite", "Vercel"],
+    tag: "Automation",
+    tagPt: "Automação",
+    link: "https://power.davidluky.com",
+  },
+  {
+    name: "Matemática Elementar",
+    description:
+      "BNCC-aligned math practice site for Brazilian students (6th–9th grade). Problem sets with answer keys, self-check progress tracking, and mastery by grade — all stored locally in the browser, no account needed.",
+    descriptionPt:
+      "Site de matemática alinhado à BNCC para estudantes brasileiros (6º ao 9º ano). Problem sets com gabaritos, acompanhamento de progresso por auto-correção e domínio por série — tudo salvo localmente no navegador, sem necessidade de conta.",
+    tech: ["Next.js 16", "React 19", "TypeScript", "Tailwind", "KaTeX"],
+    tag: "Web App",
+    tagPt: "App Web",
+    link: "https://matematica.davidluky.com",
+  },
+  {
+    name: "SNES ROM Ripper",
+    description:
+      "Standalone tool for extracting and decompressing graphics data from SNES ROMs. Implements the RLE3/LZSS algorithm used by Capcom with variable-length bit encoding, back-references, and auto-detection of copier headers.",
+    descriptionPt:
+      "Ferramenta standalone para extrair e descomprimir dados gráficos de ROMs de SNES. Implementa o algoritmo RLE3/LZSS usado pela Capcom com codificação de bits de comprimento variável, back-references e detecção automática de headers de copier.",
+    tech: ["Python"],
+    tag: "Reverse Engineering",
+    tagPt: "Engenharia Reversa",
     link: null,
   },
   {

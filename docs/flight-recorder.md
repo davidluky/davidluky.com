@@ -141,3 +141,63 @@ for (const line of envFile.split('\n')) {
 **Root cause**: Had `cd`'d to tibia-services earlier to debug Vercel issues and didn't switch back.
 
 **Lesson**: Always use absolute paths or verify `pwd` before running build commands, especially when working across multiple projects in the same session.
+
+---
+
+## FR-011: Astro ESM — require() Silently Falls Through (2026-04-25)
+
+**Symptom**: Gaming page always showed fallback data (12,309h) even though Game Library DB had real data (15,595h).
+
+**Root cause**: `gaming.ts` used `require("better-sqlite3")` but Astro runs in ESM context at build time. The `require` call threw, the catch block returned `null`, and `loadGamingData()` silently fell through to the hardcoded fallback.
+
+**Fix**: `const { default: Database } = await import("better-sqlite3")`.
+
+**Guard**: If adding any native module to Astro data files, always use `await import()`, never `require()`.
+
+---
+
+## FR-012: Xbox Auth — Azure AD v2 vs login.live.com (2026-04-25)
+
+**Symptom**: `AADSTS700016: Application with identifier '000000004C12AE6F' was not found`.
+
+**Root cause**: Xbox app client IDs are registered on `login.live.com`, not Azure AD v2 (`login.microsoftonline.com`). The device code endpoint, token endpoint, and scope format are all different.
+
+**Correct endpoints**:
+- Device code: `https://login.live.com/oauth20_connect.srf`
+- Token: `https://login.live.com/oauth20_token.srf`
+- Scope: `service::user.auth.xboxlive.com::MBI_SSL`
+- RpsTicket prefix: `t=` (not `d=` which is for Azure AD tokens)
+
+**Reference**: prismarine-auth library uses the same flow.
+
+---
+
+## FR-013: Xbox titlehub — /users/me Returns 400 (2026-04-25)
+
+**Symptom**: `titlehub.xboxlive.com/users/me/titles/titlehistory` returns HTTP 400 "Valid Xuid is not present in the URI".
+
+**Root cause**: The Xbox Android app token doesn't support `/users/me`. Must use explicit `/users/xuid({xuid})/` in the URL.
+
+**Fix**: Resolve XUID from `xas.auth.xboxlive.com` response during auth, then use `xuid(2533274910520647)` in all API calls.
+
+---
+
+## FR-014: Electron safeStorage — Cross-App Key Mismatch (2026-04-25)
+
+**Symptom**: "Error while decrypting the ciphertext provided using the associated data" during Xbox sync in Game Library.
+
+**Root cause**: Ran a standalone Electron script to encrypt the Xbox token. But Electron's `safeStorage` uses per-app-identity encryption keys — the standalone script's identity differs from the main Game Library app's identity. The main app couldn't decrypt.
+
+**Fix**: `decryptToken()` now has a try/catch that returns the raw string if decryption fails (assumes plaintext token inserted externally). The main app will re-encrypt on next write.
+
+**Guard**: Never encrypt tokens from external scripts. Insert raw tokens and let the app handle encryption.
+
+---
+
+## FR-015: Xbox MinutesPlayed — Xbox 360 Titles Return 0 (2026-04-25)
+
+**Symptom**: Playtime API returned 0 for Fallout 3 and BioShock 2, but TrueAchievements showed 333h 39m for Hunt: Showdown.
+
+**Root cause**: `MinutesPlayed` comes from `userstats.xboxlive.com/batch` and requires a `serviceConfigId` (SCID). Only Xbox One+ games with event-based stats have SCIDs. Xbox 360 titles use the older achievement system and don't track playtime via this API.
+
+**Workaround**: Only query MinutesPlayed for titles where `serviceConfigId` is present in the titlehub response. Xbox 360 titles show 0h — this is an Xbox platform limitation, not a bug.

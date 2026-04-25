@@ -1,51 +1,55 @@
-# Session Handoff — 2026-04-25
+# Session Handoff — 2026-04-25 (Session 2)
 
-## What was done
+## What Was Done
 
-### Cleanup
-- Deleted `/mmx-boss-animations` page (unused debug page)
-- Deleted 8 `public/mmx-*` asset folders (~200+ GIFs, phase viewers, debug assets)
+### Xbox Integration + Real Gaming Data (this session)
 
-### Data centralization (root-cause fix for scattered hardcoded numbers)
-- Created `src/data/stats.ts` — single source of truth for all numeric stats
-- All 4 content pages (index, projects, gaming, about) now import from `stats.ts`
-- `yearsGaming` auto-computes from current year
+**davidluky.com** (3 commits):
+- **`1dd6adf`** — Fixed ESM module loading: `gaming.ts` used `require("better-sqlite3")` which fails in Astro's ESM build context. Changed to `await import("better-sqlite3")`. Root cause of gaming page always showing fallback data (12,309h) instead of real DB data.
+- **`2e1ce69`** — Replaced hardcoded Xbox stats with real data. `stats.ts`: `xboxGames: 476`, `xboxGamerscore: "75,268"`. Gaming page Xbox card shows gamerscore instead of fake hours. EN + PT-BR i18n updated.
+- **`10d4b4`** — Platform hours now come dynamically from `game_stats` table grouped by platform. Total hours = 15,595 (Steam 12,288h + Xbox 3,307h).
 
-### Content fixes
-- Location: "Based in Brazil" → "Based in the US" (index + about, EN + PT)
-- The Room game count: hardcoded 13 → dynamic `stats.theRoomGames` (14)
-- Live Sites stat: hardcoded "3" → computed from projects data, now links to /projects
-- Gaming page: all hardcoded numbers replaced with stats refs
-- Added 3 new projects: Power Monitor, Matemática Elementar, SNES ROM Ripper (total: 18)
+**game-library** (3 commits):
+- **`78b7d07`** — Xbox `xbox.cjs` rewritten: `xuid()` in titlehub URLs, `scripts/xbox-auth.cjs` device code auth via `login.live.com`.
+- **`19d5396`** — `_fetchPlaytimes()` via `userstats.xboxlive.com/batch` with `MinutesPlayed`. Only titles with `serviceConfigId` (Xbox One+).
+- **`250ee71`** — `safeStorage.cjs` try/catch for raw plaintext tokens. `sync.cjs` console.log/error for sync visibility.
 
-### i18n improvements
-- About page: full PT-BR translations for timeline entries and tech stack categories
-- Projects page: eliminated 18-entry hardcoded `projectsPt` map — reads directly from `projects.ts`
-- Footer: added Power Monitor and Matemática links
-
-### Documentation updated
-- CHANGELOG.md — new unreleased section with all changes
-- design-decisions.md — DD-011 (stats.ts centralization pattern)
-- tech-notes.md — TN-010 (define:vars server-to-client bridge), updated TN-005 (no more duplication)
-- developer-guide.md — updated counts, data files, adding-projects instructions
-- CLAUDE.md — updated project count (18), added stats.ts to structure, updated doc maintenance table
+### Prior Session (same day)
+- Deleted MMX debug pages/assets, created `stats.ts`, fixed location/game counts/i18n, added 3 projects, centralized all stats, full doc update. See `session-2026-04-11.md` and CHANGELOG for earlier work.
 
 ### Deployment
-- Deployed to Cloudflare Workers — live at davidluky.com
+- Deployed to Cloudflare Workers — live at davidluky.com with real gaming data.
 
-## Current state
-- **Builds clean**: site builds and deploys without errors
-- **Live**: all changes deployed to davidluky.com
-- **All changes uncommitted** — git status shows modified + deleted files
+## Current State
+- **Build**: Passing
+- **Deploy**: Live at davidluky.com
+- **Data**: Game Library DB → 1,984 games, 15,595 hours (Steam 12,288h + Xbox 3,307h)
+- **Fallback chain**: DB → Steam API → hardcoded (all three paths working)
+- **No uncommitted changes**
 
-## What's next
-1. **Commit changes** — large batch: deleted MMX assets, new stats.ts, all page updates, doc updates
-2. **Push to GitHub** — public repo
-3. **CI/CD** — still manual `npx wrangler deploy`
-4. **Analytics** — consider Cloudflare Web Analytics
-5. **Performance audit** — Lighthouse score after the cleanup
+## What's Next
+1. **CI/CD** — still manual `npx wrangler deploy`
+2. **Analytics** — consider Cloudflare Web Analytics
+3. **Performance audit** — Lighthouse score
+4. Future platforms added to Game Library will auto-appear (dynamic query)
 
-## Decisions made
-- Stats centralization via `src/data/stats.ts` (DD-011) — prevents the class of bug where numbers drift between pages
-- `define:vars` bridge pattern (TN-010) — necessary for Astro's server/client boundary
-- Eliminated `projectsPt` duplication — projects.ts is now the only place PT descriptions live
+## Decisions Made
+- **Dynamic platform hours**: Removed `stats.xboxHoursPlayed` in favor of querying `game_stats` by platform at build time. New platforms auto-propagate.
+- **Gamerscore over hours for Xbox card**: Xbox card shows games + gamerscore (canonical Xbox metric, always accurate) instead of hours (only available for Xbox One+ titles).
+- **ESM imports only**: Native modules in Astro data files must use `await import()`, never `require()`.
+
+## Session Retro
+
+### What went well
+- Xbox auth chain worked on login.live.com after the Azure AD v2 dead end. prismarine-auth was the key reference.
+- Real data is massively better: 15,595h vs 12,309h fallback. 476 Xbox games. Credible gaming stats.
+- ESM fix was high-value: one-line change that had been silently breaking the gaming page.
+
+### What went wrong
+- Azure AD v2 was a dead end (~20 min). Xbox app client IDs live on login.live.com.
+- Wrong Microsoft account consumed the first device code. Needed a fresh one.
+- safeStorage cross-app key mismatch (~15 min). Standalone Electron scripts encrypt with different app identity.
+- Xbox 360 playtime is unavailable — `MinutesPlayed` only exists for Xbox One+ titles with `serviceConfigId`.
+
+### Lessons → flight-recorder.md
+- FR-011 through FR-015 added (see flight-recorder.md)

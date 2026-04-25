@@ -210,3 +210,27 @@ Astro pages compute data at build time (server-side), but i18n translations happ
 - `about.astro` → `window.__about` (timelinePt, techCategoriesPt, roomGames, roomAchievements)
 - `projects.astro` → `window.__projects` (project descriptions for i18n)
 - `gaming.astro` → `window.__gaming` (all gaming stats for i18n)
+
+---
+
+## TN-011: Gaming Data — Native Module Loading in Astro ESM
+
+`src/data/gaming.ts` loads data from the Game Library SQLite DB at build time using `better-sqlite3`. Astro runs in ESM context, so native modules must be loaded via dynamic `import()`:
+
+```typescript
+const { default: Database } = await import("better-sqlite3");
+```
+
+**NOT** `require("better-sqlite3")` — `require` is not defined in ESM and throws, causing the function to silently fall through to the fallback data chain.
+
+### Data Source Priority
+1. **Game Library DB** (`%APPDATA%/game-library/library.db`) — real data, includes all platforms
+2. **Steam API** (via `STEAM_API_KEY` env var) — Steam-only fallback
+3. **Hardcoded fallback** — stale snapshot, last resort
+
+### Platform Hours
+Platform hours are queried dynamically:
+```sql
+SELECT platform, SUM(playtime_minutes) as t FROM game_stats GROUP BY platform
+```
+This means new platforms added to Game Library (e.g., PlayStation, GOG) will auto-appear on the website without code changes.

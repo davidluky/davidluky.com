@@ -9,6 +9,9 @@ All notable changes to davidluky.com are documented here.
 - **3 new projects**: Power Monitor, Matemática Elementar, SNES ROM Ripper — total 18 projects.
 - **Full PT-BR translations for about page**: timeline entries and tech stack categories now translate when switching to Portuguese.
 - **Footer links**: Power Monitor and Matemática added to Projects column.
+- **Xbox gamerscore stats**: Xbox card on gaming page now shows 476 games + 75,268 gamerscore (real data from Xbox Live API).
+- **Platform hours breakdown**: Total gaming hours (15,595) computed dynamically from Game Library DB grouped by platform (Steam 12,288h + Xbox 3,307h).
+- **Flight recorder entries**: FR-011 through FR-015 documenting Xbox auth, ESM imports, and safeStorage gotchas.
 
 ### Fixed
 - **Location**: "Based in Brazil" → "Based in the US" across index + about pages (EN + PT).
@@ -16,6 +19,8 @@ All notable changes to davidluky.com are documented here.
 - **Live Sites stat**: hardcoded "3" → computed from `projects.filter(p => p.link?.startsWith("http"))`, now links to /projects.
 - **Projects page PT duplication**: eliminated 18-entry hardcoded `projectsPt` map — now reads `descriptionPt`/`tagPt` directly from `projects.ts`.
 - **Gaming page stats**: all hardcoded numbers replaced with `stats.*` refs.
+- **ESM module loading** (`gaming.ts`): `require("better-sqlite3")` → `await import("better-sqlite3")`. Astro runs ESM at build time; `require()` silently threw, causing the gaming page to always show fallback data instead of real DB data.
+- **Xbox stats**: Replaced hardcoded `xboxTrackedGames: 5` / `xboxHoursPlayed: 59` with real data `xboxGames: 476` / `xboxGamerscore: "75,268"`.
 
 ### Removed
 - **`/mmx-boss-animations` page** — unused debug page from MMX KB project.
@@ -26,6 +31,7 @@ All notable changes to davidluky.com are documented here.
 - `yearsGaming` auto-computes from current year, never goes stale.
 - About page uses `define:vars` to pass server-side data to client-side i18n scripts.
 - Projects page i18n reads translations directly from imported data (no duplication).
+- Platform hours are now dynamic — queried from `game_stats` table by platform at build time. New platforms added to Game Library will auto-appear on the website.
 
 ## [Unreleased] — 2026-04-24
 

@@ -58,10 +58,18 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
           <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.gamingPlatforms}</div>
           <div data-i18n="stat_gaming" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Gaming Platforms</div>
         </a>
-        <a href="/projects" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
+        <div class="live-sites-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">{liveSites}</div>
           <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
-        </a>
+          <div class="live-sites-tooltip">
+            {projects.filter(p => p.link?.startsWith("http")).map(p => (
+              <a href={p.link!} target="_blank" rel="noopener noreferrer" class="live-sites-link">
+                <span class="live-sites-name">{p.name}</span>
+                <span class="live-sites-url">{p.link!.replace("https://", "")}</span>
+              </a>
+            ))}
+          </div>
+        </div>
         <div class="achievements-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomAchievements}</div>
           <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>

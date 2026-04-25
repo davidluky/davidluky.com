@@ -7,10 +7,16 @@ export interface GameEntry {
   lastPlayed: string | null;
 }
 
+export interface PlatformHours {
+  platform: string;
+  hours: number;
+}
+
 export interface GamingData {
   source: "game-library" | "steam-api" | "fallback";
   totalGames: number;
   totalHours: number;
+  hoursByPlatform: PlatformHours[];
   ownedByPlatform: Record<string, number>;
   recentGames: GameEntry[];
   mostPlayed: GameEntry[];
@@ -30,7 +36,15 @@ function fromGameLibrary(): GamingData | null {
       "SELECT COUNT(DISTINCT pg.game_id) as c FROM platform_games pg JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'"
     ).get().c;
 
-    const totalMinutes = db.prepare("SELECT SUM(playtime_minutes) as t FROM game_stats").get().t || 0;
+    const steamMinutes = db.prepare("SELECT SUM(playtime_minutes) as t FROM game_stats WHERE platform = 'steam'").get().t || 0;
+    const steamHours = Math.round(steamMinutes / 60);
+    const xboxHours = stats.xboxHoursPlayed;
+
+    const hoursByPlatform: PlatformHours[] = [
+      { platform: "Steam", hours: steamHours },
+      { platform: "Xbox", hours: xboxHours },
+    ];
+    const totalHours = steamHours + xboxHours;
 
     const platforms = db.prepare(
       `SELECT pg.platform, COUNT(DISTINCT pg.game_id) as c
@@ -79,7 +93,8 @@ function fromGameLibrary(): GamingData | null {
     return {
       source: "game-library",
       totalGames,
-      totalHours: Math.round(totalMinutes / 60),
+      totalHours,
+      hoursByPlatform,
       ownedByPlatform,
       recentGames,
       mostPlayed,
@@ -127,10 +142,16 @@ async function fromSteamAPI(): Promise<GamingData | null> {
       .filter((g: any) => g.playtime_2weeks)
       .sort((a: any, b: any) => b.playtime_2weeks - a.playtime_2weeks);
 
+    const steamHours = Math.round(totalMinutes / 60);
+    const xboxHours = stats.xboxHoursPlayed;
     const data: GamingData = {
       source: "steam-api",
       totalGames: games.length,
-      totalHours: Math.round(totalMinutes / 60),
+      totalHours: steamHours + xboxHours,
+      hoursByPlatform: [
+        { platform: "Steam", hours: steamHours },
+        { platform: "Xbox", hours: xboxHours },
+      ],
       ownedByPlatform: { steam: games.length },
       recentGames: recentRaw.slice(0, 8).map(toEntry),
       mostPlayed: sorted.slice(0, 25).map(toEntry),
@@ -156,7 +177,11 @@ function fallbackData(): GamingData {
   return {
     source: "fallback",
     totalGames: 1647,
-    totalHours: 12250,
+    totalHours: 12309,
+    hoursByPlatform: [
+      { platform: "Steam", hours: 12250 },
+      { platform: "Xbox", hours: 59 },
+    ],
     ownedByPlatform: { steam: 1366, epic: 281 },
     recentGames: [
       { name: "Counter-Strike 2", platform: "steam", hours: 621, lastPlayed: "2026-03-19" },

@@ -257,6 +257,39 @@ a {
   font-family: var(--font-mono);
 }
 
+/* ── Hours played tooltip ── */
+.hours-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  width: max-content;
+  min-width: 160px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hours-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--color-border);
+}
+
+.hours-tile:hover .hours-tooltip {
+  display: block;
+}
+
 /* ── Animations ── */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }

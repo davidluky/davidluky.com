@@ -37,14 +37,15 @@ davidluky.com/
       Hero.astro          Full-width centered hero section
       Footer.astro        3-column footer with link groups
     data/
-      projects.ts         Single source of truth for all 12 projects
+      projects.ts         Single source of truth for all 18 projects
+      stats.ts            Centralized stats (game counts, hours, levels)
     i18n/
       shared.ts           Shared nav/footer i18n strings + applyI18n() helper
     layouts/
       Base.astro          HTML shell: meta tags, fonts, OG image, styles
     pages/
       index.astro         Homepage: hero, intro, stats grid, language toggle
-      projects.astro      All 12 projects with tags, descriptions, tech badges
+      projects.astro      All 18 projects with tags, descriptions, tech badges
       gaming.astro        Gaming stats, platform cards, game lists
       about.astro         Background, tech stack, timeline, contact
       404.astro           Not found page
@@ -60,9 +61,10 @@ davidluky.com/
   scripts/
     generate-og.mjs      One-shot script to render OG image SVG → PNG
   docs/
-    design-decisions.md  Architectural choices with rationale
-    tech-notes.md        Implementation details and patterns
+    design-decisions.md  Architectural choices with rationale (11 entries)
+    tech-notes.md        Implementation details and patterns (10 entries)
     deployment-guide.md  Full deployment and DNS setup guide
+    flight-recorder.md   Failed approaches and gotchas (10 entries)
     SESSION-HANDOFF.md   Latest session state for continuity
   dist/                  Build output (gitignored)
   astro.config.mjs       Astro config: site URL, sitemap, Tailwind plugin
@@ -104,9 +106,15 @@ Edit `src/data/projects.ts` — add a new entry to the `projects` array:
 }
 ```
 
-The homepage "Active Projects" count and the projects page both update automatically.
+The homepage "Active Projects" count, the projects page, and the "Live Sites" counter all update automatically.
 
-If this is a new tag category, also add it to `tagColors` in `projects.astro` and add the PT-BR translation to the `projectsPt` map in the projects page script.
+If this is a new tag category, add it to `tagColors` in `projects.astro`.
+
+### Updating Stats
+
+Edit `src/data/stats.ts` to update numeric values (game counts, hours played, levels, etc.). All pages that reference these stats will pick up the change automatically at build time.
+
+For stats that appear in i18n strings, the value flows through `define:vars` → `window.__*` → template literal. See TN-010 in tech-notes.md.
 
 ## i18n System
 

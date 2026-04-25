@@ -88,14 +88,14 @@ The projects page has a unique i18n challenge: project descriptions come from `s
 
 ### Approach
 1. Each project card has `data-i18n-tag="tag_0"` and `data-i18n-desc="desc_0"` attributes (index-based)
-2. The page script contains a `projectsPt` map with all 12 PT-BR descriptions
-3. On load, if language is `pt`, the script iterates all `[data-i18n-tag]` and `[data-i18n-desc]` elements and replaces their text
+2. The projects array is passed to client-side via `define:vars` — the script reads `descriptionPt`/`tagPt` directly from the data
+3. On load, if language is `pt`, the script iterates all `[data-i18n-tag]` and `[data-i18n-desc]` elements and replaces their text from the imported data
 
 ### Why not data-i18n?
 The standard `data-i18n` system uses a flat key-value map. Projects need per-item translations that map to array indices, not named keys. Using separate `data-i18n-tag`/`data-i18n-desc` attributes keeps the two systems cleanly separated.
 
-### Duplication note
-The PT-BR descriptions exist in both `projects.ts` (as `descriptionPt`/`tagPt` fields) and in the page script's `projectsPt` map. The `projects.ts` fields are the source of truth; the script duplicates them for client-side access. If a description changes, update both places.
+### No duplication
+PT-BR descriptions live only in `projects.ts` (as `descriptionPt`/`tagPt` fields). The page script reads them directly — there is no separate `projectsPt` map to keep in sync. Adding a project is a single-file change.
 
 ---
 
@@ -178,3 +178,35 @@ Output: `dist/sitemap-index.xml` and `dist/sitemap-0.xml`
 - Fonts: Google Fonts CDN
 - Images: self
 - Frame: none (X-Frame-Options: DENY)
+
+---
+
+## TN-010: Server-to-Client Data Bridge via `define:vars`
+
+Astro pages compute data at build time (server-side), but i18n translations happen client-side. To pass server-side values into client-side `<script>` blocks:
+
+### Pattern
+```astro
+<!-- Step 1: inline script with define:vars to set window globals -->
+<script is:inline define:vars={{ roomGames: stats.theRoomGames }}>
+  window.__stats = { roomGames };
+</script>
+
+<!-- Step 2: module script reads from window -->
+<script>
+  const { roomGames } = (window as any).__stats;
+  // Use in template literals for i18n strings
+  const strings = { en: { text: `${roomGames} games` } };
+</script>
+```
+
+### Why two scripts?
+- `is:inline` scripts with `define:vars` can receive Astro server values but are NOT processed by Vite (no imports)
+- Module scripts (no `is:inline`) ARE processed by Vite (imports work) but can't use `define:vars`
+- The `window.__*` bridge connects the two worlds
+
+### Pages using this pattern
+- `index.astro` → `window.__stats` (roomGames, roomAchievements)
+- `about.astro` → `window.__about` (timelinePt, techCategoriesPt, roomGames, roomAchievements)
+- `projects.astro` → `window.__projects` (project descriptions for i18n)
+- `gaming.astro` → `window.__gaming` (all gaming stats for i18n)

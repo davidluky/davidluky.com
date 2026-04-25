@@ -2,6 +2,31 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-04-25
+
+### Added
+- **`src/data/stats.ts`** — Single source of truth for all hardcoded stats (The Room games/achievements, Steam hours, Tibia level, etc.). All pages now import from here instead of scattering magic numbers.
+- **3 new projects**: Power Monitor, Matemática Elementar, SNES ROM Ripper — total 18 projects.
+- **Full PT-BR translations for about page**: timeline entries and tech stack categories now translate when switching to Portuguese.
+- **Footer links**: Power Monitor and Matemática added to Projects column.
+
+### Fixed
+- **Location**: "Based in Brazil" → "Based in the US" across index + about pages (EN + PT).
+- **The Room game count**: hardcoded 13 → dynamic `stats.theRoomGames` (14) across all pages.
+- **Live Sites stat**: hardcoded "3" → computed from `projects.filter(p => p.link?.startsWith("http"))`, now links to /projects.
+- **Projects page PT duplication**: eliminated 18-entry hardcoded `projectsPt` map — now reads `descriptionPt`/`tagPt` directly from `projects.ts`.
+- **Gaming page stats**: all hardcoded numbers replaced with `stats.*` refs.
+
+### Removed
+- **`/mmx-boss-animations` page** — unused debug page from MMX KB project.
+- **8 `public/mmx-*` asset folders** — ~200+ boss animation GIFs, phase viewers, and debug assets (not part of the live site).
+
+### Architecture
+- Centralized all numeric stats into `src/data/stats.ts` (DD-011 pattern).
+- `yearsGaming` auto-computes from current year, never goes stale.
+- About page uses `define:vars` to pass server-side data to client-side i18n scripts.
+- Projects page i18n reads translations directly from imported data (no duplication).
+
 ## [Unreleased] — 2026-04-24
 
 ### Fixed

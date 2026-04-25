@@ -10,7 +10,8 @@
 ## Project Structure
 - `src/pages/` — File-based routing: index, projects, gaming, about, 404
 - `src/components/` — Header.astro, Hero.astro, Footer.astro
-- `src/data/projects.ts` — Single source of truth for all 15 projects (EN + PT-BR)
+- `src/data/projects.ts` — Single source of truth for all 18 projects (EN + PT-BR)
+- `src/data/stats.ts` — Centralized stats (game counts, hours, levels, achievements)
 - `src/i18n/shared.ts` — Shared nav/footer i18n strings + applyI18n() helper
 - `src/layouts/Base.astro` — HTML shell with meta tags, fonts, OG image
 - `src/styles/global.css` — Tailwind imports + @theme (Warm Dark palette) + brand morph CSS
@@ -65,7 +66,8 @@
 | Change Type | Update These Docs |
 |-------------|-------------------|
 | New page | `docs/developer-guide.md` (structure) + CLAUDE.md (pages list) |
-| New project | `src/data/projects.ts` + projects page `projectsPt` map |
+| New project | `src/data/projects.ts` (EN + PT descriptions auto-propagate) |
+| Stat value change | `src/data/stats.ts` (all pages auto-update) |
 | Design decision | `docs/design-decisions.md` |
 | Implementation pattern | `docs/tech-notes.md` |
 | Version/release | `CHANGELOG.md` |

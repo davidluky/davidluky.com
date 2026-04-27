@@ -133,11 +133,11 @@ export const projects: Project[] = [
     link: null,
   },
   {
-    name: "Gemini Pixel Art Generator",
+    name: "Gemini Image Generator",
     description:
-      "Batch sprite generation pipeline using Google Gemini via Vertex AI. Region rotation for quota management, post-processing (resize, transparency, palette normalization), and dry-run mode. Built to generate RPG sprites for The Room.",
+      "Batch image generation pipeline using Google Gemini via Vertex AI. Region rotation for quota management, post-processing (resize, transparency, palette normalization), and dry-run mode. Originally built for RPG sprites in The Room, works for any image type.",
     descriptionPt:
-      "Pipeline de geração de sprites em lote usando Google Gemini via Vertex AI. Rotação de regiões para gestão de quota, pós-processamento (redimensionamento, transparência, normalização de paleta) e modo dry-run. Feito para gerar sprites de RPG para o The Room.",
+      "Pipeline de geração de imagens em lote usando Google Gemini via Vertex AI. Rotação de regiões para gestão de quota, pós-processamento (redimensionamento, transparência, normalização de paleta) e modo dry-run. Originalmente feito para sprites de RPG no The Room, funciona para qualquer tipo de imagem.",
     tech: ["Python", "Vertex AI", "Gemini API", "PIL"],
     tag: "AI Tooling",
     tagPt: "Ferramentas de IA",
@@ -155,7 +155,7 @@ export const projects: Project[] = [
     link: null,
   },
   {
-    name: "Glimmering Falcon",
+    name: "MMX Trainer",
     description:
       "Reinforcement learning agent that learns to play Mega Man X on SNES via population-based training. Distributed rollouts across an RTX 5080 workstation and a 32-thread Xeon server; findings feed back into the Megaman X knowledge base.",
     descriptionPt:

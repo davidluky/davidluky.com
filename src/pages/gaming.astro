@@ -49,16 +49,16 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
 
   <!-- Overview -->
   <section class="mx-auto max-w-[1280px] px-12 pb-14 max-md:px-6">
-    <h3 data-i18n="g_overview" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="g_overview" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Overview
-    </h3>
+    </h2>
     <div class="grid grid-cols-2 gap-4 max-sm:gap-3 md:grid-cols-4 lg:grid-cols-6">
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{fmt(gaming.totalGames)}</div>
         <div data-i18n="g_stat_games" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Games Owned</div>
         <div data-i18n="g_stat_games_sub" class="mt-2 text-[11px] text-text-3">Steam + Epic</div>
       </div>
-      <div class="hours-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer">
+      <div class="hours-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer" tabindex="0" role="button" aria-label="Hours breakdown by platform">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{fmt(gaming.totalHours)}</div>
         <div data-i18n="g_stat_hours" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Hours Played</div>
         <div data-i18n="g_stat_hours_sub" class="mt-2 text-[11px] text-text-3">Across all platforms</div>
@@ -111,9 +111,9 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
           </div>
         </div>
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
-          <span>Dota 2 <span class="text-text-2">{stats.steamHoursDota}h</span></span>
+          <span>Dota 2 <span class="text-text-2">{fmt(stats.steamHoursDota)}h</span></span>
           <span class="text-border">&middot;</span>
-          <span>Terraria <span class="text-text-2">{stats.steamHoursTerraria}h</span></span>
+          <span>Terraria <span class="text-text-2">{fmt(stats.steamHoursTerraria)}h</span></span>
           <span class="text-border">&middot;</span>
           <span data-i18n="g_steam_perfect">{stats.steamPerfectGames} perfect games</span>
           <span class="text-border">&middot;</span>
@@ -137,7 +137,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
         <div class="flex flex-wrap gap-2 text-[12px] text-text-3">
           <span data-i18n="g_xbox_games">{stats.xboxGames} games</span>
           <span class="text-border">&middot;</span>
-          <span data-i18n="g_xbox_gs">{stats.xboxGamerscore} gamerscore</span>
+          <span data-i18n="g_xbox_gs">{fmt(stats.xboxGamerscore)} gamerscore</span>
           <span class="text-border">&middot;</span>
           <span data-i18n="g_xbox_gp">{stats.xboxGamePassTitles} Game Pass titles</span>
         </div>
@@ -178,7 +178,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
             <span class="font-mono text-[13px] text-text-2">David Luky</span>
           </div>
           <div class="ml-auto text-right">
-            <div class="text-lg font-light text-text">{fmt(gaming.ownedByPlatform.epic ?? 281)}</div>
+            <div class="text-lg font-light text-text">{fmt(gaming.ownedByPlatform.epic ?? 281 /* snapshot from 2026-03 */)}</div>
             <div data-i18n="g_epic_count" class="text-[11px] text-text-3">games</div>
           </div>
         </div>
@@ -191,9 +191,9 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
 
   <!-- Recently played -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 data-i18n="g_recent" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="g_recent" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Recently Played
-    </h3>
+    </h2>
     <div class="space-y-0">
       {gaming.recentGames.map((game, i) => (
         <div class="flex items-center gap-5 max-sm:gap-3 border-b border-border/50 py-4 max-sm:py-2.5 last:border-0">
@@ -218,10 +218,10 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
 
   <!-- Most played -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 data-i18n="g_most_played" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="g_most_played" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Most Played
-    </h3>
-    <p data-i18n="g_most_played_desc" class="mb-5 text-[13px] text-text-3">
+    </h2>
+    <p data-i18n="g_most_played_desc" data-i18n-html class="mb-5 text-[13px] text-text-3">
       Top {gaming.mostPlayed.length} games by playtime — tracked via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, a desktop app I built to aggregate games across platforms.
     </p>
     <div class="space-y-0">
@@ -256,34 +256,34 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
 
   <!-- Playtime distribution -->
   <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <h3 data-i18n="g_distribution" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="g_distribution" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Playtime Distribution
-    </h3>
+    </h2>
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-accent mb-1">{gaming.distribution.over100h}</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">100+ hours</div>
+        <div data-i18n="g_dist_100" class="text-[11px] font-medium uppercase tracking-wider text-text-3">100+ hours</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.h10to100}</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">10–100 hours</div>
+        <div data-i18n="g_dist_10_100" class="text-[11px] font-medium uppercase tracking-wider text-text-3">10–100 hours</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.h1to10}</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">1–10 hours</div>
+        <div data-i18n="g_dist_1_10" class="text-[11px] font-medium uppercase tracking-wider text-text-3">1–10 hours</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{gaming.distribution.under1h}</div>
-        <div class="text-[11px] font-medium uppercase tracking-wider text-text-3">&lt; 1 hour</div>
+        <div data-i18n="g_dist_under1" class="text-[11px] font-medium uppercase tracking-wider text-text-3">&lt; 1 hour</div>
       </div>
     </div>
   </section>
 
   <!-- Hardware -->
   <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
-    <h3 data-i18n="g_hardware" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="g_hardware" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Hardware
-    </h3>
+    </h2>
     <div class="flex flex-wrap gap-3">
       <span class="rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm text-text-2">Xbox Series X</span>
       <span class="rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm text-text-2">Nintendo Switch</span>
@@ -309,7 +309,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
   mostPlayedCount: gaming.mostPlayed.length,
   mostPlayedTotal,
   steamGames: gaming.ownedByPlatform.steam ?? 0,
-  epicGames: gaming.ownedByPlatform.epic ?? 281,
+  epicGames: gaming.ownedByPlatform.epic ?? 281, // snapshot from 2026-03
 }}>
   window.__gaming = { totalGames, totalHours, gamesWithHours, mostPlayedCount, mostPlayedTotal, steamGames, epicGames };
 </script>
@@ -317,7 +317,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
   import { applyI18n } from '../i18n/shared';
   import { stats } from '../data/stats';
 
-  const g = (window as any).__gaming;
+  const g = window.__gaming;
   const fmt = (n: number) => n.toLocaleString('en-US');
   const fmtPt = (n: number) => n.toLocaleString('pt-BR');
 
@@ -343,7 +343,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_steam_perfect: `${stats.steamPerfectGames} perfect games`,
       g_steam_friends: `${stats.steamFriends} friends`,
       g_xbox_games: `${stats.xboxGames} games`,
-      g_xbox_gs: `${stats.xboxGamerscore} gamerscore`,
+      g_xbox_gs: `${fmt(stats.xboxGamerscore)} gamerscore`,
       g_xbox_gp: `${stats.xboxGamePassTitles} Game Pass titles`,
       g_tibia_pts: `${stats.tibiaAchievementPts} achievement pts`,
       g_tibia_since: `Since ${stats.tibiaStartYear}`,
@@ -355,6 +355,10 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_most_played_desc: `Top ${g.mostPlayedCount} games by playtime — tracked via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, a desktop app I built to aggregate games across platforms.`,
       g_most_played_total: `${fmt(g.mostPlayedTotal)} hours across these ${g.mostPlayedCount} titles`,
       g_distribution: 'Playtime Distribution',
+      g_dist_100: '100+ hours',
+      g_dist_10_100: '10–100 hours',
+      g_dist_1_10: '1–10 hours',
+      g_dist_under1: '< 1 hour',
       g_hardware: 'Hardware',
     },
     pt: {
@@ -378,7 +382,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_steam_perfect: `${stats.steamPerfectGames} jogos perfeitos`,
       g_steam_friends: `${stats.steamFriends} amigos`,
       g_xbox_games: `${stats.xboxGames} jogos`,
-      g_xbox_gs: `${stats.xboxGamerscore} gamerscore`,
+      g_xbox_gs: `${fmtPt(stats.xboxGamerscore)} gamerscore`,
       g_xbox_gp: `${stats.xboxGamePassTitles} títulos do Game Pass`,
       g_tibia_pts: `${stats.tibiaAchievementPts} pts de conquistas`,
       g_tibia_since: `Desde ${stats.tibiaStartYear}`,
@@ -390,6 +394,10 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_most_played_desc: `Top ${g.mostPlayedCount} jogos por tempo de jogo — rastreado via <a href="/projects" class="text-text-2 no-underline hover:text-accent transition-colors">Game Library</a>, um app desktop que eu construí para agregar jogos de várias plataformas.`,
       g_most_played_total: `${fmtPt(g.mostPlayedTotal)} horas nesses ${g.mostPlayedCount} títulos`,
       g_distribution: 'Distribuição de Tempo',
+      g_dist_100: '100+ horas',
+      g_dist_10_100: '10–100 horas',
+      g_dist_1_10: '1–10 horas',
+      g_dist_under1: '< 1 hora',
       g_hardware: 'Hardware',
     },
   });

@@ -39,6 +39,7 @@ davidluky.com/
     data/
       projects.ts         Single source of truth for all 18 projects
       stats.ts            Centralized stats (game counts, hours, levels)
+      gaming.ts           Gaming data loader: Game Library DB → Steam API → fallback
     i18n/
       shared.ts           Shared nav/footer i18n strings + applyI18n() helper
     layouts/
@@ -51,20 +52,25 @@ davidluky.com/
       404.astro           Not found page
     styles/
       global.css          Tailwind imports + @theme (Warm Dark palette) + brand morph CSS
+    types/
+      global.d.ts         Window interface augmentation for define:vars bridge properties
   public/
     _headers             Cloudflare security headers (CSP, X-Frame-Options)
     favicon.svg          "DL" monogram favicon
     og-image.png         1200x630 OG image for social sharing
     og-image.svg         Editable SVG source for OG image
     robots.txt           Standard robots.txt
-    stats-banner.svg     Unused stats banner (can be removed)
   scripts/
     generate-og.mjs      One-shot script to render OG image SVG → PNG
+  .github/
+    workflows/
+      deploy.yml         CI/CD: npm ci → check → build → wrangler deploy on push to main
   docs/
-    design-decisions.md  Architectural choices with rationale (11 entries)
-    tech-notes.md        Implementation details and patterns (10 entries)
-    deployment-guide.md  Full deployment and DNS setup guide
-    flight-recorder.md   Failed approaches and gotchas (10 entries)
+    design-decisions.md  Architectural choices with rationale (13 entries)
+    tech-notes.md        Implementation details and patterns (11 entries)
+    deployment-guide.md  Full deployment, DNS, CI/CD, and analytics guide
+    flight-recorder.md   Failed approaches and gotchas (18 entries)
+    audit-2026-04-25.md  32-issue audit report with root cause analysis
     SESSION-HANDOFF.md   Latest session state for continuity
   dist/                  Build output (gitignored)
   astro.config.mjs       Astro config: site URL, sitemap, Tailwind plugin
@@ -149,7 +155,7 @@ For stats that appear in i18n strings, the value flows through `define:vars` →
 | `--color-border` | `#2a2924` | Borders, dividers |
 | `--color-text` | `#faf8f1` | Primary text |
 | `--color-text-2` | `#b0a998` | Secondary text |
-| `--color-text-3` | `#6a6458` | Muted text, labels |
+| `--color-text-3` | `#847a6c` | Muted text, labels (WCAG AA compliant) |
 | `--color-accent` | `#c4a35a` | Gold accent |
 | `--color-accent-dim` | `rgba(196,163,90,0.08)` | Accent tint for backgrounds |
 
@@ -176,7 +182,7 @@ For stats that appear in i18n strings, the value flows through `define:vars` →
 - Desktop padding: `px-12` (48px)
 - Mobile padding: `px-6` (24px)
 - Prose max width: `600px–660px`
-- Brand font: `52px` desktop, `36px` mobile
+- Brand font: `52px` desktop, `30px` mobile (breakpoint: 768px)
 
 ## Testing
 
@@ -189,3 +195,25 @@ npm run preview  # Visual check at localhost:4321
 ```
 
 Check mobile by resizing browser to 375px width or using Chrome DevTools responsive mode.
+
+### Lighthouse
+Run `npx lighthouse https://davidluky.com --chrome-flags="--headless"` for a full audit. Current scores (2026-04-25): **99 / 100 / 100 / 100** (Performance / Accessibility / Best Practices / SEO).
+
+## CI/CD
+
+GitHub Actions runs on every push to `main` (`.github/workflows/deploy.yml`):
+1. `npm ci` → `npm run check` → `npm run build` → `wrangler deploy`
+
+**Setup**: Add `CLOUDFLARE_API_TOKEN` secret to the GitHub repo (Settings → Secrets → Actions). Create the token at [Cloudflare Dashboard → API Tokens](https://dash.cloudflare.com/profile/api-tokens) with **Edit Cloudflare Workers** permission.
+
+Manual deploys via `npx wrangler deploy` still work as a fallback.
+
+## Accessibility
+
+The site targets **WCAG 2.1 Level AA** compliance:
+- All text meets 4.5:1 contrast ratio against its background
+- Heading hierarchy is sequential (h1 → h2, no skipped levels)
+- Interactive tooltips are keyboard-accessible (`tabindex="0"`, `:focus-within`)
+- Mobile menu announces open/close state via `aria-expanded`
+- Document has a `<main>` landmark for screen reader navigation
+- i18n uses `textContent` by default; `innerHTML` is opt-in via `data-i18n-html`

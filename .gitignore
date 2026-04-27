@@ -12,6 +12,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Build-time cache
+.cache/
+
 # Secrets & certificates
 *.pem
 *.key

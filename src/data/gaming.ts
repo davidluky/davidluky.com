@@ -22,7 +22,7 @@ export interface GamingData {
   distribution: { over100h: number; h10to100: number; h1to10: number; under1h: number };
 }
 
-const GAME_LIBRARY_DB = "C:/Users/david/AppData/Roaming/game-library/library.db";
+const GAME_LIBRARY_DB = import.meta.env.GAME_LIBRARY_DB ?? "C:/Users/david/AppData/Roaming/game-library/library.db";
 const STEAM_CACHE = ".cache/steam-games.json";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -31,13 +31,13 @@ async function fromGameLibrary(): Promise<GamingData | null> {
     const { default: Database } = await import("better-sqlite3");
     const db = new Database(GAME_LIBRARY_DB, { readonly: true });
 
-    const totalGames = db.prepare(
+    const totalGames = (db.prepare(
       "SELECT COUNT(DISTINCT pg.game_id) as c FROM platform_games pg JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'"
-    ).get().c;
+    ).get() as { c: number }).c;
 
     const playtimeByPlatform = db.prepare(
       "SELECT platform, SUM(playtime_minutes) as t FROM game_stats GROUP BY platform"
-    ).all();
+    ).all() as { platform: string; t: number }[];
 
     const hoursByPlatform: PlatformHours[] = [];
     let totalHours = 0;
@@ -54,28 +54,28 @@ async function fromGameLibrary(): Promise<GamingData | null> {
        FROM platform_games pg
        JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'
        GROUP BY pg.platform`
-    ).all();
+    ).all() as { platform: string; c: number }[];
     const ownedByPlatform: Record<string, number> = {};
     for (const p of platforms) ownedByPlatform[p.platform] = p.c;
 
-    const recentGames: GameEntry[] = db.prepare(
+    const recentGames: GameEntry[] = (db.prepare(
       `SELECT g.name, gs.playtime_minutes, gs.platform, gs.last_played_at
        FROM game_stats gs JOIN games g ON g.id = gs.game_id
        WHERE gs.last_played_at IS NOT NULL AND gs.playtime_minutes > 0
        ORDER BY gs.last_played_at DESC LIMIT 8`
-    ).all().map((r: any) => ({
+    ).all() as { name: string; playtime_minutes: number; platform: string; last_played_at: string | null }[]).map((r) => ({
       name: r.name,
       platform: r.platform,
       hours: Math.round(r.playtime_minutes / 60),
       lastPlayed: r.last_played_at?.slice(0, 10) ?? null,
     }));
 
-    const mostPlayed: GameEntry[] = db.prepare(
+    const mostPlayed: GameEntry[] = (db.prepare(
       `SELECT g.name, gs.playtime_minutes, gs.platform, gs.last_played_at
        FROM game_stats gs JOIN games g ON g.id = gs.game_id
        WHERE gs.playtime_minutes > 0
        ORDER BY gs.playtime_minutes DESC LIMIT 25`
-    ).all().map((r: any) => ({
+    ).all() as { name: string; playtime_minutes: number; platform: string; last_played_at: string | null }[]).map((r) => ({
       name: r.name,
       platform: r.platform,
       hours: Math.round(r.playtime_minutes / 60),
@@ -89,7 +89,7 @@ async function fromGameLibrary(): Promise<GamingData | null> {
         COUNT(CASE WHEN playtime_minutes >= 60 AND playtime_minutes < 600 THEN 1 END) as c,
         COUNT(CASE WHEN playtime_minutes > 0 AND playtime_minutes < 60 THEN 1 END) as d
        FROM game_stats`
-    ).get();
+    ).get() as { a: number; b: number; c: number; d: number };
 
     db.close();
 
@@ -170,7 +170,8 @@ async function fromSteamAPI(): Promise<GamingData | null> {
     fs.writeFileSync(cachePath, JSON.stringify({ timestamp: Date.now(), data }));
 
     return data;
-  } catch {
+  } catch (err) {
+    console.error("[gaming.ts] fromSteamAPI failed:", (err as Error).message);
     return null;
   }
 }

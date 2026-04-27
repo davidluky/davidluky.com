@@ -201,3 +201,37 @@ for (const line of envFile.split('\n')) {
 **Root cause**: `MinutesPlayed` comes from `userstats.xboxlive.com/batch` and requires a `serviceConfigId` (SCID). Only Xbox One+ games with event-based stats have SCIDs. Xbox 360 titles use the older achievement system and don't track playtime via this API.
 
 **Workaround**: Only query MinutesPlayed for titles where `serviceConfigId` is present in the titlehub response. Xbox 360 titles show 0h — this is an Xbox platform limitation, not a bug.
+
+---
+
+## FR-016: Adding @types/* Can Cascade 10+ TypeScript Errors (2026-04-25)
+
+**What happened**: Installed `@types/better-sqlite3` to get proper types for DB operations. Immediately got 10 new TypeScript errors because `.get()` and `.all()` now correctly return `unknown` instead of the previous implicit `any`.
+
+**Root cause**: Without `@types/better-sqlite3`, the module had no type declarations, so TypeScript treated everything as `any`. Adding types replaced `any` with `unknown`, which is correct but requires explicit type assertions at every call site.
+
+**Fix**: Added inline type assertions to all 6 query sites (e.g., `.get() as { c: number }`, `.all() as { platform: string; t: number }[]`).
+
+**Lesson**: When adding `@types/*` packages, always run `npm run check` immediately. Plan for cascading errors — `unknown` return types will propagate into every consumer. Budget time for adding assertions.
+
+---
+
+## FR-017: innerHTML as Default i18n Pattern Is an XSS Class (2026-04-25)
+
+**What happened**: `applyI18n()` used `el.innerHTML = val` for all translation strings. While translations were hardcoded (not user-supplied), the pattern itself was dangerous — any future dynamic content would be an XSS vector.
+
+**Root cause**: When i18n was first implemented (FR-008), all strings were set via innerHTML because some contained HTML (`<a>` links, `<em>` tags, `&larr;` entities). The blanket innerHTML was the quickest path.
+
+**Fix**: Default to `textContent` (safe). Opt-in to `innerHTML` via `data-i18n-html` attribute on specific elements that need HTML parsing. Only ~7 elements out of ~40 needed the attribute.
+
+**Lesson**: When building string injection systems (i18n, templating, notifications), always default to the safe path (textContent, parameterized queries, etc.). Make the dangerous path opt-in with an explicit flag.
+
+---
+
+## FR-018: replace_all Hits Both EN and PT Blocks (2026-04-25)
+
+**What happened**: Used `replace_all=true` to change a stat formatting call (`stats.xboxGamerscore` → `fmt(stats.xboxGamerscore)`) across the gaming page. Both the EN and PT translation blocks contained the same string. The EN block needed `fmt()` but the PT block needed `fmtPt()` (Portuguese locale formatting).
+
+**Fix**: Immediately corrected the PT block to use `fmtPt()` instead of `fmt()`.
+
+**Lesson**: When using replace_all, verify that all occurrences need the same replacement. In bilingual files, the same data reference often appears in both language blocks but needs different formatting functions.

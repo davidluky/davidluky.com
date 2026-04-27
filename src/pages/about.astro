@@ -20,7 +20,7 @@ const timeline = [
   { year: "2020", text: `Built The Room — a multiplayer RPG platform in C++ with ${stats.theRoomGames} games`, textPt: `Criei o The Room — uma plataforma RPG multiplayer em C++ com ${stats.theRoomGames} jogos` },
   { year: "2024", text: "Expanded The Room to a full React web client with Firebase", textPt: "Expandi o The Room para um cliente web completo em React com Firebase" },
   { year: "2025", text: "Built Tibia Services, Game Library, Local IA, and this site", textPt: "Criei Tibia Services, Game Library, Local IA, e este site" },
-  { year: "2026", text: "Started a Megaman X remake with raylib, Gemini-powered sprite generation for The Room, and Glimmering Falcon — an RL agent that learns Mega Man X on SNES via population-based training", textPt: "Comecei um remake de Megaman X com raylib, geração de sprites com Gemini para o The Room, e Glimmering Falcon — um agente de RL que aprende Mega Man X no SNES via population-based training" },
+  { year: "2026", text: "Started a Megaman X remake with raylib, Gemini-powered sprite generation for The Room, and MMX Trainer — an RL agent that learns Mega Man X on SNES via population-based training", textPt: "Comecei um remake de Megaman X com raylib, geração de sprites com Gemini para o The Room, e MMX Trainer — um agente de RL que aprende Mega Man X no SNES via population-based training" },
 ];
 ---
 
@@ -35,7 +35,7 @@ const timeline = [
     <h1 data-i18n="a_title" class="mb-6 max-w-[620px] text-[42px] font-light leading-tight tracking-tight max-md:text-3xl">
       A bit about me
     </h1>
-    <p data-i18n="a_intro" class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
+    <p data-i18n="a_intro" data-i18n-html class="max-w-[600px] text-[17px] leading-[1.85] text-text-2">
       I'm David — a developer and lifelong gamer based in the US. I build things that interest me, from multiplayer RPGs to automation bots to achievement unlockers. Most of my work lives on
       <a href="https://github.com/davidluky" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">GitHub</a>.
     </p>
@@ -43,14 +43,14 @@ const timeline = [
 
   <!-- Background -->
   <section class="mx-auto max-w-[1280px] px-12 pb-20 max-md:px-6">
-    <h3 data-i18n="a_bg_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="a_bg_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Background
-    </h3>
+    </h2>
     <div class="max-w-[600px] space-y-4">
       <p data-i18n="a_bg_p1" class="text-[15px] leading-[1.85] text-text-2">
         Gaming is what got me into programming. I wanted to understand how the things I loved were made — that curiosity turned into building my own games, tools, and platforms.
       </p>
-      <p data-i18n="a_bg_p2" class="text-[15px] leading-[1.85] text-text-2">
+      <p data-i18n="a_bg_p2" data-i18n-html class="text-[15px] leading-[1.85] text-text-2">
         My main project is <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, a multiplayer RPG platform with {stats.theRoomGames} games, {stats.theRoomAchievements} achievements, a full economy, and tournaments. It started as a C++ desktop application and grew into a React web client sharing the same Firebase backend.
       </p>
       <p data-i18n="a_bg_p3" class="text-[15px] leading-[1.85] text-text-2">
@@ -61,9 +61,9 @@ const timeline = [
 
   <!-- What I work with -->
   <section class="mx-auto max-w-[1280px] px-12 pb-20 max-md:px-6">
-    <h3 data-i18n="a_tech_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="a_tech_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       What I work with
-    </h3>
+    </h2>
     <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       {techCategories.map((category, i) => (
         <div>
@@ -82,9 +82,9 @@ const timeline = [
 
   <!-- Timeline -->
   <section class="mx-auto max-w-[1280px] px-12 pb-20 max-md:px-6">
-    <h3 data-i18n="a_timeline_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="a_timeline_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Timeline
-    </h3>
+    </h2>
     <div class="space-y-0">
       {timeline.map((item, i) => (
         <div class="flex gap-6 border-b border-border/30 py-5 last:border-0 max-md:gap-4">
@@ -97,10 +97,10 @@ const timeline = [
 
   <!-- Contact -->
   <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
-    <h3 data-i18n="a_contact_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+    <h2 data-i18n="a_contact_label" class="mb-5 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
       Get in touch
-    </h3>
-    <p data-i18n="a_contact_text" class="max-w-[600px] text-[15px] leading-[1.85] text-text-2">
+    </h2>
+    <p data-i18n="a_contact_text" data-i18n-html class="max-w-[600px] text-[15px] leading-[1.85] text-text-2">
       Want to reach out? Send me an email at
       <a href="mailto:davidluky@davidluky.com" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">davidluky@davidluky.com</a>
       or find me on
@@ -117,7 +117,7 @@ const timeline = [
 <script>
   import { applyI18n } from '../i18n/shared';
 
-  const { timelinePt, techCategoriesPt, roomGames, roomAchievements } = (window as any).__about;
+  const { timelinePt, techCategoriesPt, roomGames, roomAchievements } = window.__about;
 
   applyI18n({
     en: {

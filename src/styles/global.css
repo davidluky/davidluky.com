@@ -8,7 +8,7 @@
   --color-border: #2a2924;
   --color-text: #faf8f1;
   --color-text-2: #b0a998;
-  --color-text-3: #6a6458;
+  --color-text-3: #847a6c;
   --color-accent: #c4a35a;
   --color-accent-dim: rgba(196, 163, 90, 0.08);
 
@@ -196,7 +196,8 @@ a {
 }
 
 .achievements-tile:hover .achievements-tooltip,
-.achievements-tile:active .achievements-tooltip {
+.achievements-tile:active .achievements-tooltip,
+.achievements-tile:focus-within .achievements-tooltip {
   display: block;
 }
 
@@ -226,7 +227,8 @@ a {
   border-top-color: var(--color-border);
 }
 
-.live-sites-tile:hover .live-sites-tooltip {
+.live-sites-tile:hover .live-sites-tooltip,
+.live-sites-tile:focus-within .live-sites-tooltip {
   display: block;
 }
 
@@ -286,20 +288,12 @@ a {
   border-top-color: var(--color-border);
 }
 
-.hours-tile:hover .hours-tooltip {
+.hours-tile:hover .hours-tooltip,
+.hours-tile:focus-within .hours-tooltip {
   display: block;
 }
 
 /* ── Animations ── */
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

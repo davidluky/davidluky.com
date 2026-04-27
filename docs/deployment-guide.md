@@ -81,7 +81,17 @@ git commit -m "description"
 git push
 ```
 
-No CI/CD is configured — deploys are manual via `npx wrangler deploy`. Could add Cloudflare Builds for automatic deploys on push.
+### CI/CD (GitHub Actions)
+
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every push to `main`:
+1. `npm ci` — install dependencies
+2. `npm run check` — TypeScript validation
+3. `npm run build` — static site build
+4. `wrangler deploy` — upload to Cloudflare Workers
+
+**Required secret**: `CLOUDFLARE_API_TOKEN` — create at [Cloudflare Dashboard → API Tokens](https://dash.cloudflare.com/profile/api-tokens) with **Edit Cloudflare Workers** permission. Add to GitHub repo → Settings → Secrets → Actions.
+
+Manual deploys via `npx wrangler deploy` still work as before.
 
 ## Related Services
 
@@ -94,6 +104,14 @@ No CI/CD is configured — deploys are manual via `npx wrangler deploy`. Could a
 ### Supabase (Tibia Services backend)
 - **Project**: lsizuiyxowfbipslkdya
 - **URL**: https://lsizuiyxowfbipslkdya.supabase.co
+
+## Analytics
+
+**Cloudflare Web Analytics** is auto-injected by Cloudflare's edge network via `static.cloudflareinsights.com/beacon.min.js`. No manual snippet needed — Cloudflare handles injection for proxied domains.
+
+The CSP header allows both the beacon script (`script-src`) and its reporting endpoint (`connect-src https://cloudflareinsights.com`).
+
+View analytics at: Cloudflare Dashboard → davidluky.com → Web Analytics.
 
 ## OG Image Regeneration
 
@@ -119,7 +137,12 @@ curl -X PUT "https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/workers/
 ```
 
 ### Fonts not loading
-Check that `fonts.googleapis.com` and `fonts.gstatic.com` are allowed in the CSP header (`public/_headers`).
+Check that `fonts.googleapis.com` and `fonts.gstatic.com` are allowed in the CSP header (`public/_headers`). Fonts are loaded non-render-blocking via `media="print" onload="this.media='all'"` — a brief FOUT (flash of unstyled text) is expected on first load.
+
+### CI/CD deploy failing
+1. Verify `CLOUDFLARE_API_TOKEN` secret is set in GitHub repo settings
+2. Check the token has **Edit Cloudflare Workers** permission
+3. Tokens expire — regenerate at Cloudflare Dashboard if needed
 
 ### OG image not showing on Twitter/Discord
 1. Verify `public/og-image.png` exists and is a valid PNG

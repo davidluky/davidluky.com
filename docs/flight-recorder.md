@@ -235,3 +235,29 @@ for (const line of envFile.split('\n')) {
 **Fix**: Immediately corrected the PT block to use `fmtPt()` instead of `fmt()`.
 
 **Lesson**: When using replace_all, verify that all occurrences need the same replacement. In bilingual files, the same data reference often appears in both language blocks but needs different formatting functions.
+
+---
+
+## FR-019: Cross-Project Rename Requires Workspace-Wide Grep (2026-04-26)
+
+**What happened**: Renamed "Glimmering Falcon" → "MMX Trainer" and "Gemini Pixel Art Generator" → "Gemini Image Generator" across the workspace. The first rename pass (GF-090) updated the Python codebase but missed 13 files with stale branding: doc headings, script descriptions, window titles, and this website's project name + timeline.
+
+**Root cause**: GF-090 scoped its grep to the mmx-trainer repo only. Cross-project references in `davidluky.com` (projects.ts, about.astro, CHANGELOG.md), `megaman-x` (tas_to_demo.py, render-status doc), and `the-room` (postprocess_all.py, export_rpg_data.py) were invisible to a single-repo search.
+
+**Fix**: GF-091 ran `grep -rni "glimmering.falcon"` across the entire `Programas/` workspace (218 hits), categorized every hit, and updated all active references. Same for `gemini-pixel-art` (30+ hits). Physical folders renamed on dev machine. All 5 affected repos committed + pushed. Website deployed.
+
+**Files changed in this repo**: `src/data/projects.ts` (2 project names + descriptions), `src/pages/about.astro` (timeline EN + PT-BR), `CHANGELOG.md` (new section + 3 historical entries).
+
+**Lesson**: After any rename, grep the entire workspace — not just the target repo. Cross-project references (website display names, sibling-project path constants, shared doc references) are invisible to single-repo searches. Budget a separate pass for each sibling project.
+
+---
+
+## FR-020: GitHub Actions Needs CLOUDFLARE_API_TOKEN Secret (2026-04-26)
+
+**What happened**: The `deploy.yml` workflow pushed in commit `a0ebe92` failed immediately. Error: "In a non-interactive environment, it's necessary to set a CLOUDFLARE_API_TOKEN environment variable."
+
+**Root cause**: The workflow was created in the audit session but the `CLOUDFLARE_API_TOKEN` GitHub secret was never configured. Wrangler v3 requires it for CI deploys.
+
+**Workaround**: Deployed manually via `npm run build && npx wrangler deploy` (local auth tokens work).
+
+**Action**: Create a Cloudflare API token at https://dash.cloudflare.com/profile/api-tokens (scope: Workers scripts edit + Pages read), then `gh secret set CLOUDFLARE_API_TOKEN` to enable CI/CD.

@@ -1,4 +1,36 @@
-# Session Handoff — 2026-04-25 (Session 3)
+# Session Handoff — 2026-04-26 (Session 4)
+
+## What Was Done
+
+### Cross-Workspace Project Renames (2026-04-26)
+- **MMX Trainer** (was "Glimmering Falcon"): Updated `projects.ts` display name, `about.astro` 2026 timeline (EN + PT-BR), 3 CHANGELOG historical entries
+- **Gemini Image Generator** (was "Gemini Pixel Art Generator"): Updated `projects.ts` display name + description (EN + PT-BR) to reflect general-purpose scope
+- Commit `a0ebe92`, pushed to origin, deployed to Cloudflare Workers
+
+### Audit Fixes + A11y + CI/CD (2026-04-25, committed 2026-04-26)
+- All 32 audit issues from Session 3 committed in the same commit (were previously uncommitted)
+- XSS fix, CSP hardening, heading hierarchy, keyboard a11y, language toggle, type safety, Lighthouse 99/100/100/100
+- GitHub Actions deploy.yml added (needs `CLOUDFLARE_API_TOKEN` secret)
+
+## Current State
+- **Build**: `npm run build` — 5 pages, ~1s, 0 errors
+- **Deploy**: Live at davidluky.com (Version ID: `3423f050-b928-4d48-a05f-7dc6c37de0b4`)
+- **Lighthouse**: 99/100/100/100
+- **CI/CD**: Workflow exists, needs `CLOUDFLARE_API_TOKEN` GitHub secret (FR-020)
+- **No uncommitted changes**
+
+## What's Next
+1. **`CLOUDFLARE_API_TOKEN` GitHub secret** — enables automated deploys on push
+2. **npm audit vulns** — 5 `yaml` CVEs in `@astrojs/check` (dev-only, needs breaking change)
+3. **Cache headers** — Cloudflare Workers default TTLs, could be tuned
+
+## Decisions Made
+- Renamed historical CHANGELOG entries (they name a *thing*, not an *event* — the thing's name changed)
+- Committed audit fixes + renames together (both were uncommitted, both session work)
+
+---
+
+# Session Handoff — 2026-04-25 (Session 3) [ARCHIVED]
 
 ## What Was Done
 

@@ -33,7 +33,14 @@ export function applyI18n(pageStrings: Record<string, Record<string, string>>) {
 
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n')!;
-    if (key in merged) el.innerHTML = merged[key as keyof typeof merged];
+    if (key in merged) {
+      const val = merged[key as keyof typeof merged];
+      if (el.hasAttribute('data-i18n-html')) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    }
   });
 
   return lang;

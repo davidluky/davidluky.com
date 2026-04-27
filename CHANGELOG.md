@@ -2,6 +2,12 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-04-26
+
+### Changed
+- **MMX Trainer** (formerly Glimmering Falcon) — project name updated across all user-facing content: `projects.ts` display name, `about.astro` 2026 timeline entry (EN + PT-BR), and 3 prior CHANGELOG entries. Aligns with the rename in the mmx-trainer repo (GF-090 + GF-091).
+- **Gemini Image Generator** (formerly Gemini Pixel Art Generator) — project name and description updated in `projects.ts`. The tool is general-purpose (any image type), not pixel-art-only. Aligned with the project's own README title.
+
 ## [Unreleased] — 2026-04-25
 
 ### Added
@@ -11,7 +17,15 @@ All notable changes to davidluky.com are documented here.
 - **Footer links**: Power Monitor and Matemática added to Projects column.
 - **Xbox gamerscore stats**: Xbox card on gaming page now shows 476 games + 75,268 gamerscore (real data from Xbox Live API).
 - **Platform hours breakdown**: Total gaming hours (15,595) computed dynamically from Game Library DB grouped by platform (Steam 12,288h + Xbox 3,307h).
-- **Flight recorder entries**: FR-011 through FR-015 documenting Xbox auth, ESM imports, and safeStorage gotchas.
+- **Flight recorder entries**: FR-011 through FR-018 documenting Xbox auth, ESM imports, safeStorage gotchas, and audit lessons.
+- **`src/types/global.d.ts`** — Window interface augmentation for `__stats`, `__gaming`, `__about` bridge properties.
+- **Header language toggle** — EN/PT switch in desktop nav and mobile menu (all pages).
+- **Keyboard-accessible tooltips** — `tabindex="0"`, `role="button"`, `aria-label`, `:focus-within` CSS for achievements, live-sites, and hours tiles.
+- **`docs/audit-2026-04-25.md`** — Full 32-issue audit report with root cause analysis and fixes.
+- **CI/CD** via GitHub Actions (`.github/workflows/deploy.yml`): check → build → wrangler deploy on push to main.
+- **Cloudflare Web Analytics** — unblocked auto-injected beacon by adding `static.cloudflareinsights.com` to CSP.
+- **`<main>` landmark** in `Base.astro` for screen reader navigation.
+- **Non-render-blocking Google Fonts** via `media="print" onload="this.media='all'"` swap pattern.
 
 ### Fixed
 - **Location**: "Based in Brazil" → "Based in the US" across index + about pages (EN + PT).
@@ -21,6 +35,28 @@ All notable changes to davidluky.com are documented here.
 - **Gaming page stats**: all hardcoded numbers replaced with `stats.*` refs.
 - **ESM module loading** (`gaming.ts`): `require("better-sqlite3")` → `await import("better-sqlite3")`. Astro runs ESM at build time; `require()` silently threw, causing the gaming page to always show fallback data instead of real DB data.
 - **Xbox stats**: Replaced hardcoded `xboxTrackedGames: 5` / `xboxHoursPlayed: 59` with real data `xboxGames: 476` / `xboxGamerscore: "75,268"`.
+- **XSS in applyI18n()**: Changed from `innerHTML` for all strings to `textContent` by default, `innerHTML` only via `data-i18n-html` opt-in.
+- **CSP headers**: Added `base-uri 'self'; form-action 'self'` to Content-Security-Policy.
+- **npm vulnerabilities**: Patched Astro + PostCSS CVEs via `npm audit fix`.
+- **Heading hierarchy**: 9x `<h3>` → `<h2>` on gaming + about pages (WCAG 1.3.1).
+- **Mobile menu a11y**: Added `aria-expanded` toggling, switched from inline styles to CSS class toggles.
+- **Homepage SEO**: Added custom `<title>` and `<meta description>`.
+- **DB query types**: All 6 better-sqlite3 query sites now have proper type assertions.
+- **stats.ts all numbers**: Converted mixed string/number values to all numbers; formatting at template layer.
+- **Gaming distribution labels**: Added PT-BR translations for 4 distribution categories.
+- **404 HTML entity**: Added `data-i18n-html` for `&larr;` entity preservation.
+- **Color contrast**: Bumped `text-text-3` from `#6a6458` → `#847a6c` (WCAG AA 4.5:1 compliance).
+- **accent/70 contrast**: Bumped to `accent/80` on stat card label for WCAG compliance.
+- **aria-label mismatch**: Tooltip tiles now include visible text in accessible name.
+- **Render-blocking fonts**: Google Fonts now loaded non-blocking via `media="print" onload` swap.
+- **CSP console errors**: Allowed Cloudflare analytics beacon in script-src and connect-src.
+- **Lighthouse scores**: 98/94/92/100 → **99/100/100/100** (Performance/Accessibility/Best Practices/SEO).
+
+### Removed
+- **`public/stats-banner.svg`** — stale hardcoded stats, never updated.
+- **5 dead stats values** from `stats.ts` (`steamGames`, `steamGamesPt`, `steamAchievements`, `totalHoursPlayed`, `totalHoursPlayedPt`).
+- **Unused CSS** — `@keyframes fade-in` and `.animate-fade-in`.
+- **`.pytest_cache/`** — stray artifact from another project.
 
 ### Removed
 - **`/mmx-boss-animations` page** — unused debug page from MMX KB project.
@@ -37,15 +73,15 @@ All notable changes to davidluky.com are documented here.
 
 ### Fixed
 - **The Room** game count: 13 → 14 (Memory Match + Prank Call added in v1.69). Updated in `projects.ts` (EN + PT), `projects.astro` (PT map), and added raylib to tech stack.
-- **Glimmering Falcon** PT-BR translation missing in `projects.astro` `projectsPt` map — added entry '13', shifted davidluky.com to '14'.
+- **MMX Trainer** PT-BR translation missing in `projects.astro` `projectsPt` map — added entry '13', shifted davidluky.com to '14'.
 - `CLAUDE.md` project count: 12 → 15.
 
 ## [Unreleased] — 2026-04-20
 
 ### Added
-- **Glimmering Falcon** project entry in `src/data/projects.ts`. Reinforcement learning agent for Mega Man X SNES via PBT, distributed across 5080 workstation + Xeon server; bilingual description and "AI Tooling" tag (shares color with Local IA / Gemini Pixel Art).
+- **MMX Trainer** project entry in `src/data/projects.ts`. Reinforcement learning agent for Mega Man X SNES via PBT, distributed across 5080 workstation + Xeon server; bilingual description and "AI Tooling" tag (shares color with Local IA / Gemini Image Generator).
 - `about.astro`: **PyTorch** added to the Tools tech stack.
-- `about.astro`: 2026 timeline entry extended to name Glimmering Falcon alongside Megaman X remake and Gemini sprite gen.
+- `about.astro`: 2026 timeline entry extended to name MMX Trainer alongside Megaman X remake and Gemini sprite gen.
 
 ## [Unreleased] — 2026-04-17
 

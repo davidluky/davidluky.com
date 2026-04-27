@@ -1,55 +1,107 @@
-# Session Handoff — 2026-04-25 (Session 2)
+# Session Handoff — 2026-04-25 (Session 3)
 
 ## What Was Done
 
-### Xbox Integration + Real Gaming Data (this session)
+### Power Monitor Fix
+- Diagnosed `InitializeDefaultDrives` terminal popup on PC restart. Root cause: scheduled task launched PowerShell before user profile fully loaded.
+- Rewrote `install-task.ps1` with 30s trigger delay + Hidden task flag.
+- Added stderr guard to `__main__.py` for `pythonw.exe` compatibility.
+- Cleaned up ~12 orphaned python processes from earlier debugging.
 
-**davidluky.com** (3 commits):
-- **`1dd6adf`** — Fixed ESM module loading: `gaming.ts` used `require("better-sqlite3")` which fails in Astro's ESM build context. Changed to `await import("better-sqlite3")`. Root cause of gaming page always showing fallback data (12,309h) instead of real DB data.
-- **`2e1ce69`** — Replaced hardcoded Xbox stats with real data. `stats.ts`: `xboxGames: 476`, `xboxGamerscore: "75,268"`. Gaming page Xbox card shows gamerscore instead of fake hours. EN + PT-BR i18n updated.
-- **`10d4b4`** — Platform hours now come dynamically from `game_stats` table grouped by platform. Total hours = 15,595 (Steam 12,288h + Xbox 3,307h).
+### Website Comprehensive Audit (32 issues)
+Full security, accessibility, type safety, SEO, i18n, and documentation audit of davidluky.com. All 32 issues fixed and deployed.
 
-**game-library** (3 commits):
-- **`78b7d07`** — Xbox `xbox.cjs` rewritten: `xuid()` in titlehub URLs, `scripts/xbox-auth.cjs` device code auth via `login.live.com`.
-- **`19d5396`** — `_fetchPlaytimes()` via `userstats.xboxlive.com/batch` with `MinutesPlayed`. Only titles with `serviceConfigId` (Xbox One+).
-- **`250ee71`** — `safeStorage.cjs` try/catch for raw plaintext tokens. `sync.cjs` console.log/error for sync visibility.
+**Security (3 critical):**
+- XSS fix: `applyI18n()` now defaults to `textContent`, opt-in `innerHTML` via `data-i18n-html`
+- CSP hardened: added `base-uri 'self'; form-action 'self'`
+- `npm audit fix` for Astro + PostCSS CVEs
 
-### Prior Session (same day)
-- Deleted MMX debug pages/assets, created `stats.ts`, fixed location/game counts/i18n, added 3 projects, centralized all stats, full doc update. See `session-2026-04-11.md` and CHANGELOG for earlier work.
+**Type Safety (7 high):**
+- Eliminated all `(window as any)` casts via `src/types/global.d.ts` Window augmentation
+- `stats.ts` converted all values to numbers (formatting at template layer)
+- Deleted 5 dead stats values
+- Added type assertions to all 6 DB query sites in `gaming.ts`
+- Moved `better-sqlite3` to devDependencies, added `@types/better-sqlite3`
+- Made DB path env-gatable, added error logging to Steam API fallback
+
+**Accessibility (4 medium):**
+- Fixed heading hierarchy: 9x `<h3>` → `<h2>` (gaming + about pages)
+- Keyboard-accessible tooltips: `tabindex="0"`, `role="button"`, `aria-label`, `:focus-within` CSS
+- Mobile menu `aria-expanded` toggling
+- Mobile menu switched from inline `style.display` to CSS class toggling
+
+**i18n (3 medium):**
+- Language toggle added to Header (desktop nav + mobile menu)
+- Gaming distribution labels translated to PT
+- 404 page `&larr;` entity preserved via `data-i18n-html`
+
+**SEO (1 medium):**
+- Homepage custom `<title>` and `<meta description>`
+
+**Dead code / stale assets (4 low):**
+- Deleted `stats-banner.svg`, unused CSS animation, `.pytest_cache/`, added `.cache/` to gitignore
+
+**Documentation (10 low):**
+- Fixed 8 inaccuracies across `tech-notes.md`, `developer-guide.md`, `CLAUDE.md`
+
+### Lighthouse Optimization (99/100/100/100)
+Ran Lighthouse against live site. Initial scores: 98/94/92/100. Fixed:
+- Color contrast: `text-text-3` #6a6458 → #847a6c (WCAG AA compliant)
+- `accent/70` → `accent/80` on stat card label
+- Added `<main>` landmark in Base.astro
+- Fixed aria-label mismatch on tooltip tiles
+- Unblocked Cloudflare analytics beacon in CSP (script-src + connect-src)
+- Made Google Fonts non-render-blocking via `media="print" onload` swap
+- Final scores: **99/100/100/100**
+
+### CI/CD
+Created `.github/workflows/deploy.yml` — runs on push to main:
+`npm ci` → `npm run check` → `npm run build` → `wrangler deploy`
+Requires `CLOUDFLARE_API_TOKEN` GitHub secret (not yet configured).
+
+### Cloudflare Web Analytics
+Already active — Cloudflare auto-injects the beacon. CSP was blocking it; now allowed. View at Cloudflare Dashboard → Web Analytics.
 
 ### Deployment
-- Deployed to Cloudflare Workers — live at davidluky.com with real gaming data.
+- Built clean: 0 errors, 0 warnings
+- Deployed to Cloudflare Workers — live at davidluky.com
 
 ## Current State
-- **Build**: Passing
+- **Build**: `npm run check` — 0 errors, 0 warnings, 1 hint (benign TS6133 on font onload)
+- **Build**: `npm run build` — 5 pages in ~1s
 - **Deploy**: Live at davidluky.com
-- **Data**: Game Library DB → 1,984 games, 15,595 hours (Steam 12,288h + Xbox 3,307h)
-- **Fallback chain**: DB → Steam API → hardcoded (all three paths working)
-- **No uncommitted changes**
+- **Lighthouse**: 99/100/100/100
+- **CI/CD**: Workflow created, needs `CLOUDFLARE_API_TOKEN` secret in GitHub
+- **No uncommitted changes** (all deployed)
 
 ## What's Next
-1. **CI/CD** — still manual `npx wrangler deploy`
-2. **Analytics** — consider Cloudflare Web Analytics
-3. **Performance audit** — Lighthouse score
-4. Future platforms added to Game Library will auto-appear (dynamic query)
+1. **Add GitHub secret** — `CLOUDFLARE_API_TOKEN` to enable CI/CD auto-deploy
+2. **Remaining npm vulns** — 5 `yaml` CVEs in `@astrojs/check` (dev-only, needs breaking change)
+3. **Cache headers** — Lighthouse flagged short cache lifetimes on static assets (Cloudflare Workers default)
 
 ## Decisions Made
-- **Dynamic platform hours**: Removed `stats.xboxHoursPlayed` in favor of querying `game_stats` by platform at build time. New platforms auto-propagate.
-- **Gamerscore over hours for Xbox card**: Xbox card shows games + gamerscore (canonical Xbox metric, always accurate) instead of hours (only available for Xbox One+ titles).
-- **ESM imports only**: Native modules in Astro data files must use `await import()`, never `require()`.
+- **textContent-by-default i18n**: HTML injection opt-in via `data-i18n-html` attribute. Eliminates XSS class without breaking HTML translations.
+- **Page-reload language toggle**: Header language switch reloads the page because `applyI18n` is page-specific and can't be imported from an inline script. Clean for a static site.
+- **All-numbers stats.ts**: Consumers handle formatting at template layer, enabling locale-aware formatting (en-US comma vs pt-BR dot).
+- **Type assertions over interfaces for DB queries**: Each query has its own shape; defining reusable interfaces would be overengineering for 6 one-shot queries.
+- **text-text-3 #847a6c**: Lightest warm gray that passes WCAG AA on both bg (#0a0a09) and card bg (#0f0f0e). Stays visually subdued.
+- **Non-blocking fonts via media="print"**: Trades ~200ms FOUT for ~800ms render-blocking elimination. Acceptable since `display=swap` already caused similar FOUT.
+- **Cloudflare Web Analytics over third-party**: Zero-config, no cookies, GDPR-compliant, auto-injected by Cloudflare edge. Just needed CSP allowlist.
 
 ## Session Retro
 
 ### What went well
-- Xbox auth chain worked on login.live.com after the Azure AD v2 dead end. prismarine-auth was the key reference.
-- Real data is massively better: 15,595h vs 12,309h fallback. 476 Xbox games. Credible gaming stats.
-- ESM fix was high-value: one-line change that had been silently breaking the gaming page.
+- Parallel audit agents caught 32 issues efficiently — security, a11y, types, docs all in one pass.
+- XSS fix was surgical: one-line change in `applyI18n()` + `data-i18n-html` attribute on 7 elements. No breakage.
+- Type augmentation via `global.d.ts` was the right call — eliminated all `(window as any)` without touching the runtime bridge pattern.
+- All 5 deferred items implemented cleanly after user chose option A for each.
 
 ### What went wrong
-- Azure AD v2 was a dead end (~20 min). Xbox app client IDs live on login.live.com.
-- Wrong Microsoft account consumed the first device code. Needed a fresh one.
-- safeStorage cross-app key mismatch (~15 min). Standalone Electron scripts encrypt with different app identity.
-- Xbox 360 playtime is unavailable — `MinutesPlayed` only exists for Xbox One+ titles with `serviceConfigId`.
+- Type errors cascaded: installing `@types/better-sqlite3` made `.get()/.all()` return `unknown`, exposing 10 new errors. Should have anticipated this when adding the types package.
+- `developer-guide.md` got a duplicate line during an edit (stats-banner.svg removal introduced a doubled robots.txt entry). Caught by grep, but was avoidable with more careful edit context.
+- `replace_all` on `g_xbox_gs` hit both EN and PT blocks — the PT version needed `fmtPt()` not `fmt()`. Fixed immediately but could have been two separate edits.
 
-### Lessons → flight-recorder.md
-- FR-011 through FR-015 added (see flight-recorder.md)
+### Lessons
+- When adding `@types/*` packages, always run `npm run check` immediately — `unknown` return types will cascade into every consumer.
+- When editing docs, grep for the change afterwards to catch duplicates.
+- When using `replace_all`, verify all occurrences need the same replacement.

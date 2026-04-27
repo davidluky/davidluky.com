@@ -138,3 +138,27 @@ interface Project {
 **Trade-off**: Server-side values that need to reach client-side i18n scripts must go through `define:vars` + `window.__stats` bridge (Astro limitation). This is a one-time wiring cost per page.
 
 **Date**: 2026-04-25
+
+---
+
+## DD-012: text-text-3 Contrast Bump (#6a6458 → #847a6c)
+
+**Decision**: Lighten the muted text color from `#6a6458` to `#847a6c` to pass WCAG AA contrast requirements.
+
+**Rationale**: Lighthouse flagged 13 elements (stat card labels, footer headings, copyright, inactive language pill) for insufficient color contrast. The original `#6a6458` achieved only 3.26–3.37:1 against the dark backgrounds (`#0a0a09`, `#0f0f0e`), below the required 4.5:1 for normal text. `#847a6c` achieves 4.55–4.70:1, passing on both backgrounds while remaining visually subdued.
+
+**Trade-off**: The muted text is slightly more visible now. The warm tone is preserved — only the lightness channel changed.
+
+**Date**: 2026-04-25
+
+---
+
+## DD-013: Non-Render-Blocking Google Fonts
+
+**Decision**: Load the Google Fonts stylesheet with `media="print" onload="this.media='all'"` instead of a standard `rel="stylesheet"`.
+
+**Rationale**: Lighthouse measured ~800ms render-blocking time from the Google Fonts stylesheet. The `media="print"` trick downloads the CSS without blocking rendering, then swaps to `media="all"` once loaded. A `<noscript>` fallback ensures fonts still load with JS disabled.
+
+**Trade-off**: Brief flash of unstyled text (FOUT) on first visit — system fonts show for ~200-500ms before web fonts swap in. `display=swap` in the Google Fonts URL already made this the expected behavior; this change just moves the blocking from the critical path.
+
+**Date**: 2026-04-25

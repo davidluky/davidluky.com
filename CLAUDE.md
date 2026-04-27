@@ -5,6 +5,7 @@
 - **Tailwind CSS 4.x** — via @tailwindcss/vite plugin, theme in global.css @theme block
 - **TypeScript** — strict mode via astro/tsconfigs/strict
 - **Cloudflare Workers** — static asset deployment via wrangler
+- **better-sqlite3** — Game Library SQLite access at build time (devDependency)
 - **@resvg/resvg-js** — OG image PNG generation (devDependency)
 
 ## Project Structure
@@ -12,11 +13,14 @@
 - `src/components/` — Header.astro, Hero.astro, Footer.astro
 - `src/data/projects.ts` — Single source of truth for all 18 projects (EN + PT-BR)
 - `src/data/stats.ts` — Centralized stats (game counts, hours, levels, achievements)
+- `src/data/gaming.ts` — Gaming data loader: Game Library DB → Steam API → hardcoded fallback
 - `src/i18n/shared.ts` — Shared nav/footer i18n strings + applyI18n() helper
 - `src/layouts/Base.astro` — HTML shell with meta tags, fonts, OG image
 - `src/styles/global.css` — Tailwind imports + @theme (Warm Dark palette) + brand morph CSS
+- `src/types/global.d.ts` — Window interface augmentation for define:vars bridge properties
 - `public/` — Static assets (favicon, robots.txt, OG images, security headers)
 - `scripts/generate-og.mjs` — One-shot OG image generator (SVG → PNG)
+- `.github/workflows/deploy.yml` — CI/CD: check → build → wrangler deploy on push to main
 - `dist/` — Build output (static HTML/CSS)
 
 ## Design System
@@ -28,7 +32,8 @@
 
 ## i18n
 - All 5 pages are bilingual (EN + PT-BR)
-- Language toggle on homepage stat card, persisted to `localStorage('dl-lang')`
+- Language toggle in Header (all pages) + homepage stat card, persisted to `localStorage('dl-lang')`
+- `textContent` by default; `innerHTML` opt-in via `data-i18n-html` attribute (XSS prevention)
 - Shared strings in `src/i18n/shared.ts`, page-specific strings in each page's `<script>`
 - Projects page uses `data-i18n-tag`/`data-i18n-desc` for per-project translations
 
@@ -44,7 +49,10 @@
 - **Live**: https://davidluky.com (Cloudflare Workers)
 - **Repo**: github.com/davidluky/davidluky.com (public)
 - **Cloudflare account**: alissonfrangullys@gmail.com
-- Deploy: `npm run build && npx wrangler deploy`
+- **CI/CD**: GitHub Actions on push to main (requires `CLOUDFLARE_API_TOKEN` secret)
+- **Manual deploy**: `npm run build && npx wrangler deploy`
+- **Analytics**: Cloudflare Web Analytics (auto-injected, no cookies, view in CF dashboard)
+- **Lighthouse scores**: 99 / 100 / 100 / 100 (Performance / Accessibility / Best Practices / SEO)
 
 ## Related Sites
 - **play.davidluky.com** — The Room web client (Cloudflare Workers)
@@ -58,8 +66,9 @@
 | `docs/design-decisions.md` | Architectural choices with rationale |
 | `docs/tech-notes.md` | Implementation details, patterns, gotchas |
 | `docs/developer-guide.md` | Project setup, structure, adding pages/projects |
-| `docs/deployment-guide.md` | Build, deploy, DNS, troubleshooting |
+| `docs/deployment-guide.md` | Build, deploy, CI/CD, DNS, analytics, troubleshooting |
 | `docs/flight-recorder.md` | Failed approaches, gotchas, hard-won lessons |
+| `docs/audit-2026-04-25.md` | 32-issue audit report with root cause analysis |
 | `docs/SESSION-HANDOFF.md` | Latest session state for AI continuity |
 
 ## Documentation Maintenance

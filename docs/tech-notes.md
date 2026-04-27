@@ -29,7 +29,7 @@ The "David Luky" → "DL" morph is pure CSS, no JavaScript animation.
 The morph uses `font-size: 0` instead of `display: none` because font-size transitions smoothly while display is binary. The letters literally shrink away rather than popping out.
 
 ### Mobile
-Brand font shrinks from 52px to 36px at `max-width: 640px` via media query in `global.css`.
+Brand font shrinks from 52px to 30px at `max-width: 768px` via media query in `global.css`.
 
 ---
 
@@ -58,7 +58,11 @@ The site loads 3 font families from Google Fonts:
 ### Optimization
 1. `preconnect` to `fonts.googleapis.com` and `fonts.gstatic.com` (with `crossorigin`)
 2. `display=swap` in the Google Fonts URL — prevents invisible text during load
-3. `fetchpriority="high"` on the stylesheet link — tells browser to prioritize this resource
+3. Non-render-blocking load via `media="print" onload="this.media='all'"` — downloads CSS without blocking first paint
+4. `<noscript>` fallback with standard `rel="stylesheet"` for JS-disabled browsers
+
+### Why not `fetchpriority="high"`?
+The previous approach used `fetchpriority="high"` with a blocking stylesheet link. Lighthouse measured ~800ms of render-blocking time. The `media="print"` swap eliminates the blocking at the cost of a brief FOUT (flash of unstyled text), which is acceptable since `display=swap` already produces similar behavior.
 
 ### Trade-off
 ~70KB total font download (woff2). Could self-host for faster loading but Google's CDN has good cache hit rates globally.
@@ -167,17 +171,21 @@ Output: `dist/sitemap-index.xml` and `dist/sitemap-0.xml`
 
 ### What's Not in the Repo
 - No API keys, tokens, or secrets
-- No analytics tracking (no Google Analytics, no Plausible)
+- Cloudflare Web Analytics auto-injected (privacy-focused, no cookies, GDPR-compliant)
+- No third-party analytics (no Google Analytics, no Plausible)
 - No cookies set (localStorage only for language preference)
 - No forms or user input
 
 ### CSP Headers
 `public/_headers` sets Content-Security-Policy allowing only:
-- Scripts: self + Google Fonts
-- Styles: self + Google Fonts + inline (Tailwind)
+- Scripts: self + inline + `static.cloudflareinsights.com` (analytics beacon)
+- Styles: self + inline + Google Fonts
 - Fonts: Google Fonts CDN
-- Images: self
+- Images: self + data URIs
+- Connect: self + `cloudflareinsights.com` (analytics reporting)
 - Frame: none (X-Frame-Options: DENY)
+- Base URI: self (prevents `<base>` tag injection)
+- Form action: self (prevents form hijack)
 
 ---
 
@@ -208,7 +216,7 @@ Astro pages compute data at build time (server-side), but i18n translations happ
 ### Pages using this pattern
 - `index.astro` → `window.__stats` (roomGames, roomAchievements)
 - `about.astro` → `window.__about` (timelinePt, techCategoriesPt, roomGames, roomAchievements)
-- `projects.astro` → `window.__projects` (project descriptions for i18n)
+- `projects.astro` → direct import from `projects.ts` (no `define:vars` bridge needed)
 - `gaming.astro` → `window.__gaming` (all gaming stats for i18n)
 
 ---

@@ -36,6 +36,13 @@ const navLinks = [
           {label}
         </a>
       ))}
+      <button
+        id="lang-switch"
+        aria-label="Switch language"
+        class="text-[12px] font-semibold text-text-3 hover:text-text transition-colors cursor-pointer"
+      >
+        <span id="lang-label">EN</span>
+      </button>
       <a
         href="https://play.davidluky.com"
         target="_blank"
@@ -81,6 +88,13 @@ const navLinks = [
           {label}
         </a>
       ))}
+      <button
+        id="lang-switch-mobile"
+        aria-label="Switch language"
+        class="text-[13px] font-semibold text-text-3 hover:text-text transition-colors cursor-pointer py-1 text-left"
+      >
+        <span id="lang-label-mobile">EN</span>
+      </button>
       <a
         href="https://play.davidluky.com"
         target="_blank"
@@ -107,6 +121,9 @@ const navLinks = [
     if (header) {
       var scrolled = false;
       var threshold = window.innerWidth < 768 ? 150 : 60;
+      window.addEventListener('resize', function() {
+        threshold = window.innerWidth < 768 ? 150 : 60;
+      }, { passive: true });
       function onScroll() {
         var past = window.scrollY > threshold;
         if (past !== scrolled) {
@@ -118,11 +135,34 @@ const navLinks = [
       onScroll();
     }
 
+    // Language toggle — sets localStorage and reloads so each page's
+    // applyI18n picks up the new value on load
+    var currentLang = localStorage.getItem('dl-lang') || 'en';
+    var langLabel = document.getElementById('lang-label');
+    var langLabelMobile = document.getElementById('lang-label-mobile');
+    function updateLangLabels() {
+      var text = currentLang === 'pt' ? 'PT' : 'EN';
+      if (langLabel) langLabel.textContent = text;
+      if (langLabelMobile) langLabelMobile.textContent = text;
+    }
+    updateLangLabels();
+    function switchLang() {
+      currentLang = currentLang === 'en' ? 'pt' : 'en';
+      localStorage.setItem('dl-lang', currentLang);
+      location.reload();
+    }
+    var langSwitch = document.getElementById('lang-switch');
+    var langSwitchMobile = document.getElementById('lang-switch-mobile');
+    if (langSwitch) langSwitch.addEventListener('click', switchLang);
+    if (langSwitchMobile) langSwitchMobile.addEventListener('click', switchLang);
+
     // Mobile menu toggle
     if (menuBtn && mobileMenu) {
       menuBtn.addEventListener('click', function() {
-        var open = mobileMenu.style.display === 'block';
-        mobileMenu.style.display = open ? 'none' : 'block';
+        var open = mobileMenu.classList.contains('mobile-menu-open');
+        mobileMenu.classList.toggle('mobile-menu-closed', open);
+        mobileMenu.classList.toggle('mobile-menu-open', !open);
+        menuBtn.setAttribute('aria-expanded', String(!open));
         if (menuIcon) menuIcon.style.display = open ? 'block' : 'none';
         if (closeIcon) closeIcon.style.display = open ? 'none' : 'block';
       });

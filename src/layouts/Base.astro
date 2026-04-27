@@ -37,14 +37,21 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
 
-    <!-- Fonts -->
+    <!-- Fonts — preload as stylesheet with print→all swap to avoid render-blocking -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=UnifrakturMaguntia&display=swap"
       rel="stylesheet"
-      fetchpriority="high"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=UnifrakturMaguntia&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -55,6 +62,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     </style>
   </head>
   <body>
-    <slot />
+    <main>
+      <slot />
+    </main>
   </body>
 </html>

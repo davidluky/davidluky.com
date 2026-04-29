@@ -199,6 +199,28 @@ export const projects: Project[] = [
     link: null,
   },
   {
+    name: "TCG Arbitrage",
+    description:
+      "CLI scanner that finds cross-platform price discrepancies between eBay and TCGPlayer for trading cards. 31 tests, 16 commands, persistent SQLite cache for price history and alerts.",
+    descriptionPt:
+      "Scanner CLI que encontra discrepâncias de preço entre eBay e TCGPlayer para cards colecionáveis. 31 testes, 16 comandos, cache persistente em SQLite para histórico de preços e alertas.",
+    tech: ["Python", "SQLite", "httpx", "Rich"],
+    tag: "Automation",
+    tagPt: "Automação",
+    link: null,
+  },
+  {
+    name: "DigiPets",
+    description:
+      "Virtual pet mobile app — feed pets, play minigames, earn coins, unlock new species. Learning-oriented project built to explore Flutter and mobile development patterns.",
+    descriptionPt:
+      "App mobile de pet virtual — alimente pets, jogue minigames, ganhe moedas, desbloqueie novas espécies. Projeto de aprendizado feito para explorar Flutter e padrões de desenvolvimento mobile.",
+    tech: ["Flutter", "Dart", "Firebase"],
+    tag: "Mobile App",
+    tagPt: "App Mobile",
+    link: null,
+  },
+  {
     name: "davidluky.com",
     description:
       "This website. Personal hub for projects, gaming profiles, and bio. Static site with blackletter brand morph, bilingual toggle, and zero JS besides scroll animation.",

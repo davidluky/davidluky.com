@@ -1,164 +1,81 @@
 # Design Decisions
 
-Architectural and design choices for davidluky.com, with rationale.
+Architectural and design choices for `davidluky.com`.
 
----
+## DD-001: Astro Static Site
 
-## DD-001: Astro over Next.js / SvelteKit
+**Decision**: Use Astro as the site framework.
 
-**Decision**: Use Astro as the static site generator.
+**Rationale**: The core site is static portfolio content. Astro keeps the HTML-first model, low runtime JavaScript, file-based routing, and easy Tailwind integration.
 
-**Rationale**: The site is entirely static content — no dynamic data, no auth, no server-side rendering needed. Astro ships zero JavaScript by default, which is ideal for a personal portfolio. Next.js would add unnecessary client-side hydration overhead. SvelteKit was considered but Astro's component island model and file-based routing are simpler for this use case.
+## DD-002: Warm Dark Visual System
 
-**Trade-offs**: No client-side routing (full page loads on navigation), but for a 5-page site this is imperceptible.
+**Decision**: Use a warm near-black palette with gold accent and a blackletter brand mark.
 
----
+**Rationale**: The site should feel personal and game-adjacent rather than corporate. The palette and brand morph give the portfolio a recognizable identity while keeping pages quiet enough for dense project content.
 
-## DD-002: Warm Dark Color Palette
+## DD-003: Client-Side EN/PT-BR i18n
 
-**Decision**: Custom dark theme with warm tones instead of cold blue-gray.
+**Decision**: Keep bilingual content client-side with `localStorage("dl-lang")`.
 
-**Colors**:
-- Background: `#0a0a09` (near-black with warm undertone)
-- Text: `#faf8f1` (warm white)
-- Accent: `#c4a35a` (gold)
-- Card: `#1a1917` (warm dark gray)
-- Border: `#2a2924` (warm border)
+**Rationale**: Static duplicate routes would add routing and SEO complexity that is not currently needed. The language state is centralized in `src/i18n/shared.ts` so all toggles and header labels stay synchronized.
 
-**Rationale**: Cold dark themes (pure black + blue) feel corporate. The warm palette with gold accents creates a distinctive, personal feel that stands out from generic developer portfolios. The gold accent ties into the blackletter brand font, evoking a medieval/gaming aesthetic that reflects the gaming-focused content.
+**Trade-off**: The initial static HTML is English. Portuguese SEO would require route-based pages later.
 
----
+## DD-004: Rich Project Catalog as Source of Truth
 
-## DD-003: Blackletter Brand Font with Scroll Morph
+**Decision**: Model projects in `src/data/projects.ts` with typed tag/status/visibility metadata instead of one display string and one link.
 
-**Decision**: Use UnifrakturMaguntia (blackletter/gothic) for the "David Luky" brand mark, with a CSS-only animation that morphs "David Luky" → "DL" on scroll.
+**Rationale**: The portfolio needs to distinguish public live products, private active work, internal dashboards, and archived utilities. Deriving featured projects, live-site counts, footer links, and JSON-LD from typed metadata prevents stale counts and dead public links.
 
-**Rationale**: The blackletter font is unexpected for a developer portfolio and creates instant visual identity. The scroll morph is a technical flex that demonstrates CSS animation capabilities without JavaScript. The "DL" collapsed state keeps the brand visible without occupying too much header space.
+**Guard**: Public `liveUrl` values must resolve. Internal tools use `visibility: "internal"` and do not appear in live-site counts.
 
-**Implementation**: The morph works by animating `font-size: 0` on the middle letters ("avid" and "uky") while keeping the anchor letters ("D" and "L") visible. A gap element between them collapses from `0.35em` to `0.06em`. The anchor letters gain a gold color and text-shadow glow in the scrolled state.
+## DD-005: Cloudflare Workers With Static Assets
 
-**Trade-off**: The font is ~30KB loaded from Google Fonts. Acceptable since it's a single decorative font with only one weight.
+**Decision**: Deploy to Cloudflare Workers using `main = "src/worker.ts"` plus `[assets]`.
 
----
+**Rationale**: The site is mostly static, but TCG Arbitrage needs an eBay marketplace account deletion endpoint on the main domain. A Worker entrypoint lets `/ebay/deletion` be dynamic while everything else remains static edge assets.
 
-## DD-004: Client-Side i18n via localStorage
+## DD-006: eBay Secrets as Worker Bindings
 
-**Decision**: Implement bilingual support (EN/PT-BR) entirely client-side using `data-i18n` attributes and localStorage.
+**Decision**: Store eBay verification and API credentials only as Cloudflare Worker secrets.
 
-**Rationale**: Server-side i18n would require either SSR (negating Astro's static benefits) or generating duplicate pages (doubling build output and URLs). Client-side translation with `display=swap` on fonts means there's a brief flash of English before Portuguese loads, but this is acceptable for a personal site.
+**Rationale**: The previous Worker draft hardcoded a verification token. Moving secrets to bindings and adding gitleaks/validation guards fixes the class of secret-in-source bugs rather than just removing one string.
 
-**Implementation**:
-- Shared strings in `src/i18n/shared.ts` (nav, footer — imported by all pages)
-- Page-specific strings in each page's `<script>` block
-- `applyI18n()` helper merges shared + page strings and applies to DOM
-- Language toggle on homepage saves to `localStorage('dl-lang')`
-- All pages read the saved language on load
+## DD-007: Verify eBay POSTs Before Acknowledgement
 
-**Trade-off**: Flash of untranslated content on initial load if language is PT-BR. Could be solved with a server-side redirect or cookie-based routing, but adds complexity not worth it for a personal site.
+**Decision**: The eBay deletion POST endpoint returns success only after signature verification and payload validation.
 
----
+**Rationale**: Blindly returning `{ status: "ok" }` can make integrations look compliant while ignoring authenticity and deletion semantics. The current site stores no eBay account data, so verified acknowledgement is the full local action.
 
-## DD-005: Single Data Source for Projects
+## DD-008: CI Quality Before Deploy
 
-**Decision**: All 18 projects defined in `src/data/projects.ts` with both EN and PT-BR descriptions.
+**Decision**: Pull requests and pushes run secret scanning, type checks, build, site validation, and high/critical audit before production deploy.
 
-**Rationale**: The homepage stat card ("18 Active Projects") and the projects page both need the project list. A single source of truth prevents count mismatches and makes adding/removing projects a one-file change.
+**Rationale**: Deployment should not be the first time regressions are discovered. The workflow now separates `quality` from `deploy`, and deploy runs only on `main` after quality succeeds.
 
-**Interface**:
-```typescript
-interface Project {
-  name: string;
-  description: string;
-  descriptionPt: string;
-  tech: string[];
-  tag: string;
-  tagPt: string;
-  link: string | null;
-}
-```
+## DD-009: Project-Specific Validation Script
 
----
+**Decision**: Add `scripts/validate-site.mjs`.
 
-## DD-006: Cloudflare Workers over Cloudflare Pages
+**Rationale**: Generic tools do not know this project's failure classes: mojibake, missing JSON-LD, dead internal assets, missing CSP directives, and hardcoded eBay token regressions. The custom validator keeps those checks cheap and explicit.
 
-**Decision**: Deploy to Cloudflare Workers with static assets, not Cloudflare Pages.
+## DD-010: Google Fonts Non-Blocking Load
 
-**Rationale**: David already had a Cloudflare Workers setup for the domain (`davidluky.com` was previously routed to a different worker). Workers allows `wrangler deploy` with a simple `wrangler.toml` config, no build pipeline to configure. Pages would require connecting a GitHub repo and configuring build settings.
+**Decision**: Load Google Fonts through preconnect plus `media="print"` stylesheet swap.
 
-**Trade-off**: No automatic GitHub-triggered deploys — requires manual `npx wrangler deploy`. Could set up Cloudflare Builds later for CI/CD.
+**Rationale**: It keeps first render fast while preserving the visual system. The onload handler uses `setAttribute` to avoid Astro check hints.
 
----
+## DD-012: Auto-Computing Time-Based Stats
 
-## DD-007: OG Image as PNG via @resvg/resvg-js
+**Decision**: `yearsCoding` and `yearsGaming` derive from the current year minus a start year, rather than being hardcoded numbers.
 
-**Decision**: Generate the OG image as a 1200x630 PNG using a one-shot Node script, rather than using the SVG directly.
+**Rationale**: Hardcoded year-difference stats go stale on January 1st every year. Computing them from `new Date().getFullYear() - startYear` eliminates a class of stale data — the site never shows "11 years coding" when it should show "12".
 
-**Rationale**: Twitter, Discord, and Slack don't render SVG images in link previews. A raster PNG is universally supported. Using `@resvg/resvg-js` (a Rust-based SVG renderer compiled to WASM) produces high-quality output with system fonts.
+**Guard**: All time-derived stats in `stats.ts` use the computation pattern. Hardcoded year-difference numbers are a code smell.
 
-**Script**: `scripts/generate-og.mjs` — run manually when the OG image design changes. Output goes to `public/og-image.png`. The SVG source (`public/og-image.svg`) is kept as the editable source.
+## DD-011: JSON-LD Only for Public Live Projects
 
----
+**Decision**: The `/projects` ItemList structured data includes only `liveProjects`.
 
-## DD-008: No JavaScript Framework for Interactivity
-
-**Decision**: All interactivity (language toggle, scroll morph) uses vanilla JavaScript in inline `<script>` tags.
-
-**Rationale**: The site has exactly two interactive features: the brand scroll morph and the language toggle. Neither warrants importing React, Vue, or even Alpine.js. Inline scripts are bundled by Vite, tree-shaken, and produce minimal output.
-
-**Result**: Total JavaScript shipped is ~3KB across all pages (mostly i18n strings).
-
----
-
-## DD-009: Tailwind CSS 4.x with @theme Block
-
-**Decision**: Use Tailwind CSS 4 with the new `@theme` directive in `global.css` instead of `tailwind.config.ts`.
-
-**Rationale**: Tailwind 4 eliminates the config file in favor of CSS-native theme definitions. The `@theme` block in `global.css` defines all custom colors, fonts, and design tokens in one place, co-located with the CSS they modify.
-
----
-
-## DD-010: About Page over Homepage Merge
-
-**Decision**: Expand the temporary page into a standalone `/about` page rather than merging its content into the homepage.
-
-**Rationale**: The homepage is intentionally minimal — hero + intro + stats. Adding a full bio, tech stack, timeline, and contact section would make it too long and dilute the clean first impression. A dedicated `/about` page gives the content room to breathe and makes the nav structure clearer (Projects | Gaming | About).
-
-**Date**: 2026-04-11 (Session 2)
-
----
-
-## DD-011: Centralized Stats via `src/data/stats.ts`
-
-**Decision**: Extract all hardcoded numeric stats (The Room game count, Steam hours, Tibia level, achievement counts, etc.) into a single `src/data/stats.ts` file, imported by all pages.
-
-**Rationale**: The same numbers (e.g., "14 games", "239 achievements", "Level 627") appeared on index, about, gaming, and projects pages — each hardcoded independently. When The Room grew from 13 to 14 games, only some pages were updated, creating visible inconsistency. A single source of truth eliminates the entire class of drift bugs.
-
-**Pattern**: `stats.ts` exports a `const` object with all values. Pages import and interpolate via Astro `{stats.field}` in templates and `${stats.field}` in i18n template literals. `yearsGaming` is computed from the current year, so it never goes stale.
-
-**Trade-off**: Server-side values that need to reach client-side i18n scripts must go through `define:vars` + `window.__stats` bridge (Astro limitation). This is a one-time wiring cost per page.
-
-**Date**: 2026-04-25
-
----
-
-## DD-012: text-text-3 Contrast Bump (#6a6458 → #847a6c)
-
-**Decision**: Lighten the muted text color from `#6a6458` to `#847a6c` to pass WCAG AA contrast requirements.
-
-**Rationale**: Lighthouse flagged 13 elements (stat card labels, footer headings, copyright, inactive language pill) for insufficient color contrast. The original `#6a6458` achieved only 3.26–3.37:1 against the dark backgrounds (`#0a0a09`, `#0f0f0e`), below the required 4.5:1 for normal text. `#847a6c` achieves 4.55–4.70:1, passing on both backgrounds while remaining visually subdued.
-
-**Trade-off**: The muted text is slightly more visible now. The warm tone is preserved — only the lightness channel changed.
-
-**Date**: 2026-04-25
-
----
-
-## DD-013: Non-Render-Blocking Google Fonts
-
-**Decision**: Load the Google Fonts stylesheet with `media="print" onload="this.media='all'"` instead of a standard `rel="stylesheet"`.
-
-**Rationale**: Lighthouse measured ~800ms render-blocking time from the Google Fonts stylesheet. The `media="print"` trick downloads the CSS without blocking rendering, then swaps to `media="all"` once loaded. A `<noscript>` fallback ensures fonts still load with JS disabled.
-
-**Trade-off**: Brief flash of unstyled text (FOUT) on first visit — system fonts show for ~200-500ms before web fonts swap in. `display=swap` in the Google Fonts URL already made this the expected behavior; this change just moves the blocking from the critical path.
-
-**Date**: 2026-04-25
+**Rationale**: Emitting private/internal entries as source-code entities with duplicate `/projects` URLs creates noisy structured data. Public live apps provide cleaner crawler signals.

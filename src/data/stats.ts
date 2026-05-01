@@ -1,7 +1,9 @@
 export const stats = {
   theRoomGames: 14,
-  theRoomAchievements: 239,
+  theRoomAchievements: 249,
   gamingPlatforms: 4,
+  codingStartYear: 2014,
+  yearsCoding: new Date().getFullYear() - 2014,
   steamLevel: 30,
   steamHoursDota: 6338,
   steamHoursTerraria: 1238,

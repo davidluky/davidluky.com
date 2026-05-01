@@ -2,6 +2,13 @@
 # Use the default gitleaks rules
 useDefault = true
 
+[[rules]]
+id = "ebay-verification-token"
+description = "Detect hardcoded eBay marketplace deletion verification tokens"
+regex = '''(?i)(ebay[_-]?verification[_-]?token|verification[_-]?token)\s*[:=]\s*["']?([A-Za-z0-9_-]{32,80})["']?'''
+secretGroup = 2
+keywords = ["verification_token", "verification-token", "EBAY_VERIFICATION_TOKEN", "EBAY-VERIFICATION-TOKEN"]
+
 [allowlist]
 description = "Project-specific allowlisted patterns"
 paths = [

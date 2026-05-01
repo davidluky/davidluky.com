@@ -1,5 +1,10 @@
 name = "davidluky-com"
 compatibility_date = "2026-04-11"
+main = "src/worker.ts"
+
+[vars]
+EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion"
+EBAY_ENVIRONMENT = "production"
 
 [assets]
 directory = "./dist"

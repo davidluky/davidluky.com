@@ -7,19 +7,26 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "validate:site": "node scripts/validate-site.mjs",
+    "audit:high": "npm audit --audit-level=high",
+    "verify": "npm run check && npm run build && npm run validate:site && npm run audit:high"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.8",
+    "@astrojs/check": "^0.9.9",
     "@astrojs/sitemap": "^3.7.2",
-    "@tailwindcss/vite": "^4.2.2",
-    "astro": "^6.1.5",
-    "tailwindcss": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^6.2.1",
+    "tailwindcss": "^4.2.4",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/better-sqlite3": "^7.6.13",
     "better-sqlite3": "^12.9.0"
+  },
+  "overrides": {
+    "vite": "^7.2.7",
+    "yaml": "^2.8.3"
   }
 }

@@ -1,154 +1,153 @@
 # Deployment Guide
 
-How to build, deploy, and manage davidluky.com infrastructure.
+How to build, verify, deploy, and operate `davidluky.com`.
 
-## Architecture Overview
+## Architecture
 
+```text
+Browser
+  -> Cloudflare DNS
+  -> Cloudflare Worker `davidluky-com`
+       -> /ebay/deletion handled by src/worker.ts
+       -> everything else served from dist/ static assets
 ```
-Browser → Cloudflare DNS → Cloudflare Workers → Static HTML/CSS/JS
-                         → (play.davidluky.com) → The Room Web Worker
-                         → (tibia.davidluky.com) → CNAME → Vercel
-```
 
-## Build & Deploy
+Related domains:
 
-### Standard Deployment
+| Host | Target | Notes |
+|------|--------|-------|
+| `davidluky.com` | `davidluky-com` Worker | This site |
+| `play.davidluky.com` | The Room Web Worker | Public live app |
+| `tibia.davidluky.com` | Vercel | Public live marketplace |
+| `matematica.davidluky.com` | Vercel | Public live math site |
+
+`power.davidluky.com` is not listed as public/live because DNS did not resolve during the 2026-04-30 audit. Power Monitor remains documented as an internal dashboard.
+
+## Local Build
 
 ```bash
-npm run build          # Build to dist/
-npm run check          # Verify TypeScript (optional but recommended)
-npx wrangler deploy    # Upload to Cloudflare Workers
+npm install
+npm run verify
 ```
 
-Build output is ~15 static files (5 HTML pages + CSS + JS chunks + assets).
+`npm run verify` runs:
 
-### What Gets Uploaded
+1. `npm run check`
+2. `npm run build`
+3. `npm run validate:site`
+4. `npm run audit:high`
 
-Wrangler uploads the `dist/` directory as static assets. It diffs against the previous deployment and only uploads changed files. Typical deploy takes 5-10 seconds.
+## Wrangler Config
 
-### Verify Deployment
-
-After `wrangler deploy`, the site is immediately live at:
-- https://davidluky.com (custom domain)
-- https://davidluky-com.alissonfrangullys.workers.dev (worker URL)
-
-## Cloudflare Configuration
-
-### Account
-- **Email**: alissonfrangullys@gmail.com
-- **Domain**: davidluky.com (registered and DNS managed by Cloudflare)
-
-### Workers
-| Worker | Domain | Purpose |
-|--------|--------|---------|
-| `davidluky-com` | davidluky.com | This site |
-| `the-room-web` | play.davidluky.com | The Room web client |
-
-### DNS Records
-
-| Type | Name | Target | Proxy |
-|------|------|--------|-------|
-| (Worker route) | davidluky.com | `davidluky-com` worker | Yes |
-| (Worker route) | play.davidluky.com | `the-room-web` worker | Yes |
-| CNAME | tibia | cname.vercel-dns.com | DNS only |
-
-### wrangler.toml
+`wrangler.toml` uses a Worker entrypoint plus static assets:
 
 ```toml
 name = "davidluky-com"
 compatibility_date = "2026-04-11"
+main = "src/worker.ts"
+
+[vars]
+EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion"
+EBAY_ENVIRONMENT = "production"
 
 [assets]
 directory = "./dist"
 not_found_handling = "404-page"
 ```
 
-### Authentication
+## Required Secrets
 
-Wrangler uses OAuth — run `npx wrangler login` to authenticate via browser. Token is stored locally and refreshed automatically.
+GitHub Actions:
 
-## GitHub
+- `CLOUDFLARE_API_TOKEN`
 
-### Repository
-- **URL**: https://github.com/davidluky/davidluky.com
-- **Visibility**: Public
-- **Branch**: `main` (single branch)
+Cloudflare Worker:
 
-### Pushing
+- `EBAY_VERIFICATION_TOKEN`
+- `EBAY_CLIENT_ID`
+- `EBAY_CLIENT_SECRET`
+
+Set Worker secrets:
+
 ```bash
-git add -A
-git commit -m "description"
-git push
+npx wrangler secret put EBAY_VERIFICATION_TOKEN
+npx wrangler secret put EBAY_CLIENT_ID
+npx wrangler secret put EBAY_CLIENT_SECRET
 ```
 
-### CI/CD (GitHub Actions)
+Never put these values in `.env`, source files, docs, screenshots, or issue text. The repo has a gitleaks rule and `scripts/validate-site.mjs` guard for the eBay token class.
 
-A GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every push to `main`:
-1. `npm ci` — install dependencies
-2. `npm run check` — TypeScript validation
-3. `npm run build` — static site build
-4. `wrangler deploy` — upload to Cloudflare Workers
+## eBay Endpoint
 
-**Required secret**: `CLOUDFLARE_API_TOKEN` — create at [Cloudflare Dashboard → API Tokens](https://dash.cloudflare.com/profile/api-tokens) with **Edit Cloudflare Workers** permission. Add to GitHub repo → Settings → Secrets → Actions.
+`src/worker.ts` handles eBay marketplace account deletion:
 
-Manual deploys via `npx wrangler deploy` still work as before.
+- `GET /ebay/deletion?challenge_code=...`
+  - Requires `EBAY_VERIFICATION_TOKEN`.
+  - Returns `{ "challengeResponse": "..." }`.
+- `POST /ebay/deletion`
+  - Requires `content-type: application/json`.
+  - Requires a valid `X-EBAY-SIGNATURE`.
+  - Validates `MARKETPLACE_ACCOUNT_DELETION` payload shape.
+  - Fetches eBay public keys using client-credentials OAuth.
+  - Returns `204` only after signature verification succeeds.
 
-## Related Services
+The site does not persist eBay user account data, so a verified deletion notification has no local records to delete. Acknowledgement after verification is the full local action.
 
-### Vercel (Tibia Services)
-- **URL**: https://tibia.davidluky.com
-- **Direct URL**: https://tibia-services.vercel.app (Vercel default)
-- **Repo**: github.com/davidluky/tibia-services
-- **Account**: linked to GitHub `davidluky`
+## CI/CD
 
-### Supabase (Tibia Services backend)
-- **Project**: lsizuiyxowfbipslkdya
-- **URL**: https://lsizuiyxowfbipslkdya.supabase.co
+`.github/workflows/deploy.yml` runs two jobs:
+
+| Job | Trigger | Steps |
+|-----|---------|-------|
+| `quality` | pull requests and pushes | checkout, gitleaks, npm ci, check, build, validate, high/critical audit |
+| `deploy` | push to `main` only | npm ci, build, Cloudflare token preflight, Wrangler deploy |
+
+Deploy uses GitHub Environment `production`, so environment-level protections can be added in GitHub without changing the workflow.
+
+## Manual Deploy
+
+```bash
+npm run verify
+npx wrangler deploy
+```
+
+Manual deploys use local Wrangler auth. CI deploys require `CLOUDFLARE_API_TOKEN`.
 
 ## Analytics
 
-**Cloudflare Web Analytics** is auto-injected by Cloudflare's edge network via `static.cloudflareinsights.com/beacon.min.js`. No manual snippet needed — Cloudflare handles injection for proxied domains.
+Cloudflare Web Analytics is injected by Cloudflare for the proxied domain. CSP allows:
 
-The CSP header allows both the beacon script (`script-src`) and its reporting endpoint (`connect-src https://cloudflareinsights.com`).
-
-View analytics at: Cloudflare Dashboard → davidluky.com → Web Analytics.
-
-## OG Image Regeneration
-
-If the OG image design changes:
-
-```bash
-# Edit the SVG in scripts/generate-og.mjs
-node scripts/generate-og.mjs     # Generates public/og-image.png
-npm run build                     # Rebuild with new image
-npx wrangler deploy               # Deploy
-```
-
-The SVG source in `public/og-image.svg` is kept as reference but is not used by social platforms — only `og-image.png` is referenced in meta tags.
+- `script-src https://static.cloudflareinsights.com`
+- `connect-src https://cloudflareinsights.com`
 
 ## Troubleshooting
 
-### "Worker not found" after deploy
-The custom domain might have been reassigned. Use the Cloudflare API to reassign:
-```bash
-curl -X PUT "https://api.cloudflare.com/client/v4/accounts/{ACCOUNT_ID}/workers/domains" \
-  -H "Authorization: Bearer {TOKEN}" \
-  -d '{"zone_id":"{ZONE_ID}","hostname":"davidluky.com","service":"davidluky-com","environment":"production"}'
-```
+### CI says `CLOUDFLARE_API_TOKEN` is missing
+
+Create or refresh the GitHub Actions secret with Worker deploy permissions.
+
+### eBay challenge returns 503
+
+`EBAY_VERIFICATION_TOKEN` is missing in Worker secrets. Add it with `npx wrangler secret put EBAY_VERIFICATION_TOKEN`.
+
+### eBay POST returns 412
+
+The signature header is missing, invalid, or does not verify against eBay's public key.
+
+### eBay POST returns 503
+
+The Worker could not fetch OAuth/public-key data. Check `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, and `EBAY_ENVIRONMENT`.
 
 ### Fonts not loading
-Check that `fonts.googleapis.com` and `fonts.gstatic.com` are allowed in the CSP header (`public/_headers`). Fonts are loaded non-render-blocking via `media="print" onload="this.media='all'"` — a brief FOUT (flash of unstyled text) is expected on first load.
 
-### CI/CD deploy failing
-1. Verify `CLOUDFLARE_API_TOKEN` secret is set in GitHub repo settings
-2. Check the token has **Edit Cloudflare Workers** permission
-3. Tokens expire — regenerate at Cloudflare Dashboard if needed
+Check CSP entries for `fonts.googleapis.com` and `fonts.gstatic.com`.
 
-### OG image not showing on Twitter/Discord
-1. Verify `public/og-image.png` exists and is a valid PNG
-2. Check `src/layouts/Base.astro` references `og-image.png` (not `.svg`)
-3. Twitter card should be `summary_large_image` for the 1200x630 format
-4. Use https://cards-dev.twitter.com/validator to debug
+### OG image not showing
 
-### Language toggle not persisting
-Check that `localStorage` is accessible (not blocked by browser privacy settings). The key is `dl-lang` with values `en` or `pt`.
+Regenerate and deploy:
+
+```bash
+node scripts/generate-og.mjs
+npm run verify
+npx wrangler deploy
+```

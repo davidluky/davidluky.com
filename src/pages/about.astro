@@ -8,19 +8,19 @@ const techCategories = ["Languages", "Frontend", "Backend", "Tools"];
 const techCategoriesPt = ["Linguagens", "Frontend", "Backend", "Ferramentas"];
 
 const techStack: Record<string, string[]> = {
-  Languages: ["TypeScript", "C++17", "C", "Python", "Bash", "SQL"],
-  Frontend: ["React 19", "Astro", "Tailwind CSS", "Vite", "Electron", "raylib"],
-  Backend: ["Node.js", "Next.js", "Firebase", "Supabase", "SQLite"],
-  Tools: ["Git", "Cloudflare Workers", "Vercel", "PM2", "Ollama", "MCP", "Vertex AI", "PyTorch"],
+  Languages: ["TypeScript", "C++17", "C", "Python", "Dart", "Lua", "Bash", "SQL"],
+  Frontend: ["React 19", "Astro", "Next.js", "Tailwind CSS", "Vite", "Electron", "Flutter", "raylib"],
+  Backend: ["Node.js", "Firebase", "Supabase", "SQLite", "FastAPI"],
+  Tools: ["Git", "Cloudflare Workers", "Vercel", "PM2", "Ollama", "MCP", "Vertex AI", "PyTorch", "PowerShell"],
 };
 
 const timeline = [
   { year: "2010", text: `Created my Steam account — gaming became a daily thing`, textPt: `Criei minha conta Steam — jogos viraram rotina diária` },
-  { year: "2014", text: `Started playing Tibia — still active today at Level ${stats.tibiaLevel}`, textPt: `Comecei a jogar Tibia — ainda ativo hoje no Level ${stats.tibiaLevel}` },
+  { year: "2014", text: `Started playing Tibia and writing my first code — still active in both today (Tibia Level ${stats.tibiaLevel})`, textPt: `Comecei a jogar Tibia e escrever meu primeiro código — ainda ativo em ambos hoje (Tibia Level ${stats.tibiaLevel})` },
   { year: "2020", text: `Built The Room — a multiplayer RPG platform in C++ with ${stats.theRoomGames} games`, textPt: `Criei o The Room — uma plataforma RPG multiplayer em C++ com ${stats.theRoomGames} jogos` },
   { year: "2024", text: "Expanded The Room to a full React web client with Firebase", textPt: "Expandi o The Room para um cliente web completo em React com Firebase" },
-  { year: "2025", text: "Built Tibia Services, Game Library, Local IA, and this site", textPt: "Criei Tibia Services, Game Library, Local IA, e este site" },
-  { year: "2026", text: "Started a Megaman X remake with raylib, Gemini-powered sprite generation for The Room, and MMX Trainer — an RL agent that learns Mega Man X on SNES via population-based training", textPt: "Comecei um remake de Megaman X com raylib, geração de sprites com Gemini para o The Room, e MMX Trainer — um agente de RL que aprende Mega Man X no SNES via population-based training" },
+  { year: "2025", text: "Built Tibia Services, Game Library, Local IA, and the first version of this portfolio", textPt: "Criei Tibia Services, Game Library, Local IA e a primeira versão deste portfólio" },
+  { year: "2026", text: "Expanded into dual-curriculum math, trading-card arbitrage, Flutter mobile work, eBay compliance infrastructure, and AI/game-dev systems around Mega Man X", textPt: "Expandi para matemática com currículo duplo, arbitragem de cards, mobile com Flutter, infraestrutura de compliance do eBay e sistemas de IA/game-dev em torno de Mega Man X" },
 ];
 ---
 
@@ -54,7 +54,7 @@ const timeline = [
         My main project is <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, a multiplayer RPG platform with {stats.theRoomGames} games, {stats.theRoomAchievements} achievements, a full economy, and tournaments. It started as a C++ desktop application and grew into a React web client sharing the same Firebase backend.
       </p>
       <p data-i18n="a_bg_p3" class="text-[15px] leading-[1.85] text-text-2">
-        Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, AI-powered sprite generation via Gemini, and a Megaman X remake from scratch with raylib.
+        Outside of that, I build whatever catches my attention: dual-curriculum math practice, trading-card arbitrage, Flutter mobile experiments, WhatsApp automation, AI asset pipelines, reverse-engineering tools, and game systems from scratch.
       </p>
     </div>
   </section>
@@ -115,7 +115,7 @@ const timeline = [
   window.__about = { timelinePt, techCategoriesPt, roomGames, roomAchievements };
 </script>
 <script>
-  import { applyI18n } from '../i18n/shared';
+  import { applyI18n, getLanguage } from '../i18n/shared';
 
   const { timelinePt, techCategoriesPt, roomGames, roomAchievements } = window.__about;
 
@@ -127,7 +127,7 @@ const timeline = [
       a_bg_label: 'Background',
       a_bg_p1: 'Gaming is what got me into programming. I wanted to understand how the things I loved were made — that curiosity turned into building my own games, tools, and platforms.',
       a_bg_p2: `My main project is <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, a multiplayer RPG platform with ${roomGames} games, ${roomAchievements} achievements, a full economy, and tournaments. It started as a C++ desktop application and grew into a React web client sharing the same Firebase backend.`,
-      a_bg_p3: 'Outside of that, I build whatever catches my attention — a WhatsApp bot for tracking gym check-ins, a marketplace for Tibia game services, a tool for reverse engineering Xbox achievement data, AI-powered sprite generation via Gemini, and a Megaman X remake from scratch with raylib.',
+      a_bg_p3: 'Outside of that, I build whatever catches my attention: dual-curriculum math practice, trading-card arbitrage, Flutter mobile experiments, WhatsApp automation, AI asset pipelines, reverse-engineering tools, and game systems from scratch.',
       a_tech_label: 'What I work with',
       a_timeline_label: 'Timeline',
       a_contact_label: 'Get in touch',
@@ -140,7 +140,7 @@ const timeline = [
       a_bg_label: 'Trajetória',
       a_bg_p1: 'Jogos foram o que me levaram à programação. Eu queria entender como as coisas que eu amava eram feitas — essa curiosidade se transformou em construir meus próprios jogos, ferramentas e plataformas.',
       a_bg_p2: `Meu projeto principal é o <a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a>, uma plataforma RPG multiplayer com ${roomGames} jogos, ${roomAchievements} conquistas, economia completa e torneios. Começou como um aplicativo desktop em C++ e cresceu para um cliente web em React compartilhando o mesmo backend Firebase.`,
-      a_bg_p3: 'Fora isso, construo o que chama minha atenção — um bot de WhatsApp para rastrear check-ins na academia, um marketplace para serviços de Tibia, uma ferramenta para engenharia reversa de dados de conquistas do Xbox, geração de sprites com IA via Gemini, e um remake do Megaman X feito do zero com raylib.',
+      a_bg_p3: 'Fora isso, construo o que chama minha atenção: prática de matemática com currículo duplo, arbitragem de cards, experimentos mobile em Flutter, automação de WhatsApp, pipelines de assets com IA, ferramentas de engenharia reversa e sistemas de jogo do zero.',
       a_tech_label: 'Com o que trabalho',
       a_timeline_label: 'Linha do tempo',
       a_contact_label: 'Entre em contato',
@@ -148,7 +148,7 @@ const timeline = [
     },
   });
 
-  const lang = localStorage.getItem('dl-lang') || 'en';
+  const lang = getLanguage();
   if (lang === 'pt') {
     document.querySelectorAll('[data-i18n-timeline]').forEach(el => {
       const idx = Number(el.getAttribute('data-i18n-timeline')!.replace('tl_', ''));

@@ -315,13 +315,14 @@ export const projects: readonly Project[] = [
     name: "Alisson David Frangullys",
     year: 2026,
     description:
-      "Astro microsite for a personal RPG-style profile, built as a sibling branded site under alisson.davidluky.com. It shares the portfolio stack while experimenting with chaptered storytelling and bilingual content scaffolding.",
+      "Astro microsite for a personal RPG-style profile, built as a sibling branded site under alisson.davidluky.com. Tabletop RPG aesthetic framing a developer portfolio with chaptered storytelling and bilingual content.",
     descriptionPt:
-      "Microsite em Astro para um perfil pessoal em estilo RPG, criado como site irmão em alisson.davidluky.com. Compartilha a stack do portfólio enquanto experimenta storytelling em capítulos e estrutura bilíngue.",
+      "Microsite em Astro para um perfil pessoal em estilo RPG, criado como site irmão em alisson.davidluky.com. Estética de RPG de mesa enquadrando um portfólio de desenvolvedor com storytelling em capítulos e conteúdo bilíngue.",
     tech: ["Astro", "Tailwind", "TypeScript", "Cloudflare"],
     tag: "website",
-    status: "wip",
-    visibility: "private",
+    status: "live",
+    visibility: "public",
+    liveUrl: "https://alisson.davidluky.com",
   },
   {
     id: "laptop-bootstrap",

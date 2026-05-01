@@ -1,14 +1,29 @@
-name: Deploy to Cloudflare Workers
+name: Check and Deploy
 
 on:
+  pull_request:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: davidluky-com-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  deploy:
+  quality:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - uses: actions/setup-node@v4
         with:
@@ -20,6 +35,34 @@ jobs:
       - run: npm run check
 
       - run: npm run build
+
+      - run: npm run validate:site
+
+      - run: npm run audit:high
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: quality
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Verify Cloudflare token is configured
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "CLOUDFLARE_API_TOKEN is required for production deploys."
+            exit 1
+          fi
 
       - uses: cloudflare/wrangler-action@v3
         with:

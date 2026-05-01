@@ -22,14 +22,17 @@ export interface GamingData {
   distribution: { over100h: number; h10to100: number; h1to10: number; under1h: number };
 }
 
-const GAME_LIBRARY_DB = import.meta.env.GAME_LIBRARY_DB ?? "C:/Users/david/AppData/Roaming/game-library/library.db";
+const GAME_LIBRARY_DB = import.meta.env.GAME_LIBRARY_DB;
 const STEAM_CACHE = ".cache/steam-games.json";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 async function fromGameLibrary(): Promise<GamingData | null> {
+  if (!GAME_LIBRARY_DB) return null;
+
+  let db: import("better-sqlite3").Database | null = null;
   try {
     const { default: Database } = await import("better-sqlite3");
-    const db = new Database(GAME_LIBRARY_DB, { readonly: true });
+    db = new Database(GAME_LIBRARY_DB, { readonly: true });
 
     const totalGames = (db.prepare(
       "SELECT COUNT(DISTINCT pg.game_id) as c FROM platform_games pg JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'"
@@ -91,8 +94,6 @@ async function fromGameLibrary(): Promise<GamingData | null> {
        FROM game_stats`
     ).get() as { a: number; b: number; c: number; d: number };
 
-    db.close();
-
     return {
       source: "game-library",
       totalGames,
@@ -106,6 +107,8 @@ async function fromGameLibrary(): Promise<GamingData | null> {
   } catch (err) {
     console.error("[gaming.ts] fromGameLibrary failed:", (err as Error).message);
     return null;
+  } finally {
+    db?.close();
   }
 }
 

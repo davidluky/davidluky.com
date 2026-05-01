@@ -261,3 +261,39 @@ for (const line of envFile.split('\n')) {
 **Workaround**: Deployed manually via `npm run build && npx wrangler deploy` (local auth tokens work).
 
 **Action**: Create a Cloudflare API token at https://dash.cloudflare.com/profile/api-tokens (scope: Workers scripts edit + Pages read), then `gh secret set CLOUDFLARE_API_TOKEN` to enable CI/CD.
+
+---
+
+## FR-021: eBay Compliance Endpoint Must Not Acknowledge Blind POSTs (2026-04-30)
+
+**What happened**: `src/worker.ts` was added with `/ebay/deletion`, but the draft returned `{ status: "ok" }` for every POST request and hardcoded the verification token.
+
+**Root cause**: The endpoint was built around the GET challenge path only. POST notification authenticity and deletion semantics were treated as a placeholder, which made the integration look compliant without actually verifying eBay notifications.
+
+**Fix**: Moved secrets to Worker bindings, added typed env contracts, validated the deletion payload, fetched eBay public keys with OAuth client credentials, verified `X-EBAY-SIGNATURE`, and returned `204` only after verification. Since the site stores no eBay account data, verified acknowledgement is the complete local deletion action.
+
+**Guard**: `scripts/validate-site.mjs` fails if `src/worker.ts` hardcodes a verification token. `.gitleaks.toml` has a custom quoted/unquoted eBay verification token rule. CI runs gitleaks before build/deploy.
+
+---
+
+## FR-023: Stale Hardcoded Stats Across Project Descriptions (2026-05-01)
+
+**What happened**: Multiple project entries in `projects.ts` had hardcoded numbers that drifted from reality: Matemática showed "221 sets, 2,483 problems" (actual: 267 sets, 5,564 problems — more than double), TCG Arbitrage showed "31 tests, 16 commands" (actual: 80 tests, 18 commands), Game Library showed "8+ platforms" (actual: 11 integrations), and The Room achievements showed 239 (actual: 249).
+
+**Root cause**: Stats were copied from project state at time of initial website entry creation and never updated as the projects grew. No automated sync exists between project codebases and the website's data file.
+
+**Fix**: Updated all stale numbers to current verified values. Added `yearsCoding` to `stats.ts` as an auto-computed value (DD-012 pattern) to prevent at least time-based stats from going stale.
+
+**Lesson**: Project stats embedded in descriptions will drift. After any major project sprint, grep `projects.ts` for the project name and verify its metrics. Consider a future validation step that cross-checks key stats at build time.
+
+---
+
+## FR-022: Public Live Links Must Resolve Before Counting as Live (2026-04-30)
+
+**What happened**: Power Monitor used `https://power.davidluky.com` as a live project link, but DNS did not resolve. Homepage and projects stats counted it as a live site because the old model treated any `http` link as public/live.
+
+**Root cause**: The project model had only one `link` field, so it mixed public live URLs, internal dashboards, repos, and local/private work.
+
+**Fix**: Replaced the thin project model with typed `status`, `visibility`, `liveUrl`, `repoUrl`, `featured`, and metrics fields. Power Monitor is now `internal` with no public `liveUrl`, and `liveProjects` derives only from resolving public URLs.
+
+**Guard**: New project rule: never set `liveUrl` until the URL resolves. Use `visibility: "internal"` for private dashboards.

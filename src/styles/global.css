@@ -164,6 +164,15 @@ a {
   display: block;
 }
 
+.stat-tile-summary {
+  display: block;
+  list-style: none;
+}
+
+.stat-tile-summary::-webkit-details-marker {
+  display: none;
+}
+
 /* ── Achievements tooltip ── */
 .achievements-tooltip {
   display: none;
@@ -197,7 +206,8 @@ a {
 
 .achievements-tile:hover .achievements-tooltip,
 .achievements-tile:active .achievements-tooltip,
-.achievements-tile:focus-within .achievements-tooltip {
+.achievements-tile:focus-within .achievements-tooltip,
+.achievements-tile[open] .achievements-tooltip {
   display: block;
 }
 
@@ -228,7 +238,8 @@ a {
 }
 
 .live-sites-tile:hover .live-sites-tooltip,
-.live-sites-tile:focus-within .live-sites-tooltip {
+.live-sites-tile:focus-within .live-sites-tooltip,
+.live-sites-tile[open] .live-sites-tooltip {
   display: block;
 }
 
@@ -289,7 +300,8 @@ a {
 }
 
 .hours-tile:hover .hours-tooltip,
-.hours-tile:focus-within .hours-tooltip {
+.hours-tile:focus-within .hours-tooltip,
+.hours-tile[open] .hours-tooltip {
   display: block;
 }
 
@@ -300,9 +312,5 @@ a {
     transition-duration: 0.01ms !important;
   }
   /* Brand morph is exempt — it's a small, user-triggered text transition */
-  .brand-mid, .brand-gap, .brand-keep, .brand-text,
-  .brand-mark .brand-mid, .brand-mark .brand-gap, .brand-mark .brand-keep {
-    transition-duration: revert !important;
-  }
   html { scroll-behavior: auto; }
 }

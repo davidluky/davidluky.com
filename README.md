@@ -1,6 +1,6 @@
 # davidluky.com
 
-Personal website for David Luky. Built with Astro + Tailwind CSS, deployed on Cloudflare Workers.
+Personal website for David Luky. Built with Astro + Tailwind CSS, deployed on Cloudflare Workers with a small Worker entrypoint for static assets and eBay marketplace account deletion compliance.
 
 ## Setup
 
@@ -9,24 +9,50 @@ npm install
 npm run dev       # http://localhost:4321
 ```
 
-## Build & Deploy
+## Quality Gates
 
 ```bash
-npm run build     # Output: dist/
+npm run check          # Astro + TypeScript diagnostics
+npm run build          # Build static output into dist/
+npm run validate:site  # Internal links, JSON-LD, headers, mojibake, Worker secret guard
+npm run audit:high     # Fail on high/critical npm advisories
+npm run verify         # Run all of the above in order
+```
+
+## Deploy
+
+```bash
+npm run build
 npx wrangler deploy
 ```
 
-## Cloudflare Manual Steps
+GitHub Actions runs the same quality path on pull requests and pushes to `main`; deploy runs only after the quality job passes on `main`.
 
-After first deploy, configure in the Cloudflare dashboard:
+Required GitHub secret:
 
-1. **Reassign davidluky.com domain** from the-room-web worker to davidluky-com worker:
-   - Workers & Pages → the-room-web → Settings → Custom Domains → Remove davidluky.com
-   - Workers & Pages → davidluky-com → Settings → Custom Domains → Add davidluky.com
+- `CLOUDFLARE_API_TOKEN` — Cloudflare API token with Worker deploy permissions.
 
-2. **Add play.davidluky.com subdomain** for the-room-web:
-   - DNS → Add CNAME record: `play` → `the-room-web.alissonfrangullys.workers.dev`
-   - Workers & Pages → the-room-web → Settings → Custom Domains → Add play.davidluky.com
+Required Cloudflare Worker secrets:
 
-3. **Connect GitHub repo** for auto-deploy (optional):
-   - Workers & Pages → davidluky-com → Settings → Builds → Connect to GitHub
+- `EBAY_VERIFICATION_TOKEN` — 32-80 character marketplace deletion verification token from eBay.
+- `EBAY_CLIENT_ID` — eBay application client ID for Notification API public-key lookup.
+- `EBAY_CLIENT_SECRET` — eBay application client secret for Notification API public-key lookup.
+
+Set Worker secrets with:
+
+```bash
+npx wrangler secret put EBAY_VERIFICATION_TOKEN
+npx wrangler secret put EBAY_CLIENT_ID
+npx wrangler secret put EBAY_CLIENT_SECRET
+```
+
+Non-secret Worker vars live in `wrangler.toml`:
+
+- `EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion"`
+- `EBAY_ENVIRONMENT = "production"`
+
+## Project Content
+
+Projects live in `src/data/projects.ts` as the single source of truth. Each entry includes bilingual descriptions, tag, status, visibility, year, optional live/source URLs, featured flag, and metrics. The homepage, footer, live-site count, JSON-LD, and `/projects` page all derive from that data.
+
+Power Monitor is intentionally marked as an internal dashboard, so it is no longer counted as a live public site until DNS/public access exists.

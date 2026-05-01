@@ -1,10 +1,11 @@
 ---
+import { liveProjects } from "../data/projects";
+
 const currentYear = new Date().getFullYear();
 ---
 
 <footer>
   <div class="mx-auto max-w-[1280px] px-12 pt-12 pb-8 max-md:px-6">
-    <!-- Top: brand + link columns -->
     <div class="mb-12 flex justify-between max-md:flex-col max-md:gap-6">
       <span class="text-xs font-semibold uppercase tracking-[2px] text-text-3">
         David Luky
@@ -13,14 +14,16 @@ const currentYear = new Date().getFullYear();
         <div>
           <div data-i18n="footer_projects" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Projects</div>
           <a href="/projects" data-i18n="footer_all_projects" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">All Projects</a>
-          <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">The Room Web</a>
-          <a href="https://tibia.davidluky.com" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Tibia Services</a>
-          <a href="https://power.davidluky.com" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Power Monitor</a>
-          <a href="https://matematica.davidluky.com" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Matemática</a>
+          {liveProjects.map((project) => (
+            <a href={project.liveUrl!} target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">
+              {project.name}
+            </a>
+          ))}
         </div>
         <div>
-          <div data-i18n="footer_gaming" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Gaming</div>
-          <a href="/gaming" data-i18n="footer_profiles" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Profiles</a>
+          <div data-i18n="footer_explore" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Explore</div>
+          <a href="/gaming" data-i18n="footer_profiles" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Gaming</a>
+          <a href="/about" data-i18n="footer_about" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">About</a>
         </div>
         <div>
           <div data-i18n="footer_connect" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Connect</div>
@@ -30,7 +33,6 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
 
-    <!-- Bottom: copyright -->
     <div class="flex items-center justify-between pt-5">
       <span class="text-[13px] text-text-3">
         &copy; {currentYear} David Luky

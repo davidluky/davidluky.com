@@ -2,6 +2,54 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-05-01
+
+### Added
+- **`stats.yearsCoding`**: Auto-computed years since 2014 (DD-012 pattern), used on the homepage "Years Coding" stat card.
+- **`stats.codingStartYear`**: Source constant for the coding start year.
+- **Lua** added to the About page tech stack (Languages category).
+- **About link** in the footer under a new "Explore" column (was "Gaming" only).
+
+### Changed
+- **Homepage stat card**: Replaced "Gaming Platforms" (linked to /gaming) with **"Years Coding"** (linked to /about). Bilingual: EN "Years Coding" / PT "Anos Programando".
+- **The Room achievements**: 239 → **249** in `stats.ts`.
+- **Matemática Elementar**: "221 audited sets, 2,483 problems" → **"267 sets, 5,564 problems"** in description and metrics (EN + PT).
+- **TCG Arbitrage**: "31 tests, 16 commands" → **"80 tests, 18 commands"** in description and metrics (EN + PT).
+- **Game Library**: "8+ platforms" → **"10+ platforms"** in description and metrics (EN + PT). Description now lists Game Pass PC/Xbox split.
+- **About page timeline**: 2014 entry now mentions coding alongside Tibia (EN + PT).
+- **Footer**: "Gaming" column renamed to "Explore" with Gaming + About links. Shared i18n strings updated.
+
+### Fixed
+- 5 stale hardcoded stat values across project descriptions (FR-023).
+
+## [Unreleased] — 2026-04-30
+
+### Added
+- **Cloudflare Worker eBay endpoint**: `/ebay/deletion` now handles eBay marketplace account deletion challenge and signed POST notifications.
+- **Worker secret/env contract**: `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `EBAY_ENDPOINT_URL`, and `EBAY_ENVIRONMENT`.
+- **Rich project catalog**: projects now include typed status, visibility, year, featured flag, live/source URLs, and EN/PT metrics.
+- **Featured projects section** on `/projects`, plus live-only JSON-LD structured data.
+- **`scripts/validate-site.mjs`** guard for internal links, JSON-LD, CSP directives, mojibake, and hardcoded eBay token regressions.
+- **CI quality job** for PRs and pushes: gitleaks, check, build, site validation, and high/critical npm audit.
+- **Custom gitleaks rule** for quoted and unquoted eBay verification token assignments.
+
+### Changed
+- Refreshed the projects page with current work: Matemática Elementar dual-curriculum scope, TCG Arbitrage, DigiPets, Alisson site, Laptop Bootstrap, and updated Power Monitor as internal.
+- Homepage project stat now says "Projects" instead of overclaiming "Active Projects".
+- Live-site counts now derive only from public `liveUrl` values.
+- Footer project links now derive from `liveProjects`.
+- Language state helpers now centralize header/homepage toggle synchronization.
+- Informational stat tiles now use `<details>/<summary>` disclosure semantics instead of fake button roles.
+- Gaming data no longer falls back to a personal absolute Game Library DB path; local DB use requires `GAME_LIBRARY_DB`.
+- npm dependencies updated and `yaml` overridden to `^2.8.3`; npm audit now reports 0 vulnerabilities.
+
+### Fixed
+- Removed hardcoded eBay verification token from source.
+- Replaced blind eBay POST acknowledgement with signed notification validation.
+- Fixed reduced-motion behavior so brand morph transitions are not exempted.
+- Added locale metadata and JSON-LD structured data.
+- Updated README, CLAUDE, developer guide, deployment guide, tech notes, design decisions, flight recorder, and session handoff for the new architecture.
+
 ## [Unreleased] — 2026-04-26
 
 ### Changed

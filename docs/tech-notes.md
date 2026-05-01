@@ -1,244 +1,116 @@
 # Tech Notes
 
-Implementation details, patterns, and gotchas for davidluky.com.
+Implementation notes for `davidluky.com`.
 
----
+## TN-001: Brand Morph
 
-## TN-001: Brand Morph Animation
+The header brand renders the full text `David Luky`, then scroll state toggles `.header-scrolled` so the middle letters shrink away and the mark reads as `DL`.
 
-The "David Luky" → "DL" morph is pure CSS, no JavaScript animation.
+Reduced-motion users still get the state change, but transitions are reduced globally by `prefers-reduced-motion`.
 
-### HTML Structure
-```html
-<span class="brand-text">
-  <span class="brand-keep">D</span>
-  <span class="brand-mid">avid</span>
-  <span class="brand-gap"></span>
-  <span class="brand-keep">L</span>
-  <span class="brand-mid">uky</span>
-</span>
-```
+## TN-002: Language State
 
-### How It Works
-1. **Default state**: All letters visible, gap at `0.35em`
-2. **On scroll past 60px**: JS adds `.header-scrolled` class to `<header>`
-3. **CSS transition**: `.brand-mid` elements animate `font-size: 0` + `opacity: 0`, `.brand-gap` shrinks to `0.06em`, `.brand-keep` letters turn gold with text-shadow glow
-4. **Timing**: `cubic-bezier(0.4, 0, 0.2, 1)` for smooth deceleration, 500ms duration
+`src/i18n/shared.ts` owns language storage and synchronization:
 
-### Key Detail
-The morph uses `font-size: 0` instead of `display: none` because font-size transitions smoothly while display is binary. The letters literally shrink away rather than popping out.
+- `getLanguage()`
+- `setLanguage(lang)`
+- `toggleLanguage()`
+- `syncLanguageControls()`
+- `applyI18n(pageStrings)`
 
-### Mobile
-Brand font shrinks from 52px to 30px at `max-width: 768px` via media query in `global.css`.
+Header buttons and the homepage language card call the same helpers, which prevents the old bug where page text switched to Portuguese while the header label still showed `EN`.
 
----
+## TN-003: Project Catalog
 
-## TN-002: Astro Inline Scripts and Vite Bundling
+`src/data/projects.ts` is the single source of truth for project content and presentation metadata.
 
-Astro `<script>` tags are processed by Vite at build time. This means:
-- TypeScript works in inline scripts
-- ES module imports work (`import { applyI18n } from '../i18n/shared'`)
-- Each page's script is bundled into a separate chunk
-- Dead code elimination applies
+Each project has:
 
-This is why the i18n deduplication works — `src/i18n/shared.ts` is imported by all 5 pages and Vite deduplicates the module in the final bundle.
+- stable `id`
+- bilingual descriptions
+- `tag`, `status`, and `visibility` union keys
+- `year`
+- optional `featured`
+- optional `liveUrl`
+- optional `repoUrl`
+- optional EN/PT metrics
 
-### Gotcha
-Astro inline scripts run **once per page load**, not per component instance. If a component with a script is used multiple times, the script only executes once.
+Derived exports:
 
----
+- `featuredProjects`
+- `liveProjects`
+- `getProjectTag()`
+- `getProjectStatus()`
+- `getProjectVisibility()`
 
-## TN-003: Google Fonts Loading Strategy
+Public live URLs must resolve before being added. Internal dashboards should not set `liveUrl`; otherwise they get counted as live sites and appear in footer/homepage links.
 
-The site loads 3 font families from Google Fonts:
-- Inter (4 weights: 300, 400, 500, 600)
-- JetBrains Mono (2 weights: 400, 500)
-- UnifrakturMaguntia (1 weight: 400)
+## TN-004: Project JSON-LD
 
-### Optimization
-1. `preconnect` to `fonts.googleapis.com` and `fonts.gstatic.com` (with `crossorigin`)
-2. `display=swap` in the Google Fonts URL — prevents invisible text during load
-3. Non-render-blocking load via `media="print" onload="this.media='all'"` — downloads CSS without blocking first paint
-4. `<noscript>` fallback with standard `rel="stylesheet"` for JS-disabled browsers
+The `/projects` page emits `ItemList` JSON-LD only for `liveProjects`. Private and internal archive entries are deliberately omitted from structured data to avoid duplicate `/projects` URLs and misleading crawler signals.
 
-### Why not `fetchpriority="high"`?
-The previous approach used `fetchpriority="high"` with a blocking stylesheet link. Lighthouse measured ~800ms of render-blocking time. The `media="print"` swap eliminates the blocking at the cost of a brief FOUT (flash of unstyled text), which is acceptable since `display=swap` already produces similar behavior.
+## TN-005: Cloudflare Worker Entrypoint
 
-### Trade-off
-~70KB total font download (woff2). Could self-host for faster loading but Google's CDN has good cache hit rates globally.
+`wrangler.toml` points to `src/worker.ts` and also serves `dist/` through Workers static assets.
 
----
+Request routing:
 
-## TN-004: OG Image Generation
+1. `/ebay/deletion` -> Worker handler.
+2. Everything else -> `env.ASSETS.fetch(request)`.
 
-**Problem**: SVG OG images don't render on Twitter, Discord, or Slack.
+The Worker uses non-secret vars for endpoint URL/environment and secrets for credentials.
 
-**Solution**: Generate a 1200x630 PNG using `@resvg/resvg-js` (Rust SVG renderer compiled to WASM).
+## TN-006: eBay Signature Verification
 
-**Process**:
-1. SVG is defined inline in `scripts/generate-og.mjs` (not loaded from file, so fonts can be specified as system fonts)
-2. `Resvg` renders the SVG to a pixel buffer
-3. Buffer is written as PNG to `public/og-image.png`
+The eBay deletion POST flow is intentionally strict:
 
-**Font note**: The SVG uses `Arial, Helvetica, sans-serif` and `Consolas, monospace` instead of Inter and JetBrains Mono, because resvg can only use locally installed fonts. The visual difference is minimal at OG image resolution.
+1. Parse `X-EBAY-SIGNATURE`.
+2. Require JSON.
+3. Validate `MARKETPLACE_ACCOUNT_DELETION` shape.
+4. Fetch OAuth access token with `EBAY_CLIENT_ID` and `EBAY_CLIENT_SECRET`.
+5. Fetch eBay public key by `kid`.
+6. Verify ECDSA signature against the exact request body.
+7. Return `204` only after verification.
 
-**When to regenerate**: Run `node scripts/generate-og.mjs` after changing the OG design (title, tagline, colors).
+The Worker caches OAuth tokens and public keys in module scope to avoid unnecessary remote calls across warm invocations.
 
----
+## TN-007: Static Site Validation
 
-## TN-005: Projects Page i18n for Dynamic Content
+`scripts/validate-site.mjs` guards project-specific failure classes:
 
-The projects page has a unique i18n challenge: project descriptions come from `src/data/projects.ts` (server-side data), but translations need to happen client-side.
+- likely mojibake in source/docs
+- hardcoded eBay verification token regression
+- missing CSP directives
+- missing internal links/assets in built HTML
+- missing JSON-LD in built HTML
 
-### Approach
-1. Each project card has `data-i18n-tag="tag_0"` and `data-i18n-desc="desc_0"` attributes (index-based)
-2. The projects array is passed to client-side via `define:vars` — the script reads `descriptionPt`/`tagPt` directly from the data
-3. On load, if language is `pt`, the script iterates all `[data-i18n-tag]` and `[data-i18n-desc]` elements and replaces their text from the imported data
+This script runs in `npm run verify` and CI.
 
-### Why not data-i18n?
-The standard `data-i18n` system uses a flat key-value map. Projects need per-item translations that map to array indices, not named keys. Using separate `data-i18n-tag`/`data-i18n-desc` attributes keeps the two systems cleanly separated.
+## TN-008: Security Headers
 
-### No duplication
-PT-BR descriptions live only in `projects.ts` (as `descriptionPt`/`tagPt` fields). The page script reads them directly — there is no separate `projectsPt` map to keep in sync. Adding a project is a single-file change.
+`public/_headers` controls CSP and browser security headers:
 
----
+- no framing
+- no camera/microphone/geolocation permissions
+- strict origin referrer policy
+- HSTS
+- self-only base URI and form action
+- Cloudflare Web Analytics allowlist
 
-## TN-006: Cloudflare Workers Static Assets
+Inline scripts remain allowed because Astro page i18n and JSON-LD currently use local inline script patterns. All translated HTML strings are local source-controlled strings and require `data-i18n-html`.
 
-The site deploys to Cloudflare Workers using the `[assets]` config in `wrangler.toml`:
+## TN-009: Gaming Data
 
-```toml
-[assets]
-directory = "./dist"
-not_found_handling = "404-page"
-```
+Gaming data loads in this order:
 
-This serves static files directly from Cloudflare's edge network. The `404-page` handling means `dist/404.html` is served for any unmatched route.
+1. `GAME_LIBRARY_DB` env var, if provided.
+2. Steam API, if `STEAM_API_KEY` and `STEAM_ID` are provided.
+3. Hardcoded fallback.
 
-### Security Headers
-`public/_headers` defines CSP and security headers. Cloudflare Workers respects this file for static asset deployments.
+There is no personal absolute DB path fallback anymore. Local builds must opt into machine-specific data by setting `GAME_LIBRARY_DB`.
 
-### Domain Routing
-- `davidluky.com` → this site (Workers)
-- `play.davidluky.com` → the-room-web (separate Workers)
-- `tibia.davidluky.com` → Tibia Services (Vercel, via CNAME)
+SQLite handles are closed in `finally` so build failures do not leak native resources.
 
----
+## TN-010: Google Fonts
 
-## TN-007: Mobile Responsive Strategy
-
-The site uses a mobile-first approach with Tailwind's `max-*` breakpoint modifiers:
-
-### Breakpoint Cascade
-1. **Default styles**: work at all sizes (text sizes, spacing)
-2. **`max-md:` (< 768px)**: layout changes (flex-col, reduced padding, smaller headings)
-3. **`max-sm:` (< 640px)**: fine-tuning for small phones (tighter gaps, smaller text, brand logo resize)
-
-### Common Patterns
-- `px-12 max-md:px-6` — container padding
-- `text-[42px] max-md:text-3xl` — heading size
-- `gap-8 max-md:gap-4 max-sm:gap-3` — grid/flex gaps
-- `p-7 max-sm:p-4` — card padding
-
-### Known Limitation
-The gaming page's platform cards (Steam, Xbox, Tibia, Epic) use `ml-auto` for right-aligned stats which can crowd on very narrow screens (< 360px). The cards are functional but not perfectly balanced at extreme widths.
-
----
-
-## TN-008: Sitemap Generation
-
-`@astrojs/sitemap` auto-generates the sitemap at build time. Configuration in `astro.config.mjs`:
-
-```javascript
-site: "https://davidluky.com",
-integrations: [sitemap()],
-```
-
-The sitemap includes all pages in `src/pages/` except:
-- `404.astro` (excluded by Astro convention)
-
-Output: `dist/sitemap-index.xml` and `dist/sitemap-0.xml`
-
----
-
-## TN-009: Security Considerations
-
-### What's Public
-- All page content (it's a static site)
-- Project descriptions and tech stacks
-- Gaming profiles and stats
-- Contact email (davidluky@davidluky.com)
-
-### What's Not in the Repo
-- No API keys, tokens, or secrets
-- Cloudflare Web Analytics auto-injected (privacy-focused, no cookies, GDPR-compliant)
-- No third-party analytics (no Google Analytics, no Plausible)
-- No cookies set (localStorage only for language preference)
-- No forms or user input
-
-### CSP Headers
-`public/_headers` sets Content-Security-Policy allowing only:
-- Scripts: self + inline + `static.cloudflareinsights.com` (analytics beacon)
-- Styles: self + inline + Google Fonts
-- Fonts: Google Fonts CDN
-- Images: self + data URIs
-- Connect: self + `cloudflareinsights.com` (analytics reporting)
-- Frame: none (X-Frame-Options: DENY)
-- Base URI: self (prevents `<base>` tag injection)
-- Form action: self (prevents form hijack)
-
----
-
-## TN-010: Server-to-Client Data Bridge via `define:vars`
-
-Astro pages compute data at build time (server-side), but i18n translations happen client-side. To pass server-side values into client-side `<script>` blocks:
-
-### Pattern
-```astro
-<!-- Step 1: inline script with define:vars to set window globals -->
-<script is:inline define:vars={{ roomGames: stats.theRoomGames }}>
-  window.__stats = { roomGames };
-</script>
-
-<!-- Step 2: module script reads from window -->
-<script>
-  const { roomGames } = (window as any).__stats;
-  // Use in template literals for i18n strings
-  const strings = { en: { text: `${roomGames} games` } };
-</script>
-```
-
-### Why two scripts?
-- `is:inline` scripts with `define:vars` can receive Astro server values but are NOT processed by Vite (no imports)
-- Module scripts (no `is:inline`) ARE processed by Vite (imports work) but can't use `define:vars`
-- The `window.__*` bridge connects the two worlds
-
-### Pages using this pattern
-- `index.astro` → `window.__stats` (roomGames, roomAchievements)
-- `about.astro` → `window.__about` (timelinePt, techCategoriesPt, roomGames, roomAchievements)
-- `projects.astro` → direct import from `projects.ts` (no `define:vars` bridge needed)
-- `gaming.astro` → `window.__gaming` (all gaming stats for i18n)
-
----
-
-## TN-011: Gaming Data — Native Module Loading in Astro ESM
-
-`src/data/gaming.ts` loads data from the Game Library SQLite DB at build time using `better-sqlite3`. Astro runs in ESM context, so native modules must be loaded via dynamic `import()`:
-
-```typescript
-const { default: Database } = await import("better-sqlite3");
-```
-
-**NOT** `require("better-sqlite3")` — `require` is not defined in ESM and throws, causing the function to silently fall through to the fallback data chain.
-
-### Data Source Priority
-1. **Game Library DB** (`%APPDATA%/game-library/library.db`) — real data, includes all platforms
-2. **Steam API** (via `STEAM_API_KEY` env var) — Steam-only fallback
-3. **Hardcoded fallback** — stale snapshot, last resort
-
-### Platform Hours
-Platform hours are queried dynamically:
-```sql
-SELECT platform, SUM(playtime_minutes) as t FROM game_stats GROUP BY platform
-```
-This means new platforms added to Game Library (e.g., PlayStation, GOG) will auto-appear on the website without code changes.
+Fonts use preconnect plus a non-render-blocking `media="print"` stylesheet swap. The `onload` handler uses `setAttribute("media", "all")` so Astro's checker does not treat `media` as an unused identifier.

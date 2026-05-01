@@ -3,10 +3,8 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Footer from "../components/Footer.astro";
-import { projects } from "../data/projects";
+import { liveProjects, projects } from "../data/projects";
 import { stats } from "../data/stats";
-
-const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).length;
 ---
 
 <Base title="David Luky — Developer, Gamer, Builder of Things" description="Building multiplayer games and small tools that solve problems I care about. Projects, gaming profiles, and more.">
@@ -48,33 +46,37 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
       <div class="grid grid-cols-2 gap-6 shrink-0 max-md:w-full max-sm:gap-4 md:w-[320px]">
         <a href="/projects" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">{projects.length}</div>
-          <div data-i18n="stat_projects" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Active Projects</div>
+          <div data-i18n="stat_projects" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Projects</div>
         </a>
         <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
           <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomGames}</div>
           <div data-i18n="stat_games_room" class="text-[12px] font-medium uppercase tracking-wider text-accent/80">Games in The Room</div>
         </a>
-        <a href="/gaming" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
-          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.gamingPlatforms}</div>
-          <div data-i18n="stat_gaming" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Gaming Platforms</div>
+        <a href="/about" class="rounded-xl bg-[#0f0f0e] p-6 no-underline transition-colors hover:bg-[#141413]">
+          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.yearsCoding}</div>
+          <div data-i18n="stat_coding" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Years Coding</div>
         </a>
-        <div class="live-sites-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]" tabindex="0" role="button" aria-label={`${liveSites} Live Sites — click for details`}>
-          <div class="text-4xl font-light tracking-tight text-text mb-2">{liveSites}</div>
-          <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
-          <div class="live-sites-tooltip">
-            {projects.filter(p => p.link?.startsWith("http")).map(p => (
-              <a href={p.link!} target="_blank" rel="noopener noreferrer" class="live-sites-link">
+        <details class="live-sites-tile relative rounded-xl bg-[#0f0f0e] p-6 transition-colors hover:bg-[#141413]">
+          <summary class="stat-tile-summary cursor-pointer">
+            <div class="text-4xl font-light tracking-tight text-text mb-2">{liveProjects.length}</div>
+            <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
+          </summary>
+          <div id="live-sites-tooltip" class="live-sites-tooltip">
+            {liveProjects.map(p => (
+              <a href={p.liveUrl!} target="_blank" rel="noopener noreferrer" class="live-sites-link">
                 <span class="live-sites-name">{p.name}</span>
-                <span class="live-sites-url">{p.link!.replace("https://", "")}</span>
+                <span class="live-sites-url">{p.liveUrl!.replace("https://", "")}</span>
               </a>
             ))}
           </div>
-        </div>
-        <div class="achievements-tile relative rounded-xl bg-[#0f0f0e] p-6 cursor-pointer transition-colors hover:bg-[#141413]" tabindex="0" role="button" aria-label={`${stats.theRoomAchievements} Achievements — click for details`}>
-          <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomAchievements}</div>
-          <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
+        </details>
+        <details class="achievements-tile relative rounded-xl bg-[#0f0f0e] p-6 transition-colors hover:bg-[#141413]">
+          <summary class="stat-tile-summary cursor-pointer">
+            <div class="text-4xl font-light tracking-tight text-text mb-2">{stats.theRoomAchievements}</div>
+            <div data-i18n="stat_achievements" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Achievements</div>
+          </summary>
           <div id="achievements-tooltip" class="achievements-tooltip" data-i18n="stat_achievements_tip">The real achievements are the traumas we acquired along the way!</div>
-        </div>
+        </details>
         <!-- Language toggle card -->
         <button id="lang-toggle" class="rounded-xl bg-[#0f0f0e] p-6 text-left cursor-pointer transition-colors hover:bg-[#141413] group">
           <div class="text-4xl font-light tracking-tight text-text mb-2">2</div>
@@ -95,7 +97,7 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
   window.__stats = { roomGames, roomAchievements };
 </script>
 <script>
-  import { applyI18n } from '../i18n/shared';
+  import { applyI18n, setLanguage } from '../i18n/shared';
 
   const pageStrings = {
     en: {
@@ -106,9 +108,9 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
       intro_heading: 'Most of what I build starts as something I want to use myself.',
       intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> is a multiplayer RPG platform — ${window.__stats.roomGames} games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a <em class="not-italic font-medium text-text">full web client</em> built with React, TypeScript, and Firebase.`,
       intro_p2: 'I also build smaller things when a problem catches my attention: a <em class="not-italic font-medium text-text">WhatsApp bot</em> for automating gym check-ins, a tool for <em class="not-italic font-medium text-text">reverse engineering</em> game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.',
-      stat_projects: 'Active Projects',
+      stat_projects: 'Projects',
       stat_games_room: 'Games in The Room',
-      stat_gaming: 'Gaming Platforms',
+      stat_coding: 'Years Coding',
       stat_sites: 'Live Sites',
       stat_achievements: 'Achievements',
       stat_achievements_tip: 'The real achievements are the traumas we acquired along the way!',
@@ -122,9 +124,9 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
       intro_heading: 'A maioria do que eu construo começa como algo que eu mesmo quero usar.',
       intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> é uma plataforma RPG multiplayer — ${window.__stats.roomGames} jogos, conquistas, economia e torneios. Começou como um aplicativo desktop em C++ e desde então se expandiu para um <em class="not-italic font-medium text-text">cliente web completo</em> feito com React, TypeScript e Firebase.`,
       intro_p2: 'Também construo coisas menores quando um problema chama minha atenção: um <em class="not-italic font-medium text-text">bot de WhatsApp</em> para automatizar check-ins na academia, uma ferramenta para <em class="not-italic font-medium text-text">engenharia reversa</em> de dados de conquistas em plataformas legadas, e vários experimentos que nunca saem da fase de protótipo.',
-      stat_projects: 'Projetos Ativos',
+      stat_projects: 'Projetos',
       stat_games_room: 'Jogos em The Room',
-      stat_gaming: 'Plataformas de Jogos',
+      stat_coding: 'Anos Programando',
       stat_sites: 'Sites Online',
       stat_achievements: 'Conquistas',
       stat_achievements_tip: 'As verdadeiras conquistas são os traumas que adquirimos pelo caminho!',
@@ -160,7 +162,7 @@ const liveSites = projects.filter(p => p.link && p.link.startsWith("http")).leng
 
   document.getElementById('lang-toggle')?.addEventListener('click', () => {
     lang = lang === 'en' ? 'pt' : 'en';
-    localStorage.setItem('dl-lang', lang);
+    setLanguage(lang);
     applyI18n(pageStrings);
     updateHeroAndPills(lang);
   });

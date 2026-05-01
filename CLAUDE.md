@@ -1,85 +1,63 @@
 # davidluky.com — Personal Website
 
 ## Tech Stack
-- **Astro 6.x** — static site generator, zero JS shipped (except i18n + scroll morph)
-- **Tailwind CSS 4.x** — via @tailwindcss/vite plugin, theme in global.css @theme block
-- **TypeScript** — strict mode via astro/tsconfigs/strict
-- **Cloudflare Workers** — static asset deployment via wrangler
-- **better-sqlite3** — Game Library SQLite access at build time (devDependency)
-- **@resvg/resvg-js** — OG image PNG generation (devDependency)
+- **Astro 6.x** — static site generator
+- **Tailwind CSS 4.x** — via `@tailwindcss/vite`, theme in `src/styles/global.css`
+- **TypeScript** — strict Astro config
+- **Cloudflare Workers** — static assets plus `src/worker.ts` for `/ebay/deletion`
+- **better-sqlite3** — optional Game Library SQLite access at build time
+- **@resvg/resvg-js** — OG image PNG generation
 
 ## Project Structure
-- `src/pages/` — File-based routing: index, projects, gaming, about, 404
-- `src/components/` — Header.astro, Hero.astro, Footer.astro
-- `src/data/projects.ts` — Single source of truth for all 18 projects (EN + PT-BR)
-- `src/data/stats.ts` — Centralized stats (game counts, hours, levels, achievements)
-- `src/data/gaming.ts` — Gaming data loader: Game Library DB → Steam API → hardcoded fallback
-- `src/i18n/shared.ts` — Shared nav/footer i18n strings + applyI18n() helper
-- `src/layouts/Base.astro` — HTML shell with meta tags, fonts, OG image
-- `src/styles/global.css` — Tailwind imports + @theme (Warm Dark palette) + brand morph CSS
-- `src/types/global.d.ts` — Window interface augmentation for define:vars bridge properties
-- `public/` — Static assets (favicon, robots.txt, OG images, security headers)
-- `scripts/generate-og.mjs` — One-shot OG image generator (SVG → PNG)
-- `.github/workflows/deploy.yml` — CI/CD: check → build → wrangler deploy on push to main
-- `dist/` — Build output (static HTML/CSS)
-
-## Design System
-- **Palette**: Warm Dark — bg #0a0a09, accent #c4a35a (gold), text #faf8f1
-- **Fonts**: Inter (body), JetBrains Mono (tech labels), UnifrakturMaguntia (brand mark)
-- **Brand**: Blackletter "David Luky" morphs to "DL" on scroll (CSS-only animation)
-- **Layout**: sticky header, centered hero, full-width sections, 1280px container, ~600px prose width
-- **Breakpoints**: `max-md:` (< 768px), `max-sm:` (< 640px)
-
-## i18n
-- All 5 pages are bilingual (EN + PT-BR)
-- Language toggle in Header (all pages) + homepage stat card, persisted to `localStorage('dl-lang')`
-- `textContent` by default; `innerHTML` opt-in via `data-i18n-html` attribute (XSS prevention)
-- Shared strings in `src/i18n/shared.ts`, page-specific strings in each page's `<script>`
-- Projects page uses `data-i18n-tag`/`data-i18n-desc` for per-project translations
+- `src/pages/` — `index`, `projects`, `gaming`, `about`, `404`
+- `src/components/` — `Header`, `Hero`, `Footer`
+- `src/data/projects.ts` — rich project catalog: EN/PT copy, tags, status, visibility, featured flags, metrics, live/source URLs
+- `src/data/stats.ts` — centralized stats
+- `src/data/gaming.ts` — Game Library DB -> Steam API -> fallback data loader
+- `src/i18n/shared.ts` — shared i18n strings plus language-state helpers
+- `src/layouts/Base.astro` — HTML shell, metadata, OG, JSON-LD, fonts
+- `src/worker.ts` — Cloudflare Worker entrypoint for eBay marketplace account deletion challenge + signed notification validation
+- `scripts/validate-site.mjs` — content/build guard for links, JSON-LD, headers, mojibake, and Worker secret regressions
+- `public/_headers` — Cloudflare security headers and CSP
+- `.github/workflows/deploy.yml` — PR/push quality job and protected production deploy
 
 ## Commands
 - `npm run dev` — Dev server at localhost:4321
-- `npm run build` — Build to dist/
-- `npm run preview` — Preview production build
 - `npm run check` — Astro TypeScript check
+- `npm run build` — Build to `dist/`
+- `npm run validate:site` — Site/content/security guard
+- `npm run audit:high` — Fail on high/critical npm advisories
+- `npm run verify` — check + build + validate + audit
 - `npx wrangler deploy` — Deploy to Cloudflare Workers
 - `node scripts/generate-og.mjs` — Regenerate OG image PNG
 
 ## Deployment
-- **Live**: https://davidluky.com (Cloudflare Workers)
-- **Repo**: github.com/davidluky/davidluky.com (public)
-- **Cloudflare account**: alissonfrangullys@gmail.com
-- **CI/CD**: GitHub Actions on push to main (requires `CLOUDFLARE_API_TOKEN` secret)
-- **Manual deploy**: `npm run build && npx wrangler deploy`
-- **Analytics**: Cloudflare Web Analytics (auto-injected, no cookies, view in CF dashboard)
-- **Lighthouse scores**: 99 / 100 / 100 / 100 (Performance / Accessibility / Best Practices / SEO)
+- **Live**: https://davidluky.com
+- **Repo**: github.com/davidluky/davidluky.com
+- **CI/CD**: GitHub Actions on PR and push to `main`; deploy only after quality passes on `main`
+- **GitHub secret**: `CLOUDFLARE_API_TOKEN`
+- **Worker secrets**: `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`
+- **Worker vars**: `EBAY_ENDPOINT_URL`, `EBAY_ENVIRONMENT`
+- **Analytics**: Cloudflare Web Analytics, allowed in CSP
 
 ## Related Sites
-- **play.davidluky.com** — The Room web client (Cloudflare Workers)
-- **tibia.davidluky.com** — Tibia Services marketplace (Vercel, CNAME)
-- **tibia-services.vercel.app** — Tibia Services direct URL (fallback)
+- **play.davidluky.com** — The Room web client
+- **tibia.davidluky.com** — Tibia Services marketplace
+- **matematica.davidluky.com** — Matemática Elementar
 
 ## Documentation
 | Doc | Purpose |
 |-----|---------|
 | `CHANGELOG.md` | Version history |
-| `docs/design-decisions.md` | Architectural choices with rationale |
-| `docs/tech-notes.md` | Implementation details, patterns, gotchas |
-| `docs/developer-guide.md` | Project setup, structure, adding pages/projects |
-| `docs/deployment-guide.md` | Build, deploy, CI/CD, DNS, analytics, troubleshooting |
-| `docs/flight-recorder.md` | Failed approaches, gotchas, hard-won lessons |
-| `docs/audit-2026-04-25.md` | 32-issue audit report with root cause analysis |
-| `docs/SESSION-HANDOFF.md` | Latest session state for AI continuity |
+| `docs/design-decisions.md` | Architectural choices |
+| `docs/tech-notes.md` | Implementation patterns |
+| `docs/developer-guide.md` | Setup, structure, adding pages/projects |
+| `docs/deployment-guide.md` | Build, deploy, CI/CD, DNS, eBay endpoint |
+| `docs/flight-recorder.md` | Failed approaches and gotchas |
+| `docs/SESSION-HANDOFF.md` | Latest session state |
 
-## Documentation Maintenance
-| Change Type | Update These Docs |
-|-------------|-------------------|
-| New page | `docs/developer-guide.md` (structure) + CLAUDE.md (pages list) |
-| New project | `src/data/projects.ts` (EN + PT descriptions auto-propagate) |
-| Stat value change | `src/data/stats.ts` (all pages auto-update) |
-| Design decision | `docs/design-decisions.md` |
-| Implementation pattern | `docs/tech-notes.md` |
-| Version/release | `CHANGELOG.md` |
-| Deployment change | `docs/deployment-guide.md` |
-| Failed approach or gotcha | `docs/flight-recorder.md` |
-| New i18n pattern | `docs/developer-guide.md` (i18n section) |
+## Maintenance Notes
+- Add projects only through `src/data/projects.ts`; counts and live-site lists derive from it.
+- Public live links must resolve before they are added as `liveUrl`. Internal dashboards use `visibility: "internal"` and no public `liveUrl`.
+- Never hardcode eBay or Cloudflare credentials. `scripts/validate-site.mjs` and gitleaks both guard this.
+- Run `npm run verify` before commit/deploy.

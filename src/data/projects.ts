@@ -138,17 +138,17 @@ export const projects: readonly Project[] = [
     name: "Matemática Elementar",
     year: 2026,
     description:
-      "Dual-curriculum math practice site: BNCC for Brazilian students (6th-9th grade plus Ensino Médio) and US Common Core K-8 plus Algebra 1, Geometry, and Algebra 2. 267 audited sets, 5,564 problems, local progress, no account required.",
+      "Dual-curriculum math practice site: BNCC for Brazilian students (6th-9th grade plus Ensino Médio) and US Common Core K-8 plus Algebra 1, Geometry, and Algebra 2. 281 audited sets, 2,864 problems, local progress, no account required.",
     descriptionPt:
-      "Site de prática de matemática com currículo duplo: BNCC para estudantes brasileiros (6º ao 9º ano + Ensino Médio) e US Common Core K-8 com Algebra 1, Geometry e Algebra 2. 267 sets auditados, 5.564 problemas, progresso local e sem conta.",
+      "Site de prática de matemática com currículo duplo: BNCC para estudantes brasileiros (6º ao 9º ano + Ensino Médio) e US Common Core K-8 com Algebra 1, Geometry e Algebra 2. 281 sets auditados, 2.864 problemas, progresso local e sem conta.",
     tech: ["Next.js 16", "React 19", "TypeScript", "Tailwind", "KaTeX"],
     tag: "web-app",
     status: "live",
     visibility: "public",
     featured: true,
     liveUrl: "https://matematica.davidluky.com",
-    metrics: ["267 audited sets", "5,564 problems", "BNCC + US Common Core"],
-    metricsPt: ["267 sets auditados", "5.564 problemas", "BNCC + US Common Core"],
+    metrics: ["281 audited sets", "2,864 problems", "BNCC + US Common Core"],
+    metricsPt: ["281 sets auditados", "2.864 problemas", "BNCC + US Common Core"],
   },
   {
     id: "tibia-services",
@@ -355,10 +355,10 @@ export const projects: readonly Project[] = [
     name: "Frank's Stories",
     year: 2025,
     description:
-      "Family storytelling platform with decade-based timeline, DOCX/PDF upload, auto-image extraction, password-gated reader access, and admin dashboard.",
+      "Static family storytelling site with a decade-based timeline and book-style story reader. Current source reads curated JSON story files, includes the first two recovered stories, and keeps DOCX artifacts plus an add-story helper for source-controlled updates.",
     descriptionPt:
-      "Plataforma de histórias familiares com timeline por década, upload de DOCX/PDF, extração automática de imagens, acesso de leitura protegido por senha e painel admin.",
-    tech: ["Next.js 15", "SQLite", "Tailwind", "mammoth.js"],
+      "Site estático de histórias familiares com timeline por década e leitura em estilo livro. O código atual lê histórias em JSON, inclui as duas primeiras histórias recuperadas e preserva artefatos DOCX com um helper add-story para atualizações versionadas.",
+    tech: ["Next.js 15", "JSON", "Tailwind", "mammoth.js"],
     tag: "web-app",
     status: "maintained",
     visibility: "private",

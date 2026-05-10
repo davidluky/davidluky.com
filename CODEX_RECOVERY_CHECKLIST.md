@@ -1,10 +1,12 @@
-﻿# Codex Recovery Checklist
+# Codex Recovery Checklist
 
 Generated: 2026-05-06 20:13:50 -04:00
 
 Project: `davidluky.com`
 
-Canonical path: `C:\Users\David\OneDrive\Desktop\Programas\Programas\davidluky.com`
+Historical recovery source path: `C:\Users\David\OneDrive\Desktop\Programas\Programas\davidluky.com`
+
+Current promoted path: `C:\Users\David\OneDrive\Desktop\Programas_funcionando\davidluky.com`
 
 This checklist is evidence-based. Checked items below come from the audit CSVs, verification logs, or file operations recorded under `C:\Users\David\OneDrive\Desktop\Programas\_codex_project_audit_20260506`. It does not claim a full manual UX, security, or product review.
 

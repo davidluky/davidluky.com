@@ -1,60 +1,58 @@
 # Session Handoff
 
-Last updated: 2026-05-01
+Last updated: 2026-05-11
 
 ## What Was Done
 
-- Audited all 22 website project entries against actual project state in `Programas/`.
-- Fixed 5 stale stat values:
-  - The Room achievements: 239 → 249 (`stats.ts`)
-  - Matemática Elementar: 221 sets / 2,483 problems → 267 sets / 5,564 problems (`projects.ts` description + metrics EN/PT)
-  - TCG Arbitrage: 31 tests / 16 commands → 80 tests / 18 commands (`projects.ts` description + metrics EN/PT)
-  - Game Library: 8+ platforms → 10+ platforms (`projects.ts` description + metrics EN/PT)
-- Replaced homepage "Gaming Platforms" stat card with "Years Coding" (since 2014, auto-computed via DD-012).
-- Added `yearsCoding` and `codingStartYear` to `stats.ts`.
-- Updated About page timeline to mention coding start in 2014 alongside Tibia.
-- Added Lua to the About page tech stack.
-- Added About link to footer; renamed "Gaming" column to "Explore".
-- Updated shared i18n strings for the new footer structure.
-- Updated docs: CHANGELOG, flight-recorder (FR-023), design-decisions (DD-012), SESSION-HANDOFF.
+- Ran a conservative maintenance heartbeat scoped to `davidluky.com` only.
+- Reviewed the Astro + Tailwind site structure, Cloudflare Worker entrypoint, docs, CI workflow, package scripts, custom validator, and generated-artifact conventions.
+- Confirmed the repo starts clean on `main` tracking `origin/main`.
+- Installed locked dependencies with `npm ci` for local verification.
+- Ran the full project quality gate with optional external gaming data env vars unset so the build stayed local-only.
+- Checked dependency freshness with `npm outdated --long`; routine semver-allowed updates are available for Astro/Tailwind, and TypeScript has a newer major, but there is no audit pressure.
+- Updated this handoff with the current maintenance state and retro.
 
 ## In Progress
 
-- Nothing left unfinished.
-
-## What's Next
-
-1. Consider adding a build-time validation step that cross-checks key project stats (test counts, set counts) against source repos to prevent drift.
-2. The `_transfers` (Xeon ops scripts) folder is the only Programas project not represented on the website — could be added as an internal/ops-tooling entry if desired.
-3. Monitor Tibia Services deployment status — it's listed as `live` with a liveUrl but was noted as "NOT deployed" in memory. Verify `tibia.davidluky.com` resolves.
+- Nothing left unfinished in this pass.
 
 ## Current State
 
-- `npm run check`: 0 errors, 0 warnings.
-- `npm run build`: 6 pages built successfully.
-- `npm run validate:site`: passed.
-- `npm run audit:high`: 0 vulnerabilities.
-- All changes committed and pushed.
+- `npm ci`: succeeded; 389 packages installed, 0 vulnerabilities. `prebuild-install@7.1.3` emitted an upstream deprecation warning through the locked dependency tree.
+- `npm run verify`: passed.
+  - `npm run check`: 20 files checked, 0 errors, 0 warnings, 0 hints.
+  - `npm run build`: 6 pages built successfully.
+  - `npm run validate:site`: passed.
+  - `npm run audit:high`: 0 vulnerabilities.
+- `npm outdated --long`: reports non-security updates:
+  - `@tailwindcss/vite` 4.2.4 -> 4.3.0
+  - `astro` 6.2.1 -> 6.3.1
+  - `tailwindcss` 4.2.4 -> 4.3.0
+  - `typescript` 5.9.3 -> 6.0.3 latest, but 5.9.3 remains the semver-wanted version.
+- Generated local artifacts from verification are expected to be removed before commit: `.astro/`, `dist/`, and `node_modules/`.
+
+## What's Next
+
+1. Consider a separate dependency refresh PR/commit for the routine Astro and Tailwind semver updates, followed by the full `npm run verify` path and a quick visual smoke test.
+2. Keep watching hardcoded portfolio stats in `src/data/projects.ts`; FR-023 documents the drift risk, but there is still no automated cross-project stat validation.
+3. If a future pass needs live URL confidence, verify public URLs deliberately and document the scope. This heartbeat avoided broad external scans and production mutations.
 
 ## Decisions Made
 
-- Replaced "Gaming Platforms" with "Years Coding" on homepage — Gaming is still accessible via the gaming page and footer.
-- Used 2014 as coding start year per user instruction.
-- Auto-compute `yearsCoding` to prevent annual staleness (DD-012).
-- Footer reorganized: "Gaming" column → "Explore" column with both Gaming and About links.
-- Added Lua to tech stack since it's actively used in Mesen2 oracle scripts for MMX Trainer.
+- No runtime code changes were made because the existing quality gate passed and no clear local bug surfaced.
+- No flight recorder entry was added; there was no new failed approach, production gotcha, or recurring trap beyond the already documented artifact-cleanup and stat-drift patterns.
+- Dependency versions were not updated in this pass because available updates were routine and unrelated to a failing check or vulnerability.
 
 ## Retro
 
 **What went well:**
-- Cross-project stat verification caught significant drift (Matemática was showing less than half its actual content).
-- The auto-computing pattern (DD-012) prevents an entire class of annual staleness bugs.
-- Build passed on first try after all changes.
+- The repo's `verify` script gives a useful single-command health check: type diagnostics, static build, custom site validation, and high-severity audit all passed.
+- The custom validator still covers project-specific risks that generic tooling would miss, including mojibake, missing JSON-LD, CSP directives, internal links, and hardcoded eBay token regressions.
 
 **What could be better:**
-- Stats in project descriptions are inherently fragile — they're hardcoded text that drifts as projects evolve. A build-time cross-check or a convention of using ranges ("250+" instead of "249") would reduce maintenance burden.
-- The `projects.ts` file is getting long (400+ lines) — consider splitting into individual project files if it grows further.
+- There is no lint script. Astro check covers TypeScript/Astro diagnostics, but style and broader static analysis are currently limited to review plus the custom validator.
+- Dependency freshness is manual. `npm outdated` found routine updates that are safe candidates for a deliberate follow-up, but this pass did not roll them into the lockfile.
 
 **Risks:**
-- Tibia Services is marked `live` but may not be deployed yet — needs verification.
-- Project stats will drift again over time. The flight recorder (FR-023) documents this but doesn't prevent it.
+- Build-time gaming data intentionally falls back when `GAME_LIBRARY_DB`, `STEAM_API_KEY`, and `STEAM_ID` are absent. That keeps local builds safe, but fallback numbers can drift.
+- Project stats embedded in descriptions can become stale again as sibling projects evolve.

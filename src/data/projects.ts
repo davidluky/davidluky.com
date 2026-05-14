@@ -121,17 +121,17 @@ export const projects: readonly Project[] = [
     name: "The Room Web Client",
     year: 2024,
     description:
-      "Full React web companion to The Room, sharing the same Firebase backend. 40 routes, 3 visual themes (Terminal, Hybrid, Modern), bilingual EN/PT-BR content, and PWA-ready architecture.",
+      "Full React web companion to The Room, sharing the same Firebase backend. 40+ route modules, 3 visual themes (Terminal, Hybrid, Modern), bilingual EN/PT-BR content, and PWA-ready architecture.",
     descriptionPt:
-      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. 40 rotas, 3 temas visuais (Terminal, Híbrido, Moderno), conteúdo bilíngue EN/PT-BR e arquitetura pronta para PWA.",
+      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. 40+ módulos de rotas, 3 temas visuais (Terminal, Híbrido, Moderno), conteúdo bilíngue EN/PT-BR e arquitetura pronta para PWA.",
     tech: ["React 19", "TypeScript", "Tailwind", "Firebase", "Vite"],
     tag: "web-app",
     status: "live",
     visibility: "public",
     featured: true,
     liveUrl: "https://play.davidluky.com",
-    metrics: ["40 routes", "3 themes", "Shared Firebase backend"],
-    metricsPt: ["40 rotas", "3 temas", "Backend Firebase compartilhado"],
+    metrics: ["40+ route modules", "3 themes", "Shared Firebase backend"],
+    metricsPt: ["40+ módulos de rotas", "3 temas", "Backend Firebase compartilhado"],
   },
   {
     id: "matematica-elementar",
@@ -172,16 +172,16 @@ export const projects: readonly Project[] = [
     name: "TCG Arbitrage",
     year: 2026,
     description:
-      "CLI scanner that finds cross-platform price discrepancies between eBay and TCGPlayer for trading cards. Includes 80 tests, 18 commands, persistent SQLite price history, alerts, and the eBay compliance endpoint now served by this site.",
+      "CLI scanner that finds cross-platform price discrepancies between eBay and TCGPlayer for trading cards. Includes 82 tests, 18 commands, persistent SQLite price history, alerts, and the eBay compliance endpoint now served by this site.",
     descriptionPt:
-      "Scanner CLI que encontra discrepâncias de preço entre eBay e TCGPlayer para cards colecionáveis. Inclui 80 testes, 18 comandos, histórico de preços persistente em SQLite, alertas e o endpoint de compliance do eBay agora servido por este site.",
+      "Scanner CLI que encontra discrepâncias de preço entre eBay e TCGPlayer para cards colecionáveis. Inclui 82 testes, 18 comandos, histórico de preços persistente em SQLite, alertas e o endpoint de compliance do eBay agora servido por este site.",
     tech: ["Python", "SQLite", "httpx", "Rich", "eBay API"],
     tag: "automation",
     status: "active",
     visibility: "private",
     featured: true,
-    metrics: ["80 tests", "18 commands", "SQLite alerts"],
-    metricsPt: ["80 testes", "18 comandos", "Alertas em SQLite"],
+    metrics: ["82 tests", "18 commands", "SQLite alerts"],
+    metricsPt: ["82 testes", "18 comandos", "Alertas em SQLite"],
   },
   {
     id: "game-library",

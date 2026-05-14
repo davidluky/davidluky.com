@@ -14,6 +14,8 @@ declare global {
       mostPlayedTotal: number;
       steamGames: number;
       epicGames: number;
+      dataNoteEn: string;
+      dataNotePt: string;
     };
     __about: {
       timelinePt: string[];

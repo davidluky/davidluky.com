@@ -297,3 +297,15 @@ for (const line of envFile.split('\n')) {
 **Fix**: Replaced the thin project model with typed `status`, `visibility`, `liveUrl`, `repoUrl`, `featured`, and metrics fields. Power Monitor is now `internal` with no public `liveUrl`, and `liveProjects` derives only from resolving public URLs.
 
 **Guard**: New project rule: never set `liveUrl` until the URL resolves. Use `visibility: "internal"` for private dashboards.
+
+---
+
+## FR-024: Public Profile Stats Drift Between Website Builds (2026-05-14)
+
+**What happened**: A live information audit found stale public stats on the site: The Room still reported 14 games while the current registry exposes 15, TCG Arbitrage reported 80 tests while the current lock-path suite records 82, Steam copy still said the account started in 2010 even though the public profile shows July 25, 2009, and Tibia profile stats had moved from level 627 / 234 achievement points to level 628 / 236.
+
+**Root cause**: `stats.ts`, `projects.ts`, and the gaming fallback snapshot are manually curated. They intentionally avoid private API use during normal builds, but that makes public-facing numbers drift unless a maintenance pass checks live public sources and sibling-project ledgers.
+
+**Fix**: Refreshed the stale numbers, changed The Room Web route count to "40+ route modules" to avoid exact-count churn, and added a visible `/gaming` data note when the build uses fallback snapshot data.
+
+**Lesson**: Treat profile stats as dated evidence, not eternal constants. During website audits, check public Steam XML/profile HTML, TibiaData, and sibling project recovery ledgers before changing the website. If a number depends on private APIs, label it as a snapshot instead of presenting it as live.

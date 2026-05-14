@@ -2,6 +2,17 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-05-14
+
+### Changed
+- Refreshed public-facing profile stats after a full site information audit: The Room now reports 15 games, TCG Arbitrage reports 82 tests, Steam profile data uses the 2009 account year, 1,348 public Steam games, 6,357h Dota 2, and 95 friends, and Tibia now reports level 628 with 236 achievement points.
+- The Room Web route metric now says "40+ route modules" instead of a brittle exact "40 routes" count.
+- `/gaming` now always shows a data freshness note when private API-backed gaming data falls back to a local snapshot.
+- DigiPets privacy policy now reflects the current source more precisely: no analytics, advertising tracking, or crash-reporting SDKs are present.
+
+### Fixed
+- Removed stale no-JS fallback copy that still said Steam started in 2010.
+
 ## [Unreleased] — 2026-05-01
 
 ### Added

@@ -30,6 +30,14 @@ const platformLabel = (p: string) => {
 
 const mostPlayedTotal = gaming.mostPlayed.reduce((s, g) => s + g.hours, 0);
 const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to100 + gaming.distribution.h1to10 + gaming.distribution.under1h;
+const dataNote =
+  gaming.source === "fallback"
+    ? "Gaming library data combines public Steam/Tibia checks from May 14, 2026 with a local March 2026 playtime snapshot for values that require private APIs."
+    : `Data sourced from ${gaming.source === "game-library" ? "Game Library" : "Steam API"} at build time. Last synced: ${new Date().toISOString().slice(0, 10)}.`;
+const dataNotePt =
+  gaming.source === "fallback"
+    ? "Os dados de jogos combinam checagens públicas de Steam/Tibia de 14 de maio de 2026 com um snapshot local de março de 2026 para valores que dependem de APIs privadas."
+    : `Dados vindos de ${gaming.source === "game-library" ? "Game Library" : "Steam API"} no build. Última sincronização: ${new Date().toISOString().slice(0, 10)}.`;
 ---
 
 <Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, Epic Games, and Tibia gaming profiles.">
@@ -86,7 +94,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.yearsGaming}</div>
         <div data-i18n="g_stat_years" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Years Gaming</div>
-        <div data-i18n="g_stat_years_sub" class="mt-2 text-[11px] text-text-3">On Steam since 2010</div>
+        <div data-i18n="g_stat_years_sub" class="mt-2 text-[11px] text-text-3">On Steam since {stats.steamStartYear}</div>
       </div>
       <div class="rounded-xl bg-[#0f0f0e] p-6">
         <div class="text-3xl font-light tracking-tight text-text mb-1">{stats.tibiaLevel}</div>
@@ -293,13 +301,11 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
     </div>
   </section>
 
-  {gaming.source !== "fallback" && (
-    <div class="mx-auto max-w-[1280px] px-12 pb-8 max-md:px-6">
-      <p class="text-[11px] text-text-3/50">
-        Data sourced from {gaming.source === "game-library" ? "Game Library" : "Steam API"} at build time. Last synced: {new Date().toISOString().slice(0, 10)}.
-      </p>
-    </div>
-  )}
+  <div class="mx-auto max-w-[1280px] px-12 pb-8 max-md:px-6">
+    <p data-i18n="g_data_note" class="text-[11px] text-text-3/50">
+      {dataNote}
+    </p>
+  </div>
 
   <Footer />
 </Base>
@@ -312,8 +318,10 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
   mostPlayedTotal,
   steamGames: gaming.ownedByPlatform.steam ?? 0,
   epicGames: gaming.ownedByPlatform.epic ?? 281, // snapshot from 2026-03
+  dataNoteEn: dataNote,
+  dataNotePt,
 }}>
-  window.__gaming = { totalGames, totalHours, gamesWithHours, mostPlayedCount, mostPlayedTotal, steamGames, epicGames };
+  window.__gaming = { totalGames, totalHours, gamesWithHours, mostPlayedCount, mostPlayedTotal, steamGames, epicGames, dataNoteEn, dataNotePt };
 </script>
 <script>
   import { applyI18n } from '../i18n/shared';
@@ -362,6 +370,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_dist_1_10: '1–10 hours',
       g_dist_under1: '< 1 hour',
       g_hardware: 'Hardware',
+      g_data_note: g.dataNoteEn,
     },
     pt: {
       g_label: 'Jogos',
@@ -401,6 +410,7 @@ const gamesWithHours = gaming.distribution.over100h + gaming.distribution.h10to1
       g_dist_1_10: '1–10 horas',
       g_dist_under1: '< 1 hora',
       g_hardware: 'Hardware',
+      g_data_note: g.dataNotePt,
     },
   });
 </script>

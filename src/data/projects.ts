@@ -360,8 +360,9 @@ export const projects: readonly Project[] = [
       "Site estático de histórias familiares com timeline por década e leitura em estilo livro. O código atual lê histórias em JSON, inclui as duas primeiras histórias recuperadas e preserva artefatos DOCX com um helper add-story para atualizações versionadas.",
     tech: ["Next.js 15", "JSON", "Tailwind", "mammoth.js"],
     tag: "web-app",
-    status: "maintained",
+    status: "live",
     visibility: "private",
+    liveUrl: "https://frank.davidluky.com",
   },
   {
     id: "games-downloader",

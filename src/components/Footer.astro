@@ -1,7 +1,9 @@
 ---
 import { liveProjects } from "../data/projects";
+import { socialProfiles } from "../data/socials";
 
 const currentYear = new Date().getFullYear();
+const footerProfiles = socialProfiles.filter((profile) => ["GitHub", "LinkedIn", "Writing", "Personal"].includes(profile.platform));
 ---
 
 <footer>
@@ -28,7 +30,11 @@ const currentYear = new Date().getFullYear();
         <div>
           <div data-i18n="footer_connect" class="mb-3.5 text-xs font-semibold uppercase tracking-wider text-text-3">Connect</div>
           <a href="mailto:davidluky@davidluky.com" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">Email</a>
-          <a href="https://github.com/davidluky" target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">GitHub</a>
+          {footerProfiles.map((profile) => (
+            <a href={profile.url} target="_blank" rel="noopener noreferrer" class="mb-2.5 block text-sm text-text-2 no-underline transition-colors hover:text-text">
+              {profile.platform}
+            </a>
+          ))}
         </div>
       </div>
     </div>

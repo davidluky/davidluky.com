@@ -18,8 +18,13 @@ const defaultStructuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "David Luky",
+  alternateName: "Alisson David Frangullys",
   url: new URL("/", Astro.site).toString(),
   sameAs: socialProfiles.map((profile) => profile.url),
+  homeLocation: {
+    "@type": "Place",
+    name: "Richmond, Virginia",
+  },
   knowsAbout: ["Game development", "Web applications", "Automation", "AI tooling", "Reverse engineering"],
   mainEntityOfPage: canonicalUrl.toString(),
 };

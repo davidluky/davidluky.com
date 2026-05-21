@@ -1,4 +1,6 @@
 ---
+import { socialProfiles } from "../data/socials";
+
 interface Props {
   title?: string;
   description?: string;
@@ -17,7 +19,7 @@ const defaultStructuredData = {
   "@type": "Person",
   name: "David Luky",
   url: new URL("/", Astro.site).toString(),
-  sameAs: ["https://github.com/davidluky"],
+  sameAs: socialProfiles.map((profile) => profile.url),
   knowsAbout: ["Game development", "Web applications", "Automation", "AI tooling", "Reverse engineering"],
   mainEntityOfPage: canonicalUrl.toString(),
 };

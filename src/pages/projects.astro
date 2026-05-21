@@ -9,6 +9,9 @@ import {
   getProjectVisibility,
   liveProjects,
   projects,
+  projectStatuses,
+  projectTags,
+  projectVisibilities,
 } from "../data/projects";
 
 const activeProjects = projects.filter((project) => project.status !== "archived").length;
@@ -35,6 +38,15 @@ const projectsStructuredData = {
 
 const externalTarget = (url: string) => url.startsWith("http") ? "_blank" : undefined;
 const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferrer" : undefined;
+const searchableText = (project: (typeof projects)[number]) => [
+  project.name,
+  project.description,
+  project.descriptionPt,
+  project.tech.join(" "),
+  getProjectTag(project).label,
+  getProjectStatus(project).label,
+  getProjectVisibility(project).label,
+].join(" ").toLowerCase();
 ---
 
 <Base title="Projects — David Luky" description="A curated portfolio of David Luky's games, web apps, automation tools, AI tooling, and internal systems." structuredData={projectsStructuredData}>
@@ -73,6 +85,69 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
     </div>
   </section>
 
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <div class="rounded-lg border border-border bg-bg-card p-5">
+      <div class="mb-4 flex items-end justify-between gap-4 max-md:flex-col max-md:items-start">
+        <div>
+          <h2 data-i18n="p_filter_title" class="text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+            Find a Project
+          </h2>
+          <p data-i18n="p_filter_desc" class="mt-2 text-[13px] leading-relaxed text-text-2">
+            Search by name, technology, status, project type, or public/private visibility.
+          </p>
+        </div>
+        <button id="project-filter-clear" data-i18n="p_filter_clear" class="text-sm font-medium text-accent transition-colors hover:text-text">
+          Clear filters
+        </button>
+      </div>
+
+      <div class="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <label class="block">
+          <span data-i18n="p_filter_search" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Search</span>
+          <input
+            id="project-search"
+            data-i18n-placeholder="p_filter_search_placeholder"
+            type="search"
+            placeholder="Try Firebase, AI, games, automation..."
+            class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors placeholder:text-text-3 focus:border-accent"
+          />
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_type" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Type</span>
+          <select id="project-tag-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_types">All types</option>
+            {Object.entries(projectTags).map(([value, tag]) => (
+              <option value={value}>{tag.label}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_status" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Status</span>
+          <select id="project-status-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_statuses">All statuses</option>
+            {Object.entries(projectStatuses).map(([value, status]) => (
+              <option value={value}>{status.label}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_visibility" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Visibility</span>
+          <select id="project-visibility-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_visibility">All visibility</option>
+            {Object.entries(projectVisibilities).map(([value, visibility]) => (
+              <option value={value}>{visibility.label}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <p id="project-filter-count" class="mt-4 font-mono text-[12px] text-text-3" aria-live="polite"></p>
+      <p id="project-filter-empty" data-i18n="p_filter_empty" class="mt-4 hidden text-sm text-text-2">
+        No projects match these filters.
+      </p>
+    </div>
+  </section>
+
   <section class="mx-auto max-w-[1280px] px-12 pb-18 max-md:px-6">
     <div class="mb-7 flex items-end justify-between gap-6 max-sm:flex-col max-sm:items-start">
       <div>
@@ -92,7 +167,15 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
         const status = getProjectStatus(project);
         const visibility = getProjectVisibility(project);
         return (
-          <article class="rounded-lg border border-border bg-bg-card p-6">
+          <article
+            class="rounded-lg border border-border bg-bg-card p-6"
+            data-project-card
+            data-project-featured="true"
+            data-project-search={searchableText(project)}
+            data-project-tag-value={project.tag}
+            data-project-status-value={project.status}
+            data-project-visibility-value={project.visibility}
+          >
             <div class="mb-4 flex flex-wrap items-center gap-2">
               <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
                 {tag.label}
@@ -182,7 +265,15 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
         const status = getProjectStatus(project);
         const visibility = getProjectVisibility(project);
         return (
-          <article class="border-b border-border/30 py-8 last:border-0">
+          <article
+            class="border-b border-border/30 py-8 last:border-0"
+            data-project-card
+            data-project-featured="false"
+            data-project-search={searchableText(project)}
+            data-project-tag-value={project.tag}
+            data-project-status-value={project.status}
+            data-project-visibility-value={project.visibility}
+          >
             <div class="mb-3 flex flex-wrap items-center gap-2">
               <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
                 {tag.label}
@@ -264,6 +355,18 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
       p_stat_active: 'Active / Maintained',
       p_stat_live: 'Live Sites',
       p_stat_tech: 'Technologies',
+      p_filter_title: 'Find a Project',
+      p_filter_desc: 'Search by name, technology, status, project type, or public/private visibility.',
+      p_filter_clear: 'Clear filters',
+      p_filter_search: 'Search',
+      p_filter_search_placeholder: 'Try Firebase, AI, games, automation...',
+      p_filter_type: 'Type',
+      p_filter_all_types: 'All types',
+      p_filter_status: 'Status',
+      p_filter_all_statuses: 'All statuses',
+      p_filter_visibility: 'Visibility',
+      p_filter_all_visibility: 'All visibility',
+      p_filter_empty: 'No projects match these filters.',
       p_featured_title: 'Featured',
       p_featured_desc: 'The highest-signal projects: shipped products, active systems, and work that best represents how I build.',
       p_all_title: 'Full Archive',
@@ -279,6 +382,18 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
       p_stat_active: 'Ativos / Mantidos',
       p_stat_live: 'Sites Online',
       p_stat_tech: 'Tecnologias',
+      p_filter_title: 'Encontrar Projeto',
+      p_filter_desc: 'Busque por nome, tecnologia, status, tipo de projeto ou visibilidade pública/privada.',
+      p_filter_clear: 'Limpar filtros',
+      p_filter_search: 'Busca',
+      p_filter_search_placeholder: 'Tente Firebase, IA, jogos, automação...',
+      p_filter_type: 'Tipo',
+      p_filter_all_types: 'Todos os tipos',
+      p_filter_status: 'Status',
+      p_filter_all_statuses: 'Todos os status',
+      p_filter_visibility: 'Visibilidade',
+      p_filter_all_visibility: 'Todas as visibilidades',
+      p_filter_empty: 'Nenhum projeto combina com estes filtros.',
       p_featured_title: 'Destaques',
       p_featured_desc: 'Os projetos de maior sinal: produtos publicados, sistemas ativos e trabalhos que melhor representam como eu construo.',
       p_all_title: 'Arquivo Completo',
@@ -315,5 +430,77 @@ const externalRel = (url: string) => url.startsWith("http") ? "noopener noreferr
       const translatedMetric = project?.metricsPt?.[Number(metricIndex)];
       if (translatedMetric) el.textContent = translatedMetric;
     });
+
+    document.querySelectorAll<HTMLOptionElement>('#project-tag-filter option[value]').forEach((option) => {
+      if (option.value && option.value in projectTags) option.textContent = projectTags[option.value as keyof typeof projectTags].labelPt;
+    });
+    document.querySelectorAll<HTMLOptionElement>('#project-status-filter option[value]').forEach((option) => {
+      if (option.value && option.value in projectStatuses) option.textContent = projectStatuses[option.value as keyof typeof projectStatuses].labelPt;
+    });
+    document.querySelectorAll<HTMLOptionElement>('#project-visibility-filter option[value]').forEach((option) => {
+      if (option.value && option.value in projectVisibilities) option.textContent = projectVisibilities[option.value as keyof typeof projectVisibilities].labelPt;
+    });
   }
+
+  const search = document.getElementById('project-search') as HTMLInputElement | null;
+  const tag = document.getElementById('project-tag-filter') as HTMLSelectElement | null;
+  const status = document.getElementById('project-status-filter') as HTMLSelectElement | null;
+  const visibility = document.getElementById('project-visibility-filter') as HTMLSelectElement | null;
+  const clear = document.getElementById('project-filter-clear');
+  const count = document.getElementById('project-filter-count');
+  const empty = document.getElementById('project-filter-empty');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-project-card]')];
+  const archiveCards = cards.filter((card) => card.dataset.projectFeatured === 'false');
+
+  function updateProjectFilters() {
+    const query = search?.value.trim().toLowerCase() ?? '';
+    const tagValue = tag?.value ?? '';
+    const statusValue = status?.value ?? '';
+    const visibilityValue = visibility?.value ?? '';
+    let visibleProjects = 0;
+
+    for (const card of cards) {
+      const matches =
+        (!query || (card.dataset.projectSearch ?? '').includes(query)) &&
+        (!tagValue || card.dataset.projectTagValue === tagValue) &&
+        (!statusValue || card.dataset.projectStatusValue === statusValue) &&
+        (!visibilityValue || card.dataset.projectVisibilityValue === visibilityValue);
+
+      card.hidden = !matches;
+      if (matches && card.dataset.projectFeatured === 'false') visibleProjects += 1;
+    }
+
+    if (count) {
+      count.textContent = lang === 'pt'
+        ? `${visibleProjects} de ${archiveCards.length} projetos visíveis`
+        : `${visibleProjects} of ${archiveCards.length} projects visible`;
+    }
+    empty?.classList.toggle('hidden', visibleProjects !== 0);
+  }
+
+  [search, tag, status, visibility].forEach((control) => {
+    control?.addEventListener('input', updateProjectFilters);
+    control?.addEventListener('change', updateProjectFilters);
+  });
+
+  clear?.addEventListener('click', () => {
+    if (search) search.value = '';
+    if (tag) tag.value = '';
+    if (status) status.value = '';
+    if (visibility) visibility.value = '';
+    updateProjectFilters();
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-i18n-placeholder]').forEach((el) => {
+    const key = el.dataset.i18nPlaceholder;
+    if (key && key in (lang === 'pt' ? {
+      p_filter_search_placeholder: 'Tente Firebase, IA, jogos, automação...',
+    } : {
+      p_filter_search_placeholder: 'Try Firebase, AI, games, automation...',
+    })) {
+      el.setAttribute('placeholder', lang === 'pt' ? 'Tente Firebase, IA, jogos, automação...' : 'Try Firebase, AI, games, automation...');
+    }
+  });
+
+  updateProjectFilters();
 </script>

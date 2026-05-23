@@ -31,6 +31,11 @@ export const projectTags = {
     labelPt: "Ferramentas de IA",
     colorClass: "text-[#f472b6]",
   },
+  "creative-pipeline": {
+    label: "Creative Pipeline",
+    labelPt: "Pipeline Criativo",
+    colorClass: "text-[#facc15]",
+  },
   "reverse-engineering": {
     label: "Reverse Engineering",
     labelPt: "Engenharia Reversa",
@@ -60,6 +65,11 @@ export const projectTags = {
     label: "Ops Tooling",
     labelPt: "Ferramentas de Operações",
     colorClass: "text-[#93c5fd]",
+  },
+  "personal-system": {
+    label: "Personal System",
+    labelPt: "Sistema Pessoal",
+    colorClass: "text-[#2dd4bf]",
   },
 } as const;
 
@@ -105,33 +115,33 @@ export const projects: readonly Project[] = [
     name: "The Room",
     year: 2020,
     description:
-      `Multiplayer social platform with ${stats.theRoomGames} games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, ${stats.theRoomAchievements} achievements, tournaments, economy, and admin dashboard. The original C++ desktop client that started it all.`,
+      `Multiplayer social platform with ${stats.theRoomGames} games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, ${stats.theRoomAchievements} achievements, tournaments, economy, and admin dashboard. The native v1.78 RPG pass now includes bilingual absurdist field notes, first-encounter writing, NPC/shop polish, and the Pombo Sniper enemy with sprite/data support.`,
     descriptionPt:
-      `Plataforma social multiplayer com ${stats.theRoomGames} jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, ${stats.theRoomAchievements} conquistas, torneios, economia e painel admin. O cliente desktop C++ original que começou tudo.`,
+      `Plataforma social multiplayer com ${stats.theRoomGames} jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, ${stats.theRoomAchievements} conquistas, torneios, economia e painel admin. O passe nativo v1.78 do RPG agora inclui notas de bestiário e primeiros encontros em PT-BR/EN, polimento de NPCs/lojas e o inimigo Pombo Sniper com sprite e dados próprios.`,
     tech: ["C++17", "Firebase", "libcurl", "raylib", "Windows API"],
     tag: "game-platform",
     status: "active",
     visibility: "private",
     featured: true,
-    metrics: [`${stats.theRoomGames} games`, `${stats.theRoomAchievements} achievements`, "7 RPG zones"],
-    metricsPt: [`${stats.theRoomGames} jogos`, `${stats.theRoomAchievements} conquistas`, "7 zonas de RPG"],
+    metrics: [`${stats.theRoomGames} games`, `${stats.theRoomAchievements} achievements`, "RPG v1.78 content pass"],
+    metricsPt: [`${stats.theRoomGames} jogos`, `${stats.theRoomAchievements} conquistas`, "Passe RPG v1.78"],
   },
   {
     id: "the-room-web",
     name: "The Room Web Client",
     year: 2024,
     description:
-      "Full React web companion to The Room, sharing the same Firebase backend. 40+ route modules, 3 visual themes (Terminal, Hybrid, Modern), bilingual EN/PT-BR content, and PWA-ready architecture.",
+      "Full React web companion to The Room, sharing the same Firebase backend. The latest RPG parity pass mirrors the native content update with shared encounter/bestiary text, Pombo Sniper assets, canonical bestiary unlock flags, hidden locked-zone names, tutorial/image fixes, 3 themes, and PWA-ready architecture.",
     descriptionPt:
-      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. 40+ módulos de rotas, 3 temas visuais (Terminal, Híbrido, Moderno), conteúdo bilíngue EN/PT-BR e arquitetura pronta para PWA.",
+      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. O passe mais recente de paridade do RPG espelha o conteúdo nativo com textos de encontro/bestiário compartilhados, assets do Pombo Sniper, flags canônicas de desbloqueio, zonas bloqueadas sem spoilers, correções de tutorial/imagens, 3 temas e arquitetura pronta para PWA.",
     tech: ["React 19", "TypeScript", "Tailwind", "Firebase", "Vite"],
     tag: "web-app",
     status: "live",
     visibility: "public",
     featured: true,
     liveUrl: "https://play.davidluky.com",
-    metrics: ["40+ route modules", "3 themes", "Shared Firebase backend"],
-    metricsPt: ["40+ módulos de rotas", "3 temas", "Backend Firebase compartilhado"],
+    metrics: ["Native RPG parity", "3 themes", "Shared Firebase backend"],
+    metricsPt: ["Paridade com RPG nativo", "3 temas", "Backend Firebase compartilhado"],
   },
   {
     id: "matematica-elementar",
@@ -276,13 +286,46 @@ export const projects: readonly Project[] = [
     name: "Gym Check-in Bot",
     year: 2025,
     description:
-      "WhatsApp bot that tracks gym training via message reactions in a group chat. Posts daily, weekly, and monthly reports in PT-BR, auto-detects members, and reconciles check-ins.",
+      "WhatsApp bot that tracks gym training via message reactions in a group chat. The Phase 1 personal-trainer mode adds allowlisted private chats, PT-BR commands/natural recaps for workouts, food, hydration, body metrics, and pain, scheduled morning plans, evening reviews, and safe CSV exports into a private profile folder.",
     descriptionPt:
-      "Bot de WhatsApp que rastreia treinos na academia via reações em grupo. Publica relatórios diários, semanais e mensais em PT-BR, detecta membros automaticamente e reconcilia check-ins.",
-    tech: ["Node.js", "whatsapp-web.js", "SQLite", "PM2"],
+      "Bot de WhatsApp que rastreia treinos na academia via reações em grupo. O modo personal trainer Fase 1 adiciona chats privados autorizados, comandos e recaps naturais em PT-BR para treinos, comida, hidratação, métricas corporais e dor, planos pela manhã, revisões à noite e exportação CSV segura para uma pasta de perfil privada.",
+    tech: ["Node.js", "whatsapp-web.js", "SQLite", "PM2", "Jest"],
     tag: "bot",
-    status: "maintained",
+    status: "active",
     visibility: "private",
+    featured: true,
+    metrics: ["Private PT mode", "Morning/evening coaching", "CSV profile exports"],
+    metricsPt: ["Modo personal privado", "Coaching manhã/noite", "Exportação CSV"],
+  },
+  {
+    id: "ccb-hinos-rock-suno",
+    name: "CCB Hinos Rock Suno Pipeline",
+    year: 2026,
+    description:
+      "Production pipeline for non-commercial rock and epic-rock hymn arrangements. It includes a 480-hymn tracker, catalog CSV/JSON, rights review, Suno prompt queue and stubs, cover/video scripts, YouTube metadata, upload queue, and an offline TV workflow. It is a planning system, not a lyrics archive, and publication stays gated by rights clearance.",
+    descriptionPt:
+      "Pipeline de produção para arranjos não comerciais de hinos em rock e rock épico. Inclui tracker de 480 hinos, catálogo CSV/JSON, revisão de direitos, fila e stubs de prompts para Suno, scripts de capa/vídeo, metadados de YouTube, fila de upload e fluxo offline para TV. É um sistema de planejamento, não um arquivo de letras, e publicação continua condicionada à liberação de direitos.",
+    tech: ["Node.js", "PowerShell", "Excel", "Suno", "YouTube Workflow"],
+    tag: "creative-pipeline",
+    status: "wip",
+    visibility: "private",
+    metrics: ["480-hymn tracker", "Rights-first workflow", "Video/upload queue"],
+    metricsPt: ["Tracker de 480 hinos", "Fluxo com direitos primeiro", "Fila de vídeo/upload"],
+  },
+  {
+    id: "personal-profile",
+    name: "Personal Trainer Profile",
+    year: 2026,
+    description:
+      "Private planning profile for training, nutrition, recovery, progress reviews, and future Gym Bot personal-trainer integration. It organizes measurements, health summaries, inventories, mobility/recomposition plans, logs, and reviewed exports while staying internal and explicitly outside medical-advice territory.",
+    descriptionPt:
+      "Perfil privado de planejamento para treino, nutrição, recuperação, revisões de progresso e futura integração com o modo personal trainer do Gym Bot. Organiza medidas, resumos de saúde, inventários, planos de mobilidade/recomposição, logs e exports revisados, mantendo tudo interno e explicitamente fora do papel de aconselhamento médico.",
+    tech: ["YAML", "CSV", "Markdown", "SQLite exports", "Gym Bot"],
+    tag: "personal-system",
+    status: "internal",
+    visibility: "internal",
+    metrics: ["Private profile", "Trainer-mode handoff", "Progress logs"],
+    metricsPt: ["Perfil privado", "Integração com modo personal", "Logs de progresso"],
   },
   {
     id: "whatsapp-exporter",

@@ -447,6 +447,59 @@ export const projects: readonly Project[] = [
     visibility: "private",
   },
   {
+    id: "luxury-office-studio-8bit",
+    name: "Office Render 8-Bit",
+    year: 2026,
+    description:
+      "Local Vite tool for approving cinematic luxury-office stills, attaching audio, and exporting browser-generated WEBM video or audio-only output. Includes image approval gate, duration, FPS, and sequential-or-mix audio controls.",
+    descriptionPt:
+      "Ferramenta Vite local para aprovar imagens de escritório luxuoso, anexar áudio e exportar vídeo WEBM ou áudio gerados no browser. Inclui gate de aprovação de imagem, controles de duração, FPS e mixagem sequencial ou simultânea.",
+    tech: ["Vite", "JavaScript", "Canvas API"],
+    tag: "creative-pipeline",
+    status: "active",
+    visibility: "private",
+    repoUrl: "https://github.com/davidluky/luxury-office-studio-8bit",
+  },
+  {
+    id: "kumiko-frame-p1s",
+    name: "Kumiko Frame (P1S)",
+    year: 2026,
+    description:
+      "3D-print planning and production system for a modular kumiko-style wall panel on a Bambu Lab P1S. Tracks parts, slicer settings, tolerance tests, and the full assembly workflow from first test print to wall mount.",
+    descriptionPt:
+      "Sistema de planejamento e produção para um painel de parede modular estilo kumiko no Bambu Lab P1S. Rastreia peças, configurações de fatiador, testes de tolerância e o fluxo completo de montagem desde o primeiro teste até a instalação.",
+    tech: ["Bambu Lab P1S", "MakerWorld", "Markdown", "CSV"],
+    tag: "creative-pipeline",
+    status: "wip",
+    visibility: "internal",
+  },
+  {
+    id: "sync-scripts",
+    name: "Retro Collection Sync",
+    year: 2026,
+    description:
+      "PowerShell toolkit for syncing Xbox 360 and Nintendo 3DS game collections across machines. Includes ETA tracking, stale mtime repair, integrity verification, and per-platform progress monitoring.",
+    descriptionPt:
+      "Kit PowerShell para sincronizar coleções de Xbox 360 e Nintendo 3DS entre máquinas. Inclui rastreamento de ETA, reparo de mtimes antigos, verificação de integridade e monitoramento de progresso por plataforma.",
+    tech: ["PowerShell"],
+    tag: "ops-tooling",
+    status: "maintained",
+    visibility: "internal",
+  },
+  {
+    id: "transfers-ops",
+    name: "Xeon Server Ops",
+    year: 2026,
+    description:
+      "PowerShell toolkit for Xeon home-lab server operations: data sync with stall detection, firewall scoping, ACL management, WinRM hardening, security audit, and Windows Update automation via Tailscale.",
+    descriptionPt:
+      "Kit PowerShell para operações no servidor Xeon do home lab: sync de dados com detecção de stall, escopo de firewall, gestão de ACLs, hardening de WinRM, auditoria de segurança e automação de Windows Update via Tailscale.",
+    tech: ["PowerShell", "Windows", "Tailscale"],
+    tag: "ops-tooling",
+    status: "active",
+    visibility: "internal",
+  },
+  {
     id: "davidluky-com",
     name: "davidluky.com",
     year: 2026,

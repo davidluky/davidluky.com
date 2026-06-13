@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import type { ProjectStatus } from "../data/projects";
 import {
   featuredProjects,
   getProjectStatus,
@@ -17,6 +18,14 @@ import {
 const activeProjects = projects.filter((project) => project.status !== "archived").length;
 const desktopApps = projects.filter((project) => project.tag === "desktop-app").length;
 const technologies = new Set(projects.flatMap((project) => project.tech)).size;
+const remainingProjects = projects.filter((project) => !project.featured);
+const statusProjectGroups = Object.entries(projectStatuses)
+  .map(([status, statusMeta]) => ({
+    status: status as ProjectStatus,
+    statusMeta,
+    projects: remainingProjects.filter((project) => project.status === status),
+  }))
+  .filter((group) => group.projects.length > 0);
 const projectsStructuredData = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -82,69 +91,6 @@ const searchableText = (project: (typeof projects)[number]) => [
         <div class="mb-1 text-3xl font-light tracking-tight text-text">{technologies}</div>
         <div data-i18n="p_stat_tech" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Technologies</div>
       </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
-    <div class="rounded-lg border border-border bg-bg-card p-5">
-      <div class="mb-4 flex items-end justify-between gap-4 max-md:flex-col max-md:items-start">
-        <div>
-          <h2 data-i18n="p_filter_title" class="text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
-            Find a Project
-          </h2>
-          <p data-i18n="p_filter_desc" class="mt-2 text-[13px] leading-relaxed text-text-2">
-            Search by name, technology, status, project type, or public/private visibility.
-          </p>
-        </div>
-        <button id="project-filter-clear" data-i18n="p_filter_clear" class="text-sm font-medium text-accent transition-colors hover:text-text">
-          Clear filters
-        </button>
-      </div>
-
-      <div class="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <label class="block">
-          <span data-i18n="p_filter_search" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Search</span>
-          <input
-            id="project-search"
-            data-i18n-placeholder="p_filter_search_placeholder"
-            type="search"
-            placeholder="Try Firebase, AI, games, automation..."
-            class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors placeholder:text-text-3 focus:border-accent"
-          />
-        </label>
-        <label class="block">
-          <span data-i18n="p_filter_type" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Type</span>
-          <select id="project-tag-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
-            <option value="" data-i18n="p_filter_all_types">All types</option>
-            {Object.entries(projectTags).map(([value, tag]) => (
-              <option value={value}>{tag.label}</option>
-            ))}
-          </select>
-        </label>
-        <label class="block">
-          <span data-i18n="p_filter_status" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Status</span>
-          <select id="project-status-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
-            <option value="" data-i18n="p_filter_all_statuses">All statuses</option>
-            {Object.entries(projectStatuses).map(([value, status]) => (
-              <option value={value}>{status.label}</option>
-            ))}
-          </select>
-        </label>
-        <label class="block">
-          <span data-i18n="p_filter_visibility" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Visibility</span>
-          <select id="project-visibility-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
-            <option value="" data-i18n="p_filter_all_visibility">All visibility</option>
-            {Object.entries(projectVisibilities).map(([value, visibility]) => (
-              <option value={value}>{visibility.label}</option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <p id="project-filter-count" class="mt-4 font-mono text-[12px] text-text-3" aria-live="polite"></p>
-      <p id="project-filter-empty" data-i18n="p_filter_empty" class="mt-4 hidden text-sm text-text-2">
-        No projects match these filters.
-      </p>
     </div>
   </section>
 
@@ -251,89 +197,161 @@ const searchableText = (project: (typeof projects)[number]) => [
     </div>
   </section>
 
+  <section class="mx-auto max-w-[1280px] px-12 pb-16 max-md:px-6">
+    <div class="rounded-lg border border-border bg-bg-card p-5">
+      <div class="mb-4 flex items-end justify-between gap-4 max-md:flex-col max-md:items-start">
+        <div>
+          <h2 data-i18n="p_filter_title" class="text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+            Find a Project
+          </h2>
+          <p data-i18n="p_filter_desc" class="mt-2 text-[13px] leading-relaxed text-text-2">
+            Search by name, technology, status, project type, or public/private visibility.
+          </p>
+        </div>
+        <button id="project-filter-clear" data-i18n="p_filter_clear" class="text-sm font-medium text-accent transition-colors hover:text-text">
+          Clear filters
+        </button>
+      </div>
+
+      <div class="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <label class="block">
+          <span data-i18n="p_filter_search" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Search</span>
+          <input
+            id="project-search"
+            data-i18n-placeholder="p_filter_search_placeholder"
+            type="search"
+            placeholder="Try Firebase, AI, games, automation..."
+            class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors placeholder:text-text-3 focus:border-accent"
+          />
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_type" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Type</span>
+          <select id="project-tag-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_types">All types</option>
+            {Object.entries(projectTags).map(([value, tag]) => (
+              <option value={value}>{tag.label}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_status" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Status</span>
+          <select id="project-status-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_statuses">All statuses</option>
+            {Object.entries(projectStatuses).map(([value, status]) => (
+              <option value={value}>{status.label}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_visibility" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Visibility</span>
+          <select id="project-visibility-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
+            <option value="" data-i18n="p_filter_all_visibility">All visibility</option>
+            {Object.entries(projectVisibilities).map(([value, visibility]) => (
+              <option value={value}>{visibility.label}</option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <p id="project-filter-count" class="mt-4 font-mono text-[12px] text-text-3" aria-live="polite"></p>
+      <p id="project-filter-empty" data-i18n="p_filter_empty" class="mt-4 hidden text-sm text-text-2">
+        No projects match these filters.
+      </p>
+    </div>
+  </section>
+
   <section class="mx-auto max-w-[1280px] px-12 pb-24 max-md:px-6">
     <div class="mb-5 flex items-end justify-between gap-4">
       <h2 data-i18n="p_all_title" class="text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
-        Full Archive
+        By Status
       </h2>
       <span data-i18n="p_desktop_note" class="text-[12px] text-text-3">{desktopApps} desktop apps in the mix</span>
     </div>
 
-    <div class="space-y-0">
-      {projects.map((project) => {
-        const tag = getProjectTag(project);
-        const status = getProjectStatus(project);
-        const visibility = getProjectVisibility(project);
-        return (
-          <article
-            class="border-b border-border/30 py-8 last:border-0"
-            data-project-card
-            data-project-featured="false"
-            data-project-search={searchableText(project)}
-            data-project-tag-value={project.tag}
-            data-project-status-value={project.status}
-            data-project-visibility-value={project.visibility}
-          >
-            <div class="mb-3 flex flex-wrap items-center gap-2">
-              <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
-                {tag.label}
-              </span>
-              <span class="text-border">/</span>
-              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-status={project.id}>
-                {status.label}
-              </span>
-              <span class="text-border">/</span>
-              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-visibility={project.id}>
-                {visibility.label}
-              </span>
-            </div>
+    <div class="space-y-8">
+      {statusProjectGroups.map(({ status, statusMeta, projects: groupProjects }) => (
+        <div class="border-t border-border/40 pt-6" data-project-group>
+          <div class="mb-3 flex items-baseline justify-between gap-4">
+            <h3
+              class="text-[13px] font-semibold uppercase tracking-[2px] text-text"
+              data-project-group-label={status}
+            >
+              {statusMeta.label}
+            </h3>
+            <span class="font-mono text-[12px] text-text-3">{groupProjects.length}</span>
+          </div>
 
-            <div class="flex items-start justify-between gap-12 max-md:flex-col max-md:gap-4">
-              <div class="max-w-[640px]">
-                <div class="mb-3 flex items-baseline gap-3">
-                  <h3 class="text-xl font-medium">{project.name}</h3>
-                  <span class="font-mono text-[12px] text-text-3">{project.year}</span>
-                </div>
-                <p class="text-[15px] leading-relaxed text-text-2" data-project-desc={project.id}>
-                  {project.description}
-                </p>
-                <div class="mt-4 flex flex-wrap gap-3">
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target={externalTarget(project.liveUrl)}
-                      rel={externalRel(project.liveUrl)}
-                      data-i18n="p_live"
-                      class="text-sm font-medium text-accent no-underline transition-colors hover:text-text"
-                    >
-                      Live
-                    </a>
-                  )}
-                  {project.repoUrl && (
-                    <a
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-i18n="p_source"
-                      class="text-sm font-medium text-text-2 no-underline transition-colors hover:text-text"
-                    >
-                      Source
-                    </a>
-                  )}
-                </div>
-              </div>
+          <div class="divide-y divide-border/30">
+            {groupProjects.map((project) => {
+              const tag = getProjectTag(project);
+              const visibility = getProjectVisibility(project);
+              return (
+                <article
+                  class="grid gap-4 py-5 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1.35fr)_minmax(0,1fr)_auto] md:items-center"
+                  data-project-card
+                  data-project-featured="false"
+                  data-project-search={searchableText(project)}
+                  data-project-tag-value={project.tag}
+                  data-project-status-value={project.status}
+                  data-project-visibility-value={project.visibility}
+                >
+                  <div class="min-w-0">
+                    <div class="mb-2 flex flex-wrap items-center gap-2">
+                      <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
+                        {tag.label}
+                      </span>
+                      <span class="text-border">/</span>
+                      <span class="font-mono text-[12px] text-text-3">{project.year}</span>
+                      <span class="text-border">/</span>
+                      <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-visibility={project.id}>
+                        {visibility.label}
+                      </span>
+                    </div>
+                    <h4 class="truncate text-[17px] font-medium leading-snug">{project.name}</h4>
+                  </div>
 
-              <div class="flex shrink-0 flex-wrap gap-2 md:max-w-[220px] md:justify-end">
-                {project.tech.map((tech) => (
-                  <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </article>
-        );
-      })}
+                  <p class="min-w-0 truncate text-[14px] leading-relaxed text-text-2" data-project-desc={project.id}>
+                    {project.description}
+                  </p>
+
+                  <div class="flex min-w-0 flex-wrap gap-2">
+                    {project.tech.map((tech) => (
+                      <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div class="flex shrink-0 gap-3 md:justify-end">
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target={externalTarget(project.liveUrl)}
+                        rel={externalRel(project.liveUrl)}
+                        data-i18n="p_live"
+                        class="text-sm font-medium text-accent no-underline transition-colors hover:text-text"
+                      >
+                        Live
+                      </a>
+                    )}
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-i18n="p_source"
+                        class="text-sm font-medium text-text-2 no-underline transition-colors hover:text-text"
+                      >
+                        Source
+                      </a>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -369,7 +387,7 @@ const searchableText = (project: (typeof projects)[number]) => [
       p_filter_empty: 'No projects match these filters.',
       p_featured_title: 'Featured',
       p_featured_desc: 'The highest-signal projects: shipped products, active systems, and work that best represents how I build.',
-      p_all_title: 'Full Archive',
+      p_all_title: 'By Status',
       p_desktop_note: `${desktopApps} desktop apps in the mix`,
       p_live: 'Live',
       p_source: 'Source',
@@ -396,7 +414,7 @@ const searchableText = (project: (typeof projects)[number]) => [
       p_filter_empty: 'Nenhum projeto combina com estes filtros.',
       p_featured_title: 'Destaques',
       p_featured_desc: 'Os projetos de maior sinal: produtos publicados, sistemas ativos e trabalhos que melhor representam como eu construo.',
-      p_all_title: 'Arquivo Completo',
+      p_all_title: 'Por Status',
       p_desktop_note: `${desktopApps} apps desktop na mistura`,
       p_live: 'Online',
       p_source: 'Código',
@@ -422,6 +440,13 @@ const searchableText = (project: (typeof projects)[number]) => [
     document.querySelectorAll('[data-project-visibility]').forEach((el) => {
       const project = projects.find((item) => item.id === el.getAttribute('data-project-visibility'));
       if (project) el.textContent = projectVisibilities[project.visibility].labelPt;
+    });
+
+    document.querySelectorAll('[data-project-group-label]').forEach((el) => {
+      const status = el.getAttribute('data-project-group-label');
+      if (status && status in projectStatuses) {
+        el.textContent = projectStatuses[status as keyof typeof projectStatuses].labelPt;
+      }
     });
 
     document.querySelectorAll('[data-project-metric]').forEach((el) => {
@@ -450,7 +475,7 @@ const searchableText = (project: (typeof projects)[number]) => [
   const count = document.getElementById('project-filter-count');
   const empty = document.getElementById('project-filter-empty');
   const cards = [...document.querySelectorAll<HTMLElement>('[data-project-card]')];
-  const archiveCards = cards.filter((card) => card.dataset.projectFeatured === 'false');
+  const groups = [...document.querySelectorAll<HTMLElement>('[data-project-group]')];
 
   function updateProjectFilters() {
     const query = search?.value.trim().toLowerCase() ?? '';
@@ -467,13 +492,19 @@ const searchableText = (project: (typeof projects)[number]) => [
         (!visibilityValue || card.dataset.projectVisibilityValue === visibilityValue);
 
       card.hidden = !matches;
-      if (matches && card.dataset.projectFeatured === 'false') visibleProjects += 1;
+      if (matches) visibleProjects += 1;
+    }
+
+    for (const group of groups) {
+      const hasVisibleProject = [...group.querySelectorAll<HTMLElement>('[data-project-card]')]
+        .some((card) => !card.hidden);
+      group.hidden = !hasVisibleProject;
     }
 
     if (count) {
       count.textContent = lang === 'pt'
-        ? `${visibleProjects} de ${archiveCards.length} projetos visíveis`
-        : `${visibleProjects} of ${archiveCards.length} projects visible`;
+        ? `${visibleProjects} de ${cards.length} projetos visíveis`
+        : `${visibleProjects} of ${cards.length} projects visible`;
     }
     empty?.classList.toggle('hidden', visibleProjects !== 0);
   }

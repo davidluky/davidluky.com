@@ -1,4 +1,11 @@
 ---
+import "@fontsource/inter/latin-ext-300.css";
+import "@fontsource/inter/latin-ext-400.css";
+import "@fontsource/inter/latin-ext-500.css";
+import "@fontsource/inter/latin-ext-600.css";
+import "@fontsource/jetbrains-mono/latin-ext-400.css";
+import "@fontsource/jetbrains-mono/latin-ext-500.css";
+import "@fontsource/unifrakturmaguntia/latin-400.css";
 import { socialProfiles } from "../data/socials";
 
 interface Props {
@@ -60,22 +67,6 @@ const pageStructuredData = structuredData ?? defaultStructuredData;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL("/og-image.png", Astro.site)} />
     <meta name="twitter:image:alt" content="David Luky — Developer. Gamer. Builder of things." />
-
-    <!-- Fonts — preload as stylesheet with print→all swap to avoid render-blocking -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=UnifrakturMaguntia&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.setAttribute('media','all')"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=UnifrakturMaguntia&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

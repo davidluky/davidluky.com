@@ -1,0 +1,1368 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import trackerRaw from "../data/gameTracker.json";
+
+const tracker = trackerRaw as any;
+const playOrder = tracker.playOrder as any[];
+const finishThisYear = tracker.finishThisYear as any[];
+const inProgress = tracker.inProgress as any[];
+const finishedThisYear = tracker.finishedThisYear as any[];
+const pokemon = tracker.pokemon as any[];
+const history = tracker.history as any[];
+
+const fmt = (value: number) => value.toLocaleString("en-US");
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(value?: string | null) {
+  if (!value) return "Not started";
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return Number.isNaN(date.getTime()) ? value : dateFormatter.format(date);
+}
+
+function yearOnly(value?: string | null) {
+  return value ? value.slice(0, 4) : "";
+}
+
+const updatedDate = new Date(`${tracker.updated}T00:00:00.000Z`);
+function daysOpen(value?: string | null) {
+  if (!value) return null;
+  const started = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(started.getTime())) return null;
+  return Math.max(0, Math.round((updatedDate.getTime() - started.getTime()) / 86400000));
+}
+
+const historyYears = [2022, 2023, 2024, 2025, 2026].map((year) => {
+  const rows = history.filter((row) => row.year === year);
+  return {
+    year,
+    started: rows.length,
+    finished: rows.filter((row) => row.status === "Finished").length,
+  };
+});
+const maxYearValue = Math.max(...historyYears.map((row) => Math.max(row.started, row.finished)), 1);
+
+const decadeRows = Object.entries(tracker.decadeCounts as Record<string, number>)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([decade, count]) => ({ decade, count }));
+const maxDecadeValue = Math.max(...decadeRows.map((row) => row.count), 1);
+
+const backlogAngle = Math.round((tracker.summary.backlogRows / tracker.summary.activePlayOrderRows) * 360);
+const statusOptions = ["Backlog", "Finish this year"];
+const decadeOptions = ["1990s", "2000s", "2010s", "2020s"];
+const historyByYear = historyYears.map((yearRow) => ({
+  ...yearRow,
+  rows: history.filter((row) => row.year === yearRow.year),
+}));
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  name: "GameTracker 2026",
+  description: "Release-order game backlog dashboard generated from David Luky's corrected 2026 spreadsheet.",
+  dateModified: tracker.updated,
+  creator: {
+    "@type": "Person",
+    name: "David Luky",
+  },
+};
+---
+
+<Base
+  title="GameTracker 2026 - David Luky"
+  description="A corrected oldest-first game backlog dashboard with 2026 targets, Pokemon handheld route, and completion history."
+  structuredData={structuredData}
+>
+  <Header currentPath="/game-tracker" />
+
+  <div class="tracker-page" data-game-tracker>
+    <aside class="tracker-rail" aria-label="GameTracker sections">
+      <a href="#overview" class="rail-brand">
+        <span class="rail-mark">GT</span>
+        <span>
+          <strong>GameTracker</strong>
+          <small>2026</small>
+        </span>
+      </a>
+      <nav class="rail-nav">
+        <a href="#overview">Dashboard</a>
+        <a href="#finish">Finish 2026</a>
+        <a href="#backlog">Backlog</a>
+        <a href="#pokemon">Pokemon Route</a>
+        <a href="#history">History</a>
+      </nav>
+      <div class="rail-count">{fmt(tracker.summary.activePlayOrderRows)} games sorted</div>
+    </aside>
+
+    <div class="tracker-main">
+      <section id="overview" class="tracker-hero">
+        <div class="hero-kicker">Corrected workbook dashboard</div>
+        <div class="hero-row">
+          <div>
+            <h1>GameTracker <span>2026</span></h1>
+            <p>{fmt(tracker.summary.activePlayOrderRows)} games sorted by release date, oldest first.</p>
+          </div>
+          <div class="hero-source">
+            <span>Updated</span>
+            <strong>{formatDate(tracker.updated)}</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="stat-grid" aria-label="GameTracker summary">
+        <article class="stat-card tone-blue">
+          <span class="stat-icon">01</span>
+          <strong>{fmt(tracker.summary.activePlayOrderRows)}</strong>
+          <span>Games in Order</span>
+          <small>oldest active: {tracker.summary.oldestReleaseYear}</small>
+        </article>
+        <article class="stat-card tone-amber">
+          <span class="stat-icon">02</span>
+          <strong>{fmt(tracker.summary.finishThisYear)}</strong>
+          <span>Finish This Year</span>
+          <small>next: {tracker.summary.nextFinishTarget}</small>
+        </article>
+        <article class="stat-card tone-violet">
+          <span class="stat-icon">03</span>
+          <strong>{fmt(tracker.summary.inProgress)}</strong>
+          <span>In Progress</span>
+          <small>carryovers with start dates</small>
+        </article>
+        <article class="stat-card tone-green">
+          <span class="stat-icon">04</span>
+          <strong>{fmt(tracker.summary.finishedThisYear)}</strong>
+          <span>Finished in 2026</span>
+          <small>{finishedThisYear[0]?.game ?? "Ready for the first clear"}</small>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel panel-wide">
+          <div class="panel-heading">
+            <div>
+              <h2>Progress by Year</h2>
+              <p>Started rows vs finished rows from the history log</p>
+            </div>
+            <span class="panel-badge">2022-2026</span>
+          </div>
+          <div class="year-chart" style={`--max-year:${maxYearValue};`}>
+            {historyYears.map((row) => (
+              <div class="year-group">
+                <div class="bars">
+                  <span class="bar started" style={`height:${Math.max(8, (row.started / maxYearValue) * 100)}%`}></span>
+                  <span class="bar finished" style={`height:${Math.max(8, (row.finished / maxYearValue) * 100)}%`}></span>
+                </div>
+                <strong>{row.year}</strong>
+                <small>{row.finished}/{row.started}</small>
+              </div>
+            ))}
+          </div>
+          <div class="chart-legend">
+            <span><i class="legend-started"></i>Started</span>
+            <span><i class="legend-finished"></i>Finished</span>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Backlog State</h2>
+              <p>{fmt(tracker.summary.activePlayOrderRows)} active rows</p>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <div class="donut" style={`--backlog-angle:${backlogAngle}deg;`}>
+              <span>{fmt(tracker.summary.activePlayOrderRows)}</span>
+            </div>
+          </div>
+          <div class="split-list">
+            <span><i class="legend-backlog"></i>Backlog <strong>{fmt(tracker.summary.backlogRows)}</strong></span>
+            <span><i class="legend-target"></i>Finish this year <strong>{fmt(tracker.summary.finishThisYear)}</strong></span>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>By Decade</h2>
+              <p>Release-year distribution</p>
+            </div>
+          </div>
+          <div class="decade-bars">
+            {decadeRows.map((row) => (
+              <div class="decade-row">
+                <span>{row.decade}</span>
+                <div class="decade-track">
+                  <i style={`width:${Math.max(2, (row.count / maxDecadeValue) * 100)}%`}></i>
+                </div>
+                <strong>{row.count}</strong>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article class="panel panel-wide">
+          <div class="panel-heading">
+            <div>
+              <h2>In Progress</h2>
+              <p>Carryovers that keep their start dates</p>
+            </div>
+            <span class="panel-badge">{fmt(inProgress.length)} active</span>
+          </div>
+          <div class="compact-list">
+            {inProgress.map((game) => (
+              <article class="compact-row">
+                <span class="dot"></span>
+                <div>
+                  <strong>{game.game}</strong>
+                  <small>Started {formatDate(game.started)} · {yearOnly(game.releaseDate)} · {game.whereToPlay}</small>
+                </div>
+                <span class="status-pill">{daysOpen(game.started)}d</span>
+              </article>
+            ))}
+          </div>
+        </article>
+      </section>
+
+      <section id="finish" class="section-block">
+        <div class="section-heading">
+          <div>
+            <span>Priority route</span>
+            <h2>Finish This Year</h2>
+          </div>
+          <p>{fmt(finishThisYear.length)} targets, sorted by release date and priority.</p>
+        </div>
+        <div class="target-grid">
+          {finishThisYear.map((game) => (
+            <article class="target-row">
+              <span class="priority">{game.priority}</span>
+              <div class="target-main">
+                <h3>{game.game}</h3>
+                <p>{game.notes ?? game.sourceText}</p>
+                <div class="target-meta">
+                  <span>{formatDate(game.releaseDate)}</span>
+                  <span>{game.whereToPlay}</span>
+                  {game.started && <span>Started {formatDate(game.started)}</span>}
+                </div>
+              </div>
+              <span class:list={["target-state", game.started ? "active" : "pending"]}>
+                {game.started ? "In progress" : "Pending"}
+              </span>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="section-block completed-grid">
+        <article class="panel completed-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Finished in 2026</h2>
+              <p>Completion log for this year</p>
+            </div>
+            <span class="panel-badge success">{fmt(finishedThisYear.length)} done</span>
+          </div>
+          <div class="compact-list">
+            {finishedThisYear.map((game) => (
+              <article class="compact-row done-row">
+                <span class="done-star">*</span>
+                <div>
+                  <strong>{game.game}</strong>
+                  <small>Finished {formatDate(game.finished)} · Started {formatDate(game.started)} · {game.whereToPlay}</small>
+                </div>
+                <span class="target-state done">Done</span>
+              </article>
+            ))}
+          </div>
+        </article>
+        <article class="panel">
+          <div class="mini-stats">
+            <span><strong>{fmt(tracker.summary.pokemonRows)}</strong>Pokemon games</span>
+            <span><strong>{fmt(tracker.summary.historyRecords)}</strong>history records</span>
+            <span><strong>{fmt(tracker.summary.previousFinished)}</strong>archived clears</span>
+            <span><strong>{tracker.summary.oldestReleaseYear}</strong>oldest release</span>
+          </div>
+        </article>
+      </section>
+
+      <section id="backlog" class="section-block">
+        <div class="section-heading">
+          <div>
+            <span>Full release order</span>
+            <h2>Backlog</h2>
+          </div>
+          <p><span id="backlog-count">{fmt(playOrder.length)}</span> games shown.</p>
+        </div>
+
+        <div class="filter-panel">
+          <label class="search-box">
+            <span>Search</span>
+            <input id="game-search" type="search" placeholder="Search game..." autocomplete="off" />
+          </label>
+          <div class="filter-group" aria-label="Decade filter">
+            <button type="button" class="filter-chip active" data-filter-kind="decade" data-filter-value="all">All</button>
+            {decadeOptions.map((decade) => (
+              <button type="button" class="filter-chip" data-filter-kind="decade" data-filter-value={decade}>{decade}</button>
+            ))}
+          </div>
+          <div class="filter-group" aria-label="Status filter">
+            <button type="button" class="filter-chip active" data-filter-kind="status" data-filter-value="all">All</button>
+            {statusOptions.map((status) => (
+              <button type="button" class="filter-chip" data-filter-kind="status" data-filter-value={status}>{status}</button>
+            ))}
+          </div>
+        </div>
+
+        <div class="backlog-list" id="backlog-list">
+          {playOrder.map((game) => (
+            <article
+              class="tracker-card"
+              data-tracker-card
+              data-title={`${game.game} ${game.notes ?? ""} ${game.whereToPlay ?? ""}`.toLowerCase()}
+              data-decade={game.decade}
+              data-status={game.status}
+            >
+              <span class="card-rank">#{game.rank}</span>
+              <div class="card-body">
+                <div class="card-title-row">
+                  <h3>{game.game}</h3>
+                  <span class:list={["card-status", game.status === "Finish this year" ? "target" : "backlog"]}>{game.status}</span>
+                </div>
+                <p>{game.notes ?? game.sourceText}</p>
+                <div class="card-meta">
+                  <span>{formatDate(game.releaseDate)}</span>
+                  <span>{game.whereToPlay}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="pokemon" class="section-block">
+        <div class="section-heading">
+          <div>
+            <span>Handheld path</span>
+            <h2>Pokemon Route</h2>
+          </div>
+          <p>{fmt(pokemon.length)} grouped releases from Game Boy through Switch.</p>
+        </div>
+        <div class="pokemon-track">
+          {pokemon.map((game) => (
+            <article class="pokemon-node">
+              <span>{game.rank}</span>
+              <div>
+                <h3>{game.game}</h3>
+                <p>{game.platform} · {formatDate(game.releaseDate)}</p>
+                <small>{game.whereToPlay}</small>
+              </div>
+              <strong>{game.status}</strong>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="history" class="section-block">
+        <div class="section-heading">
+          <div>
+            <span>Source history</span>
+            <h2>History</h2>
+          </div>
+          <p>{fmt(history.length)} rows from previous yearly sheets.</p>
+        </div>
+        <div class="history-grid">
+          {historyByYear.map((year) => (
+            <article class="history-year">
+              <header>
+                <strong>{year.year}</strong>
+                <span>{year.finished}/{year.started} finished</span>
+              </header>
+              <div>
+                {year.rows.map((game) => (
+                  <p>
+                    <span>{game.game}</span>
+                    <small>
+                      {game.status === "Finished"
+                        ? `${formatDate(game.started)} -> ${formatDate(game.finished)}`
+                        : `${formatDate(game.started)} · ${game.status}`}
+                    </small>
+                  </p>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="source-note">
+        <p>Data source: {tracker.generatedFrom}. Release dates use the corrected workbook; remakes and special editions keep their own release dates.</p>
+      </section>
+    </div>
+  </div>
+
+  <Footer />
+</Base>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    var root = document.querySelector("[data-game-tracker]");
+    if (!root) return;
+
+    var search = document.getElementById("game-search");
+    var count = document.getElementById("backlog-count");
+    var cards = Array.prototype.slice.call(root.querySelectorAll("[data-tracker-card]"));
+    var filters = { decade: "all", status: "all" };
+
+    function syncButtons(kind) {
+      root.querySelectorAll('[data-filter-kind="' + kind + '"]').forEach(function (button) {
+        button.classList.toggle("active", button.getAttribute("data-filter-value") === filters[kind]);
+      });
+    }
+
+    function render() {
+      var q = search ? search.value.trim().toLowerCase() : "";
+      var shown = 0;
+      cards.forEach(function (card) {
+        var matchesSearch = !q || (card.getAttribute("data-title") || "").indexOf(q) !== -1;
+        var matchesDecade = filters.decade === "all" || card.getAttribute("data-decade") === filters.decade;
+        var matchesStatus = filters.status === "all" || card.getAttribute("data-status") === filters.status;
+        var visible = matchesSearch && matchesDecade && matchesStatus;
+        card.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      if (count) count.textContent = shown.toLocaleString("en-US");
+    }
+
+    root.querySelectorAll("[data-filter-kind]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var kind = button.getAttribute("data-filter-kind");
+        var value = button.getAttribute("data-filter-value");
+        if (!kind || !value) return;
+        filters[kind] = value;
+        syncButtons(kind);
+        render();
+      });
+    });
+
+    if (search) search.addEventListener("input", render);
+    render();
+  });
+</script>
+
+<style>
+  .tracker-page {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: 0;
+    min-height: calc(100vh - 60px);
+    border-top: 1px solid rgba(42, 41, 36, 0.55);
+    background:
+      linear-gradient(135deg, rgba(59, 130, 246, 0.06), transparent 34%),
+      linear-gradient(25deg, transparent 0%, rgba(245, 158, 11, 0.08) 58%, transparent 86%),
+      var(--color-bg);
+  }
+
+  .tracker-rail {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    padding: 22px 8px;
+    border-right: 1px solid rgba(42, 41, 36, 0.8);
+    background: rgba(8, 8, 8, 0.78);
+    backdrop-filter: blur(16px);
+  }
+
+  .rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px 20px;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .rail-mark {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    border-radius: 8px;
+    color: #f5a524;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(245, 158, 11, 0.08);
+  }
+
+  .rail-brand strong,
+  .rail-brand small {
+    display: block;
+    line-height: 1.1;
+  }
+
+  .rail-brand strong {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .rail-brand small {
+    margin-top: 4px;
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .rail-nav {
+    display: grid;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .rail-nav a {
+    display: block;
+    border-radius: 7px;
+    padding: 10px 12px;
+    color: var(--color-text-2);
+    text-decoration: none;
+    font-size: 13px;
+  }
+
+  .rail-nav a:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .rail-count {
+    position: absolute;
+    right: 20px;
+    bottom: 22px;
+    left: 20px;
+    border-top: 1px solid rgba(42, 41, 36, 0.8);
+    padding-top: 16px;
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .tracker-main {
+    min-width: 0;
+    padding: 54px clamp(24px, 5vw, 64px) 64px;
+  }
+
+  .tracker-hero {
+    max-width: 1040px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-kicker,
+  .section-heading span {
+    color: #f5a524;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 18px;
+  }
+
+  .tracker-hero h1 {
+    margin: 0;
+    font-size: 46px;
+    font-weight: 650;
+    line-height: 1.03;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .tracker-hero h1 span {
+    color: #f5a524;
+  }
+
+  .tracker-hero p {
+    margin-top: 12px;
+    color: var(--color-text-2);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .hero-source {
+    min-width: 150px;
+    border: 1px solid rgba(42, 41, 36, 0.9);
+    border-radius: 8px;
+    padding: 12px 14px;
+    background: rgba(15, 15, 14, 0.78);
+    text-align: right;
+  }
+
+  .hero-source span,
+  .hero-source strong {
+    display: block;
+  }
+
+  .hero-source span {
+    color: var(--color-text-3);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .hero-source strong {
+    margin-top: 4px;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .stat-grid,
+  .dashboard-grid,
+  .section-block {
+    max-width: 1040px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card,
+  .panel,
+  .filter-panel,
+  .tracker-card,
+  .target-row,
+  .pokemon-node,
+  .history-year {
+    border: 1px solid rgba(42, 41, 36, 0.88);
+    border-radius: 8px;
+    background: rgba(12, 12, 13, 0.82);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+  }
+
+  .stat-card {
+    min-height: 156px;
+    min-width: 0;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .stat-card::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--tone);
+  }
+
+  .tone-blue { --tone: #3b82f6; }
+  .tone-amber { --tone: #f59e0b; }
+  .tone-violet { --tone: #8b5cf6; }
+  .tone-green { --tone: #10b981; }
+
+  .stat-icon {
+    display: inline-grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+    border-radius: 8px;
+    color: var(--tone);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: color-mix(in srgb, var(--tone) 12%, transparent);
+  }
+
+  .stat-card strong,
+  .stat-card span,
+  .stat-card small {
+    display: block;
+  }
+
+  .stat-card strong {
+    margin-top: 14px;
+    color: var(--tone);
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  .stat-card span:not(.stat-icon) {
+    margin-top: 8px;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  .stat-card small {
+    margin-top: 4px;
+    color: var(--color-text-3);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+    gap: 16px;
+    margin-bottom: 34px;
+  }
+
+  .panel {
+    padding: 20px;
+  }
+
+  .panel-wide {
+    min-width: 0;
+  }
+
+  .panel-heading,
+  .section-heading,
+  .card-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .panel-heading h2,
+  .section-heading h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  .panel-heading p,
+  .section-heading p {
+    margin-top: 4px;
+    color: var(--color-text-3);
+    font-size: 13px;
+  }
+
+  .panel-badge,
+  .status-pill,
+  .target-state,
+  .card-status,
+  .history-year header span {
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 999px;
+    padding: 3px 8px;
+    color: #f5a524;
+    background: rgba(245, 158, 11, 0.08);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .panel-badge.success,
+  .target-state.done {
+    border-color: rgba(16, 185, 129, 0.35);
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .year-chart {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(64px, 1fr));
+    gap: 14px;
+    height: 230px;
+    margin-top: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-image: linear-gradient(to top, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 100% 25%;
+  }
+
+  .year-group {
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    justify-items: center;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .bars {
+    display: flex;
+    align-items: end;
+    gap: 5px;
+    width: 44px;
+    height: 176px;
+  }
+
+  .bar {
+    display: block;
+    width: 16px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .bar.started {
+    background: linear-gradient(#60a5fa, #2563eb);
+  }
+
+  .bar.finished {
+    background: linear-gradient(#fbbf24, #f59e0b);
+  }
+
+  .year-group strong,
+  .year-group small {
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .chart-legend,
+  .split-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+    color: var(--color-text-3);
+    font-size: 12px;
+  }
+
+  .chart-legend span,
+  .split-list span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .chart-legend i,
+  .split-list i {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+  }
+
+  .legend-started,
+  .legend-backlog { background: #3b82f6; }
+  .legend-finished,
+  .legend-target { background: #f59e0b; }
+
+  .split-list {
+    display: grid;
+    gap: 9px;
+  }
+
+  .split-list span {
+    justify-content: space-between;
+  }
+
+  .split-list strong {
+    margin-left: auto;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+  }
+
+  .donut-wrap {
+    display: grid;
+    place-items: center;
+    min-height: 188px;
+  }
+
+  .donut {
+    display: grid;
+    width: 148px;
+    height: 148px;
+    place-items: center;
+    border-radius: 999px;
+    background: conic-gradient(#3b82f6 0 var(--backlog-angle), #f59e0b var(--backlog-angle) 360deg);
+    position: relative;
+  }
+
+  .donut::after {
+    content: "";
+    position: absolute;
+    inset: 24px;
+    border-radius: inherit;
+    background: #080808;
+  }
+
+  .donut span {
+    position: relative;
+    z-index: 1;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .decade-bars {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .decade-row {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) 32px;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .decade-track {
+    height: 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+  }
+
+  .decade-track i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  }
+
+  .decade-row strong {
+    color: var(--color-text-2);
+    text-align: right;
+  }
+
+  .compact-list {
+    display: grid;
+    gap: 9px;
+    margin-top: 18px;
+  }
+
+  .compact-row {
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 54px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .compact-row strong,
+  .compact-row small {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  .compact-row strong {
+    color: var(--color-text);
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  .compact-row small {
+    margin-top: 2px;
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.12);
+  }
+
+  .section-block {
+    margin-top: 34px;
+    scroll-margin-top: 84px;
+  }
+
+  .section-heading {
+    margin-bottom: 16px;
+  }
+
+  .target-grid,
+  .backlog-list,
+  .pokemon-track {
+    display: grid;
+    gap: 10px;
+  }
+
+  .target-row {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+
+  .priority,
+  .card-rank,
+  .pokemon-node > span {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    color: #f5a524;
+    background: rgba(245, 158, 11, 0.12);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .target-main h3,
+  .card-body h3,
+  .pokemon-node h3 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  .target-main p,
+  .card-body p,
+  .pokemon-node p,
+  .pokemon-node small {
+    margin-top: 4px;
+    color: var(--color-text-3);
+    font-size: 12px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .target-meta,
+  .card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .target-meta span,
+  .card-meta span {
+    border-radius: 5px;
+    padding: 3px 7px;
+    color: var(--color-text-2);
+    background: rgba(255, 255, 255, 0.04);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .target-state.active,
+  .card-status.target {
+    border-color: rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.1);
+  }
+
+  .target-state.pending,
+  .card-status.backlog {
+    border-color: rgba(132, 122, 108, 0.35);
+    color: var(--color-text-2);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .completed-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+    gap: 16px;
+  }
+
+  .done-star {
+    color: #34d399;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .mini-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    min-height: 130px;
+    align-content: center;
+  }
+
+  .mini-stats span {
+    display: grid;
+    gap: 4px;
+    color: var(--color-text-3);
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .mini-stats strong {
+    color: #f5a524;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .filter-panel {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 14px;
+  }
+
+  .search-box {
+    display: grid;
+    gap: 6px;
+  }
+
+  .search-box span {
+    color: var(--color-text-3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .search-box input {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid rgba(42, 41, 36, 0.9);
+    border-radius: 7px;
+    padding: 0 12px;
+    color: var(--color-text);
+    background: rgba(0, 0, 0, 0.28);
+    outline: none;
+  }
+
+  .search-box input:focus {
+    border-color: rgba(245, 158, 11, 0.65);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-chip {
+    min-height: 32px;
+    border: 1px solid rgba(42, 41, 36, 0.9);
+    border-radius: 999px;
+    padding: 0 12px;
+    color: var(--color-text-2);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .filter-chip.active {
+    border-color: rgba(245, 158, 11, 0.5);
+    color: #f5a524;
+    background: rgba(245, 158, 11, 0.12);
+  }
+
+  .tracker-card {
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 14px;
+    padding: 13px 16px;
+  }
+
+  .tracker-card[hidden] {
+    display: none;
+  }
+
+  .card-title-row {
+    align-items: center;
+  }
+
+  .pokemon-track {
+    position: relative;
+  }
+
+  .pokemon-node {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+
+  .pokemon-node strong {
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .history-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .history-year {
+    padding: 16px;
+  }
+
+  .history-year header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .history-year header strong {
+    color: #f5a524;
+    font-size: 20px;
+  }
+
+  .history-year p {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    margin: 0;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .history-year p span {
+    color: var(--color-text-2);
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .history-year p small {
+    color: var(--color-text-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-align: right;
+  }
+
+  .source-note {
+    max-width: 1040px;
+    margin: 32px auto 0;
+    color: rgba(132, 122, 108, 0.75);
+    font-size: 11px;
+  }
+
+  @media (max-width: 1080px) {
+    .tracker-page {
+      grid-template-columns: minmax(0, 1fr);
+      overflow-x: hidden;
+    }
+
+    .tracker-rail {
+      position: sticky;
+      top: 52px;
+      z-index: 20;
+      height: auto;
+      max-width: 100vw;
+      min-width: 0;
+      overflow: hidden;
+      padding: 8px 16px;
+      border-right: 0;
+      border-bottom: 1px solid rgba(42, 41, 36, 0.8);
+    }
+
+    .rail-brand,
+    .rail-count {
+      display: none;
+    }
+
+    .rail-nav {
+      display: flex;
+      gap: 8px;
+      margin: 0;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .rail-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .rail-nav a {
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .tracker-main {
+      width: 100%;
+      padding: 34px 20px 48px;
+    }
+
+    .hero-row,
+    .section-heading,
+    .panel-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .hero-source {
+      width: 100%;
+      text-align: left;
+    }
+
+    .stat-grid,
+    .dashboard-grid,
+    .completed-grid,
+    .history-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .tracker-hero h1 {
+      font-size: 32px;
+    }
+
+    .stat-grid {
+      gap: 10px;
+    }
+
+    .year-chart {
+      grid-template-columns: repeat(5, 70px);
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .target-row,
+    .tracker-card,
+    .pokemon-node,
+    .compact-row {
+      grid-template-columns: 1fr;
+    }
+
+    .priority,
+    .card-rank,
+    .pokemon-node > span {
+      width: fit-content;
+      min-width: 34px;
+    }
+
+    .target-state,
+    .card-status,
+    .status-pill {
+      width: fit-content;
+    }
+
+    .card-title-row,
+    .history-year p {
+      grid-template-columns: 1fr;
+    }
+
+    .history-year p small {
+      text-align: left;
+    }
+  }
+</style>

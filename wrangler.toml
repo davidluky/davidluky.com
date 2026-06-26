@@ -5,8 +5,7 @@ main = "src/worker.ts"
 routes = [
   { pattern = "davidluky.com", custom_domain = true },
   { pattern = "matheus.davidluky.com", custom_domain = true },
-  { pattern = "manual-matheus.davidluky.com", custom_domain = true },
-  { pattern = "pescados-matheus.davidluky.com", custom_domain = true }
+  { pattern = "manual-matheus.davidluky.com", custom_domain = true }
 ]
 
 [vars]

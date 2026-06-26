@@ -18,7 +18,7 @@ Related domains:
 |------|--------|-------|
 | `davidluky.com` | `davidluky-com` Worker | This site |
 | `play.davidluky.com` | The Room Web Worker | Public live app |
-| `pescados-matheus.davidluky.com` | `davidluky-com` Worker | Static Matheus seafood manual preview |
+| `manual-matheus.davidluky.com/matheus/` | `davidluky-com` Worker | Static Matheus seafood manual preview |
 | `tibia.davidluky.com` | Vercel | Public live marketplace |
 | `matematica.davidluky.com` | Vercel | Public live math site |
 

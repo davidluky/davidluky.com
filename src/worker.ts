@@ -6,7 +6,11 @@ const EBAY_SANDBOX_OAUTH = "https://api.sandbox.ebay.com/identity/v1/oauth2/toke
 const EBAY_SCOPE = "https://api.ebay.com/oauth/api_scope";
 const PUBLIC_KEY_CACHE_TTL_MS = 60 * 60 * 1000;
 const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
-const MATHEUS_HOSTS = new Set(["matheus.davidluky.com", "manual-matheus.davidluky.com"]);
+const MATHEUS_HOSTS = new Set([
+  "matheus.davidluky.com",
+  "manual-matheus.davidluky.com",
+  "pescados-matheus.davidluky.com",
+]);
 const MATHEUS_ASSET_PREFIX = "/matheus";
 
 interface Env {

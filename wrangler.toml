@@ -2,6 +2,11 @@ name = "davidluky-com"
 compatibility_date = "2026-04-11"
 main = "src/worker.ts"
 
+routes = [
+  { pattern = "davidluky.com", custom_domain = true },
+  { pattern = "matheus.davidluky.com", custom_domain = true }
+]
+
 [vars]
 EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion"
 EBAY_ENVIRONMENT = "production"

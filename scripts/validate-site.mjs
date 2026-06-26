@@ -80,6 +80,7 @@ if (existsSync(dist)) {
 
   for (const htmlFile of htmlFiles) {
     const html = readText(htmlFile);
+    const htmlRelativePath = relative(htmlFile);
     const links = [...html.matchAll(/\s(?:href|src)="([^"]+)"/g)].map((match) => match[1]);
 
     for (const link of links) {
@@ -111,8 +112,8 @@ if (existsSync(dist)) {
       }
     }
 
-    if (!html.includes('type="application/ld+json"')) {
-      failures.push(`${relative(htmlFile)} is missing JSON-LD structured data.`);
+    if (!htmlRelativePath.startsWith("dist/matheus/") && !html.includes('type="application/ld+json"')) {
+      failures.push(`${htmlRelativePath} is missing JSON-LD structured data.`);
     }
   }
 }

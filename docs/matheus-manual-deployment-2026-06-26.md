@@ -38,8 +38,16 @@ The published snapshot contains:
 
 ```text
 113 files
-33,149,435 bytes
+33,157,476 bytes after the 2026-06-26 01:32 local refresh
 95 image references validated in the HTML
+```
+
+Latest refresh:
+
+```text
+2026-06-26 01:32 BRT
+public/matheus/index.html copied from the regenerated preview_livro_manual.html
+public/matheus/html_preview_assets/ replaced from the regenerated html_preview_assets folder
 ```
 
 ## Hosting Approach

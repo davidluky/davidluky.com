@@ -329,11 +329,14 @@ async function handleEbayDeletion(request: Request, env: Env): Promise<Response>
 async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<Response> {
   const assetUrl = new URL(request.url);
   assetUrl.pathname =
-    url.pathname === "/"
-      ? `${MATHEUS_ASSET_PREFIX}/index.html`
+    url.pathname === "/" || url.pathname === "/index.html"
+      ? `${MATHEUS_ASSET_PREFIX}/`
       : `${MATHEUS_ASSET_PREFIX}${url.pathname}`;
 
-  const assetRequest = new Request(assetUrl, request);
+  const assetRequest = new Request(assetUrl.toString(), {
+    headers: request.headers,
+    method: request.method,
+  });
   const response = await env.ASSETS.fetch(assetRequest);
 
   if (response.status !== 404 || url.pathname === "/404.html") {
@@ -342,7 +345,7 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
 
   const notFoundUrl = new URL(request.url);
   notFoundUrl.pathname = `${MATHEUS_ASSET_PREFIX}/404.html`;
-  const notFound = await env.ASSETS.fetch(new Request(notFoundUrl, request));
+  const notFound = await env.ASSETS.fetch(new Request(notFoundUrl.toString(), { headers: request.headers }));
   return new Response(notFound.body, {
     status: 404,
     headers: notFound.headers,

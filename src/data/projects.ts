@@ -368,6 +368,22 @@ export const projects: readonly Project[] = [
     liveUrl: "https://alisson.davidluky.com",
   },
   {
+    id: "matheus-manual-pescados",
+    name: "Manual de Pescados - Matheus",
+    year: 2026,
+    description:
+      "Static preview for a seafood handling manual, published early so the current HTML edition can be reviewed from anywhere while the source project continues to evolve.",
+    descriptionPt:
+      "Preview estático de um manual de manipulação de pescados, publicado antecipadamente para que a versão HTML atual possa ser revisada de qualquer lugar enquanto o projeto continua em atualização.",
+    tech: ["HTML", "CSS", "Cloudflare Workers Assets"],
+    tag: "website",
+    status: "wip",
+    visibility: "public",
+    liveUrl: "https://matheus.davidluky.com",
+    metrics: ["HTML snapshot", "95 image references", "Cloudflare subdomain"],
+    metricsPt: ["Snapshot HTML", "95 imagens referenciadas", "Subdomínio Cloudflare"],
+  },
+  {
     id: "laptop-bootstrap",
     name: "Laptop Bootstrap",
     year: 2026,

@@ -6,6 +6,8 @@ const EBAY_SANDBOX_OAUTH = "https://api.sandbox.ebay.com/identity/v1/oauth2/toke
 const EBAY_SCOPE = "https://api.ebay.com/oauth/api_scope";
 const PUBLIC_KEY_CACHE_TTL_MS = 60 * 60 * 1000;
 const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
+const MATHEUS_HOST = "matheus.davidluky.com";
+const MATHEUS_ASSET_PREFIX = "/matheus";
 
 interface Env {
   ASSETS: { fetch: typeof fetch };
@@ -324,9 +326,36 @@ async function handleEbayDeletion(request: Request, env: Env): Promise<Response>
   });
 }
 
+async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<Response> {
+  const assetUrl = new URL(request.url);
+  assetUrl.pathname =
+    url.pathname === "/"
+      ? `${MATHEUS_ASSET_PREFIX}/index.html`
+      : `${MATHEUS_ASSET_PREFIX}${url.pathname}`;
+
+  const assetRequest = new Request(assetUrl, request);
+  const response = await env.ASSETS.fetch(assetRequest);
+
+  if (response.status !== 404 || url.pathname === "/404.html") {
+    return response;
+  }
+
+  const notFoundUrl = new URL(request.url);
+  notFoundUrl.pathname = `${MATHEUS_ASSET_PREFIX}/404.html`;
+  const notFound = await env.ASSETS.fetch(new Request(notFoundUrl, request));
+  return new Response(notFound.body, {
+    status: 404,
+    headers: notFound.headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+
+    if (url.hostname === MATHEUS_HOST) {
+      return handleMatheusSite(request, env, url);
+    }
 
     if (url.pathname === "/ebay/deletion") {
       return handleEbayDeletion(request, env);

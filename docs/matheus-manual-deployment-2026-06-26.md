@@ -71,10 +71,10 @@ The important Cloudflare setting is:
 
 ```toml
 [assets]
-run_worker_first = ["/", "/index.html"]
+run_worker_first = ["/", "/index.html", "/html_preview_assets/*"]
 ```
 
-Without this, Cloudflare Workers Static Assets can serve the main `davidluky.com` homepage for `/` before the Worker script gets a chance to route the Matheus host.
+Without this, Cloudflare Workers Static Assets can serve the main `davidluky.com` homepage for `/` before the Worker script gets a chance to route the Matheus host. The `/html_preview_assets/*` entry is needed because the manual HTML references images with relative paths from the subdomain root.
 
 ## davidluky.com Catalog Entry
 

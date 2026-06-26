@@ -6,7 +6,7 @@ const EBAY_SANDBOX_OAUTH = "https://api.sandbox.ebay.com/identity/v1/oauth2/toke
 const EBAY_SCOPE = "https://api.ebay.com/oauth/api_scope";
 const PUBLIC_KEY_CACHE_TTL_MS = 60 * 60 * 1000;
 const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
-const MATHEUS_HOST = "matheus.davidluky.com";
+const MATHEUS_HOSTS = new Set(["matheus.davidluky.com", "manual-matheus.davidluky.com"]);
 const MATHEUS_ASSET_PREFIX = "/matheus";
 
 interface Env {
@@ -353,7 +353,7 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    if (url.hostname === MATHEUS_HOST) {
+    if (MATHEUS_HOSTS.has(url.hostname)) {
       return handleMatheusSite(request, env, url);
     }
 

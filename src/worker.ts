@@ -9,7 +9,6 @@ const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
 const MATHEUS_HOSTS = new Set([
   "matheus.davidluky.com",
   "manual-matheus.davidluky.com",
-  "pescados-matheus.davidluky.com",
 ]);
 const MATHEUS_ASSET_PREFIX = "/matheus";
 

@@ -29,9 +29,12 @@ C:\Users\ala0r\OneDrive\Desktop\Programas\Matheus\Know-how manipulacao basica de
 Published source files copied into this repo:
 
 ```text
-public/matheus/index.html
+public/matheus/index.html           # style selector
+public/matheus/livro/index.html     # original book/manual layout
+public/matheus/revista/index.html   # magazine layout experiment
 public/matheus/404.html
 public/matheus/html_preview_assets/
+public/matheus/magazine_assets/
 ```
 
 The published snapshot contains:
@@ -48,6 +51,24 @@ Latest refresh:
 2026-06-26 01:32 BRT
 public/matheus/index.html copied from the regenerated preview_livro_manual.html
 public/matheus/html_preview_assets/ replaced from the regenerated html_preview_assets folder
+```
+
+Style selector refresh:
+
+```text
+2026-06-26 BRT
+public/matheus/index.html now lets the reader choose between:
+- https://matheus.davidluky.com/livro/
+- https://matheus.davidluky.com/revista/
+
+The original generated book HTML lives at public/matheus/livro/index.html.
+The generated magazine HTML lives at public/matheus/revista/index.html.
+Generated HTML asset paths are adjusted one level up:
+- `../html_preview_assets/...` from `/livro/`
+- `../magazine_assets/...` from `/revista/`
+
+This keeps browser URLs correct on the Matheus subdomain and keeps the local `validate-site` link
+checker happy after Astro copies `public/` into `dist/`.
 ```
 
 ## Hosting Approach
@@ -79,10 +100,21 @@ The important Cloudflare setting is:
 
 ```toml
 [assets]
-run_worker_first = ["/", "/index.html", "/html_preview_assets/*"]
+run_worker_first = [
+  "/",
+  "/index.html",
+  "/livro",
+  "/livro/*",
+  "/revista",
+  "/revista/*",
+  "/html_preview_assets/*",
+  "/magazine_assets/*"
+]
 ```
 
 Without this, Cloudflare Workers Static Assets can serve the main `davidluky.com` homepage for `/` before the Worker script gets a chance to route the Matheus host. The `/html_preview_assets/*` entry is needed because the manual HTML references images with relative paths from the subdomain root.
+The `/magazine_assets/*`, `/livro/*`, and `/revista/*` entries are needed for the style selector and
+the magazine layout.
 
 ## davidluky.com Catalog Entry
 
@@ -140,7 +172,10 @@ Tests used after deploy:
 
 ```powershell
 Invoke-WebRequest -UseBasicParsing -Uri "https://matheus.davidluky.com/"
+Invoke-WebRequest -UseBasicParsing -Uri "https://matheus.davidluky.com/livro/"
+Invoke-WebRequest -UseBasicParsing -Uri "https://matheus.davidluky.com/revista/"
 Invoke-WebRequest -UseBasicParsing -Uri "https://matheus.davidluky.com/html_preview_assets/images/cover-matheus-peixaria.jpg"
+Invoke-WebRequest -UseBasicParsing -Uri "https://matheus.davidluky.com/magazine_assets/images/cover-revista-matheus-peixaria.jpg"
 Invoke-WebRequest -UseBasicParsing -Uri "https://davidluky.com/projects"
 Invoke-WebRequest -UseBasicParsing -Uri "https://davidluky.com/"
 ```
@@ -148,8 +183,11 @@ Invoke-WebRequest -UseBasicParsing -Uri "https://davidluky.com/"
 Expected:
 
 ```text
-Manual HTML returns HTTP 200 and contains html_preview_assets/images/cover-matheus-peixaria.jpg
+Root returns HTTP 200 and contains links to `/livro/` and `/revista/`
+Book HTML returns HTTP 200 and contains html_preview_assets/images/cover-matheus-peixaria.jpg
+Magazine HTML returns HTTP 200 and contains magazine_assets/images/cover-revista-matheus-peixaria.jpg
 Cover image returns HTTP 200 and image/jpeg
+Magazine cover image returns HTTP 200 and image/jpeg
 davidluky.com/projects contains Manual de Pescados - Matheus
 davidluky.com links to https://matheus.davidluky.com/
 ```
@@ -162,9 +200,14 @@ When the manual changes:
 2. Replace:
 
 ```text
-public/matheus/index.html
+public/matheus/livro/index.html
+public/matheus/revista/index.html
 public/matheus/html_preview_assets/
+public/matheus/magazine_assets/
 ```
+
+Keep `public/matheus/index.html` as the hand-authored style selector unless the selector design also
+needs to change.
 
 3. Run:
 

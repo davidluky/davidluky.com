@@ -16,4 +16,13 @@ EBAY_ENVIRONMENT = "production"
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = ["/", "/index.html", "/html_preview_assets/*"]
+run_worker_first = [
+  "/",
+  "/index.html",
+  "/livro",
+  "/livro/*",
+  "/revista",
+  "/revista/*",
+  "/html_preview_assets/*",
+  "/magazine_assets/*"
+]

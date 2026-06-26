@@ -1,0 +1,1660 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Know-How: Manipulação de Pescados | Revista experimental</title>
+  <style>
+:root {
+  --ink: #17201e;
+  --muted: #68716d;
+  --paper: #e4e8e2;
+  --page: #fbfaf4;
+  --line: #d8d3c8;
+  --teal: #0f6866;
+  --blue: #365d70;
+  --coral: #a34b38;
+  --gold: #9a7435;
+  --leaf: #4d6849;
+  --added: #a43754;
+  --added-soft: #f7e7ec;
+  --added-on-dark: #f5b9c7;
+  --sans: system-ui, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.tone-1 { --tone: var(--teal); --tone-soft: #e5efeb; }
+.tone-2 { --tone: var(--gold); --tone-soft: #f1eadb; }
+.tone-3 { --tone: var(--coral); --tone-soft: #f2e4df; }
+.tone-4 { --tone: var(--blue); --tone-soft: #e3edf1; }
+.tone-5 { --tone: var(--leaf); --tone-soft: #e6ece2; }
+
+html {
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.55;
+}
+
+.magazine {
+  width: min(100%, calc(210mm + 32px));
+  margin: 0 auto 56px;
+  padding: 16px 0;
+}
+
+.page {
+  width: 210mm;
+  height: 280mm;
+  margin: 0 auto 18px;
+  padding: 15mm 16mm 14mm;
+  position: relative;
+  overflow: hidden;
+  background: var(--page);
+  box-shadow: 0 18px 48px rgba(24, 32, 30, .16);
+}
+
+.full-bleed {
+  padding: 0;
+}
+
+.folio {
+  position: absolute;
+  z-index: 8;
+  top: 7mm;
+  right: 9mm;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 7.4pt;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.on-dark .folio {
+  color: rgba(255, 255, 255, .84);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .55);
+}
+
+.running-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6mm;
+  align-items: center;
+  margin: 0 0 7mm;
+  padding-bottom: 2.2mm;
+  border-bottom: 1px solid color-mix(in srgb, var(--tone, var(--teal)) 34%, var(--line));
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 7.8pt;
+  font-weight: 760;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.running-head span:last-child {
+  color: var(--tone, var(--teal));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.added {
+  color: var(--added);
+  font-family: var(--sans);
+}
+
+.on-dark .added {
+  color: var(--added-on-dark);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .58);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.02;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 4.2mm;
+}
+
+strong {
+  font-weight: 780;
+}
+
+.cover-page {
+  display: grid;
+  align-items: end;
+  color: white;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .08), rgba(0, 0, 0, .16) 43%, rgba(0, 0, 0, .78)),
+    var(--cover);
+  background-size: cover;
+  background-position: center;
+}
+
+.cover-rule {
+  position: absolute;
+  left: 12mm;
+  top: 12mm;
+  bottom: 12mm;
+  width: 1.1mm;
+  background: var(--added-on-dark);
+}
+
+.cover-topline {
+  position: absolute;
+  left: 17mm;
+  right: 17mm;
+  top: 13mm;
+  display: flex;
+  justify-content: space-between;
+  gap: 10mm;
+  color: rgba(255, 255, 255, .84);
+  font-family: var(--sans);
+  font-size: 8.3pt;
+  font-weight: 780;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+}
+
+.cover-copy {
+  width: min(165mm, 100%);
+  padding: 0 17mm 20mm;
+}
+
+.cover-kicker,
+.feature-kicker {
+  margin: 0 0 3.6mm;
+  font-size: 8.4pt;
+  font-weight: 850;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.cover-page h1 {
+  max-width: 162mm;
+  color: white;
+  font-size: 48pt;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .52);
+}
+
+.cover-deck {
+  max-width: 122mm;
+  margin-top: 6mm;
+  font-size: 12.2pt;
+  font-weight: 680;
+  line-height: 1.45;
+}
+
+.cover-credit {
+  margin-top: 5mm;
+  font-size: 8.8pt;
+  font-weight: 780;
+}
+
+.article-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8mm;
+  margin: 0 0 5mm;
+  color: var(--tone, var(--teal));
+  font-family: var(--sans);
+  font-size: 7.8pt;
+  font-weight: 820;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.article-label.solo {
+  display: block;
+}
+
+.article-title {
+  max-width: 150mm;
+  margin-bottom: 7mm;
+  color: var(--tone, var(--teal));
+  font-size: 30pt;
+}
+
+.article-body {
+  column-count: 2;
+  column-gap: 8mm;
+  font-size: 9.25pt;
+  line-height: 1.5;
+}
+
+.article-body > * {
+  break-inside: avoid;
+}
+
+.article-body .lead {
+  color: #24312e;
+  font-size: 12.4pt;
+  line-height: 1.42;
+}
+
+.article-body h3 {
+  margin: 5mm 0 2.6mm;
+  color: var(--tone, var(--teal));
+  font-family: var(--sans);
+  font-size: 14.5pt;
+  font-weight: 820;
+}
+
+.story-list {
+  margin: 0 0 4.6mm 4mm;
+  padding: 0;
+}
+
+.story-list li {
+  margin: 0 0 1.8mm;
+  padding-left: 1.2mm;
+}
+
+.draft-note {
+  padding-left: 3.2mm;
+  border-left: 1mm solid var(--gold);
+  color: #755a28;
+  font-family: var(--sans);
+  font-style: italic;
+}
+
+.story-figure,
+.equipment-module,
+.fish-module,
+.face-gallery-module {
+  column-span: all;
+  margin: 5mm 0 6mm;
+}
+
+.story-photo-grid {
+  display: grid;
+  gap: 2.4mm;
+}
+
+.story-photo-grid.single {
+  grid-template-columns: 1fr;
+}
+
+.story-photo-grid.count-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.story-photo-grid.count-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.story-photo-grid img {
+  width: 100%;
+  height: 55mm;
+  display: block;
+  object-fit: cover;
+  background: #dde3df;
+}
+
+.story-photo-grid.single img {
+  height: 70mm;
+}
+
+figcaption {
+  margin-top: 2.2mm;
+  padding-left: 3mm;
+  border-left: .8mm solid var(--added);
+  color: var(--added);
+  font-family: var(--sans);
+  font-size: 7.8pt;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+figcaption::before {
+  content: "Nota visual";
+  display: inline-block;
+  margin-right: .6em;
+  font-style: normal;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.equipment-module,
+.fish-module,
+.face-gallery-module {
+  padding: 4.2mm 4.8mm;
+  border-top: 1mm solid var(--tone, var(--teal));
+  background: var(--tone-soft, #e5efeb);
+}
+
+.equipment-module h3,
+.fish-module h3,
+.face-gallery-module h3 {
+  margin: 0 0 3mm;
+  font-size: 12.4pt;
+}
+
+.equipment-module ul,
+.fish-module ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4mm 3mm;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.equipment-module li,
+.fish-module li {
+  margin: 0;
+  padding-bottom: 1.1mm;
+  border-bottom: 1px solid rgba(23, 32, 30, .12);
+  font-family: var(--sans);
+  font-size: 7.65pt;
+  line-height: 1.18;
+}
+
+.editorial-module {
+  border-top-color: var(--added);
+  background: var(--added-soft);
+}
+
+.face-gallery-note {
+  max-width: 150mm;
+  margin: 0 0 4mm;
+  font-size: 8pt;
+  font-style: italic;
+  font-weight: 720;
+  line-height: 1.35;
+}
+
+.face-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2mm;
+}
+
+.face-gallery-grid figure {
+  margin: 0;
+}
+
+.face-gallery-grid img {
+  width: 100%;
+  height: 26mm;
+  display: block;
+  object-fit: cover;
+  background: #16201e;
+}
+
+.face-gallery-grid figcaption {
+  margin: 1mm 0 0;
+  padding: 0;
+  border: 0;
+  color: var(--muted);
+  font-size: 6.5pt;
+  font-style: normal;
+  line-height: 1.15;
+}
+
+.face-gallery-grid figcaption::before {
+  content: "";
+  display: none;
+}
+
+.toc-layout {
+  display: grid;
+  grid-template-columns: 56mm 1fr;
+  gap: 12mm;
+  min-height: 236mm;
+}
+
+.toc-intro {
+  padding-top: 20mm;
+  border-right: 1px solid var(--line);
+}
+
+.toc-intro h2 {
+  color: var(--teal);
+  font-size: 34pt;
+}
+
+.toc-note {
+  max-width: 45mm;
+  margin-top: 8mm;
+  font-size: 8.8pt;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.toc-list {
+  align-self: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc-list li {
+  display: grid;
+  grid-template-columns: 14mm 1fr 11mm;
+  gap: 4mm;
+  align-items: baseline;
+  padding: 4.2mm 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--sans);
+}
+
+.toc-index {
+  color: var(--gold);
+  font-size: 8pt;
+  font-weight: 850;
+}
+
+.toc-title {
+  color: var(--ink);
+  font-size: 11.2pt;
+  font-weight: 760;
+}
+
+.toc-list strong {
+  color: var(--teal);
+  font-size: 10pt;
+}
+
+.chapter-opener {
+  display: grid;
+  color: white;
+  background: #111816;
+}
+
+.chapter-image {
+  position: absolute;
+  inset: 0;
+}
+
+.chapter-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.chapter-opener::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, .72), rgba(0, 0, 0, .22) 50%, rgba(0, 0, 0, .18)),
+    linear-gradient(180deg, rgba(0, 0, 0, .08), rgba(0, 0, 0, .68));
+}
+
+.chapter-panel {
+  width: 112mm;
+  align-self: end;
+  position: relative;
+  z-index: 2;
+  padding: 0 0 20mm 17mm;
+}
+
+.chapter-index {
+  margin: 0 0 4mm;
+  color: var(--added-on-dark);
+  font-family: var(--sans);
+  font-size: 8pt;
+  font-weight: 850;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.chapter-panel h2 {
+  color: white;
+  font-size: 38pt;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .58);
+}
+
+.chapter-caption {
+  max-width: 96mm;
+  margin-top: 5mm;
+  padding-left: 3mm;
+  border-left: .8mm solid currentColor;
+  font-size: 8.8pt;
+  font-weight: 740;
+  line-height: 1.45;
+}
+
+.chapter-number {
+  position: absolute;
+  z-index: 2;
+  right: 13mm;
+  bottom: 10mm;
+  color: rgba(255, 255, 255, .22);
+  font-family: var(--sans);
+  font-size: 82pt;
+  font-weight: 900;
+  line-height: .8;
+}
+
+.feature-page,
+.visual-plate-solo {
+  color: white;
+  background: #111816;
+}
+
+.feature-page img,
+.plate-solo-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.feature-page::after,
+.visual-plate-solo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .05), rgba(0, 0, 0, .08) 46%, rgba(0, 0, 0, .74));
+}
+
+.feature-caption,
+.plate-caption {
+  position: absolute;
+  z-index: 2;
+  left: 17mm;
+  right: 17mm;
+  bottom: 17mm;
+}
+
+.feature-caption h2,
+.plate-caption h2 {
+  max-width: 145mm;
+  font-size: 29pt;
+}
+
+.feature-caption p,
+.plate-caption p {
+  max-width: 118mm;
+  font-size: 9.6pt;
+  font-weight: 730;
+  line-height: 1.42;
+}
+
+.visual-plate-grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 7mm;
+}
+
+.plate-header {
+  padding: 5mm 6mm;
+  border-left: 1mm solid var(--added);
+  background: var(--added-soft);
+}
+
+.plate-header h2 {
+  color: var(--added);
+  font-size: 24pt;
+}
+
+.plate-header p:last-child {
+  max-width: 150mm;
+  margin: 2.5mm 0 0;
+  color: var(--added);
+  font-size: 8.6pt;
+  font-weight: 720;
+  line-height: 1.38;
+}
+
+.plate-grid {
+  display: grid;
+  gap: 3mm;
+  min-height: 0;
+}
+
+.plate-grid.diptych {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.plate-grid.sequence {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.plate-grid img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: block;
+  object-fit: cover;
+  background: #dde3df;
+}
+
+@media (max-width: 860px) {
+  .magazine {
+    width: 100%;
+    padding: 8px 0 28px;
+  }
+
+  .page {
+    width: calc(100vw - 16px);
+    height: calc((100vw - 16px) * 1.3333);
+  }
+}
+
+@page {
+  size: 210mm 280mm;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    background: white;
+  }
+
+  .magazine {
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    width: 210mm;
+    height: 280mm;
+    margin: 0;
+    box-shadow: none;
+    break-after: page;
+  }
+}
+</style>
+</head>
+<body>
+  <main class="magazine">
+    <section class="page cover-page full-bleed on-dark" id="revista-01" data-page="1" style="--cover: url(../magazine_assets/images/cover-revista-matheus-peixaria.jpg)">
+<div class="folio">Página 1</div>
+<div class="cover-rule"></div>
+<div class="cover-topline">
+<span>Edição experimental</span>
+<span>Manual visual de peixaria</span>
+</div>
+<div class="cover-copy">
+<p class="cover-kicker added">Revista técnica</p>
+<h1>Know-How: Manipulação de Pescados</h1>
+<p class="cover-deck added">Manipulação técnica de pescados e frutos do mar, do recebimento ao porcionamento.</p>
+<p class="cover-credit added">Texto-base de Matheus Felipe Silverio</p>
+</div>
+</section>
+    <section class="page text-page frontmatter-page tone-1" id="revista-02" data-page="2">
+<div class="folio">Página 2</div>
+<div class="running-head"><span>Revista técnica</span><span>Apresentação</span></div>
+<div class="article-label">
+<span>Matéria 00</span>
+<span>Apresentação</span>
+</div>
+<h2 class="article-title">Apresentação</h2>
+<div class="article-body">
+<p class="lead">Aqui mostro o básico, sem enrolação. O objetivo não é executar nem montar o prato — é manipular o pescado e os frutos do mar para entregar o melhor insumo para os processos seguintes. Vamos aprender a &quot;fazer um trabalho dificil&quot; com classe.</p>
+<p>Meu nome é Matheus Felipe Silverio, tenho 13 ano de experiencia em restaurantes mediterrâneos, orientais e frutos do mar, 30 anos de idade, trabalho com manipulação de pescados e frutos do mar em Itajai-SC, sou responsável da setor “peixaria” no aspas restaurante na praia brava, estou á 3 anos junto com o chefe Gabriel Aguilar, na qual a proposta é a entrega desde o recebimento, manipulação ao porcionamento final dos pescados e fruto do mar, junto com maturação e defumação, aonde priorizo o cuidado com o melhor insumo que nossa costa nos proporciona.</p>
+<p>Nesses 3 anos de trabalho intenso, desde toneladas de pescados e frutos do mar até cerimônia kaitai (atum de 100 kg direto da espanha), peixes inimagináveis de diferentes qualidades, diferentes espécies, fora as diversas adaptações e mudanças na forma de trabalhar, hoje trago a conjuntura de 13 anos de anotações e reflexões e 3 anos de intenso trabalho numa peixaria de um chefe que me possibilita sempre mudar e aprimorar. Esse documento é a forma que trabalho e como lido com um insumo tão precioso.</p>
+</div>
+</section>
+    <section class="page toc-page" id="revista-03" data-page="3">
+<div class="folio">Página 3</div>
+<div class="running-head"><span>Revista técnica</span><span>Sumário</span></div>
+<div class="toc-layout">
+<div class="toc-intro">
+<p class="article-label solo"><span>Versão revista</span></p>
+<h2>Sumário</h2>
+<p class="toc-note added">Experimento de diagramação editorial: mais ritmo visual, páginas de abertura e leitura em colunas.</p>
+</div>
+<ol class="toc-list">
+<li>
+<span class="toc-index">01</span>
+<span class="toc-title">Apresentação</span>
+<strong>2</strong>
+</li>
+<li>
+<span class="toc-index">02</span>
+<span class="toc-title">Sumário</span>
+<strong>3</strong>
+</li>
+<li>
+<span class="toc-index">03</span>
+<span class="toc-title">Fundamentos da Manipulação</span>
+<strong>4</strong>
+</li>
+<li>
+<span class="toc-index">04</span>
+<span class="toc-title">Água, Higiene e Armazenamento</span>
+<strong>11</strong>
+</li>
+<li>
+<span class="toc-index">05</span>
+<span class="toc-title">Lula</span>
+<strong>14</strong>
+</li>
+<li>
+<span class="toc-index">06</span>
+<span class="toc-title">Polvo</span>
+<strong>17</strong>
+</li>
+<li>
+<span class="toc-index">07</span>
+<span class="toc-title">Camarão Rosa</span>
+<strong>19</strong>
+</li>
+<li>
+<span class="toc-index">08</span>
+<span class="toc-title">Mexilhão</span>
+<strong>23</strong>
+</li>
+<li>
+<span class="toc-index">09</span>
+<span class="toc-title">Peixes</span>
+<strong>28</strong>
+</li>
+<li>
+<span class="toc-index">10</span>
+<span class="toc-title">Setorização de Filés Grandes (Acima de 7 kg)</span>
+<strong>46</strong>
+</li>
+</ol>
+</div>
+</section>
+    <section class="page chapter-opener full-bleed on-dark tone-1" id="revista-04" data-page="4">
+<div class="folio">Página 4</div>
+<div class="running-head"><span>Revista técnica</span><span>Fundamentos da Manipulação</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-fundamentos-da-manipulacao.jpg" alt="Destaque do capítulo: limpeza fria e manipulação inicial do pescado." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 01</p>
+<h2>Fundamentos da Manipulação</h2>
+<p class="chapter-caption added">Destaque do capítulo: limpeza fria e manipulação inicial do pescado.</p>
+</div>
+<div class="chapter-number">01</div>
+</section>
+<section class="page text-page tone-1" id="revista-05" data-page="5">
+<div class="folio">Página 5</div>
+<div class="running-head"><span>Revista técnica</span><span>Fundamentos da Manipulação</span></div>
+<div class="article-body">
+<p>Vou falar sobre osmose e as formas de usar o sal como realçador e conservador, com as devidas cautelas</p>
+<p>O que é osmose simplificadamente, é a troca natural de água entre o alimente e o ambiente</p>
+<p>Quando aplicamos sal em um peixe, o sal começa a puxar parte da água presente na carne para fora, mas a o mesmo tempo o sal vai penetrando no alimento, ajudando a firmar a carne, concentrando sabores e conservando o produto.</p>
+<ul class="story-list">
+<li>Solução para limpeza : água, sal e muito gelo</li>
+<li>Brine: cura submersa por liquido, que evita a contração das fibras e tempera o file por inteiro</li>
+<li>Shiojime: cura seca, realçadora e superficial nos files do pescado.</li>
+</ul>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-01-limpeza-inicial-em-gelo-reforcando-a-ideia-de.jpg" alt="Limpeza inicial em gelo, reforçando a ideia de baixa temperatura e controle de água residual." loading="lazy">
+<img src="../magazine_assets/images/fig-02-limpeza-inicial-em-gelo-reforcando-a-ideia-de.jpg" alt="Limpeza inicial em gelo, reforçando a ideia de baixa temperatura e controle de água residual." loading="lazy">
+</div>
+<figcaption class="added">Limpeza inicial em gelo, reforçando a ideia de baixa temperatura e controle de água residual.</figcaption>
+</figure>
+<p>Nós conseguimos chegar à osmose pelos processos que eu cito acima, mas trabalhamos com cuidado evitando a saturação, a ideia é sempre trabalhar em baixas temperatura para sempre a absorção de sal ser menor pela contração dos poros</p>
+<p>A solução para Limpeza: Recomendo uso de sal sem iodo. A medida exata é de 25g de sal por litro de água, acompanhada de muito gelo. Quanto mais gelada estiver a solução, mais os poros da proteína se contraem. Isso faz com que a absorção de sal seja muito menor durante a limpeza</p>
+<p>Limites de Saturação: A proteína suporta até 5% de sal; após esse ponto, ela satura. Trabalhamos com precisão técnica para evitar o erro, pois não tem como retirar o sal depois de absorvido.</p>
+</div>
+</section>
+<section class="page text-page tone-1" id="revista-06" data-page="6">
+<div class="folio">Página 6</div>
+<div class="running-head"><span>Revista técnica</span><span>Fundamentos da Manipulação</span></div>
+<div class="article-body">
+<p>Brine (Cura): Utilizamos uma solução de 3% do peso da proteína. Dentro desses 3%, a proporção é de 70% de sal e 30% de açúcar. A cada 30g dessa mistura, adicionamos 1 litro de água. A ideia é cobrir o alimento; use uma GN que favoreça para que tudo esteja submerso na solução. Dependendo do tamanho e peso dos files de pescado a cura varia entre 2/4/8/12 hrs</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-03-file-e-cortes-preparados-para-cura-com-foco-em.jpg" alt="Filé e cortes preparados para cura, com foco em superfície limpa e manipulação precisa." loading="lazy">
+</div>
+<figcaption class="added">Filé e cortes preparados para cura, com foco em superfície limpa e manipulação precisa.</figcaption>
+</figure>
+<p>Shiojime(baseada nos 3% de peso): Técnica de conservação com sal (“Shio’’ significa sal e “jime”, técnica) que extrai água residual, gorduras e sujeira, realçando o sabor e criando uma película de cura que garante durabilidade extra.</p>
+<p>* Processo: Após o salgamento, o descanso varia de 20, 30 ou 40 minutos (dependendo do tamanho do filé). Em seguida, retire o sal em água corrente — este é o único momento em que usamos água corrente diretamente. Não esfregue o sal contra a proteína; deixe a água levar o sal e use toques leves. Logo após, coloque em uma GN ou caixa-bloco com água e gelo abundante para estabilizar a temperatura e fechar os poros. Retire e seque muito bem</p>
+<h3>Cheiro de peixe</h3>
+<p>A única maneira de eliminar ou diluir parcialmente os aromas voláteis (como a amônia) é por meio da acidez. Geralmente armazenamos os peixes em plásticos e no vácuo, infelizmente ambientes abafados aceleram a produção de amônia, resultando no cheiro de peixe forte, pitiú ou &quot;FISHY FISH&quot;, eu sugiro que caso tente eliminar os aromas use uma das bases da manipulação que se conecta diretamente às nossas técnicas de conservação.</p>
+</div>
+</section>
+<section class="page text-page tone-1" id="revista-07" data-page="7">
+<div class="folio">Página 7</div>
+<div class="running-head"><span>Revista técnica</span><span>Fundamentos da Manipulação</span></div>
+<div class="article-body">
+<p>Sujime: Técnica que utiliza uma diluição de água, vinagre e gelo (&quot;Su&quot; significa vinagre e &quot;jime&quot;, técnica). Usada para conservação e refinamento de sabor, eliminando aromas voláteis e criando uma pequena película proveniente da reação do vinagre na proteína. Lembrando que tudo que é acido cozinha a proteína. Trabalhamos com diluição e baixa temperatura (quanto mais frio, menor o poder de ação do ácido). A proporção é de 1 para 1: a mesma quantidade de vinagre para a mesma quantidade de água.</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-04-apoio-visual-para-limpeza-e-controle-de-aromas.jpg" alt="Apoio visual para limpeza e controle de aromas durante a manipulação." loading="lazy">
+</div>
+<figcaption class="added">Apoio visual para limpeza e controle de aromas durante a manipulação.</figcaption>
+</figure>
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-1" id="revista-08" data-page="8">
+<div class="folio">Página 8</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co.jpg" alt="Detalhe fechado da carne para valorizar textura, gordura e leitura sensorial do pescado." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Gordura, fibra e corte</h2>
+<p class="added">Detalhe fechado da carne para valorizar textura, gordura e leitura sensorial do pescado.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-1" id="revista-09" data-page="9">
+<div class="folio">Página 9</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Texturas de pele</h2>
+<p class="added">Pele, escama e brilho como material visual de estudo antes da faca.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-fundamentos-da-manipul-02-01-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-fundamentos-da-manipul-02-02-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-fundamentos-da-manipul-02-03-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-fundamentos-da-manipul-02-04-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page feature-page full-bleed on-dark tone-1" id="revista-10" data-page="10">
+<div class="folio">Página 10</div>
+
+<img src="../magazine_assets/images/feature-fundamentos-da-manipulacao.jpg" alt="Uma pausa visual para mostrar escala, bancada e matéria-prima antes dos processos de cura." loading="lazy">
+<div class="feature-caption">
+<p class="feature-kicker added">Ensaio visual</p>
+<h2 class="added">Frio e precisão</h2>
+<p class="added">Uma pausa visual para mostrar escala, bancada e matéria-prima antes dos processos de cura.</p>
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-2" id="revista-11" data-page="11">
+<div class="folio">Página 11</div>
+<div class="running-head"><span>Revista técnica</span><span>Água, Higiene e Armazenamento</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-agua-higiene-e-armazenamento.jpg" alt="Destaque do capítulo: bancada, cuba e ferramentas organizadas para manipulação." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 02</p>
+<h2>Água, Higiene e Armazenamento</h2>
+<p class="chapter-caption added">Destaque do capítulo: bancada, cuba e ferramentas organizadas para manipulação.</p>
+</div>
+<div class="chapter-number">02</div>
+</section>
+<section class="page text-page tone-2" id="revista-12" data-page="12">
+<div class="folio">Página 12</div>
+<div class="running-head"><span>Revista técnica</span><span>Água, Higiene e Armazenamento</span></div>
+<div class="article-body">
+<p>Nossa manipulação não impede o uso de água, mas foca no estado final do insumo. Água residual é igual à proliferação de bactérias. Uso muito papel e muito Perflex para garantir que o insumo saia seco e seguro. Lembrando que uma geladeira própria para pescados é essencial, e também GN furadas e caixa-bloco furadas para sempre deixar o ar correr e os líquidos não ficarem parados</p>
+<p>Para o armazenamento técnico:</p>
+<p>Geladeira Exclusiva: O ideal é manter uma geladeira apenas para pescados, evitando contaminação cruzada e troca de odores.</p>
+<p>Usamos GNs com furos, formas vazadas ou grades. O peixe precisa de circulação de ar para evitar a oxidação e manter a qualidade.</p>
+<p>Você pode cobrir a GN com filme PVC, mas nunca lacre completamente. Deve haver vazão para o ar (seja por cima ou por baixo). O ambiente abafado acelera a produção de amônia, resultando no cheiro forte conhecemos como &quot;FISHY FISH&quot; ou PITIÚ.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-2" id="revista-13" data-page="13">
+<div class="folio">Página 13</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Bancada e instrumento</h2>
+<p class="added">Organização, superfície limpa e ferramenta pronta como base visual do método.</p>
+</div>
+<div class="plate-grid diptych">
+<img src="../magazine_assets/images/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume.jpg" alt="Organização, superfície limpa e ferramenta pronta como base visual do método." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume.jpg" alt="Organização, superfície limpa e ferramenta pronta como base visual do método." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-3" id="revista-14" data-page="14">
+<div class="folio">Página 14</div>
+<div class="running-head"><span>Revista técnica</span><span>Lula</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-lula.jpg" alt="Destaque do capítulo: lula em caixa-bloco, ainda sob controle de frio." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 03</p>
+<h2>Lula</h2>
+<p class="chapter-caption added">Destaque do capítulo: lula em caixa-bloco, ainda sob controle de frio.</p>
+</div>
+<div class="chapter-number">03</div>
+</section>
+<section class="page text-page tone-3" id="revista-15" data-page="15">
+<div class="folio">Página 15</div>
+<div class="running-head"><span>Revista técnica</span><span>Lula</span></div>
+<div class="article-body">
+<h3>Descongelamento</h3>
+<p>Como a indústria geralmente entrega a lula em blocos de 17kg a 22kg, o processo exige paciência e técnica:</p>
+<p>Descongelamento Lento: O ideal é realizar o descongelamento em caixas-bloco grandes e furadas, permitindo que o líquido escorra conforme o gelo derrete.</p>
+<p>Descongelamento de Urgência: Caso haja pressa, utilize uma caixa-bloco cheia de água e sal (nas proporções já estabelecidas nos Fundamentos). Este método é mais limpo, pois a limpeza de resíduos por osmose já começa a acontecer durante o descongelamento.</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-05-lula-descongelando-em-gelo-e-caixa-bloco-mante.jpg" alt="Lula descongelando em gelo e caixa-bloco, mantendo frio constante durante o processo." loading="lazy">
+</div>
+<figcaption class="added">Lula descongelando em gelo e caixa-bloco, mantendo frio constante durante o processo.</figcaption>
+</figure>
+<h3>Braços e Tentáculos</h3>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-06-separacao-visual-de-partes-da-lula-para-limpez.jpg" alt="Separação visual de partes da lula para limpeza de braços, tentáculos e tubo." loading="lazy">
+</div>
+<figcaption class="added">Separação visual de partes da lula para limpeza de braços, tentáculos e tubo.</figcaption>
+</figure>
+<p>A primeira etapa da manipulação consiste em separar as partes inferiores:</p>
+</div>
+</section>
+<section class="page text-page tone-3" id="revista-16" data-page="16">
+<div class="folio">Página 16</div>
+<div class="running-head"><span>Revista técnica</span><span>Lula</span></div>
+<div class="article-body">
+<ul class="story-list">
+<li>Retire os braços e tentáculos em sua totalidade. O corte é semelhante ao &quot;descabeçar&quot; do polvo: logo abaixo da linha dos olhos.</li>
+<li>Tenha muito cuidado para não furar os olhos da lula. É ali que a sujeira estoura e espirra para todos os lados.</li>
+<li>Lembre-se que a lula possui 8 braços, 2 tentáculos e um bico.</li>
+<li>Remova com atenção o bico que fica bem ao centro dos braços (se assemelha a uma pequena bolinha).</li>
+<li>Após separar, reserve os braços e tentáculos. Faça uma lavagem com a solução de água, gelo e sal para eliminar areia residual e o resto de tinta.</li>
+</ul>
+<p>Para limpar o tubo com precisão, utilizaremos uma <strong>pinça de 20 cm</strong>.</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-07-lulas-em-preparo-etapa-que-antecede-a-revisao.jpg" alt="Lulas em preparo, etapa que antecede a revisão interna do tubo." loading="lazy">
+</div>
+<figcaption class="added">Lulas em preparo, etapa que antecede a revisão interna do tubo.</figcaption>
+</figure>
+<ul class="story-list">
+<li>Introduza a pinça gentilmente no tubo, apertando sutilmente como se estivesse &quot;abraçando&quot; o conteúdo interno.</li>
+<li>Gire a pinça 3 vezes e puxe. Isso remove cerca de 80% de toda a sujeira de forma fácil.</li>
+<li>Muita cautela com a &quot;pena&quot; (o osso transparente da lula). Ela dificilmente sai de primeira, mas com jeito ela sai inteira.</li>
+<li>Após retirar a pena, verifique se não restaram grãos de areia, órgãos ou pedaços quebrados da pena dentro do tubo.</li>
+</ul>
+<p class="draft-note">(Explicar sobre como lavar e verificar se não tem areia ou órgãos arrastando a faca sobre a lula necessitara fotos )</p>
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-4" id="revista-17" data-page="17">
+<div class="folio">Página 17</div>
+<div class="running-head"><span>Revista técnica</span><span>Polvo</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-polvo.jpg" alt="Destaque do capítulo: polvo em gelo antes da higienização das ventosas." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 04</p>
+<h2>Polvo</h2>
+<p class="chapter-caption added">Destaque do capítulo: polvo em gelo antes da higienização das ventosas.</p>
+</div>
+<div class="chapter-number">04</div>
+</section>
+<section class="page text-page tone-4" id="revista-18" data-page="18">
+<div class="folio">Página 18</div>
+<div class="running-head"><span>Revista técnica</span><span>Polvo</span></div>
+<div class="article-body">
+<p>O processo muda pouco se o polvo vier fresco e com vísceras ou já limpo pela indústria, sendo apenas mais ou menos maçante, a limpeza com sal nos “braços” tentáculos será a mesma</p>
+<ul class="story-list">
+<li>Corte a cabeça do polvo logo abaixo da linha dos olhos.</li>
+<li>Assim como na lula, tenha extremo cuidado para não furar os olhos. Se estourarem, a sujeira se espalha.</li>
+<li>Após o corte, você terá a “cabeça” e o &quot;rosto&quot; (onde ficam os olhos n rosto e as vísceras na cabeça).</li>
+<li>Descarte as vísceras e o rosto. Remova as vísceras da cabeça, lave com sal e enxágue em água corrente.</li>
+</ul>
+<h3>Higienização por Osmose (Shiojime de Limpeza)</h3>
+<p>Sabemos que a proteína suporta até 5% de sal antes de saturar. No polvo, trabalhamos com <strong>4% de sal</strong> em relação ao peso para lidar com a sujeira pesada e o muco.</p>
+<p>Pese o polvo já eviscerado e calcule 4% desse peso em sal (Exemplo: 1kg de polvo = 40g de sal).</p>
+<p>Peso do polvo X 0,04</p>
+<ul class="story-list">
+<li>Utilize preferencialmente <strong>sal grosso sem iodo</strong>.</li>
+<li>Salpique o sal sobre o polvo e inicie uma massagem rápida e vigorosa.</li>
+<li>limpe ventosa por ventosa. É ali que se escondem as micro sujeiras que o animal traz do mar.</li>
+<li>Lave em água corrente e procure ser rápido nessa limpeza o foco é a sujeira, massagem é bom fazer sem sal.</li>
+</ul>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-08-polvo-em-gelo-e-caixa-antes-da-higienizacao-cu.jpg" alt="Polvo em gelo e caixa, antes da higienização cuidadosa das ventosas." loading="lazy">
+</div>
+<figcaption class="added">Polvo em gelo e caixa, antes da higienização cuidadosa das ventosas.</figcaption>
+</figure>
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-5" id="revista-19" data-page="19">
+<div class="folio">Página 19</div>
+<div class="running-head"><span>Revista técnica</span><span>Camarão Rosa</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-camarao-rosa.jpg" alt="Destaque do capítulo: camarão rosa em preparo, preservando textura e integridade." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 05</p>
+<h2>Camarão Rosa</h2>
+<p class="chapter-caption added">Destaque do capítulo: camarão rosa em preparo, preservando textura e integridade.</p>
+</div>
+<div class="chapter-number">05</div>
+</section>
+<section class="page text-page tone-5" id="revista-20" data-page="20">
+<div class="folio">Página 20</div>
+<div class="running-head"><span>Revista técnica</span><span>Camarão Rosa</span></div>
+<div class="article-body">
+<p>Descongelamento com urgência: água e sal em uma caixa-bloco, por si só a solução vai ficar gelada, basta usar essa água para descongelar regando o os camarões como são congelados um a um ele descongela rápido.</p>
+<p>Descongelamento lento e seguro: de um dia para o outro na câmara resfriada em uma caixa-bloco furada escorrendo líquidos pelo descongelamento</p>
+<h3>Ferramentas e Manuseio</h3>
+<p>Usaremos uma faca de legumes (faca pequena) e luvas para descascar e lidar com a água dele. Camarão é velocidade e cuidado com a manipulação. Procurar descascar com sutileza, como se fosse retirar uma pele sobressaltada; se forçar, o machuca.</p>
+<figure class="story-figure">
+<div class="story-photo-grid count-3">
+<img src="../magazine_assets/images/fig-09-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy">
+<img src="../magazine_assets/images/fig-10-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy">
+<img src="../magazine_assets/images/fig-11-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy">
+</div>
+<figcaption class="added">Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne.</figcaption>
+</figure>
+<h3>Anatomia e Limpeza</h3>
+<p>Lembrando que no camarão e sua estrutura dorsal teremos as ovas junto com as fezes. É nítida a diferença: a ova é mais macia e esverdeada; as fezes são uma linha pretinha meio firme. Aliás, ovas são comestíveis.</p>
+<p>Basicamente tudo liga do rabo à cabeça. Lembrando que onde é o ligamento do corpo com a cabeça, ali se encontra o estômago. Eu não gosto muito e retiro quando está exorbitante. Caso vá usar sem cabeça, basta remover toda a cabeça e reservar para caldo e afins.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-5" id="revista-21" data-page="21">
+<div class="folio">Página 21</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-camarao-rosa-01-01-vermelho-vivo.jpg" alt="Cor intensa do camarão como pausa visual e contraste com as páginas técnicas." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Vermelho vivo</h2>
+<p class="added">Cor intensa do camarão como pausa visual e contraste com as páginas técnicas.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-5" id="revista-22" data-page="22">
+<div class="folio">Página 22</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Casca e anatomia</h2>
+<p class="added">Duas leituras do mesmo produto: transparência, casca e estrutura inteira.</p>
+</div>
+<div class="plate-grid diptych">
+<img src="../magazine_assets/images/plate-camarao-rosa-02-01-casca-e-anatomia.jpg" alt="Duas leituras do mesmo produto: transparência, casca e estrutura inteira." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-camarao-rosa-02-02-casca-e-anatomia.jpg" alt="Duas leituras do mesmo produto: transparência, casca e estrutura inteira." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-1" id="revista-23" data-page="23">
+<div class="folio">Página 23</div>
+<div class="running-head"><span>Revista técnica</span><span>Mexilhão</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-mexilhao.jpg" alt="Destaque do capítulo: mexilhões abertos, evidenciando concha e carne." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 06</p>
+<h2>Mexilhão</h2>
+<p class="chapter-caption added">Destaque do capítulo: mexilhões abertos, evidenciando concha e carne.</p>
+</div>
+<div class="chapter-number">06</div>
+</section>
+<section class="page text-page tone-1" id="revista-24" data-page="24">
+<div class="folio">Página 24</div>
+<div class="running-head"><span>Revista técnica</span><span>Mexilhão</span></div>
+<div class="article-body">
+<p>É um dos mariscos com que trabalhamos mais consumidos e “chatos “de se trabalhar; o importante é tentar deixar essa caminhada mais fácil.</p>
+<p>O marisco é composto por duas conchas e um músculo que se projeta para fora, algo semelhante a cabelos, que chamamos de &quot;umbigo&quot;. Ele é ligado a um conjunto de músculos dentro do marisco. Quando retirado com muito cuidado, segurando levemente as conchas e deixando apenas uma pequena fresta por onde você vai puxar essa conjuntura de &quot;cabelinhos&quot;, o &quot;umbigo&quot; sai sem machucar o molusco.</p>
+<p>Para abrir com cautela, é importante entender que o marisco tem um músculo principal que se liga às duas conchas. Passamos a faca bem triscando na casca por dentro; assim, ele se abre na totalidade. O ponto fraco do marisco é ali. Evite quebrar a casca, evite força, evite machucados.</p>
+<p>Ainda sobre as conchas, é interessante limpar o externo antes de limpar o interno. O marisco é sujo, tem berbigões e cracas provenientes do ambiente do bicho. Eu aconselho limpar depois de cozinhar; as cracas saem mais fácil pela dilatação e contração da concha. É ideal entender que as conchas têm faces e fazer a faca correr sempre para fora. Importante entender que o marisco faz sujeira; faça embaixo de uma caixa-bloco.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-1" id="revista-25" data-page="25">
+<div class="folio">Página 25</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-mexilhao-01-01-conchas-em-massa.jpg" alt="O volume dos mexilhões vira textura gráfica para abrir respiro no capítulo." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Conchas em massa</h2>
+<p class="added">O volume dos mexilhões vira textura gráfica para abrir respiro no capítulo.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-1" id="revista-26" data-page="26">
+<div class="folio">Página 26</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Concha aberta</h2>
+<p class="added">A cor interna do mexilhão aparece como detalhe gastronômico e anatômico.</p>
+</div>
+<div class="plate-grid diptych">
+<img src="../magazine_assets/images/plate-mexilhao-02-01-concha-aberta.jpg" alt="A cor interna do mexilhão aparece como detalhe gastronômico e anatômico." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-mexilhao-02-02-concha-aberta.jpg" alt="A cor interna do mexilhão aparece como detalhe gastronômico e anatômico." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page feature-page full-bleed on-dark tone-1" id="revista-27" data-page="27">
+<div class="folio">Página 27</div>
+
+<img src="../magazine_assets/images/feature-mexilhao.jpg" alt="Textura, cor e frescor dos moluscos como página de respiro entre capítulos técnicos." loading="lazy">
+<div class="feature-caption">
+<p class="feature-kicker added">Ensaio visual</p>
+<h2 class="added">Frutos do mar</h2>
+<p class="added">Textura, cor e frescor dos moluscos como página de respiro entre capítulos técnicos.</p>
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-2" id="revista-28" data-page="28">
+<div class="folio">Página 28</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-peixes.jpg" alt="Destaque do capítulo: variedade de pescados organizados para recebimento e trabalho." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 07</p>
+<h2>Peixes</h2>
+<p class="chapter-caption added">Destaque do capítulo: variedade de pescados organizados para recebimento e trabalho.</p>
+</div>
+<div class="chapter-number">07</div>
+</section>
+<section class="page text-page tone-2" id="revista-29" data-page="29">
+<div class="folio">Página 29</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<p>Dificilmente definimos os peixes no dia a dia sem um conhecimento de espécies levemente aprofundado, mas vou ajudar nessa interpretação. Existem peixes com muitas escamas e peixes sem escamas, além de diferentes espécies com características parecidas de outras famílias. No geral, para quem trabalha em restaurante, temos pescados-chave que sempre estão em alta no mercado. Tudo é sazonal, então as qualidades vão girar durante o ano entre épocas mais frias e mais quentes; independente do tempo, clima ou dia, nós temos que entregar.</p>
+<aside class="fish-module">
+<h3>Espécies Comuns no Mercado:</h3>
+<ul>
+<li>Robalo</li>
+<li>pescada amarela</li>
+<li>pregereba</li>
+<li>vermelho-dentão</li>
+<li>Cioba</li>
+<li>Namorado</li>
+<li>Pargo</li>
+<li>Batata</li>
+<li>dourado do mar</li>
+<li>Olhete</li>
+<li>olho-de-boi</li>
+<li>Cherne</li>
+<li>Sororoca</li>
+<li>pescada branca</li>
+<li>pescada cambucu</li>
+<li>Linguado</li>
+<li>olho-de-cão</li>
+<li>cavala</li>
+<li>Carapau</li>
+<li>Tainha</li>
+<li>Anchova</li>
+<li>Atum</li>
+<li>espadarte</li>
+<li>salmão</li>
+</ul>
+</aside>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-30" data-page="30">
+<div class="folio">Página 30</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<div class="face-gallery-module">
+<h3 class="added">Rostos e anatomias dos peixes brancos</h3>
+<p class="added face-gallery-note">Prancha editorial de miniaturas para comparar olhos, bocas, perfis, cores e proporções antes da etapa técnica.</p>
+<div class="face-gallery-grid">
+<figure><img src="../magazine_assets/images/face-gallery-01-boca-aberta-e-leitura-in.jpg" alt="Boca aberta e leitura interna da face" loading="lazy"><figcaption>Boca aberta e leitura interna da face</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-02-perfil-prateado-de-corpo.jpg" alt="Perfil prateado de corpo alto" loading="lazy"><figcaption>Perfil prateado de corpo alto</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-03-olho-vivo-e-boca-amarela.jpg" alt="Olho vivo e boca amarela" loading="lazy"><figcaption>Olho vivo e boca amarela</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-04-mandibula-e-dentes-expos.jpg" alt="Mandíbula e dentes expostos" loading="lazy"><figcaption>Mandíbula e dentes expostos</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-05-cabeca-robusta-de-peixe.jpg" alt="Cabeça robusta de peixe branco" loading="lazy"><figcaption>Cabeça robusta de peixe branco</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-06-olho-escuro-e-pele-acinz.jpg" alt="Olho escuro e pele acinzentada" loading="lazy"><figcaption>Olho escuro e pele acinzentada</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-07-olho-claro-e-borda-doura.jpg" alt="Olho claro e borda dourada" loading="lazy"><figcaption>Olho claro e borda dourada</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-08-coloracao-dourada-e-rosa.jpg" alt="Coloração dourada e rosada" loading="lazy"><figcaption>Coloração dourada e rosada</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-09-pele-verde-dourada-e-olh.jpg" alt="Pele verde-dourada e olho marcado" loading="lazy"><figcaption>Pele verde-dourada e olho marcado</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-10-perfil-colorido-de-doura.jpg" alt="Perfil colorido de dourado-do-mar" loading="lazy"><figcaption>Perfil colorido de dourado-do-mar</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-11-peixe-rosado-de-corpo-ar.jpg" alt="Peixe rosado de corpo arredondado" loading="lazy"><figcaption>Peixe rosado de corpo arredondado</figcaption></figure>
+<figure><img src="../magazine_assets/images/face-gallery-12-anatomia-achatada-e-boca.jpg" alt="Anatomia achatada e boca lateral" loading="lazy"><figcaption>Anatomia achatada e boca lateral</figcaption></figure>
+</div>
+</div>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-31" data-page="31">
+<div class="folio">Página 31</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<p>Peixes Azuis (Peixes de Sangue) Interessante ressaltar que, antes de tudo, temos que saber diferenciar um grupo específico: Geralmente, &quot;peixes azuis&quot; é o termo gastronômico usado para diferenciar alguns peixes no mercado que têm características em comum, como musculatura rica em sangue, carne mais escura, maior teor de gordura, sabor mais intenso e metabolismo elevado. Então, o que define um peixe azul é o comportamento e a composição da carne.</p>
+<h3>Exemplos de peixes azuis:</h3>
+<aside class="fish-module editorial-module">
+<h3 class="added">Peixes azuis citados</h3>
+<ul>
+<li>Sardinha</li>
+<li>anchova</li>
+<li>cavalinha / cavala</li>
+<li>atum</li>
+<li>bonito</li>
+<li>sororoca</li>
+<li>wahoo</li>
+<li>xaréu</li>
+<li>olho-de-boi</li>
+<li>dourado-do-mar</li>
+</ul>
+</aside>
+<p>Nós comumente os chamamos de &quot;peixes de sangue&quot;.</p>
+<h3 class="added">Peixes de Carne Branca</h3>
+<aside class="fish-module editorial-module">
+<h3 class="added">Peixes de carne branca citados</h3>
+<ul>
+<li>robalo</li>
+<li>pescada-amarela / pescada-branca / pescada-cambucu</li>
+<li>prejereba</li>
+<li>vermelho-dentão</li>
+<li>pargo / cioba</li>
+<li>Linguado</li>
+<li>Batata</li>
+<li>namorado</li>
+<li>cherne</li>
+<li>olho-de-cão</li>
+</ul>
+</aside>
+<p>literalmente são carne branca.</p>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-32" data-page="32">
+<div class="folio">Página 32</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<p>Até o espadarte é reconhecido pela carne branca, mesmo tendo linhas de musculos fortes e partes mais intensassem coloração. Mesmo se assemelhando a um &quot;peixe azul&quot; ou &quot;peixe de sangue&quot;, ele permanece nessa categoria. Ainda temos os que são carne branca, mas o sangue é intenso, não se assemelhando em nada a um peixe de sangue (como no caso da cioba e do vermelho-dentão), que ainda assim têm linhas de músculos mais intensas em coloração e sabor forte de &quot;sangue&quot;.</p>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-12-variedade-de-pescados-no-recebimento-e-organiz.jpg" alt="Variedade de pescados no recebimento e organização da peixaria." loading="lazy">
+<img src="../magazine_assets/images/fig-13-variedade-de-pescados-no-recebimento-e-organiz.jpg" alt="Variedade de pescados no recebimento e organização da peixaria." loading="lazy">
+</div>
+<figcaption class="added">Variedade de pescados no recebimento e organização da peixaria.</figcaption>
+</figure>
+<h3>Segurança e Anatomia</h3>
+<p>Quase todos os peixes têm esporões nas nadadeiras ventrais ou superiores. É bom sempre verificar, pois nosso trabalho é visual e sensorial; é preciso saber onde você vai colocar a mão. Se for maturar, o interessante é quebrar esse esporão; quanto mais seco, mais &quot;letal&quot;. Use um alicate de corte específico para peixaria.</p>
+<h3>Recebimento e Pré-limpeza</h3>
+<p>Verificação no Recebimento Sobre o recebimento, é bom lembrar de verificar:</p>
+<ul class="story-list">
+<li>Olhos: têm que estar vivos</li>
+<li>Guelras: vermelhas</li>
+<li>Carne: elástica</li>
+<li>Odor: sem odor forte</li>
+<li>Escama: sem descolamento.</li>
+</ul>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-33" data-page="33">
+<div class="folio">Página 33</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<p>Este é o primeiro passo antes de assinar a nota. Essas verificações devem ser feitas e não se deve aceitar um peixe que não esteja minimamente decente e condizente com as características citadas. Ainda assim, se tiver um contato bacana com seu fornecedor, peça sem plástico, com o peixe direto no gelo. O plástico deteriora demais o produto durante o transporte e a troca de temperatura que ele sofre, o que infelizmente acontece.</p>
+<p>Ao receber os pescados, além da verificação prévia, temos os cuidados pós-recebimento. Procure retirar o peixe do saco plástico caso venha a vir em um. Faça uma banheira de água, gelo e sal para a primeira limpeza antes de trabalhar com ele na tábua. Após isso, defina o seu caminho:</p>
+<h3>Filés com pele</h3>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-14-referencia-visual-para-files-com-pele-observan.jpg" alt="Referência visual para filés com pele, observando couro, mucosa e linha de corte." loading="lazy">
+<img src="../magazine_assets/images/fig-15-referencia-visual-para-files-com-pele-observan.jpg" alt="Referência visual para filés com pele, observando couro, mucosa e linha de corte." loading="lazy">
+</div>
+<figcaption class="added">Referência visual para filés com pele, observando couro, mucosa e linha de corte.</figcaption>
+</figure>
+<p>(Peixes pequenos) Usamos peixes de pele, couro e mucosa sensível e macia (ex: pargo, pescada branca, olho-de-cão). Aqui usaremos o descamador (reco-reco), que retira apenas as escamas, mantendo o couro e a mucosa.</p>
+<aside class="equipment-module">
+<h3>Itens necessário</h3>
+<ul>
+<li>Descamador</li>
+<li>Faca para filetar</li>
+<li>Alicate de espinhos</li>
+<li>GN furada</li>
+<li>GN</li>
+<li>Perflex</li>
+<li>Papel</li>
+</ul>
+</aside>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-34" data-page="34">
+<div class="folio">Página 34</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<h3>Filés sem pele</h3>
+<p>(Peixes robustos - médios a grandes, passando de 7 kg) Podemos limpá-lo através das escamas na coluna do animal, acertando as fraquezas entre as nadadeiras dorsal e ventral. Caso a linha de escamas seja muito dura, o indicado é o Sukibiki: técnica com a faca entre a pele e a mucosa, resultando na descamação e deixando apenas o couro ligado à carne. Isso facilita a retirada do couro sem muito esforço.</p>
+<aside class="equipment-module">
+<h3>Itens necessários</h3>
+<ul>
+<li>Faca para sukibiki</li>
+<li>Faca para filetar</li>
+<li>Alicate de espinhos ou pinça de espinhos</li>
+<li>Caixa-bloco furada</li>
+<li>Caixa-bloco</li>
+<li>Agua, sal e gelo</li>
+<li>Perflex</li>
+<li>papel</li>
+</ul>
+</aside>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-16-ferramentas-de-trabalho-organizadas-para-corte.jpg" alt="Ferramentas de trabalho organizadas para cortes, limpeza e acabamento." loading="lazy">
+</div>
+<figcaption class="added">Ferramentas de trabalho organizadas para cortes, limpeza e acabamento.</figcaption>
+</figure>
+<h3>Espalmado</h3>
+<p>Pode ser feito em qualquer peixe, mas para grelhar os mais indicados são os médios para pequenos (3 kg ou menos). É interessante fazer pelas costas, assim não estoura a barriga, podendo retirar os órgãos por cima junto com as guelras. Além da faca, usamos uma tesoura para fazer incisões literalmente cirúrgicas e manter o pescado íntegro, mas caso alguns for espalmar pela barriga também caso ela já venha sem vísceras, como abrir pelas costas nos mantemos a barriga intacta para manter os dois lados do peixe junto, nos não atravessamos os peixe e deixamos ele interligado pelas costas, Aqui pode ser aplicado sukibiki ou descamador independente do peixe.</p>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-35" data-page="35">
+<div class="folio">Página 35</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-17-resultado-visual-do-peixe-espalmado-mantendo-e.jpg" alt="Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra." loading="lazy">
+<img src="../magazine_assets/images/fig-18-resultado-visual-do-peixe-espalmado-mantendo-e.jpg" alt="Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra." loading="lazy">
+</div>
+<figcaption class="added">Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra.</figcaption>
+</figure>
+<aside class="equipment-module">
+<h3>Itens necessários</h3>
+<ul>
+<li>Tesoura</li>
+<li>Alicate de espinhos</li>
+<li>Faca</li>
+<li>GN furada</li>
+<li>GN</li>
+</ul>
+</aside>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-19-ferramentas-essenciais-para-abrir-limpar-e-fin.jpg" alt="Ferramentas essenciais para abrir, limpar e finalizar o pescado." loading="lazy">
+</div>
+<figcaption class="added">Ferramentas essenciais para abrir, limpar e finalizar o pescado.</figcaption>
+</figure>
+<h3>Maturado Inteiro</h3>
+<p>Usamos as técnicas</p>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-36" data-page="36">
+<div class="folio">Página 36</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<ul class="story-list">
+<li>Sukibiki :peixes grandes e médios (2 kg a 7kg). Técnica japonesa limpa, sutil e precisa. Remove os bolsões onde estão as mucosas do peixe.</li>
+<li>Descamador(reco-reco): Em alguns médios e pequenos (2 kg pra baixo) uma técnica mais firme de execução, tradicionalmente mais usado, retira apenas as escamas</li>
+</ul>
+<p>Priorizo manter o peixe sem esporões, sem guelras e sem órgãos. Mantenho apenas a carcaça base (cabeça, corpo e cauda interligados). Nada além disso deve ficar, para não interferir na maturação e na perda de água. Armazenamento a longo prazo o ideal é que sejam pendurados pela cauda em ganchos e sempre ir sempre cuidando da umidade que ele vai eliminando na câmera e o que sai superficialmente na pele</p>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-20-peixe-maturado-inteiro-pendurado-para-controle.jpg" alt="Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar." loading="lazy">
+<img src="../magazine_assets/images/fig-21-peixe-maturado-inteiro-pendurado-para-controle.jpg" alt="Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar." loading="lazy">
+</div>
+<figcaption class="added">Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar.</figcaption>
+</figure>
+<p>Cada peixe varia o tempo de maturação alguns aguentam mais de uma semana(atum, olhete, robalo)2kg pra mais, dependendo do tamanho e o teor de gordura, o interessante é não segurar peixes pequenos abaixo de 2 kg mais que uma semana, a maturação ajuda a criar sabores e complexidades mas a perda de agua acontece assim ressecando o pescado, o ideal é sempre acompanhar o desenvolvimento do pescado e assegurar que aquele peixe ira pra frente e assim entrando novos para armazenamento e maturação.</p>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-37" data-page="37">
+<div class="folio">Página 37</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-22-acompanhamento-de-maturacao-em-geladeira-com-p.jpg" alt="Acompanhamento de maturação em geladeira, com pescados suspensos e separados." loading="lazy">
+<img src="../magazine_assets/images/fig-23-acompanhamento-de-maturacao-em-geladeira-com-p.jpg" alt="Acompanhamento de maturação em geladeira, com pescados suspensos e separados." loading="lazy">
+</div>
+<figcaption class="added">Acompanhamento de maturação em geladeira, com pescados suspensos e separados.</figcaption>
+</figure>
+<p>Se uso o descamador, tenho que certificar que não haverá água remanescente nas mucosas. Quanto mais seco entrar para maturar, mais gostosa será essa mucosa seca que, ao cair na grelha, pururuca literalmente.</p>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-24-detalhe-de-pele-e-mucosa-secas-base-para-textu.jpg" alt="Detalhe de pele e mucosa secas, base para textura firme na finalização." loading="lazy">
+<img src="../magazine_assets/images/fig-25-detalhe-de-pele-e-mucosa-secas-base-para-textu.jpg" alt="Detalhe de pele e mucosa secas, base para textura firme na finalização." loading="lazy">
+</div>
+<figcaption class="added">Detalhe de pele e mucosa secas, base para textura firme na finalização.</figcaption>
+</figure>
+<h3>Nota sobre Maturação:</h3>
+<p>Se usamos o descamador, temos que certificar que não haverá água remanescente nas mucosas. Quanto mais seco entrar para maturar, mais gostosa será essa mucosa seca que, ao cair na grelha, pururuca literalmente.</p>
+</div>
+</section>
+<section class="page text-page tone-2" id="revista-38" data-page="38">
+<div class="folio">Página 38</div>
+<div class="running-head"><span>Revista técnica</span><span>Peixes</span></div>
+<div class="article-body">
+<p>Lembrando que sujeira ela é criada em crostas então ação mecânica é o que quebra essa camada de sujeira, no procuramos usar um perflex e passar na pele do pescado com ênfase assim quebrando alguma crosta remanescente, geralmente uma solução de água, sal e gelo, perflex levemente humedecido com essa solução a ideia é retirar o muco, sujeita e afins que estão grudado no peixe, após essa limpeza nos secamos muito bem e muito da sujeira passa para o papel de finalização.</p>
+<aside class="equipment-module">
+<h3>Itens Necessários:</h3>
+<ul>
+<li>Alicate de corte (específico para peixaria)</li>
+<li>Descamador (reco-reco)</li>
+<li>Faca para filetar</li>
+<li>Faca de Sukibiki</li>
+<li>Alicate de espinhos</li>
+<li>Tesoura</li>
+<li>Água, gelo e sal</li>
+<li>Caixa bloco furada</li>
+<li>Caixa bloco</li>
+<li>Ganchos</li>
+<li>Perflex</li>
+<li>Papel</li>
+</ul>
+</aside>
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-2" id="revista-39" data-page="39">
+<div class="folio">Página 39</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-peixes-01-01-azul-dourado-e-esc.jpg" alt="Recorte de cor e textura para destacar a beleza natural do pescado antes da técnica." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Azul, dourado e escama</h2>
+<p class="added">Recorte de cor e textura para destacar a beleza natural do pescado antes da técnica.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-2" id="revista-40" data-page="40">
+<div class="folio">Página 40</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Sinais de frescor</h2>
+<p class="added">Olho, guelra, boca e pele como leitura visual do recebimento.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-peixes-02-01-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-02-02-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-02-03-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-02-04-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-2" id="revista-41" data-page="41">
+<div class="folio">Página 41</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Recebimento em volume</h2>
+<p class="added">Fileiras e caixas organizam a escala real do trabalho de peixaria.</p>
+</div>
+<div class="plate-grid diptych">
+<img src="../magazine_assets/images/plate-peixes-03-01-recebimento-em-vol.jpg" alt="Fileiras e caixas organizam a escala real do trabalho de peixaria." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-03-02-recebimento-em-vol.jpg" alt="Fileiras e caixas organizam a escala real do trabalho de peixaria." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-2" id="revista-42" data-page="42">
+<div class="folio">Página 42</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Olho-de-boi em escala</h2>
+<p class="added">Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-peixes-04-01-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-04-02-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-04-03-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-04-04-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-2" id="revista-43" data-page="43">
+<div class="folio">Página 43</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Maturação como escultura</h2>
+<p class="added">Costelas, pele seca e suspensão transformam o processo em linguagem visual.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-peixes-05-01-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-05-02-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-05-03-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-peixes-05-04-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-2" id="revista-44" data-page="44">
+<div class="folio">Página 44</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-peixes-06-01-peixe-maturado-em.jpg" alt="Uma imagem de atmosfera para lembrar tempo, umidade e cuidado no processo." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Peixe maturado em madeira</h2>
+<p class="added">Uma imagem de atmosfera para lembrar tempo, umidade e cuidado no processo.</p>
+</div>
+</section>
+<section class="page feature-page full-bleed on-dark tone-2" id="revista-45" data-page="45">
+<div class="folio">Página 45</div>
+
+<img src="../magazine_assets/images/feature-peixes.jpg" alt="Peixes suspensos em ambiente controlado, valorizando o trabalho de tempo e umidade." loading="lazy">
+<div class="feature-caption">
+<p class="feature-kicker added">Ensaio visual</p>
+<h2 class="added">Maturação inteira</h2>
+<p class="added">Peixes suspensos em ambiente controlado, valorizando o trabalho de tempo e umidade.</p>
+</div>
+</section>
+<section class="page chapter-opener full-bleed on-dark tone-3" id="revista-46" data-page="46">
+<div class="folio">Página 46</div>
+<div class="running-head"><span>Revista técnica</span><span>Setorização de Filés Grandes (Acima de 7 kg)</span></div>
+<div class="chapter-image">
+<img src="../magazine_assets/images/hero-setorizacao-de-files-grandes-acima-de-7-kg.jpg" alt="Destaque do capítulo: atum aberto para estudo de setores e cortes." loading="lazy">
+</div>
+<div class="chapter-panel">
+<p class="chapter-index">Matéria 08</p>
+<h2>Setorização de Filés Grandes (Acima de 7 kg)</h2>
+<p class="chapter-caption added">Destaque do capítulo: atum aberto para estudo de setores e cortes.</p>
+</div>
+<div class="chapter-number">08</div>
+</section>
+<section class="page text-page tone-3" id="revista-47" data-page="47">
+<div class="folio">Página 47</div>
+<div class="running-head"><span>Revista técnica</span><span>Setorização de Filés Grandes (Acima de 7 kg)</span></div>
+<div class="article-body">
+<h3>1. <strong>Barriga</strong></h3>
+<p>Parte mais macia e gorda. Ótimo para tiraditos, sashimi e nigiri.</p>
+<p>*Obs: aparas da limpeza da barriga viram ceviche.*</p>
+<p>Atenção aos espinhos das costelas que geralmente atravessam a carne, tendo que retirá-los com pinças ou manobras específicas.</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-26-barriga-parte-macia-e-gordurosa-destacada-para.jpg" alt="Barriga: parte macia e gordurosa, destacada para cortes delicados." loading="lazy">
+</div>
+<figcaption class="added">Barriga: parte macia e gordurosa, destacada para cortes delicados.</figcaption>
+</figure>
+<h3>2. <strong>Filé Superior</strong></h3>
+<p>Geralmente filés que passam de dois dedos; ótimos para cortes que vão ser grelhados, assados ou cozidos. Em filés grandes, tenha atenção à linha de espinhos que junta o filé superior à barriga. Geralmente essas aparas vão para leite de tigre ou alguma base. Quando fazemos os cortes para porcionar, o que sobra por conta da altura dessas peças nós usamos para cubos grandes de peixe.</p>
+</div>
+</section>
+<section class="page text-page tone-3" id="revista-48" data-page="48">
+<div class="folio">Página 48</div>
+<div class="running-head"><span>Revista técnica</span><span>Setorização de Filés Grandes (Acima de 7 kg)</span></div>
+<div class="article-body">
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-27-file-superior-peca-alta-limpa-e-uniforme-para.jpg" alt="Filé superior: peça alta, limpa e uniforme para grelha, forno ou cocção." loading="lazy">
+</div>
+<figcaption class="added">Filé superior: peça alta, limpa e uniforme para grelha, forno ou cocção.</figcaption>
+</figure>
+<h3>3. <strong>Meio do Peixe</strong></h3>
+<p>Ainda macio. Procuro retirar o espinho que liga o filé superior com o inferior. Como é uma peça que vem antes do que denominamos &quot;rabo&quot;, não contém tantas fibras ou espinhos; geralmente são espinhos menores e fáceis de retirar com uma pinça. Ainda assim, é um ótimo filé de peixe com um tamanho bom, boas repartições do próprio peixe e uniformidade. Aqui, caso haja a necessidade de fazer algumas aparas no filé para ficar no peso ou tamanho desejado, é ótimo para aproveitar em bastonetes (iscas), cubos (moqueca e afins), além de pedaços menores para ceviche.</p>
+<figure class="story-figure">
+<div class="story-photo-grid count-2">
+<img src="../magazine_assets/images/fig-28-meio-do-peixe-porcoes-regulares-e-versateis-pa.jpg" alt="Meio do peixe: porções regulares e versáteis para diferentes preparos." loading="lazy">
+<img src="../magazine_assets/images/fig-29-meio-do-peixe-porcoes-regulares-e-versateis-pa.jpg" alt="Meio do peixe: porções regulares e versáteis para diferentes preparos." loading="lazy">
+</div>
+<figcaption class="added">Meio do peixe: porções regulares e versáteis para diferentes preparos.</figcaption>
+</figure>
+</div>
+</section>
+<section class="page text-page tone-3" id="revista-49" data-page="49">
+<div class="folio">Página 49</div>
+<div class="running-head"><span>Revista técnica</span><span>Setorização de Filés Grandes (Acima de 7 kg)</span></div>
+<div class="article-body">
+<h3>4. <strong>Rabo</strong></h3>
+<p>Parte mais fibrosa e irregular; aqui procuramos trabalhar diversos cortes para aproveitamento. Conseguimos bastonete, moqueca, ceviche e pirão. Como são sempre triangulares, é fácil a setorização.</p>
+<figure class="story-figure">
+<div class="story-photo-grid single">
+<img src="../magazine_assets/images/fig-30-rabo-parte-mais-fibrosa-boa-para-cortes-de-apr.jpg" alt="Rabo: parte mais fibrosa, boa para cortes de aproveitamento." loading="lazy">
+</div>
+<figcaption class="added">Rabo: parte mais fibrosa, boa para cortes de aproveitamento.</figcaption>
+</figure>
+</div>
+</section>
+<section class="page visual-plate visual-plate-solo full-bleed on-dark tone-3" id="revista-50" data-page="50">
+<div class="folio">Página 50</div>
+
+<div class="plate-solo-image">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-01-01-olho-e-escala.jpg" alt="Close dramático para abrir a leitura do atum como matéria-prima monumental." loading="lazy" style="object-position: center center;">
+</div>
+<div class="plate-caption">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Olho e escala</h2>
+<p class="added">Close dramático para abrir a leitura do atum como matéria-prima monumental.</p>
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-3" id="revista-51" data-page="51">
+<div class="folio">Página 51</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Simetria do corte</h2>
+<p class="added">Seções grandes do atum organizadas como estudo visual de anatomia.</p>
+</div>
+<div class="plate-grid diptych">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-02-01-simetria-do-corte.jpg" alt="Seções grandes do atum organizadas como estudo visual de anatomia." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-02-02-simetria-do-corte.jpg" alt="Seções grandes do atum organizadas como estudo visual de anatomia." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-3" id="revista-52" data-page="52">
+<div class="folio">Página 52</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">A mão, a faca e a escala</h2>
+<p class="added">Presença humana para mostrar proporção, gesto e responsabilidade no corte.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page visual-plate visual-plate-grid tone-3" id="revista-53" data-page="53">
+<div class="folio">Página 53</div>
+
+<div class="plate-header">
+<p class="feature-kicker added">Prancha visual</p>
+<h2 class="added">Detalhes do atum</h2>
+<p class="added">Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia.</p>
+</div>
+<div class="plate-grid sequence">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-04-01-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-04-02-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-04-03-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" style="object-position: center center;">
+<img src="../magazine_assets/images/plate-setorizacao-de-files-g-04-04-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" style="object-position: center center;">
+</div>
+</section>
+<section class="page feature-page full-bleed on-dark tone-3" id="revista-54" data-page="54">
+<div class="folio">Página 54</div>
+
+<img src="../magazine_assets/images/feature-setorizacao-de-files-grandes-acima-de-7-kg.jpg" alt="O atum inteiro como encerramento visual para a setorização de grandes filés." loading="lazy">
+<div class="feature-caption">
+<p class="feature-kicker added">Ensaio visual</p>
+<h2 class="added">Cerimônia e escala</h2>
+<p class="added">O atum inteiro como encerramento visual para a setorização de grandes filés.</p>
+</div>
+</section>
+  </main>
+</body>
+</html>
+
+

@@ -379,7 +379,7 @@ export const projects: readonly Project[] = [
     tag: "website",
     status: "wip",
     visibility: "public",
-    liveUrl: "https://manual-matheus.davidluky.com/matheus/",
+    liveUrl: "https://matheus.davidluky.com/",
     metrics: ["HTML snapshot", "95 image references", "Cloudflare subdomain"],
     metricsPt: ["Snapshot HTML", "95 imagens referenciadas", "Subdomínio Cloudflare"],
   },

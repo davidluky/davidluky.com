@@ -330,6 +330,12 @@ async function handleEbayDeletion(request: Request, env: Env): Promise<Response>
 }
 
 async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<Response> {
+  if (url.pathname === "/livro" || url.pathname === "/revista") {
+    const redirectUrl = new URL(request.url);
+    redirectUrl.pathname = `${url.pathname}/`;
+    return Response.redirect(redirectUrl.toString(), 308);
+  }
+
   const assetUrl = new URL(request.url);
   assetUrl.pathname =
     url.pathname === "/" || url.pathname === "/index.html"

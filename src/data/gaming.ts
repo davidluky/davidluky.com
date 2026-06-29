@@ -29,10 +29,10 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 async function fromGameLibrary(): Promise<GamingData | null> {
   if (!GAME_LIBRARY_DB) return null;
 
-  let db: import("better-sqlite3").Database | null = null;
+  let db: import("node:sqlite").DatabaseSync | null = null;
   try {
-    const { default: Database } = await import("better-sqlite3");
-    db = new Database(GAME_LIBRARY_DB, { readonly: true });
+    const { DatabaseSync } = await import("node:sqlite");
+    db = new DatabaseSync(GAME_LIBRARY_DB, { readOnly: true });
 
     const totalGames = (db.prepare(
       "SELECT COUNT(DISTINCT pg.game_id) as c FROM platform_games pg JOIN user_games ug ON ug.platform_game_id = pg.id AND ug.source = 'owned'"

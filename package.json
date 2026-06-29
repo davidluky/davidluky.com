@@ -24,15 +24,18 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "^2.6.2",
-    "@types/better-sqlite3": "^7.6.13"
+    "@resvg/resvg-js": "^2.6.2"
   },
-  "optionalDependencies": {
-    "better-sqlite3": "^12.9.0"
+  "engines": {
+    "node": ">=24"
   },
   "overrides": {
     "esbuild": "^0.28.1",
     "vite": "^7.2.7",
     "yaml": "^2.8.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true
   }
 }

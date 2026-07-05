@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import ProjectImage from "../components/ProjectImage.astro";
 import type { ProjectStatus } from "../data/projects";
 import {
   featuredProjects,
@@ -122,6 +123,8 @@ const searchableText = (project: (typeof projects)[number]) => [
             data-project-status-value={project.status}
             data-project-visibility-value={project.visibility}
           >
+            <ProjectImage project={project} class="mb-5" />
+
             <div class="mb-4 flex flex-wrap items-center gap-2">
               <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
                 {tag.label}
@@ -287,7 +290,7 @@ const searchableText = (project: (typeof projects)[number]) => [
               const visibility = getProjectVisibility(project);
               return (
                 <article
-                  class="grid gap-4 py-5 md:grid-cols-[minmax(0,1.05fr)_minmax(0,1.35fr)_minmax(0,1fr)_auto] md:items-center"
+                  class="grid gap-4 py-5 md:grid-cols-[152px_minmax(0,1fr)] md:items-center lg:grid-cols-[152px_minmax(0,0.95fr)_minmax(0,1.15fr)_minmax(0,0.85fr)_auto]"
                   data-project-card
                   data-project-featured="false"
                   data-project-search={searchableText(project)}
@@ -295,6 +298,8 @@ const searchableText = (project: (typeof projects)[number]) => [
                   data-project-status-value={project.status}
                   data-project-visibility-value={project.visibility}
                 >
+                  <ProjectImage project={project} compact class="md:row-span-3 lg:row-span-1" />
+
                   <div class="min-w-0">
                     <div class="mb-2 flex flex-wrap items-center gap-2">
                       <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
@@ -466,6 +471,12 @@ const searchableText = (project: (typeof projects)[number]) => [
       if (option.value && option.value in projectVisibilities) option.textContent = projectVisibilities[option.value as keyof typeof projectVisibilities].labelPt;
     });
   }
+
+  document.querySelectorAll<HTMLImageElement>('[data-project-image-alt]').forEach((el) => {
+    el.alt = lang === 'pt'
+      ? el.dataset.altPt || el.alt
+      : el.dataset.altEn || el.alt;
+  });
 
   const search = document.getElementById('project-search') as HTMLInputElement | null;
   const tag = document.getElementById('project-tag-filter') as HTMLSelectElement | null;

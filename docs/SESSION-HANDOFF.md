@@ -1,9 +1,14 @@
 # Session Handoff
 
-Last updated: 2026-05-14
+Last updated: 2026-07-05
 
 ## What Was Done
 
+- Added real optimized WebP project previews to the portfolio cards and homepage intro screenshot for The Room Web.
+- Created `src/components/ProjectImage.astro` for consistent image/fallback rendering.
+- Extended `src/data/projects.ts` with optional `image`, `imageAlt`, and `imageAltPt` fields.
+- Captured/processed approved imagery for The Room, The Room Web, Matemática Elementar, Tibia Services, DigiPets, Megaman X, CCB Hinos Rock Suno, Alisson David Frangullys, Manual de Pescados, and Frank's Stories.
+- Left projects without a trustworthy source image on the fallback visual; the Game Library dashboard capture is documented as blocked in the campaign notes.
 - Ran a conservative maintenance heartbeat scoped to `davidluky.com` only.
 - Reviewed the Astro + Tailwind site structure, Cloudflare Worker entrypoint, docs, CI workflow, package scripts, custom validator, and generated-artifact conventions.
 - Confirmed the repo starts clean on `main` tracking `origin/main`.
@@ -17,10 +22,12 @@ Last updated: 2026-05-14
 
 ## In Progress
 
-- Nothing left unfinished in this pass.
+- July 2026 visual campaign is in progress on branch `melhorias-2026-07`; finish visual verification, docs polish, and deploy after `npm run verify` stays green.
 
 ## Current State
 
+- Branch `melhorias-2026-07` contains the project-preview work in progress.
+- New published image assets live under `public/projects/` and should stay WebP, <= 200 KB, with EN/PT alt text in `projects.ts`.
 - `npm ci`: succeeded; 389 packages installed, 0 vulnerabilities. `prebuild-install@7.1.3` emitted an upstream deprecation warning through the locked dependency tree.
 - `npm run verify`: passed.
   - `npm run check`: 20 files checked, 0 errors, 0 warnings, 0 hints.

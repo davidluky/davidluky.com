@@ -35,7 +35,7 @@ npm run dev        # http://localhost:4321
 ```text
 davidluky.com/
   src/
-    components/          Header, Hero, Footer
+    components/          Header, Hero, Footer, ProjectImage
     data/
       projects.ts        Rich project catalog and project metadata
       stats.ts           Centralized stats
@@ -50,6 +50,7 @@ davidluky.com/
     favicon.svg
     og-image.png
     og-image.svg
+    projects/            Optimized WebP project preview images
     robots.txt
   scripts/
     generate-og.mjs
@@ -76,6 +77,9 @@ Edit `src/data/projects.ts` and add a `Project` entry:
   featured: true,
   liveUrl: "https://example.com",
   repoUrl: "https://github.com/davidluky/example",
+  image: "/projects/project-id.webp",
+  imageAlt: "English image description.",
+  imageAltPt: "Descrição da imagem em português.",
   metrics: ["Metric"],
   metricsPt: ["Métrica"],
 }
@@ -85,6 +89,7 @@ Rules:
 
 - Use an existing `projectTags` key or add a new tag in the same file.
 - Only set `liveUrl` when the public URL resolves. Internal dashboards should use `visibility: "internal"` and no `liveUrl`.
+- If a real screenshot or approved repo asset exists, optimize it to WebP under `public/projects/` and set `image`, `imageAlt`, and `imageAltPt`. Leave `image` unset when there is no trustworthy source; `ProjectImage.astro` renders a fallback.
 - `featured` controls the curated section on `/projects`.
 - `liveProjects`, footer links, homepage live count, and JSON-LD derive from this data.
 

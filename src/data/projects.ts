@@ -105,6 +105,9 @@ export interface Project {
   featured?: boolean;
   liveUrl?: string;
   repoUrl?: string;
+  image?: string;
+  imageAlt?: string;
+  imageAltPt?: string;
   metrics?: readonly string[];
   metricsPt?: readonly string[];
 }
@@ -123,6 +126,9 @@ export const projects: readonly Project[] = [
     status: "active",
     visibility: "private",
     featured: true,
+    image: "/projects/the-room.webp",
+    imageAlt: "Pixel art RPG monsters from The Room sprite set",
+    imageAltPt: "Monstros de RPG em pixel art do acervo de sprites do The Room",
     metrics: [`${stats.theRoomGames} games`, `${stats.theRoomAchievements} achievements`, "RPG v1.78 content pass"],
     metricsPt: [`${stats.theRoomGames} jogos`, `${stats.theRoomAchievements} conquistas`, "Passe RPG v1.78"],
   },
@@ -140,6 +146,9 @@ export const projects: readonly Project[] = [
     visibility: "public",
     featured: true,
     liveUrl: "https://play.davidluky.com",
+    image: "/projects/the-room-web.webp",
+    imageAlt: "The Room Web login screen with language selector",
+    imageAltPt: "Tela de login do The Room Web com seletor de idioma",
     metrics: ["Native RPG parity", "3 themes", "Shared Firebase backend"],
     metricsPt: ["Paridade com RPG nativo", "3 temas", "Backend Firebase compartilhado"],
   },
@@ -157,6 +166,9 @@ export const projects: readonly Project[] = [
     visibility: "public",
     featured: true,
     liveUrl: "https://matematica.davidluky.com",
+    image: "/projects/matematica-elementar.webp",
+    imageAlt: "Matemática Elementar home page with grade selection cards",
+    imageAltPt: "Página inicial do Matemática Elementar com cards de seleção de série",
     metrics: ["281 audited sets", "2,864 problems", "BNCC + US Common Core"],
     metricsPt: ["281 sets auditados", "2.864 problemas", "BNCC + US Common Core"],
   },
@@ -174,6 +186,9 @@ export const projects: readonly Project[] = [
     visibility: "public",
     featured: true,
     liveUrl: "https://tibia.davidluky.com",
+    image: "/projects/tibia-services.webp",
+    imageAlt: "Tibia Services landing page with marketplace call to action",
+    imageAltPt: "Landing page do Tibia Services com chamada do marketplace",
     metrics: ["Booking flow", "TibiaData verification", "Reviews + disputes"],
     metricsPt: ["Fluxo de reservas", "Verificação TibiaData", "Avaliações + disputas"],
   },
@@ -222,6 +237,9 @@ export const projects: readonly Project[] = [
     status: "wip",
     visibility: "private",
     featured: true,
+    image: "/projects/digipets.webp",
+    imageAlt: "DigiPets desktop smoke screenshot showing a pet and navigation tools",
+    imageAltPt: "Screenshot desktop do DigiPets mostrando um pet e ferramentas de navegação",
     metrics: ["Mobile-first", "Minigames", "Firebase-backed"],
     metricsPt: ["Mobile-first", "Minigames", "Com Firebase"],
   },
@@ -265,6 +283,9 @@ export const projects: readonly Project[] = [
     tag: "game-dev",
     status: "active",
     visibility: "private",
+    image: "/projects/megaman-x.webp",
+    imageAlt: "Autotest frames from the custom Megaman X raylib engine",
+    imageAltPt: "Frames de autoteste da engine customizada de Megaman X em raylib",
   },
   {
     id: "power-monitor",
@@ -309,6 +330,9 @@ export const projects: readonly Project[] = [
     tag: "creative-pipeline",
     status: "wip",
     visibility: "private",
+    image: "/projects/ccb-hinos-rock-suno.webp",
+    imageAlt: "Rock hymn cover artwork from the CCB Hinos Suno pipeline",
+    imageAltPt: "Arte de capa de hino rock do pipeline CCB Hinos Suno",
     metrics: ["480-hymn tracker", "Rights-first workflow", "Video/upload queue"],
     metricsPt: ["Tracker de 480 hinos", "Fluxo com direitos primeiro", "Fila de vídeo/upload"],
   },
@@ -366,6 +390,9 @@ export const projects: readonly Project[] = [
     status: "live",
     visibility: "public",
     liveUrl: "https://alisson.davidluky.com",
+    image: "/projects/alisson-david-frangullys.webp",
+    imageAlt: "Alisson David Frangullys personal site hero page",
+    imageAltPt: "Hero do site pessoal Alisson David Frangullys",
   },
   {
     id: "matheus-manual-pescados",
@@ -380,6 +407,9 @@ export const projects: readonly Project[] = [
     status: "wip",
     visibility: "public",
     liveUrl: "https://matheus.davidluky.com/",
+    image: "/projects/matheus-manual-pescados.webp",
+    imageAlt: "Manual de Pescados landing page with editorial and manual options",
+    imageAltPt: "Landing page do Manual de Pescados com opções editorial e manual",
     metrics: ["HTML snapshot", "95 image references", "Cloudflare subdomain"],
     metricsPt: ["Snapshot HTML", "95 imagens referenciadas", "Subdomínio Cloudflare"],
   },
@@ -422,6 +452,9 @@ export const projects: readonly Project[] = [
     status: "live",
     visibility: "private",
     liveUrl: "https://frank.davidluky.com",
+    image: "/projects/franks-stories.webp",
+    imageAlt: "Frank's Stories timeline landing page for the 1940s",
+    imageAltPt: "Timeline inicial do Frank's Stories mostrando a década de 1940",
   },
   {
     id: "games-downloader",

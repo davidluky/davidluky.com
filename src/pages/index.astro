@@ -3,9 +3,12 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Footer from "../components/Footer.astro";
+import ProjectImage from "../components/ProjectImage.astro";
 import { liveProjects, projects } from "../data/projects";
 import { socialProfiles } from "../data/socials";
 import { stats } from "../data/stats";
+
+const roomWebProject = projects.find((project) => project.id === "the-room-web")!;
 ---
 
 <Base title="David Luky - Projects, Games, and Online Presence" description="Portfolio hub for David Luky's projects, games, tools, writing, public profiles, and online presence.">
@@ -39,6 +42,9 @@ import { stats } from "../data/stats";
           <em class="not-italic font-medium text-text">reverse engineering</em>
           game achievement data on legacy platforms, and various experiments that never quite leave the prototype stage.
         </p>
+        <a href="https://play.davidluky.com" target="_blank" rel="noopener noreferrer" class="mt-8 block max-w-[600px] no-underline">
+          <ProjectImage project={roomWebProject} />
+        </a>
       </div>
 
       <div class="grid grid-cols-2 gap-6 shrink-0 max-md:w-full max-sm:gap-4 md:w-[320px]">
@@ -199,6 +205,12 @@ import { stats } from "../data/stats";
     document.querySelectorAll('[data-social-role]').forEach((el) => {
       const profile = socialProfiles.find((item) => item.platform === el.getAttribute('data-social-role'));
       if (profile) el.textContent = lang === 'pt' ? profile.rolePt : profile.role;
+    });
+
+    document.querySelectorAll<HTMLImageElement>('[data-project-image-alt]').forEach((el) => {
+      el.alt = lang === 'pt'
+        ? el.dataset.altPt || el.alt
+        : el.dataset.altEn || el.alt;
     });
   }
 

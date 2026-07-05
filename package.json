@@ -14,13 +14,13 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/sitemap": "^3.7.3",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/unifrakturmaguntia": "^5.2.8",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/vite": "^4.3.2",
     "astro": "^6.2.1",
-    "tailwindcss": "^4.2.4",
+    "tailwindcss": "^4.3.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {

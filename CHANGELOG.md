@@ -9,6 +9,9 @@ All notable changes to davidluky.com are documented here.
 - A clickable The Room Web preview in the homepage introduction.
 - Optional `image`, `imageAlt`, and `imageAltPt` fields in `src/data/projects.ts` for bilingual accessible project screenshots.
 
+### Changed
+- Updated routine patch/minor frontend dependencies: `@astrojs/sitemap`, `@tailwindcss/vite`, and `tailwindcss`.
+
 ## [Unreleased] — 2026-05-14
 
 ### Changed

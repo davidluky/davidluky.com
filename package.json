@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
+    "images:matheus": "node scripts/optimize-matheus-images.mjs",
     "validate:site": "node scripts/validate-site.mjs",
     "audit:high": "npm audit --audit-level=high",
     "verify": "npm run check && npm run test && npm run build && npm run validate:site && npm run audit:high"
@@ -25,7 +26,9 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@fontsource/fraunces": "^5.2.9",
     "@resvg/resvg-js": "^2.6.2",
+    "sharp": "^0.35.3",
     "vitest": "^4.1.10"
   },
   "engines": {
@@ -38,6 +41,7 @@
   },
   "allowScripts": {
     "esbuild@0.28.1": true,
-    "sharp@0.34.5": true
+    "sharp@0.34.5": true,
+    "sharp@0.35.3": true
   }
 }

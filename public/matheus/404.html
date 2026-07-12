@@ -1,13 +1,71 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pagina nao encontrada | Manual de Pescados</title>
-    <meta http-equiv="refresh" content="0; url=/">
-  </head>
-  <body>
-    <p>Pagina nao encontrada. Voltando para a escolha de estilos...</p>
-    <p><a href="/">Escolher versao</a></p>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Página não encontrada | Know-How: Manipulação de Pescados</title>
+  <style>
+    :root { --papel: #f5f1e6; --tinta: #10100e; --dourado: #c8a35a; }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: var(--papel);
+      background: var(--tinta);
+      font-family: Georgia, "Times New Roman", serif;
+      text-align: center;
+    }
+    main {
+      width: min(560px, 100%);
+      padding: clamp(32px, 7vw, 64px);
+      border: 1px solid rgba(245, 241, 230, .28);
+      outline: 1px solid rgba(245, 241, 230, .1);
+      outline-offset: 6px;
+    }
+    .kicker {
+      margin: 0 0 14px;
+      color: var(--dourado);
+      font-family: system-ui, "Segoe UI", sans-serif;
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      font-weight: 500;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+    p { margin: 18px auto 0; color: rgba(245, 241, 230, .72); }
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 11px 18px;
+      border: 1px solid rgba(245, 241, 230, .42);
+      color: var(--papel);
+      font-family: system-ui, "Segoe UI", sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    a:hover, a:focus-visible { border-color: var(--dourado); color: var(--dourado); }
+    a:focus-visible { outline: 2px solid var(--dourado); outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Edição fotográfica</p>
+    <h1>Página não encontrada</h1>
+    <p>Esta página não faz parte desta edição.</p>
+    <a href="/">Voltar ao livro</a>
+  </main>
+</body>
 </html>

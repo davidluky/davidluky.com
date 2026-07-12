@@ -399,9 +399,9 @@ export const projects: readonly Project[] = [
     name: "Manual de Pescados - Matheus",
     year: 2026,
     description:
-      "Static preview for a seafood handling manual, published early so the current HTML edition can be reviewed from anywhere while the source project continues to evolve.",
+      "Password-protected photography-book edition of a seafood handling manual, served by the site Worker with a signed-cookie gate, responsive AVIF/WebP plates, and the original manual and magazine layouts as alternate editions.",
     descriptionPt:
-      "Preview estático de um manual de manipulação de pescados, publicado antecipadamente para que a versão HTML atual possa ser revisada de qualquer lugar enquanto o projeto continua em atualização.",
+      "Edição fotográfica protegida por senha de um manual de manipulação de pescados, servida pelo Worker do site com sessão assinada por cookie, pranchas responsivas em AVIF/WebP e as diagramações originais de manual e revista como edições alternativas.",
     tech: ["HTML", "CSS", "Cloudflare Workers Assets"],
     tag: "website",
     status: "wip",
@@ -410,8 +410,8 @@ export const projects: readonly Project[] = [
     image: "/projects/matheus-manual-pescados.webp",
     imageAlt: "Manual de Pescados landing page with editorial and manual options",
     imageAltPt: "Landing page do Manual de Pescados com opções editorial e manual",
-    metrics: ["HTML snapshot", "95 image references", "Cloudflare subdomain"],
-    metricsPt: ["Snapshot HTML", "95 imagens referenciadas", "Subdomínio Cloudflare"],
+    metrics: ["Password gate", "8 photo chapters", "AVIF/WebP plates"],
+    metricsPt: ["Acesso com senha", "8 capítulos fotográficos", "Pranchas AVIF/WebP"],
   },
   {
     id: "laptop-bootstrap",

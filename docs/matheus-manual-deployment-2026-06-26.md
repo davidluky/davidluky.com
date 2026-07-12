@@ -206,8 +206,9 @@ public/matheus/html_preview_assets/
 public/matheus/magazine_assets/
 ```
 
-Keep `public/matheus/index.html` as the hand-authored style selector unless the selector design also
-needs to change.
+Do not replace `public/matheus/index.html` during this generated-content refresh. It is the
+hand-authored photobook edition and must be updated separately when its design or chapter composition
+changes.
 
 3. Run:
 
@@ -226,3 +227,17 @@ pnpm dlx wrangler@4 deploy --dry-run
 During rollout, `matheus.davidluky.com/` initially returned the main homepage because Static Assets handled `/index.html` before the Worker script. The fix is `run_worker_first = ["/", "/index.html"]`.
 
 The temporary/fallback URL `manual-matheus.davidluky.com/matheus/` worked while diagnosing this behavior and can remain useful as a backup check, but the public URL should be `https://matheus.davidluky.com/`.
+
+## Update 2026-07 — Photobook + gate
+
+The Matheus site is now protected server-side by the Cloudflare Worker. Session and password
+primitives live in `src/matheus-gate.ts`; production uses the Worker secrets `MATHEUS_PASSWORD` and
+`MATHEUS_SESSION_SECRET`. The Worker withholds the site and its image assets until the visitor has a
+valid signed-cookie session.
+
+The `/` route is now the hand-authored photography-book edition. The former style selector is gone;
+`/livro/` and `/revista/` remain unchanged as alternate editions linked from the colophon.
+
+For future source refreshes, Update Procedure step 2 replaces only the generated livro, revista, and
+their source asset folders. It no longer replaces `public/matheus/index.html`, which must remain the
+hand-authored photobook page.

@@ -309,3 +309,88 @@ for (const line of envFile.split('\n')) {
 **Fix**: Refreshed the stale numbers, changed The Room Web route count to "40+ route modules" to avoid exact-count churn, and added a visible `/gaming` data note when the build uses fallback snapshot data.
 
 **Lesson**: Treat profile stats as dated evidence, not eternal constants. During website audits, check public Steam XML/profile HTML, TibiaData, and sibling project recovery ledgers before changing the website. If a number depends on private APIs, label it as a snapshot instead of presenting it as live.
+
+---
+
+## FR-025: Selective Static-Asset Routing Is Not a Hostname Gate (2026-07-12)
+
+**What happened**: The Matheus password gate was correct inside `src/worker.ts`, but a selective
+`run_worker_first` path list could not cover unknown or newly added static paths. Cloudflare Assets
+could handle those requests before the hostname-aware Worker.
+
+**Fix**: Set `[assets] run_worker_first = true`, preserve normal main-site Assets pass-through in the
+Worker, and add a test that reads the Wrangler configuration.
+
+**Lesson**: When access control depends on hostname and shares one static asset namespace, route the
+entire request plane through the Worker. A list of current paths is not a security perimeter.
+
+---
+
+## FR-026: Wrangler Host Headers Did Not Exercise the Host-Aware Branch (2026-07-12)
+
+**What happened**: Local requests sent to `127.0.0.1` with a Matheus `Host` header still served the
+main site in the current Wrangler setup. Status-only testing could have mistaken that `200` for a
+successful Matheus response.
+
+**Fix**: Start local Wrangler with `--local-upstream matheus.localhost`, then assert Matheus-specific
+redirects and response content—not only status codes.
+
+**Lesson**: For host-aware Workers, prove which branch ran. A successful HTTP response from the wrong
+host branch is a false positive.
+
+---
+
+## FR-027: A Trailing Slash Can Break a Flat HTML Photobook (2026-07-12)
+
+**What happened**: Moving the photobook into a `/fotolivro/` directory would have changed the base for
+hundreds of relative images, fonts, `srcset` entries, fragment links, and edition links. The site
+validator did not cover every CSS URL and `srcset`, so a broad rewrite could have passed verification
+with broken assets.
+
+**Fix**: Keep the byte-identical file at `public/matheus/fotolivro.html`, map clean `/fotolivro` to it
+inside the Worker, and canonicalize `/fotolivro/` and `/fotolivro.html` back to the no-slash route.
+
+**Lesson**: URL shape is part of relative-asset architecture. Before moving a large static document,
+inventory `href`, `src`, `srcset`, CSS `url()`, and fragment behavior.
+
+---
+
+## FR-028: Plan Fidelity Does Not Replace Entry-Point Acceptance (2026-07-12)
+
+**What happened**: The written, approved-by-default design plan replaced the existing Matheus edition
+selector with the new photobook. After launch, David asked for the selector back with the photobook as
+a third choice.
+
+**Fix**: Restore `/` as the three-edition selector and move the photobook additively to `/fotolivro`.
+
+**Lesson**: Removing familiar navigation is a high-salience product decision even when a spec says to
+do it. Prefer additive/reversible delivery and obtain explicit visual acceptance before replacing an
+established landing experience.
+
+---
+
+## FR-029: Secret Instructions Need Exact Parsing or Immediate Rotation (2026-07-12)
+
+**What happened**: A permissive match against a local Markdown instruction file could not prove it
+had selected the intended session-secret representation. No value entered Git or captured output, but
+the provenance was ambiguous.
+
+**Fix**: Rotate the session secret, synchronize ignored local state and the Worker binding safely,
+list binding names only, and repeat authentication checks.
+
+**Lesson**: Secret automation must require exactly one structured assignment and must never echo the
+match. Ambiguous provenance is a rotation event, not something to reason past.
+
+---
+
+## FR-030: Cloudflare Assets Already Chooses the Nearest Nested 404 (2026-07-12)
+
+**What happened**: After an authenticated unknown Matheus path returned `404`, the Worker fetched
+`/404.html` again. With `not_found_handling = "404-page"`, Assets had already selected the nearest
+nested Matheus fallback; the second fetch was redundant and could choose the wrong page.
+
+**Fix**: Preserve the first Assets response and add a regression test that expects the Matheus `404`
+body with exactly one Assets fetch.
+
+**Lesson**: Understand platform fallback semantics before layering custom fallback logic. Test unknown
+paths and fetch counts, not only the final status code.

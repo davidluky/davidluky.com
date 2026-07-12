@@ -10,6 +10,25 @@
 
 **Spec:** `docs/superpowers/specs/2026-07-11-matheus-photobook-design.md`
 
+## Execution outcome — 2026-07-12
+
+Tasks 1–8 and Task 9's automated, HTTP, and deployment gates were completed. The planned interactive
+desktop/mobile/lightbox browser pass was blocked by the available browser environment and remains a
+documented visual-QA gap. Optional Task 10 was deferred. The historical checkboxes below were not
+maintained while the task commits landed; do not interpret unchecked boxes as instructions to re-run
+the plan.
+
+Two post-plan corrections define current behavior:
+
+- Production routing uses `[assets] run_worker_first = true`, not a selective path list. This ensures
+  unknown and future Matheus paths cannot bypass the hostname-aware Worker gate.
+- After launch feedback, `/` was restored as a three-edition selector. The byte-preserved photobook now
+  lives at `public/matheus/fotolivro.html` and is served at canonical `/fotolivro`; `/livro/` and
+  `/revista/` remain unchanged.
+
+Use `docs/FLIGHT-DECK.md` for current operating procedure and `docs/RETRO-2026-07-12.md` for the
+implementation learnings and deviations.
+
 ## Global Constraints
 
 - The repo `davidluky/davidluky.com` is **public**. The literal password must never appear in any committed file, code, commit message, or CI log. Its value lives only in `docs/superpowers/LOCAL-ONLY-SECRETS.md` (untracked) and in Cloudflare Worker secrets.
@@ -19,7 +38,8 @@
 - Node >= 24 (`engines` in package.json).
 - `public/matheus/livro/` and `public/matheus/revista/` must remain byte-identical.
 - The eBay routes in `src/worker.ts` must keep working unchanged.
-- Every new top-level path under `public/matheus/` must get a matching entry in `run_worker_first` in `wrangler.toml`, or it bypasses the gate.
+- **Superseded:** the original per-path `run_worker_first` rule was insufficient. Keep
+  `[assets] run_worker_first = true` so every Matheus-host path reaches the gate.
 - `npm run verify` must pass before every commit.
 - Never push to `main` (= production deploy) without David's explicit approval. Local commits are fine and expected per task.
 

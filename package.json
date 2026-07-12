@@ -8,9 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "test": "vitest run",
     "validate:site": "node scripts/validate-site.mjs",
     "audit:high": "npm audit --audit-level=high",
-    "verify": "npm run check && npm run build && npm run validate:site && npm run audit:high"
+    "verify": "npm run check && npm run test && npm run build && npm run validate:site && npm run audit:high"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -24,7 +25,8 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@resvg/resvg-js": "^2.6.2"
+    "@resvg/resvg-js": "^2.6.2",
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": ">=24"

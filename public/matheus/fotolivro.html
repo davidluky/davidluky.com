@@ -1,0 +1,1684 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Know-How: Manipulação de Pescados — Edição Fotográfica</title>
+  <meta name="description" content="Edição fotográfica do manual de manipulação de pescados e frutos do mar de Matheus Felipe Silverio.">
+  <style>
+    @font-face {
+      font-family: "Fraunces";
+      src: url("book_assets/fonts/fraunces-latin-400-normal.woff2") format("woff2");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Fraunces";
+      src: url("book_assets/fonts/fraunces-latin-400-italic.woff2") format("woff2");
+      font-weight: 400; font-style: italic; font-display: swap;
+    }
+    @font-face {
+      font-family: "Fraunces";
+      src: url("book_assets/fonts/fraunces-latin-600-normal.woff2") format("woff2");
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Fraunces";
+      src: url("book_assets/fonts/fraunces-latin-900-normal.woff2") format("woff2");
+      font-weight: 900; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Inter";
+      src: url("book_assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: "Inter";
+      src: url("book_assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --papel: #f5f1e6;
+      --papel-escuro: #ece6d6;
+      --tinta: #181f1e;
+      --tinta-suave: #5d6864;
+      --fio: #d8d0bf;
+      --acento: #0f6866;
+      --vinho: #a43754;
+      --serif: "Fraunces", Georgia, "Times New Roman", serif;
+      --sans: "Inter", system-ui, "Segoe UI", sans-serif;
+      --medida: 34em;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      margin: 0;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: var(--serif);
+      font-size: 1.06rem;
+      line-height: 1.7;
+    }
+
+    .pular {
+      position: absolute; left: -9999px; top: 0;
+      padding: 10px 16px; background: var(--tinta); color: var(--papel);
+      font-family: var(--sans); z-index: 10;
+    }
+    .pular:focus { left: 12px; top: 12px; }
+
+    /* ---------- capa ---------- */
+    .capa {
+      min-height: 100vh;
+      display: grid;
+      align-items: end;
+      position: relative;
+      color: var(--papel);
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .capa img.fundo {
+      position: absolute; inset: 0; z-index: -2;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .capa::after {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: linear-gradient(180deg, rgba(10, 14, 13, .18), rgba(10, 14, 13, .78));
+    }
+    .capa-conteudo { padding: clamp(28px, 6vw, 88px); max-width: 900px; }
+    .kicker {
+      margin: 0 0 16px;
+      font-family: var(--sans);
+      font-size: .74rem; font-weight: 600;
+      letter-spacing: .24em; text-transform: uppercase;
+      color: #d9c08a;
+    }
+    .capa h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 7.5vw, 6rem);
+      font-weight: 900; line-height: .98; letter-spacing: -.01em;
+      text-wrap: balance;
+    }
+    .capa .credito {
+      margin: 20px 0 0; font-style: italic;
+      color: rgba(245, 241, 230, .85);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+    }
+    .capa .dica {
+      margin: 34px 0 0; font-family: var(--sans);
+      font-size: .78rem; letter-spacing: .08em;
+      color: rgba(245, 241, 230, .62);
+    }
+
+    /* ---------- estrutura de páginas ---------- */
+    .pagina { padding: clamp(48px, 9vw, 120px) clamp(20px, 6vw, 72px); }
+    .miolo { width: min(1180px, 100%); margin: 0 auto; }
+
+    .rotulo {
+      display: flex; align-items: center; gap: 14px;
+      margin: 0 0 28px;
+      font-family: var(--sans);
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--tinta-suave);
+    }
+    .rotulo::after { content: ""; flex: 1; height: 1px; background: var(--fio); }
+
+    /* ---------- sumário ---------- */
+    .sumario ol {
+      margin: 0; padding: 0; list-style: none;
+      max-width: 720px;
+      counter-reset: cap;
+    }
+    .sumario li { counter-increment: cap; border-bottom: 1px solid var(--fio); }
+    .sumario a {
+      display: flex; align-items: baseline; gap: 18px;
+      padding: 16px 4px;
+      color: inherit; text-decoration: none;
+    }
+    .sumario a:hover .titulo, .sumario a:focus-visible .titulo { color: var(--acento); }
+    .sumario .num {
+      font-family: var(--sans); font-weight: 600; font-size: .8rem;
+      color: var(--vinho); min-width: 2.2em;
+    }
+    .sumario .num::before { content: counter(cap, decimal-leading-zero); }
+    .sumario .titulo { font-size: clamp(1.15rem, 2.6vw, 1.6rem); font-weight: 600; }
+    .sumario .fio { flex: 1; border-bottom: 1px dotted var(--fio); transform: translateY(-4px); }
+
+    /* ---------- abertura de capítulo ---------- */
+    .abertura {
+      position: relative;
+      min-height: 92vh;
+      display: grid; align-items: end;
+      color: var(--papel);
+      isolation: isolate; overflow: hidden;
+    }
+    .abertura picture, .abertura img.fundo {
+      position: absolute; inset: 0; z-index: -2;
+      width: 100%; height: 100%;
+    }
+    .abertura img { width: 100%; height: 100%; object-fit: cover; }
+    .abertura::after {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: linear-gradient(180deg, rgba(10, 14, 13, .05), rgba(10, 14, 13, .72));
+    }
+    .abertura .numeral {
+      position: absolute; top: clamp(8px, 3vw, 36px); right: clamp(16px, 4vw, 48px);
+      font-family: var(--serif); font-weight: 900;
+      font-size: clamp(5rem, 18vw, 15rem); line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(245, 241, 230, .5);
+    }
+    .abertura-conteudo { padding: clamp(28px, 6vw, 72px); max-width: 820px; }
+    .abertura h2 {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.4rem);
+      font-weight: 900; line-height: 1.02; text-wrap: balance;
+    }
+    .abertura .legenda {
+      margin: 16px 0 0; font-family: var(--sans);
+      font-size: .92rem; color: rgba(245, 241, 230, .82);
+      max-width: 520px;
+    }
+
+    /* ---------- texto ---------- */
+    .pagina-texto .miolo { max-width: calc(var(--medida) + 2 * 72px); }
+    .pagina-texto p, .pagina-texto ul { max-width: var(--medida); }
+    .pagina-texto p { margin: 0 0 1.1em; }
+    .pagina-texto p:first-of-type::first-letter {
+      float: left;
+      font-weight: 900; font-size: 3.2em; line-height: .9;
+      padding: .04em .12em 0 0;
+      color: var(--acento);
+    }
+    .pagina-texto h3 {
+      margin: 1.8em 0 .6em;
+      font-size: 1.35rem; font-weight: 600; color: var(--acento);
+    }
+    .pagina-texto ul { padding-left: 1.2em; }
+    .pagina-texto li { margin-bottom: .4em; }
+
+    /* ---------- pranchas ---------- */
+    .prancha { margin: 0; }
+    .prancha img {
+      display: block; width: 100%; height: auto;
+      background: var(--papel-escuro);
+      cursor: zoom-in;
+    }
+    .prancha figcaption {
+      display: flex; gap: 12px; align-items: baseline;
+      padding: 12px 2px 0;
+      font-family: var(--sans); font-size: .82rem;
+      color: var(--tinta-suave);
+      border-top: 1px solid var(--fio);
+      margin-top: 12px;
+    }
+    .prancha .num-prancha {
+      font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      font-size: .72rem; color: var(--vinho); white-space: nowrap;
+    }
+    .prancha--cheia { padding: 0; }
+    .prancha--cheia img { max-height: 96vh; object-fit: cover; }
+    .prancha--cheia figcaption { padding: 12px clamp(20px, 6vw, 72px) 0; border-top: 0; }
+    .pranchas-duplas {
+      display: grid; gap: clamp(16px, 3vw, 32px);
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    /* ---------- folha de contato ---------- */
+    .folha-contato {
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      background: #141a19; padding: clamp(14px, 2.5vw, 26px);
+    }
+    .folha-contato img {
+      width: 100%; aspect-ratio: 1; object-fit: cover;
+      display: block; cursor: zoom-in;
+      filter: saturate(.92);
+    }
+    .folha-contato img:hover, .folha-contato img:focus-visible { outline: 2px solid #d9c08a; }
+
+    /* ---------- colofão ---------- */
+    .colofao {
+      background: var(--tinta); color: var(--papel);
+      text-align: center;
+    }
+    .colofao .miolo { max-width: 640px; }
+    .colofao h2 { font-weight: 600; font-size: 1.5rem; margin: 0 0 12px; }
+    .colofao p { color: rgba(245, 241, 230, .78); font-family: var(--sans); font-size: .95rem; }
+    .colofao a { color: #d9c08a; }
+    .edicoes {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      margin-top: 28px; font-family: var(--sans); font-size: .86rem;
+    }
+    .edicoes a {
+      padding: 10px 18px;
+      border: 1px solid rgba(245, 241, 230, .4);
+      border-radius: 2px;
+      color: var(--papel); text-decoration: none;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .edicoes a:hover, .edicoes a:focus-visible { border-color: #d9c08a; color: #d9c08a; }
+
+    /* ---------- revelação ---------- */
+    .revela { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .revela.visivel { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .revela { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ---------- visor (lightbox) ---------- */
+    dialog.visor {
+      width: 100vw; height: 100vh; max-width: none; max-height: none;
+      margin: 0; padding: 0; border: 0;
+      background: rgba(8, 11, 11, .96); color: var(--papel);
+    }
+    dialog.visor::backdrop { background: rgba(8, 11, 11, .96); }
+    .visor-conteudo {
+      width: 100%; height: 100%;
+      display: grid; grid-template-rows: 1fr auto;
+      place-items: center; gap: 8px; padding: 20px;
+    }
+    .visor-conteudo img { max-width: 100%; max-height: calc(100vh - 110px); object-fit: contain; }
+    .visor-legenda { font-family: var(--sans); font-size: .85rem; color: rgba(245, 241, 230, .8); text-align: center; }
+    .visor-fechar {
+      position: fixed; top: 14px; right: 16px;
+      background: none; border: 1px solid rgba(245, 241, 230, .4);
+      color: var(--papel); font-family: var(--sans); font-size: .8rem;
+      padding: 8px 14px; cursor: pointer; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .visor-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: none; border: 0; color: rgba(245, 241, 230, .75);
+      font-size: 2.4rem; cursor: pointer; padding: 18px 12px; line-height: 1;
+    }
+    .visor-nav:hover, .visor-nav:focus-visible { color: #d9c08a; }
+    .visor-ant { left: 6px; }
+    .visor-prox { right: 6px; }
+  </style>
+</head>
+<body>
+  <a class="pular" href="#sumario">Pular para o sumário</a>
+
+  <header class="capa" data-spread>
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/cover-matheus-peixaria-480.avif 480w, book_assets/img/cover-matheus-peixaria-960.avif 960w, book_assets/img/cover-matheus-peixaria-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/cover-matheus-peixaria-480.webp 480w, book_assets/img/cover-matheus-peixaria-960.webp 960w, book_assets/img/cover-matheus-peixaria-1600.webp 1600w" sizes="100vw">
+      <img class="fundo" src="html_preview_assets/images/cover-matheus-peixaria.jpg" alt="" fetchpriority="high">
+    </picture>
+    <div class="capa-conteudo">
+      <p class="kicker">Edição fotográfica</p>
+      <h1>Know-How: Manipulação de Pescados</h1>
+      <p class="credito">Texto e fotografia de Matheus Felipe Silverio</p>
+      <p class="dica">Role para folhear · setas do teclado navegam · clique nas fotos para ampliar</p>
+    </div>
+  </header>
+
+  <section class="pagina pagina-texto revela" id="apresentacao" data-spread aria-labelledby="titulo-apresentacao">
+    <div class="miolo">
+      <p class="rotulo" id="titulo-apresentacao">Apresentação</p>
+      <p>Aqui mostro o básico, sem enrolação. O objetivo não é executar nem montar o prato — é manipular o pescado e os frutos do mar para entregar o melhor insumo para os processos seguintes. Vamos aprender a &quot;fazer um trabalho dificil&quot; com classe.</p>
+      <p>Meu nome é Matheus Felipe Silverio, tenho 13 ano de experiencia em restaurantes mediterrâneos, orientais e frutos do mar, 30 anos de idade, trabalho com manipulação de pescados e frutos do mar em Itajai-SC, sou responsável da setor “peixaria” no aspas restaurante na praia brava, estou á 3 anos junto com o chefe Gabriel Aguilar, na qual a proposta é a entrega desde o recebimento, manipulação ao porcionamento final dos pescados e fruto do mar, junto com maturação e defumação, aonde priorizo o cuidado com o melhor insumo que nossa costa nos proporciona.</p>
+      <p>Nesses 3 anos de trabalho intenso, desde toneladas de pescados e frutos do mar até cerimônia kaitai (atum de 100 kg direto da espanha), peixes inimagináveis de diferentes qualidades, diferentes espécies, fora as diversas adaptações e mudanças na forma de trabalhar, hoje trago a conjuntura de 13 anos de anotações e reflexões e 3 anos de intenso trabalho numa peixaria de um chefe que me possibilita sempre mudar e aprimorar. Esse documento é a forma que trabalho e como lido com um insumo tão precioso.</p>
+    </div>
+  </section>
+
+  <section class="pagina sumario revela" id="sumario" data-spread aria-labelledby="titulo-sumario">
+    <div class="miolo">
+      <p class="rotulo" id="titulo-sumario">Sumário</p>
+      <ol>
+        <li><a href="#cap-01"><span class="num"></span><span class="titulo">Fundamentos da Manipulação</span><span class="fio"></span></a></li>
+        <li><a href="#cap-02"><span class="num"></span><span class="titulo">Água, Higiene e Armazenamento</span><span class="fio"></span></a></li>
+        <li><a href="#cap-03"><span class="num"></span><span class="titulo">Lula</span><span class="fio"></span></a></li>
+        <li><a href="#cap-04"><span class="num"></span><span class="titulo">Polvo</span><span class="fio"></span></a></li>
+        <li><a href="#cap-05"><span class="num"></span><span class="titulo">Camarão Rosa</span><span class="fio"></span></a></li>
+        <li><a href="#cap-06"><span class="num"></span><span class="titulo">Mexilhão</span><span class="fio"></span></a></li>
+        <li><a href="#cap-07"><span class="num"></span><span class="titulo">Peixes</span><span class="fio"></span></a></li>
+        <li><a href="#cap-08"><span class="num"></span><span class="titulo">Setorização de Filés Grandes</span><span class="fio"></span></a></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- CAPITULOS: inicio (Task 7 insere os capítulos aqui) -->
+<section class="abertura revela" id="cap-01" data-spread aria-labelledby="titulo-cap-01">
+  <span class="numeral" aria-hidden="true">01</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-fundamentos-da-manipulacao-480.avif 480w, book_assets/img/hero-fundamentos-da-manipulacao-960.avif 960w, book_assets/img/hero-fundamentos-da-manipulacao-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-fundamentos-da-manipulacao-480.webp 480w, book_assets/img/hero-fundamentos-da-manipulacao-960.webp 960w, book_assets/img/hero-fundamentos-da-manipulacao-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-fundamentos-da-manipulacao.jpg" alt="Destaque do capítulo: limpeza fria e manipulação inicial do pescado." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-01">Fundamentos da Manipulação</h2>
+    <p class="legenda">Limpeza fria e manipulação inicial do pescado.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 01 · Fundamentos</p>
+    <p>Vou falar sobre osmose e as formas de usar o sal como realçador e conservador, com as devidas cautelas</p>
+    <p>O que é osmose simplificadamente, é a troca natural de água entre o alimente e o ambiente</p>
+    <p>Quando aplicamos sal em um peixe, o sal começa a puxar parte da água presente na carne para fora, mas a o mesmo tempo o sal vai penetrando no alimento, ajudando a firmar a carne, concentrando sabores e conservando o produto.</p>
+    <ul>
+      <li>Solução para limpeza : água, sal e muito gelo</li>
+      <li>Brine: cura submersa por liquido, que evita a contração das fibras e tempera o file por inteiro</li>
+      <li>Shiojime: cura seca, realçadora e superficial nos files do pescado.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-01-limpeza-inicial-em-gelo-reforcando-a-ideia-de.jpg" srcset="book_assets/img/fig-01-limpeza-inicial-em-gelo-reforcando-a-ideia-de-480.webp 480w, book_assets/img/fig-01-limpeza-inicial-em-gelo-reforcando-a-ideia-de-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Limpeza inicial em gelo, reforçando a ideia de baixa temperatura e controle de água residual." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 1</span> Limpeza inicial em gelo: baixa temperatura e controle de água residual.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-02-limpeza-inicial-em-gelo-reforcando-a-ideia-de.jpg" srcset="book_assets/img/fig-02-limpeza-inicial-em-gelo-reforcando-a-ideia-de-480.webp 480w, book_assets/img/fig-02-limpeza-inicial-em-gelo-reforcando-a-ideia-de-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Limpeza inicial em gelo, reforçando a ideia de baixa temperatura e controle de água residual." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 2</span> O mesmo processo visto de outro ângulo.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>Nós conseguimos chegar à osmose pelos processos que eu cito acima, mas trabalhamos com cuidado evitando a saturação, a ideia é sempre trabalhar em baixas temperatura para sempre a absorção de sal ser menor pela contração dos poros</p>
+    <p>A solução para Limpeza: Recomendo uso de sal sem iodo. A medida exata é de 25g de sal por litro de água, acompanhada de muito gelo. Quanto mais gelada estiver a solução, mais os poros da proteína se contraem. Isso faz com que a absorção de sal seja muito menor durante a limpeza</p>
+    <p>Limites de Saturação: A proteína suporta até 5% de sal; após esse ponto, ela satura. Trabalhamos com precisão técnica para evitar o erro, pois não tem como retirar o sal depois de absorvido.</p>
+    <p>Brine (Cura): Utilizamos uma solução de 3% do peso da proteína. Dentro desses 3%, a proporção é de 70% de sal e 30% de açúcar. A cada 30g dessa mistura, adicionamos 1 litro de água. A ideia é cobrir o alimento; use uma GN que favoreça para que tudo esteja submerso na solução. Dependendo do tamanho e peso dos files de pescado a cura varia entre 2/4/8/12 hrs</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-03-file-e-cortes-preparados-para-cura-com-foco-em.jpg" srcset="book_assets/img/fig-03-file-e-cortes-preparados-para-cura-com-foco-em-480.webp 480w, book_assets/img/fig-03-file-e-cortes-preparados-para-cura-com-foco-em-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Filé e cortes preparados para cura, com foco em superfície limpa e manipulação precisa." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 3</span> Filé e cortes preparados para cura, com foco em superfície limpa e manipulação precisa.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>Shiojime(baseada nos 3% de peso): Técnica de conservação com sal (“Shio’’ significa sal e “jime”, técnica) que extrai água residual, gorduras e sujeira, realçando o sabor e criando uma película de cura que garante durabilidade extra.</p>
+    <p>* Processo: Após o salgamento, o descanso varia de 20, 30 ou 40 minutos (dependendo do tamanho do filé). Em seguida, retire o sal em água corrente — este é o único momento em que usamos água corrente diretamente. Não esfregue o sal contra a proteína; deixe a água levar o sal e use toques leves. Logo após, coloque em uma GN ou caixa-bloco com água e gelo abundante para estabilizar a temperatura e fechar os poros. Retire e seque muito bem</p>
+    <h3>Cheiro de peixe</h3>
+    <p>A única maneira de eliminar ou diluir parcialmente os aromas voláteis (como a amônia) é por meio da acidez. Geralmente armazenamos os peixes em plásticos e no vácuo, infelizmente ambientes abafados aceleram a produção de amônia, resultando no cheiro de peixe forte, pitiú ou "FISHY FISH", eu sugiro que caso tente eliminar os aromas use uma das bases da manipulação que se conecta diretamente às nossas técnicas de conservação.</p>
+    <p>Sujime: Técnica que utiliza uma diluição de água, vinagre e gelo ("Su" significa vinagre e "jime", técnica). Usada para conservação e refinamento de sabor, eliminando aromas voláteis e criando uma pequena película proveniente da reação do vinagre na proteína. Lembrando que tudo que é acido cozinha a proteína. Trabalhamos com diluição e baixa temperatura (quanto mais frio, menor o poder de ação do ácido). A proporção é de 1 para 1: a mesma quantidade de vinagre para a mesma quantidade de água.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-04-apoio-visual-para-limpeza-e-controle-de-aromas.jpg" srcset="book_assets/img/fig-04-apoio-visual-para-limpeza-e-controle-de-aromas-480.webp 480w, book_assets/img/fig-04-apoio-visual-para-limpeza-e-controle-de-aromas-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Apoio visual para limpeza e controle de aromas durante a manipulação." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 4</span> Apoio visual para limpeza e controle de aromas durante a manipulação.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-480.avif 480w, book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-960.avif 960w, book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-480.webp 480w, book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-960.webp 960w, book_assets/img/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-fundamentos-da-manipul-01-01-gordura-fibra-e-co.jpg" alt="Detalhe fechado da carne para valorizar textura, gordura e leitura sensorial do pescado." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 5</span> <span><strong>Gordura, fibra e corte.</strong> Detalhe fechado da carne para valorizar textura, gordura e leitura sensorial do pescado.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-480.avif 480w, book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-960.avif 960w, book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-480.webp 480w, book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-960.webp 960w, book_assets/img/plate-fundamentos-da-manipul-02-01-texturas-de-pele-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-fundamentos-da-manipul-02-01-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 6</span> <span><strong>Texturas de pele.</strong> Pele, escama e brilho como material visual de estudo antes da faca.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-480.avif 480w, book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-960.avif 960w, book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-480.webp 480w, book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-960.webp 960w, book_assets/img/plate-fundamentos-da-manipul-02-02-texturas-de-pele-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-fundamentos-da-manipul-02-02-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 7</span> <span><strong>Texturas de pele.</strong> Pele, escama e brilho como material visual de estudo antes da faca.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-480.avif 480w, book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-960.avif 960w, book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-480.webp 480w, book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-960.webp 960w, book_assets/img/plate-fundamentos-da-manipul-02-03-texturas-de-pele-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-fundamentos-da-manipul-02-03-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 8</span> <span><strong>Texturas de pele.</strong> Pele, escama e brilho como material visual de estudo antes da faca.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-480.avif 480w, book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-960.avif 960w, book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-480.webp 480w, book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-960.webp 960w, book_assets/img/plate-fundamentos-da-manipul-02-04-texturas-de-pele-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-fundamentos-da-manipul-02-04-texturas-de-pele.jpg" alt="Pele, escama e brilho como material visual de estudo antes da faca." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 9</span> <span><strong>Texturas de pele.</strong> Pele, escama e brilho como material visual de estudo antes da faca.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/feature-fundamentos-da-manipulacao-480.avif 480w, book_assets/img/feature-fundamentos-da-manipulacao-960.avif 960w, book_assets/img/feature-fundamentos-da-manipulacao-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/feature-fundamentos-da-manipulacao-480.webp 480w, book_assets/img/feature-fundamentos-da-manipulacao-960.webp 960w, book_assets/img/feature-fundamentos-da-manipulacao-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/feature-fundamentos-da-manipulacao.jpg" alt="Uma pausa visual para mostrar escala, bancada e matéria-prima antes dos processos de cura." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 10</span> <span><strong>Frio e precisão.</strong> Uma pausa visual para mostrar escala, bancada e matéria-prima antes dos processos de cura.</span></figcaption>
+  </figure>
+</section>
+
+<section class="abertura revela" id="cap-02" data-spread aria-labelledby="titulo-cap-02">
+  <span class="numeral" aria-hidden="true">02</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-agua-higiene-e-armazenamento-480.avif 480w, book_assets/img/hero-agua-higiene-e-armazenamento-960.avif 960w, book_assets/img/hero-agua-higiene-e-armazenamento-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-agua-higiene-e-armazenamento-480.webp 480w, book_assets/img/hero-agua-higiene-e-armazenamento-960.webp 960w, book_assets/img/hero-agua-higiene-e-armazenamento-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-agua-higiene-e-armazenamento.jpg" alt="Destaque do capítulo: bancada, cuba e ferramentas organizadas para manipulação." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-02">Água, Higiene e Armazenamento</h2>
+    <p class="legenda">Bancada, cuba e ferramentas organizadas para manipulação.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 02 · Água, Higiene e Armazenamento</p>
+    <p>Nossa manipulação não impede o uso de água, mas foca no estado final do insumo. Água residual é igual à proliferação de bactérias. Uso muito papel e muito Perflex para garantir que o insumo saia seco e seguro. Lembrando que uma geladeira própria para pescados é essencial, e também GN furadas e caixa-bloco furadas para sempre deixar o ar correr e os líquidos não ficarem parados</p>
+    <p>Para o armazenamento técnico:</p>
+    <p>Geladeira Exclusiva: O ideal é manter uma geladeira apenas para pescados, evitando contaminação cruzada e troca de odores.</p>
+    <p>Usamos GNs com furos, formas vazadas ou grades. O peixe precisa de circulação de ar para evitar a oxidação e manter a qualidade.</p>
+    <p>Você pode cobrir a GN com filme PVC, mas nunca lacre completamente. Deve haver vazão para o ar (seja por cima ou por baixo). O ambiente abafado acelera a produção de amônia, resultando no cheiro forte conhecemos como "FISHY FISH" ou PITIÚ.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-480.avif 480w, book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-960.avif 960w, book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-480.webp 480w, book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-960.webp 960w, book_assets/img/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-agua-higiene-e-armazen-01-01-bancada-e-instrume.jpg" alt="Organização, superfície limpa e ferramenta pronta como base visual do método." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 1</span> <span><strong>Bancada e instrumento.</strong> Organização, superfície limpa e ferramenta pronta como base visual do método.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-480.avif 480w, book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-960.avif 960w, book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-480.webp 480w, book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-960.webp 960w, book_assets/img/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-agua-higiene-e-armazen-01-02-bancada-e-instrume.jpg" alt="Organização, superfície limpa e ferramenta pronta como base visual do método." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 2</span> <span><strong>Bancada e instrumento.</strong> Organização, superfície limpa e ferramenta pronta como base visual do método.</span></figcaption>
+  </figure>
+</section>
+
+<section class="abertura revela" id="cap-03" data-spread aria-labelledby="titulo-cap-03">
+  <span class="numeral" aria-hidden="true">03</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-lula-480.avif 480w, book_assets/img/hero-lula-960.avif 960w, book_assets/img/hero-lula-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-lula-480.webp 480w, book_assets/img/hero-lula-960.webp 960w, book_assets/img/hero-lula-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-lula.jpg" alt="Destaque do capítulo: lula em caixa-bloco, ainda sob controle de frio." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-03">Lula</h2>
+    <p class="legenda">Lula em caixa-bloco, ainda sob controle de frio.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 03 · Lula</p>
+    <h3>Descongelamento</h3>
+    <p>Como a indústria geralmente entrega a lula em blocos de 17kg a 22kg, o processo exige paciência e técnica:</p>
+    <p>Descongelamento Lento: O ideal é realizar o descongelamento em caixas-bloco grandes e furadas, permitindo que o líquido escorra conforme o gelo derrete.</p>
+    <p>Descongelamento de Urgência: Caso haja pressa, utilize uma caixa-bloco cheia de água e sal (nas proporções já estabelecidas nos Fundamentos). Este método é mais limpo, pois a limpeza de resíduos por osmose já começa a acontecer durante o descongelamento.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-05-lula-descongelando-em-gelo-e-caixa-bloco-mante.jpg" srcset="book_assets/img/fig-05-lula-descongelando-em-gelo-e-caixa-bloco-mante-480.webp 480w, book_assets/img/fig-05-lula-descongelando-em-gelo-e-caixa-bloco-mante-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Lula descongelando em gelo e caixa-bloco, mantendo frio constante durante o processo." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 1</span> Lula descongelando em gelo e caixa-bloco, mantendo frio constante durante o processo.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Braços e Tentáculos</h3>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-06-separacao-visual-de-partes-da-lula-para-limpez.jpg" srcset="book_assets/img/fig-06-separacao-visual-de-partes-da-lula-para-limpez-480.webp 480w, book_assets/img/fig-06-separacao-visual-de-partes-da-lula-para-limpez-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Separação visual de partes da lula para limpeza de braços, tentáculos e tubo." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 2</span> Separação visual de partes da lula para limpeza de braços, tentáculos e tubo.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>A primeira etapa da manipulação consiste em separar as partes inferiores:</p>
+    <ul>
+      <li>Retire os braços e tentáculos em sua totalidade. O corte é semelhante ao "descabeçar" do polvo: logo abaixo da linha dos olhos.</li>
+      <li>Tenha muito cuidado para não furar os olhos da lula. É ali que a sujeira estoura e espirra para todos os lados.</li>
+      <li>Lembre-se que a lula possui 8 braços, 2 tentáculos e um bico.</li>
+      <li>Remova com atenção o bico que fica bem ao centro dos braços (se assemelha a uma pequena bolinha).</li>
+      <li>Após separar, reserve os braços e tentáculos. Faça uma lavagem com a solução de água, gelo e sal para eliminar areia residual e o resto de tinta.</li>
+    </ul>
+    <p>Para limpar o tubo com precisão, utilizaremos uma <strong>pinça de 20 cm</strong>.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-07-lulas-em-preparo-etapa-que-antecede-a-revisao.jpg" srcset="book_assets/img/fig-07-lulas-em-preparo-etapa-que-antecede-a-revisao-480.webp 480w, book_assets/img/fig-07-lulas-em-preparo-etapa-que-antecede-a-revisao-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Lulas em preparo, etapa que antecede a revisão interna do tubo." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 3</span> Lulas em preparo, etapa que antecede a revisão interna do tubo.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <ul>
+      <li>Introduza a pinça gentilmente no tubo, apertando sutilmente como se estivesse "abraçando" o conteúdo interno.</li>
+      <li>Gire a pinça 3 vezes e puxe. Isso remove cerca de 80% de toda a sujeira de forma fácil.</li>
+      <li>Muita cautela com a "pena" (o osso transparente da lula). Ela dificilmente sai de primeira, mas com jeito ela sai inteira.</li>
+      <li>Após retirar a pena, verifique se não restaram grãos de areia, órgãos ou pedaços quebrados da pena dentro do tubo.</li>
+    </ul>
+    <p>(Explicar sobre como lavar e verificar se não tem areia ou órgãos arrastando a faca sobre a lula necessitara fotos )</p>
+  </div>
+</section>
+
+<section class="abertura revela" id="cap-04" data-spread aria-labelledby="titulo-cap-04">
+  <span class="numeral" aria-hidden="true">04</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-polvo-480.avif 480w, book_assets/img/hero-polvo-960.avif 960w, book_assets/img/hero-polvo-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-polvo-480.webp 480w, book_assets/img/hero-polvo-960.webp 960w, book_assets/img/hero-polvo-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-polvo.jpg" alt="Destaque do capítulo: polvo em gelo antes da higienização das ventosas." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-04">Polvo</h2>
+    <p class="legenda">Polvo em gelo antes da higienização das ventosas.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 04 · Polvo</p>
+    <p>O processo muda pouco se o polvo vier fresco e com vísceras ou já limpo pela indústria, sendo apenas mais ou menos maçante, a limpeza com sal nos “braços” tentáculos será a mesma</p>
+    <ul>
+      <li>Corte a cabeça do polvo logo abaixo da linha dos olhos.</li>
+      <li>Assim como na lula, tenha extremo cuidado para não furar os olhos. Se estourarem, a sujeira se espalha.</li>
+      <li>Após o corte, você terá a “cabeça” e o "rosto" (onde ficam os olhos n rosto e as vísceras na cabeça).</li>
+      <li>Descarte as vísceras e o rosto. Remova as vísceras da cabeça, lave com sal e enxágue em água corrente.</li>
+    </ul>
+    <h3>Higienização por Osmose (Shiojime de Limpeza)</h3>
+    <p>Sabemos que a proteína suporta até 5% de sal antes de saturar. No polvo, trabalhamos com <strong>4% de sal</strong> em relação ao peso para lidar com a sujeira pesada e o muco.</p>
+    <p>Pese o polvo já eviscerado e calcule 4% desse peso em sal (Exemplo: 1kg de polvo = 40g de sal).</p>
+    <p>Peso do polvo X 0,04</p>
+    <ul>
+      <li>Utilize preferencialmente <strong>sal grosso sem iodo</strong>.</li>
+      <li>Salpique o sal sobre o polvo e inicie uma massagem rápida e vigorosa.</li>
+      <li>limpe ventosa por ventosa. É ali que se escondem as micro sujeiras que o animal traz do mar.</li>
+      <li>Lave em água corrente e procure ser rápido nessa limpeza o foco é a sujeira, massagem é bom fazer sem sal.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-08-polvo-em-gelo-e-caixa-antes-da-higienizacao-cu.jpg" srcset="book_assets/img/fig-08-polvo-em-gelo-e-caixa-antes-da-higienizacao-cu-480.webp 480w, book_assets/img/fig-08-polvo-em-gelo-e-caixa-antes-da-higienizacao-cu-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Polvo em gelo e caixa, antes da higienização cuidadosa das ventosas." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 1</span> Polvo em gelo e caixa, antes da higienização cuidadosa das ventosas.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="abertura revela" id="cap-05" data-spread aria-labelledby="titulo-cap-05">
+  <span class="numeral" aria-hidden="true">05</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-camarao-rosa-480.avif 480w, book_assets/img/hero-camarao-rosa-960.avif 960w, book_assets/img/hero-camarao-rosa-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-camarao-rosa-480.webp 480w, book_assets/img/hero-camarao-rosa-960.webp 960w, book_assets/img/hero-camarao-rosa-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-camarao-rosa.jpg" alt="Destaque do capítulo: camarão rosa em preparo, preservando textura e integridade." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-05">Camarão Rosa</h2>
+    <p class="legenda">Camarão rosa em preparo, preservando textura e integridade.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 05 · Camarão Rosa</p>
+    <p>Descongelamento com urgência: água e sal em uma caixa-bloco, por si só a solução vai ficar gelada, basta usar essa água para descongelar regando o os camarões como são congelados um a um ele descongela rápido.</p>
+    <p>Descongelamento lento e seguro: de um dia para o outro na câmara resfriada em uma caixa-bloco furada escorrendo líquidos pelo descongelamento</p>
+    <h3>Ferramentas e Manuseio</h3>
+    <p>Usaremos uma faca de legumes (faca pequena) e luvas para descascar e lidar com a água dele. Camarão é velocidade e cuidado com a manipulação. Procurar descascar com sutileza, como se fosse retirar uma pele sobressaltada; se forçar, o machuca.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-09-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" srcset="book_assets/img/fig-09-camarao-rosa-em-manipulacao-delicadeza-na-casc-480.webp 480w, book_assets/img/fig-09-camarao-rosa-em-manipulacao-delicadeza-na-casc-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 1</span> Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-10-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" srcset="book_assets/img/fig-10-camarao-rosa-em-manipulacao-delicadeza-na-casc-480.webp 480w, book_assets/img/fig-10-camarao-rosa-em-manipulacao-delicadeza-na-casc-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 2</span> Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-11-camarao-rosa-em-manipulacao-delicadeza-na-casc.jpg" srcset="book_assets/img/fig-11-camarao-rosa-em-manipulacao-delicadeza-na-casc-480.webp 480w, book_assets/img/fig-11-camarao-rosa-em-manipulacao-delicadeza-na-casc-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 3</span> Camarão rosa em manipulação: delicadeza na casca e cuidado com integridade da carne.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Anatomia e Limpeza</h3>
+    <p>Lembrando que no camarão e sua estrutura dorsal teremos as ovas junto com as fezes. É nítida a diferença: a ova é mais macia e esverdeada; as fezes são uma linha pretinha meio firme. Aliás, ovas são comestíveis.</p>
+    <p>Basicamente tudo liga do rabo à cabeça. Lembrando que onde é o ligamento do corpo com a cabeça, ali se encontra o estômago. Eu não gosto muito e retiro quando está exorbitante. Caso vá usar sem cabeça, basta remover toda a cabeça e reservar para caldo e afins.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-480.avif 480w, book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-960.avif 960w, book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-480.webp 480w, book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-960.webp 960w, book_assets/img/plate-camarao-rosa-01-01-vermelho-vivo-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-camarao-rosa-01-01-vermelho-vivo.jpg" alt="Cor intensa do camarão como pausa visual e contraste com as páginas técnicas." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 4</span> <span><strong>Vermelho vivo.</strong> Cor intensa do camarão como pausa visual e contraste com as páginas técnicas.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-480.avif 480w, book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-960.avif 960w, book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-480.webp 480w, book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-960.webp 960w, book_assets/img/plate-camarao-rosa-02-01-casca-e-anatomia-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-camarao-rosa-02-01-casca-e-anatomia.jpg" alt="Duas leituras do mesmo produto: transparência, casca e estrutura inteira." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 5</span> <span><strong>Casca e anatomia.</strong> Duas leituras do mesmo produto: transparência, casca e estrutura inteira.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-480.avif 480w, book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-960.avif 960w, book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-480.webp 480w, book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-960.webp 960w, book_assets/img/plate-camarao-rosa-02-02-casca-e-anatomia-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-camarao-rosa-02-02-casca-e-anatomia.jpg" alt="Duas leituras do mesmo produto: transparência, casca e estrutura inteira." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 6</span> <span><strong>Casca e anatomia.</strong> Duas leituras do mesmo produto: transparência, casca e estrutura inteira.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread aria-label="Folha de contato: camarão">
+  <div class="folha-contato">
+    <img src="html_preview_assets/contact_sheets/camarao_01.jpg" srcset="book_assets/img/camarao_01-480.webp 480w, book_assets/img/camarao_01-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: camarão, quadro 01" loading="lazy" decoding="async">
+  </div>
+</section>
+
+<section class="abertura revela" id="cap-06" data-spread aria-labelledby="titulo-cap-06">
+  <span class="numeral" aria-hidden="true">06</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-mexilhao-480.avif 480w, book_assets/img/hero-mexilhao-960.avif 960w, book_assets/img/hero-mexilhao-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-mexilhao-480.webp 480w, book_assets/img/hero-mexilhao-960.webp 960w, book_assets/img/hero-mexilhao-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-mexilhao.jpg" alt="Destaque do capítulo: mexilhões abertos, evidenciando concha e carne." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-06">Mexilhão</h2>
+    <p class="legenda">Mexilhões abertos, evidenciando concha e carne.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 06 · Mexilhão</p>
+    <p>É um dos mariscos com que trabalhamos mais consumidos e “chatos “de se trabalhar; o importante é tentar deixar essa caminhada mais fácil.</p>
+    <p>O marisco é composto por duas conchas e um músculo que se projeta para fora, algo semelhante a cabelos, que chamamos de "umbigo". Ele é ligado a um conjunto de músculos dentro do marisco. Quando retirado com muito cuidado, segurando levemente as conchas e deixando apenas uma pequena fresta por onde você vai puxar essa conjuntura de "cabelinhos", o "umbigo" sai sem machucar o molusco.</p>
+    <p>Para abrir com cautela, é importante entender que o marisco tem um músculo principal que se liga às duas conchas. Passamos a faca bem triscando na casca por dentro; assim, ele se abre na totalidade. O ponto fraco do marisco é ali. Evite quebrar a casca, evite força, evite machucados.</p>
+    <p>Ainda sobre as conchas, é interessante limpar o externo antes de limpar o interno. O marisco é sujo, tem berbigões e cracas provenientes do ambiente do bicho. Eu aconselho limpar depois de cozinhar; as cracas saem mais fácil pela dilatação e contração da concha. É ideal entender que as conchas têm faces e fazer a faca correr sempre para fora. Importante entender que o marisco faz sujeira; faça embaixo de uma caixa-bloco.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-mexilhao-01-01-conchas-em-massa-480.avif 480w, book_assets/img/plate-mexilhao-01-01-conchas-em-massa-960.avif 960w, book_assets/img/plate-mexilhao-01-01-conchas-em-massa-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-mexilhao-01-01-conchas-em-massa-480.webp 480w, book_assets/img/plate-mexilhao-01-01-conchas-em-massa-960.webp 960w, book_assets/img/plate-mexilhao-01-01-conchas-em-massa-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-mexilhao-01-01-conchas-em-massa.jpg" alt="O volume dos mexilhões vira textura gráfica para abrir respiro no capítulo." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 1</span> <span><strong>Conchas em massa.</strong> O volume dos mexilhões vira textura gráfica para abrir respiro no capítulo.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-mexilhao-02-01-concha-aberta-480.avif 480w, book_assets/img/plate-mexilhao-02-01-concha-aberta-960.avif 960w, book_assets/img/plate-mexilhao-02-01-concha-aberta-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-mexilhao-02-01-concha-aberta-480.webp 480w, book_assets/img/plate-mexilhao-02-01-concha-aberta-960.webp 960w, book_assets/img/plate-mexilhao-02-01-concha-aberta-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-mexilhao-02-01-concha-aberta.jpg" alt="A cor interna do mexilhão aparece como detalhe gastronômico e anatômico." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 2</span> <span><strong>Concha aberta.</strong> A cor interna do mexilhão aparece como detalhe gastronômico e anatômico.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-mexilhao-02-02-concha-aberta-480.avif 480w, book_assets/img/plate-mexilhao-02-02-concha-aberta-960.avif 960w, book_assets/img/plate-mexilhao-02-02-concha-aberta-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-mexilhao-02-02-concha-aberta-480.webp 480w, book_assets/img/plate-mexilhao-02-02-concha-aberta-960.webp 960w, book_assets/img/plate-mexilhao-02-02-concha-aberta-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-mexilhao-02-02-concha-aberta.jpg" alt="A cor interna do mexilhão aparece como detalhe gastronômico e anatômico." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 3</span> <span><strong>Concha aberta.</strong> A cor interna do mexilhão aparece como detalhe gastronômico e anatômico.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/feature-mexilhao-480.avif 480w, book_assets/img/feature-mexilhao-960.avif 960w, book_assets/img/feature-mexilhao-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/feature-mexilhao-480.webp 480w, book_assets/img/feature-mexilhao-960.webp 960w, book_assets/img/feature-mexilhao-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/feature-mexilhao.jpg" alt="Textura, cor e frescor dos moluscos como página de respiro entre capítulos técnicos." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 4</span> <span><strong>Frutos do mar.</strong> Textura, cor e frescor dos moluscos como página de respiro entre capítulos técnicos.</span></figcaption>
+  </figure>
+</section>
+
+<section class="abertura revela" id="cap-07" data-spread aria-labelledby="titulo-cap-07">
+  <span class="numeral" aria-hidden="true">07</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-peixes-480.avif 480w, book_assets/img/hero-peixes-960.avif 960w, book_assets/img/hero-peixes-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-peixes-480.webp 480w, book_assets/img/hero-peixes-960.webp 960w, book_assets/img/hero-peixes-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-peixes.jpg" alt="Destaque do capítulo: variedade de pescados organizados para recebimento e trabalho." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-07">Peixes</h2>
+    <p class="legenda">Variedade de pescados organizados para recebimento e trabalho.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 07 · Peixes</p>
+    <p>Dificilmente definimos os peixes no dia a dia sem um conhecimento de espécies levemente aprofundado, mas vou ajudar nessa interpretação. Existem peixes com muitas escamas e peixes sem escamas, além de diferentes espécies com características parecidas de outras famílias. No geral, para quem trabalha em restaurante, temos pescados-chave que sempre estão em alta no mercado. Tudo é sazonal, então as qualidades vão girar durante o ano entre épocas mais frias e mais quentes; independente do tempo, clima ou dia, nós temos que entregar.</p>
+    <h3>Espécies Comuns no Mercado:</h3>
+    <ul>
+      <li>Robalo</li>
+      <li>pescada amarela</li>
+      <li>pregereba</li>
+      <li>vermelho-dentão</li>
+      <li>Cioba</li>
+      <li>Namorado</li>
+      <li>Pargo</li>
+      <li>Batata</li>
+      <li>dourado do mar</li>
+      <li>Olhete</li>
+      <li>olho-de-boi</li>
+      <li>Cherne</li>
+      <li>Sororoca</li>
+      <li>pescada branca</li>
+      <li>pescada cambucu</li>
+      <li>Linguado</li>
+      <li>olho-de-cão</li>
+      <li>cavala</li>
+      <li>Carapau</li>
+      <li>Tainha</li>
+      <li>Anchova</li>
+      <li>Atum</li>
+      <li>espadarte</li>
+      <li>salmão</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <h3>Rostos e anatomias dos peixes brancos</h3>
+    <p>Prancha editorial de miniaturas para comparar olhos, bocas, perfis, cores e proporções antes da etapa técnica.</p>
+    <div class="folha-contato">
+      <img src="html_preview_assets/images/face-gallery-01-boca-aberta-e-leitura-in.jpg" srcset="book_assets/img/face-gallery-01-boca-aberta-e-leitura-in-480.webp 480w, book_assets/img/face-gallery-01-boca-aberta-e-leitura-in-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Boca aberta e leitura interna da face" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-02-perfil-prateado-de-corpo.jpg" srcset="book_assets/img/face-gallery-02-perfil-prateado-de-corpo-480.webp 480w, book_assets/img/face-gallery-02-perfil-prateado-de-corpo-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Perfil prateado de corpo alto" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-03-olho-vivo-e-boca-amarela.jpg" srcset="book_assets/img/face-gallery-03-olho-vivo-e-boca-amarela-480.webp 480w, book_assets/img/face-gallery-03-olho-vivo-e-boca-amarela-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Olho vivo e boca amarela" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-04-mandibula-e-dentes-expos.jpg" srcset="book_assets/img/face-gallery-04-mandibula-e-dentes-expos-480.webp 480w, book_assets/img/face-gallery-04-mandibula-e-dentes-expos-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Mandíbula e dentes expostos" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-05-cabeca-robusta-de-peixe.jpg" srcset="book_assets/img/face-gallery-05-cabeca-robusta-de-peixe-480.webp 480w, book_assets/img/face-gallery-05-cabeca-robusta-de-peixe-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Cabeça robusta de peixe branco" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-06-olho-escuro-e-pele-acinz.jpg" srcset="book_assets/img/face-gallery-06-olho-escuro-e-pele-acinz-480.webp 480w, book_assets/img/face-gallery-06-olho-escuro-e-pele-acinz-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Olho escuro e pele acinzentada" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-07-olho-claro-e-borda-doura.jpg" srcset="book_assets/img/face-gallery-07-olho-claro-e-borda-doura-480.webp 480w, book_assets/img/face-gallery-07-olho-claro-e-borda-doura-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Olho claro e borda dourada" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-08-coloracao-dourada-e-rosa.jpg" srcset="book_assets/img/face-gallery-08-coloracao-dourada-e-rosa-480.webp 480w, book_assets/img/face-gallery-08-coloracao-dourada-e-rosa-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Coloração dourada e rosada" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-09-pele-verde-dourada-e-olh.jpg" srcset="book_assets/img/face-gallery-09-pele-verde-dourada-e-olh-480.webp 480w, book_assets/img/face-gallery-09-pele-verde-dourada-e-olh-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Pele verde-dourada e olho marcado" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-10-perfil-colorido-de-doura.jpg" srcset="book_assets/img/face-gallery-10-perfil-colorido-de-doura-480.webp 480w, book_assets/img/face-gallery-10-perfil-colorido-de-doura-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Perfil colorido de dourado-do-mar" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-11-peixe-rosado-de-corpo-ar.jpg" srcset="book_assets/img/face-gallery-11-peixe-rosado-de-corpo-ar-480.webp 480w, book_assets/img/face-gallery-11-peixe-rosado-de-corpo-ar-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Peixe rosado de corpo arredondado" loading="lazy" decoding="async">
+      <img src="html_preview_assets/images/face-gallery-12-anatomia-achatada-e-boca.jpg" srcset="book_assets/img/face-gallery-12-anatomia-achatada-e-boca-480.webp 480w, book_assets/img/face-gallery-12-anatomia-achatada-e-boca-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Anatomia achatada e boca lateral" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>Peixes Azuis (Peixes de Sangue) Interessante ressaltar que, antes de tudo, temos que saber diferenciar um grupo específico: Geralmente, "peixes azuis" é o termo gastronômico usado para diferenciar alguns peixes no mercado que têm características em comum, como musculatura rica em sangue, carne mais escura, maior teor de gordura, sabor mais intenso e metabolismo elevado. Então, o que define um peixe azul é o comportamento e a composição da carne.</p>
+    <h3>Exemplos de peixes azuis:</h3>
+    <h3>Peixes azuis citados</h3>
+    <ul>
+      <li>Sardinha</li>
+      <li>anchova</li>
+      <li>cavalinha / cavala</li>
+      <li>atum</li>
+      <li>bonito</li>
+      <li>sororoca</li>
+      <li>wahoo</li>
+      <li>xaréu</li>
+      <li>olho-de-boi</li>
+      <li>dourado-do-mar</li>
+    </ul>
+    <p>Nós comumente os chamamos de "peixes de sangue".</p>
+    <h3>Peixes de Carne Branca</h3>
+    <h3>Peixes de carne branca citados</h3>
+    <ul>
+      <li>robalo</li>
+      <li>pescada-amarela / pescada-branca / pescada-cambucu</li>
+      <li>prejereba</li>
+      <li>vermelho-dentão</li>
+      <li>pargo / cioba</li>
+      <li>Linguado</li>
+      <li>Batata</li>
+      <li>namorado</li>
+      <li>cherne</li>
+      <li>olho-de-cão</li>
+    </ul>
+    <p>literalmente são carne branca.</p>
+    <p>Até o espadarte é reconhecido pela carne branca, mesmo tendo linhas de musculos fortes e partes mais intensassem coloração. Mesmo se assemelhando a um "peixe azul" ou "peixe de sangue", ele permanece nessa categoria. Ainda temos os que são carne branca, mas o sangue é intenso, não se assemelhando em nada a um peixe de sangue (como no caso da cioba e do vermelho-dentão), que ainda assim têm linhas de músculos mais intensas em coloração e sabor forte de "sangue".</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-12-variedade-de-pescados-no-recebimento-e-organiz.jpg" srcset="book_assets/img/fig-12-variedade-de-pescados-no-recebimento-e-organiz-480.webp 480w, book_assets/img/fig-12-variedade-de-pescados-no-recebimento-e-organiz-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Variedade de pescados no recebimento e organização da peixaria." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 1</span> Variedade de pescados no recebimento e organização da peixaria.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-13-variedade-de-pescados-no-recebimento-e-organiz.jpg" srcset="book_assets/img/fig-13-variedade-de-pescados-no-recebimento-e-organiz-480.webp 480w, book_assets/img/fig-13-variedade-de-pescados-no-recebimento-e-organiz-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Variedade de pescados no recebimento e organização da peixaria." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 2</span> Variedade de pescados no recebimento e organização da peixaria.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Segurança e Anatomia</h3>
+    <p>Quase todos os peixes têm esporões nas nadadeiras ventrais ou superiores. É bom sempre verificar, pois nosso trabalho é visual e sensorial; é preciso saber onde você vai colocar a mão. Se for maturar, o interessante é quebrar esse esporão; quanto mais seco, mais "letal". Use um alicate de corte específico para peixaria.</p>
+    <h3>Recebimento e Pré-limpeza</h3>
+    <p>Verificação no Recebimento Sobre o recebimento, é bom lembrar de verificar:</p>
+    <ul>
+      <li>Olhos: têm que estar vivos</li>
+      <li>Guelras: vermelhas</li>
+      <li>Carne: elástica</li>
+      <li>Odor: sem odor forte</li>
+      <li>Escama: sem descolamento.</li>
+    </ul>
+    <p>Este é o primeiro passo antes de assinar a nota. Essas verificações devem ser feitas e não se deve aceitar um peixe que não esteja minimamente decente e condizente com as características citadas. Ainda assim, se tiver um contato bacana com seu fornecedor, peça sem plástico, com o peixe direto no gelo. O plástico deteriora demais o produto durante o transporte e a troca de temperatura que ele sofre, o que infelizmente acontece.</p>
+    <p>Ao receber os pescados, além da verificação prévia, temos os cuidados pós-recebimento. Procure retirar o peixe do saco plástico caso venha a vir em um. Faça uma banheira de água, gelo e sal para a primeira limpeza antes de trabalhar com ele na tábua. Após isso, defina o seu caminho:</p>
+    <h3>Filés com pele</h3>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-14-referencia-visual-para-files-com-pele-observan.jpg" srcset="book_assets/img/fig-14-referencia-visual-para-files-com-pele-observan-480.webp 480w, book_assets/img/fig-14-referencia-visual-para-files-com-pele-observan-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Referência visual para filés com pele, observando couro, mucosa e linha de corte." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 3</span> Referência visual para filés com pele, observando couro, mucosa e linha de corte.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-15-referencia-visual-para-files-com-pele-observan.jpg" srcset="book_assets/img/fig-15-referencia-visual-para-files-com-pele-observan-480.webp 480w, book_assets/img/fig-15-referencia-visual-para-files-com-pele-observan-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Referência visual para filés com pele, observando couro, mucosa e linha de corte." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 4</span> Referência visual para filés com pele, observando couro, mucosa e linha de corte.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>(Peixes pequenos) Usamos peixes de pele, couro e mucosa sensível e macia (ex: pargo, pescada branca, olho-de-cão). Aqui usaremos o descamador (reco-reco), que retira apenas as escamas, mantendo o couro e a mucosa.</p>
+    <h3>Itens necessário</h3>
+    <ul>
+      <li>Descamador</li>
+      <li>Faca para filetar</li>
+      <li>Alicate de espinhos</li>
+      <li>GN furada</li>
+      <li>GN</li>
+      <li>Perflex</li>
+      <li>Papel</li>
+    </ul>
+    <h3>Filés sem pele</h3>
+    <p>(Peixes robustos - médios a grandes, passando de 7 kg) Podemos limpá-lo através das escamas na coluna do animal, acertando as fraquezas entre as nadadeiras dorsal e ventral. Caso a linha de escamas seja muito dura, o indicado é o Sukibiki: técnica com a faca entre a pele e a mucosa, resultando na descamação e deixando apenas o couro ligado à carne. Isso facilita a retirada do couro sem muito esforço.</p>
+    <h3>Itens necessários</h3>
+    <ul>
+      <li>Faca para sukibiki</li>
+      <li>Faca para filetar</li>
+      <li>Alicate de espinhos ou pinça de espinhos</li>
+      <li>Caixa-bloco furada</li>
+      <li>Caixa-bloco</li>
+      <li>Agua, sal e gelo</li>
+      <li>Perflex</li>
+      <li>papel</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-16-ferramentas-de-trabalho-organizadas-para-corte.jpg" srcset="book_assets/img/fig-16-ferramentas-de-trabalho-organizadas-para-corte-480.webp 480w, book_assets/img/fig-16-ferramentas-de-trabalho-organizadas-para-corte-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Ferramentas de trabalho organizadas para cortes, limpeza e acabamento." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 5</span> Ferramentas de trabalho organizadas para cortes, limpeza e acabamento.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Espalmado</h3>
+    <p>Pode ser feito em qualquer peixe, mas para grelhar os mais indicados são os médios para pequenos (3 kg ou menos). É interessante fazer pelas costas, assim não estoura a barriga, podendo retirar os órgãos por cima junto com as guelras. Além da faca, usamos uma tesoura para fazer incisões literalmente cirúrgicas e manter o pescado íntegro, mas caso alguns for espalmar pela barriga também caso ela já venha sem vísceras, como abrir pelas costas nos mantemos a barriga intacta para manter os dois lados do peixe junto, nos não atravessamos os peixe e deixamos ele interligado pelas costas, Aqui pode ser aplicado sukibiki ou descamador independente do peixe.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-17-resultado-visual-do-peixe-espalmado-mantendo-e.jpg" srcset="book_assets/img/fig-17-resultado-visual-do-peixe-espalmado-mantendo-e-480.webp 480w, book_assets/img/fig-17-resultado-visual-do-peixe-espalmado-mantendo-e-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 6</span> Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-18-resultado-visual-do-peixe-espalmado-mantendo-e.jpg" srcset="book_assets/img/fig-18-resultado-visual-do-peixe-espalmado-mantendo-e-480.webp 480w, book_assets/img/fig-18-resultado-visual-do-peixe-espalmado-mantendo-e-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 7</span> Resultado visual do peixe espalmado, mantendo estrutura e apresentação íntegra.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Itens necessários</h3>
+    <ul>
+      <li>Tesoura</li>
+      <li>Alicate de espinhos</li>
+      <li>Faca</li>
+      <li>GN furada</li>
+      <li>GN</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-19-ferramentas-essenciais-para-abrir-limpar-e-fin.jpg" srcset="book_assets/img/fig-19-ferramentas-essenciais-para-abrir-limpar-e-fin-480.webp 480w, book_assets/img/fig-19-ferramentas-essenciais-para-abrir-limpar-e-fin-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Ferramentas essenciais para abrir, limpar e finalizar o pescado." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 8</span> Ferramentas essenciais para abrir, limpar e finalizar o pescado.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Maturado Inteiro</h3>
+    <p>Usamos as técnicas</p>
+    <ul>
+      <li>Sukibiki :peixes grandes e médios (2 kg a 7kg). Técnica japonesa limpa, sutil e precisa. Remove os bolsões onde estão as mucosas do peixe.</li>
+      <li>Descamador(reco-reco): Em alguns médios e pequenos (2 kg pra baixo) uma técnica mais firme de execução, tradicionalmente mais usado, retira apenas as escamas</li>
+    </ul>
+    <p>Priorizo manter o peixe sem esporões, sem guelras e sem órgãos. Mantenho apenas a carcaça base (cabeça, corpo e cauda interligados). Nada além disso deve ficar, para não interferir na maturação e na perda de água. Armazenamento a longo prazo o ideal é que sejam pendurados pela cauda em ganchos e sempre ir sempre cuidando da umidade que ele vai eliminando na câmera e o que sai superficialmente na pele</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-20-peixe-maturado-inteiro-pendurado-para-controle.jpg" srcset="book_assets/img/fig-20-peixe-maturado-inteiro-pendurado-para-controle-480.webp 480w, book_assets/img/fig-20-peixe-maturado-inteiro-pendurado-para-controle-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 9</span> Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-21-peixe-maturado-inteiro-pendurado-para-controle.jpg" srcset="book_assets/img/fig-21-peixe-maturado-inteiro-pendurado-para-controle-480.webp 480w, book_assets/img/fig-21-peixe-maturado-inteiro-pendurado-para-controle-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 10</span> Peixe maturado inteiro, pendurado para controle de umidade e circulação de ar.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>Cada peixe varia o tempo de maturação alguns aguentam mais de uma semana(atum, olhete, robalo)2kg pra mais, dependendo do tamanho e o teor de gordura, o interessante é não segurar peixes pequenos abaixo de 2 kg mais que uma semana, a maturação ajuda a criar sabores e complexidades mas a perda de agua acontece assim ressecando o pescado, o ideal é sempre acompanhar o desenvolvimento do pescado e assegurar que aquele peixe ira pra frente e assim entrando novos para armazenamento e maturação.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-22-acompanhamento-de-maturacao-em-geladeira-com-p.jpg" srcset="book_assets/img/fig-22-acompanhamento-de-maturacao-em-geladeira-com-p-480.webp 480w, book_assets/img/fig-22-acompanhamento-de-maturacao-em-geladeira-com-p-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Acompanhamento de maturação em geladeira, com pescados suspensos e separados." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 11</span> Acompanhamento de maturação em geladeira, com pescados suspensos e separados.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-23-acompanhamento-de-maturacao-em-geladeira-com-p.jpg" srcset="book_assets/img/fig-23-acompanhamento-de-maturacao-em-geladeira-com-p-480.webp 480w, book_assets/img/fig-23-acompanhamento-de-maturacao-em-geladeira-com-p-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Acompanhamento de maturação em geladeira, com pescados suspensos e separados." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 12</span> Acompanhamento de maturação em geladeira, com pescados suspensos e separados.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p>Se uso o descamador, tenho que certificar que não haverá água remanescente nas mucosas. Quanto mais seco entrar para maturar, mais gostosa será essa mucosa seca que, ao cair na grelha, pururuca literalmente.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-24-detalhe-de-pele-e-mucosa-secas-base-para-textu.jpg" srcset="book_assets/img/fig-24-detalhe-de-pele-e-mucosa-secas-base-para-textu-480.webp 480w, book_assets/img/fig-24-detalhe-de-pele-e-mucosa-secas-base-para-textu-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Detalhe de pele e mucosa secas, base para textura firme na finalização." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 13</span> Detalhe de pele e mucosa secas, base para textura firme na finalização.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-25-detalhe-de-pele-e-mucosa-secas-base-para-textu.jpg" srcset="book_assets/img/fig-25-detalhe-de-pele-e-mucosa-secas-base-para-textu-480.webp 480w, book_assets/img/fig-25-detalhe-de-pele-e-mucosa-secas-base-para-textu-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Detalhe de pele e mucosa secas, base para textura firme na finalização." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 14</span> Detalhe de pele e mucosa secas, base para textura firme na finalização.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>Nota sobre Maturação:</h3>
+    <p>Se usamos o descamador, temos que certificar que não haverá água remanescente nas mucosas. Quanto mais seco entrar para maturar, mais gostosa será essa mucosa seca que, ao cair na grelha, pururuca literalmente.</p>
+    <p>Lembrando que sujeira ela é criada em crostas então ação mecânica é o que quebra essa camada de sujeira, no procuramos usar um perflex e passar na pele do pescado com ênfase assim quebrando alguma crosta remanescente, geralmente uma solução de água, sal e gelo, perflex levemente humedecido com essa solução a ideia é retirar o muco, sujeita e afins que estão grudado no peixe, após essa limpeza nos secamos muito bem e muito da sujeira passa para o papel de finalização.</p>
+    <h3>Itens Necessários:</h3>
+    <ul>
+      <li>Alicate de corte (específico para peixaria)</li>
+      <li>Descamador (reco-reco)</li>
+      <li>Faca para filetar</li>
+      <li>Faca de Sukibiki</li>
+      <li>Alicate de espinhos</li>
+      <li>Tesoura</li>
+      <li>Água, gelo e sal</li>
+      <li>Caixa bloco furada</li>
+      <li>Caixa bloco</li>
+      <li>Ganchos</li>
+      <li>Perflex</li>
+      <li>Papel</li>
+    </ul>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-480.avif 480w, book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-960.avif 960w, book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-480.webp 480w, book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-960.webp 960w, book_assets/img/plate-peixes-01-01-azul-dourado-e-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-01-01-azul-dourado-e-esc.jpg" alt="Recorte de cor e textura para destacar a beleza natural do pescado antes da técnica." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 15</span> <span><strong>Azul, dourado e escama.</strong> Recorte de cor e textura para destacar a beleza natural do pescado antes da técnica.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-02-01-sinais-de-frescor-480.avif 480w, book_assets/img/plate-peixes-02-01-sinais-de-frescor-960.avif 960w, book_assets/img/plate-peixes-02-01-sinais-de-frescor-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-02-01-sinais-de-frescor-480.webp 480w, book_assets/img/plate-peixes-02-01-sinais-de-frescor-960.webp 960w, book_assets/img/plate-peixes-02-01-sinais-de-frescor-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-02-01-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 16</span> <span><strong>Sinais de frescor.</strong> Olho, guelra, boca e pele como leitura visual do recebimento.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-02-02-sinais-de-frescor-480.avif 480w, book_assets/img/plate-peixes-02-02-sinais-de-frescor-960.avif 960w, book_assets/img/plate-peixes-02-02-sinais-de-frescor-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-02-02-sinais-de-frescor-480.webp 480w, book_assets/img/plate-peixes-02-02-sinais-de-frescor-960.webp 960w, book_assets/img/plate-peixes-02-02-sinais-de-frescor-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-02-02-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 17</span> <span><strong>Sinais de frescor.</strong> Olho, guelra, boca e pele como leitura visual do recebimento.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-02-03-sinais-de-frescor-480.avif 480w, book_assets/img/plate-peixes-02-03-sinais-de-frescor-960.avif 960w, book_assets/img/plate-peixes-02-03-sinais-de-frescor-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-02-03-sinais-de-frescor-480.webp 480w, book_assets/img/plate-peixes-02-03-sinais-de-frescor-960.webp 960w, book_assets/img/plate-peixes-02-03-sinais-de-frescor-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-02-03-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 18</span> <span><strong>Sinais de frescor.</strong> Olho, guelra, boca e pele como leitura visual do recebimento.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-02-04-sinais-de-frescor-480.avif 480w, book_assets/img/plate-peixes-02-04-sinais-de-frescor-960.avif 960w, book_assets/img/plate-peixes-02-04-sinais-de-frescor-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-02-04-sinais-de-frescor-480.webp 480w, book_assets/img/plate-peixes-02-04-sinais-de-frescor-960.webp 960w, book_assets/img/plate-peixes-02-04-sinais-de-frescor-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-02-04-sinais-de-frescor.jpg" alt="Olho, guelra, boca e pele como leitura visual do recebimento." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 19</span> <span><strong>Sinais de frescor.</strong> Olho, guelra, boca e pele como leitura visual do recebimento.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-03-01-recebimento-em-vol-480.avif 480w, book_assets/img/plate-peixes-03-01-recebimento-em-vol-960.avif 960w, book_assets/img/plate-peixes-03-01-recebimento-em-vol-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-03-01-recebimento-em-vol-480.webp 480w, book_assets/img/plate-peixes-03-01-recebimento-em-vol-960.webp 960w, book_assets/img/plate-peixes-03-01-recebimento-em-vol-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-03-01-recebimento-em-vol.jpg" alt="Fileiras e caixas organizam a escala real do trabalho de peixaria." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 20</span> <span><strong>Recebimento em volume.</strong> Fileiras e caixas organizam a escala real do trabalho de peixaria.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-03-02-recebimento-em-vol-480.avif 480w, book_assets/img/plate-peixes-03-02-recebimento-em-vol-960.avif 960w, book_assets/img/plate-peixes-03-02-recebimento-em-vol-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-03-02-recebimento-em-vol-480.webp 480w, book_assets/img/plate-peixes-03-02-recebimento-em-vol-960.webp 960w, book_assets/img/plate-peixes-03-02-recebimento-em-vol-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-03-02-recebimento-em-vol.jpg" alt="Fileiras e caixas organizam a escala real do trabalho de peixaria." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 21</span> <span><strong>Recebimento em volume.</strong> Fileiras e caixas organizam a escala real do trabalho de peixaria.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-480.avif 480w, book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-960.avif 960w, book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-480.webp 480w, book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-960.webp 960w, book_assets/img/plate-peixes-04-01-olho-de-boi-em-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-04-01-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 22</span> <span><strong>Olho-de-boi em escala.</strong> Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-480.avif 480w, book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-960.avif 960w, book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-480.webp 480w, book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-960.webp 960w, book_assets/img/plate-peixes-04-02-olho-de-boi-em-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-04-02-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 23</span> <span><strong>Olho-de-boi em escala.</strong> Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-480.avif 480w, book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-960.avif 960w, book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-480.webp 480w, book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-960.webp 960w, book_assets/img/plate-peixes-04-03-olho-de-boi-em-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-04-03-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 24</span> <span><strong>Olho-de-boi em escala.</strong> Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-480.avif 480w, book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-960.avif 960w, book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-480.webp 480w, book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-960.webp 960w, book_assets/img/plate-peixes-04-04-olho-de-boi-em-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-04-04-olho-de-boi-em-esc.jpg" alt="Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 25</span> <span><strong>Olho-de-boi em escala.</strong> Do peixe inteiro ao prato: escala, filé, montagem e finalização como leitura completa do produto.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-05-01-maturacao-como-esc-480.avif 480w, book_assets/img/plate-peixes-05-01-maturacao-como-esc-960.avif 960w, book_assets/img/plate-peixes-05-01-maturacao-como-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-05-01-maturacao-como-esc-480.webp 480w, book_assets/img/plate-peixes-05-01-maturacao-como-esc-960.webp 960w, book_assets/img/plate-peixes-05-01-maturacao-como-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-05-01-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 26</span> <span><strong>Maturação como escultura.</strong> Costelas, pele seca e suspensão transformam o processo em linguagem visual.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-05-02-maturacao-como-esc-480.avif 480w, book_assets/img/plate-peixes-05-02-maturacao-como-esc-960.avif 960w, book_assets/img/plate-peixes-05-02-maturacao-como-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-05-02-maturacao-como-esc-480.webp 480w, book_assets/img/plate-peixes-05-02-maturacao-como-esc-960.webp 960w, book_assets/img/plate-peixes-05-02-maturacao-como-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-05-02-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 27</span> <span><strong>Maturação como escultura.</strong> Costelas, pele seca e suspensão transformam o processo em linguagem visual.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-05-03-maturacao-como-esc-480.avif 480w, book_assets/img/plate-peixes-05-03-maturacao-como-esc-960.avif 960w, book_assets/img/plate-peixes-05-03-maturacao-como-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-05-03-maturacao-como-esc-480.webp 480w, book_assets/img/plate-peixes-05-03-maturacao-como-esc-960.webp 960w, book_assets/img/plate-peixes-05-03-maturacao-como-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-05-03-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 28</span> <span><strong>Maturação como escultura.</strong> Costelas, pele seca e suspensão transformam o processo em linguagem visual.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-05-04-maturacao-como-esc-480.avif 480w, book_assets/img/plate-peixes-05-04-maturacao-como-esc-960.avif 960w, book_assets/img/plate-peixes-05-04-maturacao-como-esc-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-05-04-maturacao-como-esc-480.webp 480w, book_assets/img/plate-peixes-05-04-maturacao-como-esc-960.webp 960w, book_assets/img/plate-peixes-05-04-maturacao-como-esc-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-05-04-maturacao-como-esc.jpg" alt="Costelas, pele seca e suspensão transformam o processo em linguagem visual." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 29</span> <span><strong>Maturação como escultura.</strong> Costelas, pele seca e suspensão transformam o processo em linguagem visual.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-peixes-06-01-peixe-maturado-em-480.avif 480w, book_assets/img/plate-peixes-06-01-peixe-maturado-em-960.avif 960w, book_assets/img/plate-peixes-06-01-peixe-maturado-em-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-peixes-06-01-peixe-maturado-em-480.webp 480w, book_assets/img/plate-peixes-06-01-peixe-maturado-em-960.webp 960w, book_assets/img/plate-peixes-06-01-peixe-maturado-em-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-peixes-06-01-peixe-maturado-em.jpg" alt="Uma imagem de atmosfera para lembrar tempo, umidade e cuidado no processo." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 30</span> <span><strong>Peixe maturado em madeira.</strong> Uma imagem de atmosfera para lembrar tempo, umidade e cuidado no processo.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/feature-peixes-480.avif 480w, book_assets/img/feature-peixes-960.avif 960w, book_assets/img/feature-peixes-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/feature-peixes-480.webp 480w, book_assets/img/feature-peixes-960.webp 960w, book_assets/img/feature-peixes-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/feature-peixes.jpg" alt="Peixes suspensos em ambiente controlado, valorizando o trabalho de tempo e umidade." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 31</span> <span><strong>Maturação inteira.</strong> Peixes suspensos em ambiente controlado, valorizando o trabalho de tempo e umidade.</span></figcaption>
+  </figure>
+</section>
+
+<section class="abertura revela" id="cap-08" data-spread aria-labelledby="titulo-cap-08">
+  <span class="numeral" aria-hidden="true">08</span>
+  <picture>
+    <source type="image/avif" srcset="book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-480.avif 480w, book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-960.avif 960w, book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-1600.avif 1600w" sizes="100vw">
+    <source type="image/webp" srcset="book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-480.webp 480w, book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-960.webp 960w, book_assets/img/hero-setorizacao-de-files-grandes-acima-de-7-kg-1600.webp 1600w" sizes="100vw">
+    <img class="fundo" src="html_preview_assets/images/hero-setorizacao-de-files-grandes-acima-de-7-kg.jpg" alt="Destaque do capítulo: atum aberto para estudo de setores e cortes." loading="lazy" decoding="async">
+  </picture>
+  <div class="abertura-conteudo">
+    <h2 id="titulo-cap-08">Setorização de Filés Grandes (Acima de 7 kg)</h2>
+    <p class="legenda">Atum aberto para estudo de setores e cortes.</p>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <p class="rotulo">Capítulo 08 · Setorização de Filés Grandes</p>
+    <h3>1. <strong>Barriga</strong></h3>
+    <p>Parte mais macia e gorda. Ótimo para tiraditos, sashimi e nigiri.</p>
+    <p>*Obs: aparas da limpeza da barriga viram ceviche.*</p>
+    <p>Atenção aos espinhos das costelas que geralmente atravessam a carne, tendo que retirá-los com pinças ou manobras específicas.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-26-barriga-parte-macia-e-gordurosa-destacada-para.jpg" srcset="book_assets/img/fig-26-barriga-parte-macia-e-gordurosa-destacada-para-480.webp 480w, book_assets/img/fig-26-barriga-parte-macia-e-gordurosa-destacada-para-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Barriga: parte macia e gordurosa, destacada para cortes delicados." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 1</span> Barriga: parte macia e gordurosa, destacada para cortes delicados.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>2. <strong>Filé Superior</strong></h3>
+    <p>Geralmente filés que passam de dois dedos; ótimos para cortes que vão ser grelhados, assados ou cozidos. Em filés grandes, tenha atenção à linha de espinhos que junta o filé superior à barriga. Geralmente essas aparas vão para leite de tigre ou alguma base. Quando fazemos os cortes para porcionar, o que sobra por conta da altura dessas peças nós usamos para cubos grandes de peixe.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-27-file-superior-peca-alta-limpa-e-uniforme-para.jpg" srcset="book_assets/img/fig-27-file-superior-peca-alta-limpa-e-uniforme-para-480.webp 480w, book_assets/img/fig-27-file-superior-peca-alta-limpa-e-uniforme-para-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Filé superior: peça alta, limpa e uniforme para grelha, forno ou cocção." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 2</span> Filé superior: peça alta, limpa e uniforme para grelha, forno ou cocção.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>3. <strong>Meio do Peixe</strong></h3>
+    <p>Ainda macio. Procuro retirar o espinho que liga o filé superior com o inferior. Como é uma peça que vem antes do que denominamos "rabo", não contém tantas fibras ou espinhos; geralmente são espinhos menores e fáceis de retirar com uma pinça. Ainda assim, é um ótimo filé de peixe com um tamanho bom, boas repartições do próprio peixe e uniformidade. Aqui, caso haja a necessidade de fazer algumas aparas no filé para ficar no peso ou tamanho desejado, é ótimo para aproveitar em bastonetes (iscas), cubos (moqueca e afins), além de pedaços menores para ceviche.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <div class="pranchas-duplas">
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-28-meio-do-peixe-porcoes-regulares-e-versateis-pa.jpg" srcset="book_assets/img/fig-28-meio-do-peixe-porcoes-regulares-e-versateis-pa-480.webp 480w, book_assets/img/fig-28-meio-do-peixe-porcoes-regulares-e-versateis-pa-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Meio do peixe: porções regulares e versáteis para diferentes preparos." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 3</span> Meio do peixe: porções regulares e versáteis para diferentes preparos.</figcaption>
+      </figure>
+      <figure class="prancha">
+        <img src="html_preview_assets/images/fig-29-meio-do-peixe-porcoes-regulares-e-versateis-pa.jpg" srcset="book_assets/img/fig-29-meio-do-peixe-porcoes-regulares-e-versateis-pa-480.webp 480w, book_assets/img/fig-29-meio-do-peixe-porcoes-regulares-e-versateis-pa-960.webp 960w" sizes="(min-width: 700px) 48vw, 100vw" alt="Meio do peixe: porções regulares e versáteis para diferentes preparos." loading="lazy" decoding="async">
+        <figcaption><span class="num-prancha">Prancha 4</span> Meio do peixe: porções regulares e versáteis para diferentes preparos.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="pagina pagina-texto revela" data-spread>
+  <div class="miolo">
+    <h3>4. <strong>Rabo</strong></h3>
+    <p>Parte mais fibrosa e irregular; aqui procuramos trabalhar diversos cortes para aproveitamento. Conseguimos bastonete, moqueca, ceviche e pirão. Como são sempre triangulares, é fácil a setorização.</p>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <div class="miolo">
+    <figure class="prancha">
+      <img src="html_preview_assets/images/fig-30-rabo-parte-mais-fibrosa-boa-para-cortes-de-apr.jpg" srcset="book_assets/img/fig-30-rabo-parte-mais-fibrosa-boa-para-cortes-de-apr-480.webp 480w, book_assets/img/fig-30-rabo-parte-mais-fibrosa-boa-para-cortes-de-apr-960.webp 960w" sizes="(min-width: 900px) 70vw, 100vw" alt="Rabo: parte mais fibrosa, boa para cortes de aproveitamento." loading="lazy" decoding="async">
+      <figcaption><span class="num-prancha">Prancha 5</span> Rabo: parte mais fibrosa, boa para cortes de aproveitamento.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-01-01-olho-e-escala-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-01-01-olho-e-escala.jpg" alt="Close dramático para abrir a leitura do atum como matéria-prima monumental." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 6</span> <span><strong>Olho e escala.</strong> Close dramático para abrir a leitura do atum como matéria-prima monumental.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-02-01-simetria-do-corte-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-02-01-simetria-do-corte.jpg" alt="Seções grandes do atum organizadas como estudo visual de anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 7</span> <span><strong>Simetria do corte.</strong> Seções grandes do atum organizadas como estudo visual de anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-02-02-simetria-do-corte-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-02-02-simetria-do-corte.jpg" alt="Seções grandes do atum organizadas como estudo visual de anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 8</span> <span><strong>Simetria do corte.</strong> Seções grandes do atum organizadas como estudo visual de anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-03-01-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 9</span> <span><strong>A mão, a faca e a escala.</strong> Presença humana para mostrar proporção, gesto e responsabilidade no corte.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-03-02-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 10</span> <span><strong>A mão, a faca e a escala.</strong> Presença humana para mostrar proporção, gesto e responsabilidade no corte.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-03-03-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 11</span> <span><strong>A mão, a faca e a escala.</strong> Presença humana para mostrar proporção, gesto e responsabilidade no corte.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-03-04-a-mao-a-faca-e-a-e.jpg" alt="Presença humana para mostrar proporção, gesto e responsabilidade no corte." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 12</span> <span><strong>A mão, a faca e a escala.</strong> Presença humana para mostrar proporção, gesto e responsabilidade no corte.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-04-01-detalhes-do-atum-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-04-01-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 13</span> <span><strong>Detalhes do atum.</strong> Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-04-02-detalhes-do-atum-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-04-02-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 14</span> <span><strong>Detalhes do atum.</strong> Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-04-03-detalhes-do-atum-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-04-03-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 15</span> <span><strong>Detalhes do atum.</strong> Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-480.avif 480w, book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-960.avif 960w, book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-480.webp 480w, book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-960.webp 960w, book_assets/img/plate-setorizacao-de-files-g-04-04-detalhes-do-atum-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/plate-setorizacao-de-files-g-04-04-detalhes-do-atum.jpg" alt="Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 16</span> <span><strong>Detalhes do atum.</strong> Barbatana, lombo e cabeça como fragmentos visuais de uma mesma anatomia.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread>
+  <figure class="prancha prancha--cheia">
+    <picture>
+      <source type="image/avif" srcset="book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-480.avif 480w, book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-960.avif 960w, book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-1600.avif 1600w" sizes="100vw">
+      <source type="image/webp" srcset="book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-480.webp 480w, book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-960.webp 960w, book_assets/img/feature-setorizacao-de-files-grandes-acima-de-7-kg-1600.webp 1600w" sizes="100vw">
+      <img src="html_preview_assets/images/feature-setorizacao-de-files-grandes-acima-de-7-kg.jpg" alt="O atum inteiro como encerramento visual para a setorização de grandes filés." loading="lazy" decoding="async">
+    </picture>
+    <figcaption><span class="num-prancha">Prancha 17</span> <span><strong>Cerimônia e escala.</strong> O atum inteiro como encerramento visual para a setorização de grandes filés.</span></figcaption>
+  </figure>
+</section>
+
+<section class="pagina revela" data-spread aria-label="Folha de contato: atum">
+  <div class="folha-contato">
+    <img src="html_preview_assets/contact_sheets/atum_01.jpg" srcset="book_assets/img/atum_01-480.webp 480w, book_assets/img/atum_01-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: atum, quadro 01" loading="lazy" decoding="async">
+    <img src="html_preview_assets/contact_sheets/atum_02.jpg" srcset="book_assets/img/atum_02-480.webp 480w, book_assets/img/atum_02-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: atum, quadro 02" loading="lazy" decoding="async">
+    <img src="html_preview_assets/contact_sheets/atum_03.jpg" srcset="book_assets/img/atum_03-480.webp 480w, book_assets/img/atum_03-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: atum, quadro 03" loading="lazy" decoding="async">
+    <img src="html_preview_assets/contact_sheets/atum_04.jpg" srcset="book_assets/img/atum_04-480.webp 480w, book_assets/img/atum_04-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: atum, quadro 04" loading="lazy" decoding="async">
+    <img src="html_preview_assets/contact_sheets/atum_05.jpg" srcset="book_assets/img/atum_05-480.webp 480w, book_assets/img/atum_05-960.webp 960w" sizes="(min-width: 900px) 18vw, (min-width: 600px) 30vw, 50vw" alt="Folha de contato: atum, quadro 05" loading="lazy" decoding="async">
+  </div>
+</section>
+  <!-- CAPITULOS: fim -->
+
+  <footer class="pagina colofao" data-spread>
+    <div class="miolo">
+      <h2>Colofão</h2>
+      <p>Texto-base e fotografias de Matheus Felipe Silverio. Edição fotográfica composta em Fraunces e Inter sobre papel digital. Publicado por <a href="https://davidluky.com/">davidluky.com</a>.</p>
+      <div class="edicoes">
+        <a href="livro/">Edição manual</a>
+        <a href="revista/">Edição revista</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="visor" id="visor" aria-label="Visualizador de fotografias">
+    <div class="visor-conteudo">
+      <img id="visor-imagem" src="" alt="">
+      <p class="visor-legenda" id="visor-legenda"></p>
+    </div>
+    <button class="visor-nav visor-ant" id="visor-ant" aria-label="Fotografia anterior">&#8249;</button>
+    <button class="visor-nav visor-prox" id="visor-prox" aria-label="Próxima fotografia">&#8250;</button>
+    <button class="visor-fechar" id="visor-fechar">Fechar</button>
+  </dialog>
+
+  <script>
+    (function () {
+      "use strict";
+
+      // Revelação suave ao rolar
+      var motionOk = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (motionOk && "IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visivel");
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: "0px 0px -8% 0px" });
+        document.querySelectorAll(".revela").forEach(function (el) { io.observe(el); });
+      } else {
+        document.querySelectorAll(".revela").forEach(function (el) { el.classList.add("visivel"); });
+      }
+
+      // Visor (lightbox)
+      var visor = document.getElementById("visor");
+      var visorImagem = document.getElementById("visor-imagem");
+      var visorLegenda = document.getElementById("visor-legenda");
+      var fotos = Array.prototype.slice.call(
+        document.querySelectorAll(".prancha img, .folha-contato img")
+      );
+      var atual = -1;
+
+      function legendaDe(img) {
+        var figura = img.closest("figure");
+        var legenda = figura ? figura.querySelector("figcaption") : null;
+        return legenda ? legenda.textContent.trim() : (img.alt || "");
+      }
+
+      function mostrar(indice) {
+        if (indice < 0 || indice >= fotos.length) return;
+        atual = indice;
+        var img = fotos[indice];
+        visorImagem.src = img.currentSrc || img.src;
+        visorImagem.alt = img.alt || "";
+        visorLegenda.textContent = legendaDe(img);
+        if (!visor.open) visor.showModal();
+      }
+
+      fotos.forEach(function (img, indice) {
+        img.tabIndex = 0;
+        img.addEventListener("click", function () { mostrar(indice); });
+        img.addEventListener("keydown", function (evento) {
+          if (evento.key === "Enter" || evento.key === " ") {
+            evento.preventDefault();
+            mostrar(indice);
+          }
+        });
+      });
+
+      document.getElementById("visor-fechar").addEventListener("click", function () { visor.close(); });
+      document.getElementById("visor-ant").addEventListener("click", function () { mostrar(atual - 1); });
+      document.getElementById("visor-prox").addEventListener("click", function () { mostrar(atual + 1); });
+      visor.addEventListener("click", function (evento) {
+        if (evento.target === visor) visor.close();
+      });
+
+      // Navegação por teclado: no visor navega fotos; fora dele navega spreads
+      var spreads = Array.prototype.slice.call(document.querySelectorAll("[data-spread]"));
+      function spreadAtual() {
+        var meio = window.scrollY + window.innerHeight / 2;
+        for (var i = spreads.length - 1; i >= 0; i -= 1) {
+          if (spreads[i].offsetTop <= meio) return i;
+        }
+        return 0;
+      }
+      document.addEventListener("keydown", function (evento) {
+        if (visor.open) {
+          if (evento.key === "ArrowRight") mostrar(atual + 1);
+          if (evento.key === "ArrowLeft") mostrar(atual - 1);
+          return;
+        }
+        if (evento.target !== document.body) return;
+        if (evento.key === "ArrowRight") {
+          evento.preventDefault();
+          var proximo = Math.min(spreadAtual() + 1, spreads.length - 1);
+          spreads[proximo].scrollIntoView({ behavior: motionOk ? "smooth" : "auto" });
+        }
+        if (evento.key === "ArrowLeft") {
+          evento.preventDefault();
+          var anterior = Math.max(spreadAtual() - 1, 0);
+          spreads[anterior].scrollIntoView({ behavior: motionOk ? "smooth" : "auto" });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

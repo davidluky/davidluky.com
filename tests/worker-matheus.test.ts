@@ -49,6 +49,18 @@ describe("matheus gate", () => {
     expect(response.headers.get("location")).toContain("voltar=%2Flivro%2F");
   });
 
+  it("keeps the photography edition behind the gate", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/fotolivro"),
+      makeEnv(),
+    );
+    expect(response.status).toBe(302);
+    expect(response.headers.get("location")).toBe(
+      "https://matheus.davidluky.com/entrar/?voltar=%2Ffotolivro",
+    );
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
   it("serves the login page without a session", async () => {
     const response = await worker.fetch(
       new Request("https://matheus.davidluky.com/entrar/"),
@@ -77,7 +89,7 @@ describe("matheus gate", () => {
     expect(response.headers.get("location")).toContain("voltar=%2F404.html");
   });
 
-  it("serves content with a valid session and sets private headers", async () => {
+  it("serves the edition selector with a valid session and sets private headers", async () => {
     const response = await worker.fetch(
       new Request("https://matheus.davidluky.com/", { headers: { cookie: await authCookie() } }),
       makeEnv(),
@@ -87,6 +99,35 @@ describe("matheus gate", () => {
     expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
     expect(response.headers.get("cache-control")).toBe("private, max-age=600");
   });
+
+  it("serves the photography edition at its clean route", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/fotolivro", {
+        headers: { cookie: await authCookie() },
+      }),
+      makeEnv(),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe("asset:/matheus/fotolivro.html");
+    expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+    expect(response.headers.get("cache-control")).toBe("private, max-age=600");
+  });
+
+  it.each(["/fotolivro/", "/fotolivro.html"])(
+    "canonicalizes the photography edition alias %s",
+    async (pathname) => {
+      const response = await worker.fetch(
+        new Request(`https://matheus.davidluky.com${pathname}?pagina=1`, {
+          headers: { cookie: await authCookie() },
+        }),
+        makeEnv(),
+      );
+      expect(response.status).toBe(308);
+      expect(response.headers.get("location")).toBe(
+        "https://matheus.davidluky.com/fotolivro?pagina=1",
+      );
+    },
+  );
 
   it("preserves the nearest nested 404 returned by Assets", async () => {
     let assetFetches = 0;

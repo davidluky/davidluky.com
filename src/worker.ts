@@ -441,10 +441,18 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
     return withMatheusHeaders(redirect(redirectUrl.toString(), 308));
   }
 
+  if (url.pathname === "/fotolivro/" || url.pathname === "/fotolivro.html") {
+    const redirectUrl = new URL(request.url);
+    redirectUrl.pathname = "/fotolivro";
+    return withMatheusHeaders(redirect(redirectUrl.toString(), 308));
+  }
+
   const assetUrl = new URL(request.url);
   assetUrl.pathname =
     url.pathname === "/" || url.pathname === "/index.html"
       ? `${MATHEUS_ASSET_PREFIX}/`
+      : url.pathname === "/fotolivro"
+        ? `${MATHEUS_ASSET_PREFIX}/fotolivro.html`
       : `${MATHEUS_ASSET_PREFIX}${url.pathname}`;
 
   const assetRequest = new Request(assetUrl.toString(), {

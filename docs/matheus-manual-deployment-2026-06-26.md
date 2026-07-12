@@ -197,9 +197,9 @@ public/matheus/html_preview_assets/
 public/matheus/magazine_assets/
 ```
 
-Do not replace `public/matheus/index.html` during this generated-content refresh. It is the
-hand-authored photobook edition and must be updated separately when its design or chapter composition
-changes.
+Do not replace `public/matheus/index.html` or `public/matheus/fotolivro.html` during this
+generated-content refresh. They are the hand-authored selector and photobook edition and must be
+updated separately when their design or chapter composition changes.
 
 3. Run:
 
@@ -229,9 +229,9 @@ valid signed-cookie session.
 `wrangler.toml` uses `run_worker_first = true`; this is required because selective path patterns cannot
 gate unknown or newly added paths on only one hostname.
 
-The `/` route is now the hand-authored photography-book edition. The former style selector is gone;
-`/livro/` and `/revista/` remain unchanged as alternate editions linked from the colophon.
+The `/` route is the protected edition selector. It offers the unchanged generated editions at
+`/livro/` and `/revista/`, plus the hand-authored photography-book edition at `/fotolivro`.
 
 For future source refreshes, Update Procedure step 2 replaces only the generated livro, revista, and
-their source asset folders. It no longer replaces `public/matheus/index.html`, which must remain the
-hand-authored photobook page.
+their source asset folders. It must not replace the hand-authored selector at
+`public/matheus/index.html` or the photobook at `public/matheus/fotolivro.html`.

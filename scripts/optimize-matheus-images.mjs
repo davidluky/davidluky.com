@@ -1,5 +1,5 @@
 // One-time generator for responsive AVIF/WebP derivatives of the Matheus photos.
-// Output naming (<basename>-<width>.<ext>) is a contract with public/matheus/index.html.
+// Output naming (<basename>-<width>.<ext>) is a contract with public/matheus/fotolivro.html.
 import { mkdirSync, readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";

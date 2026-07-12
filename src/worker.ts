@@ -1,3 +1,13 @@
+import {
+  SESSION_COOKIE_NAME,
+  SESSION_DURATION_MS,
+  parseCookies,
+  safeReturnPath,
+  signSession,
+  verifyPassword,
+  verifySession,
+} from "./matheus-gate";
+
 const DEFAULT_EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion";
 const EBAY_PRODUCTION_API = "https://api.ebay.com";
 const EBAY_SANDBOX_API = "https://api.sandbox.ebay.com";
@@ -9,11 +19,14 @@ const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
 const MATHEUS_HOSTS = new Set([
   "matheus.davidluky.com",
   "manual-matheus.davidluky.com",
+  "matheus.localhost",
 ]);
 const MATHEUS_ASSET_PREFIX = "/matheus";
 
 interface Env {
   ASSETS: { fetch: typeof fetch };
+  MATHEUS_PASSWORD?: string;
+  MATHEUS_SESSION_SECRET?: string;
   EBAY_VERIFICATION_TOKEN?: string;
   EBAY_ENDPOINT_URL?: string;
   EBAY_CLIENT_ID?: string;
@@ -329,11 +342,103 @@ async function handleEbayDeletion(request: Request, env: Env): Promise<Response>
   });
 }
 
+const GATE_OPEN_PATHS = new Set(["/entrar", "/entrar/", "/entrar/index.html"]);
+const GATE_OPEN_PREFIXES = ["/gate_assets/"];
+const MATHEUS_CACHE_CONTROL = "private, max-age=600";
+const MATHEUS_NO_STORE = "private, no-store";
+
+function redirect(location: string, status: number, extraHeaders?: Record<string, string>): Response {
+  return new Response(null, { status, headers: { location, ...extraHeaders } });
+}
+
+function withMatheusHeaders(
+  response: Response,
+  cacheControl = MATHEUS_CACHE_CONTROL,
+): Response {
+  const headers = new Headers(response.headers);
+  headers.set("x-robots-tag", "noindex, nofollow");
+  headers.set("cache-control", cacheControl);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+async function handleMatheusLogin(request: Request, env: Env, url: URL): Promise<Response> {
+  const voltar = safeReturnPath(url.searchParams.get("voltar"));
+  const form = await request.formData().catch(() => null);
+  const senha = form?.get("senha");
+
+  if (typeof senha === "string" && (await verifyPassword(env.MATHEUS_PASSWORD as string, senha))) {
+    const expiresAtMs = Date.now() + SESSION_DURATION_MS;
+    const cookie = [
+      `${SESSION_COOKIE_NAME}=${await signSession(env.MATHEUS_SESSION_SECRET as string, expiresAtMs)}`,
+      `Max-Age=${Math.floor(SESSION_DURATION_MS / 1000)}`,
+      "Path=/",
+      "HttpOnly",
+      "Secure",
+      "SameSite=Lax",
+    ].join("; ");
+    return withMatheusHeaders(
+      redirect(voltar, 303, { "set-cookie": cookie }),
+      MATHEUS_NO_STORE,
+    );
+  }
+
+  return withMatheusHeaders(
+    redirect(`/entrar/?erro=1&voltar=${encodeURIComponent(voltar)}`, 303),
+    MATHEUS_NO_STORE,
+  );
+}
+
 async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<Response> {
+  if (!env.MATHEUS_PASSWORD || !env.MATHEUS_SESSION_SECRET) {
+    // Fail closed: never serve the manual ungated because secrets are missing.
+    return withMatheusHeaders(
+      new Response("Acesso temporariamente indisponivel.", {
+        status: 503,
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      }),
+      MATHEUS_NO_STORE,
+    );
+  }
+
+  if (request.method === "POST" && GATE_OPEN_PATHS.has(url.pathname)) {
+    return handleMatheusLogin(request, env, url);
+  }
+
+  const cookies = parseCookies(request.headers.get("cookie"));
+  const authenticated = await verifySession(
+    env.MATHEUS_SESSION_SECRET,
+    cookies.get(SESSION_COOKIE_NAME),
+    Date.now(),
+  );
+  const isOpenPath =
+    GATE_OPEN_PATHS.has(url.pathname) ||
+    GATE_OPEN_PREFIXES.some((prefix) => url.pathname.startsWith(prefix));
+
+  if (!authenticated && !isOpenPath) {
+    const login = new URL(request.url);
+    login.pathname = "/entrar/";
+    login.search =
+      url.pathname === "/" || url.pathname === "/index.html"
+        ? ""
+        : `?voltar=${encodeURIComponent(url.pathname)}`;
+    return withMatheusHeaders(redirect(login.toString(), 302), MATHEUS_NO_STORE);
+  }
+
+  if (authenticated && GATE_OPEN_PATHS.has(url.pathname)) {
+    const home = new URL(request.url);
+    home.pathname = "/";
+    home.search = "";
+    return withMatheusHeaders(redirect(home.toString(), 302), MATHEUS_NO_STORE);
+  }
+
   if (url.pathname === "/livro" || url.pathname === "/revista") {
     const redirectUrl = new URL(request.url);
     redirectUrl.pathname = `${url.pathname}/`;
-    return Response.redirect(redirectUrl.toString(), 308);
+    return withMatheusHeaders(redirect(redirectUrl.toString(), 308));
   }
 
   const assetUrl = new URL(request.url);
@@ -349,16 +454,17 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
   const response = await env.ASSETS.fetch(assetRequest);
 
   if (response.status !== 404 || url.pathname === "/404.html") {
-    return response;
+    return withMatheusHeaders(response);
   }
 
   const notFoundUrl = new URL(request.url);
   notFoundUrl.pathname = `${MATHEUS_ASSET_PREFIX}/404.html`;
-  const notFound = await env.ASSETS.fetch(new Request(notFoundUrl.toString(), { headers: request.headers }));
-  return new Response(notFound.body, {
-    status: 404,
-    headers: notFound.headers,
-  });
+  const notFound = await env.ASSETS.fetch(
+    new Request(notFoundUrl.toString(), { headers: request.headers }),
+  );
+  return withMatheusHeaders(
+    new Response(notFound.body, { status: 404, headers: notFound.headers }),
+  );
 }
 
 export default {
@@ -367,6 +473,15 @@ export default {
 
     if (MATHEUS_HOSTS.has(url.hostname)) {
       return handleMatheusSite(request, env, url);
+    }
+
+    if (url.pathname === "/matheus" || url.pathname.startsWith("/matheus/")) {
+      const target = new URL(request.url);
+      target.protocol = "https:";
+      target.hostname = "matheus.davidluky.com";
+      target.port = "";
+      target.pathname = url.pathname.slice("/matheus".length) || "/";
+      return redirect(target.toString(), 301);
     }
 
     if (url.pathname === "/ebay/deletion") {

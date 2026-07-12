@@ -24,5 +24,12 @@ run_worker_first = [
   "/revista",
   "/revista/*",
   "/html_preview_assets/*",
-  "/magazine_assets/*"
+  "/magazine_assets/*",
+  "/404.html",
+  "/matheus",
+  "/matheus/*",
+  "/entrar",
+  "/entrar/*",
+  "/gate_assets/*",
+  "/book_assets/*"
 ]

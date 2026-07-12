@@ -445,8 +445,8 @@ it. After rotation, verify binding names and authentication without printing val
 - The gate intentionally uses one shared password. It has no per-user identity/revocation, application
   rate limiter, or logout route. Clear the host's site data for local logout; rotate the session secret
   only when global revocation is required.
-- Optional Task 10 remains separate; the portfolio screenshot can be refreshed to show the final
-  three-card selector.
+- The 2026-07-12 Task 10 pass refreshed the three-card portfolio screenshot and completed the five
+  sibling-site audits. Future cross-site work should remain separately time-boxed per repository.
 - The historical implementation plan's unchecked boxes are not a reliable completion ledger. Use Git,
   tests, the retrospective, and this deck for current state.
 - The image generator needs explicit stale-output and duplicate-basename review on future source

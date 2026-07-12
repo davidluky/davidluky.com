@@ -14,9 +14,9 @@
 
 Tasks 1–8 and Task 9's automated, HTTP, and deployment gates were completed. The planned interactive
 desktop/mobile/lightbox browser pass was blocked by the available browser environment and remains a
-documented visual-QA gap. Optional Task 10 was deferred. The historical checkboxes below were not
-maintained while the task commits landed; do not interpret unchecked boxes as instructions to re-run
-the plan.
+documented visual-QA gap. The optional Task 10 cross-site audit was completed in a separate time-boxed
+pass later on 2026-07-12. The historical Task 1–9 checkboxes below were not maintained while the task
+commits landed; do not interpret those unchecked boxes as instructions to re-run the plan.
 
 Two post-plan corrections define current behavior:
 
@@ -28,6 +28,25 @@ Two post-plan corrections define current behavior:
 
 Use `docs/FLIGHT-DECK.md` for current operating procedure and `docs/RETRO-2026-07-12.md` for the
 implementation learnings and deviations.
+
+Task 10 outcome:
+
+- `davidluky.com`: refreshed the 1200×750 WebP Matheus project preview to show all three editions
+  (`35d36dc`).
+- `alisson.davidluky.com`: install, full verification, metadata, fragment links, and 375px live layout
+  passed; no change required.
+- `tibia-services`: full quality/package checks, internal links, live routes, metadata, and 375px live
+  layout passed; no change required.
+- `franks-stories`: added route-specific story metadata and mobile card/reader improvements
+  (`fef5004`).
+- `the-room-web`: lint, types, 890 tests, build, and 375px live login passed. A generated path change
+  depended on uncommitted sibling-native tournament work, so it was not committed alone; the
+  coordinated follow-up and non-blocking warnings are logged in `docs/task-10-audit-2026-07-12.md`
+  (`4781ea1`).
+- `matematica-davidluky`: 320-page build, links, metadata, and 375px live layout passed; added the
+  missing `/us` landing page to the sitemap (`5165558`).
+
+All Task 10 commits remain local pending explicit per-repository production-push approval.
 
 ## Global Constraints
 
@@ -1637,13 +1656,13 @@ Then log in via a real browser and click through the book.
 
 Time-box: at most ~30 minutes per site. Skip anything that turns into a project; log it in that repo's docs instead.
 
-- [ ] **davidluky.com** — retake the Matheus card screenshot: with the photobook deployed, capture the login cover page (it is public), save as `public/projects/matheus-manual-pescados.webp` (same name/format as current), rebuild, verify, commit.
-- [ ] **alisson.davidluky.com** (Astro) — `npm install && npm run build`; fix any build warnings; check `<title>`/description/OG tags on the home page; verify mobile nav at 375px.
-- [ ] **tibia-services** (Next.js) — `npm install && npm run build`; check for broken internal links and missing OG/meta on the main pages.
-- [ ] **franks-stories** (Next.js) — `npm install && npm run build`; same meta/link check; confirm the story reader renders on mobile width.
-- [ ] **the-room-web** (Vite/React) — `npm install && npm run test && npm run build`; fix only trivial breakage.
-- [ ] **matematica-davidluky** — `npm install && npm run build` (or open the static entry point if there is no build); check links and meta.
-- [ ] For each site: if anything nontrivial surfaces, write it down in that repo (README or docs/) rather than fixing it now.
+- [x] **davidluky.com** — refresh the Matheus card screenshot from the final authenticated three-edition selector (an intentional deviation from the original login-cover capture), save as `public/projects/matheus-manual-pescados.webp` in the same 1200×750 WebP format, rebuild, verify, commit.
+- [x] **alisson.davidluky.com** (Astro) — `npm install && npm run build`; fix any build warnings; check `<title>`/description/OG tags on the home page; verify mobile nav at 375px.
+- [x] **tibia-services** (Next.js) — `npm install && npm run build`; check for broken internal links and missing OG/meta on the main pages.
+- [x] **franks-stories** (Next.js) — `npm install && npm run build`; same meta/link check; confirm the story reader renders on mobile width.
+- [x] **the-room-web** (Vite/React) — `npm install && npm run test && npm run build`; fix only trivial breakage.
+- [x] **matematica-davidluky** — `npm install && npm run build` (or open the static entry point if there is no build); check links and meta.
+- [x] For each site: if anything nontrivial surfaces, write it down in that repo (README or docs/) rather than fixing it now.
 
 ---
 

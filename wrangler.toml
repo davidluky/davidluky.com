@@ -16,20 +16,5 @@ EBAY_ENVIRONMENT = "production"
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "404-page"
-run_worker_first = [
-  "/",
-  "/index.html",
-  "/livro",
-  "/livro/*",
-  "/revista",
-  "/revista/*",
-  "/html_preview_assets/*",
-  "/magazine_assets/*",
-  "/404.html",
-  "/matheus",
-  "/matheus/*",
-  "/entrar",
-  "/entrar/*",
-  "/gate_assets/*",
-  "/book_assets/*"
-]
+# The password gate is hostname-aware, so every asset request must reach it.
+run_worker_first = true

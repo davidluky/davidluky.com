@@ -100,21 +100,12 @@ The important Cloudflare setting is:
 
 ```toml
 [assets]
-run_worker_first = [
-  "/",
-  "/index.html",
-  "/livro",
-  "/livro/*",
-  "/revista",
-  "/revista/*",
-  "/html_preview_assets/*",
-  "/magazine_assets/*"
-]
+run_worker_first = true
 ```
 
-Without this, Cloudflare Workers Static Assets can serve the main `davidluky.com` homepage for `/` before the Worker script gets a chance to route the Matheus host. The `/html_preview_assets/*` entry is needed because the manual HTML references images with relative paths from the subdomain root.
-The `/magazine_assets/*`, `/livro/*`, and `/revista/*` entries are needed for the style selector and
-the magazine layout.
+The Worker must see every request so its hostname-aware gate can protect both known assets and unknown
+or newly added paths on the Matheus host. Normal `davidluky.com` requests still pass through to the
+Assets binding after the Worker checks its Matheus redirect and eBay routes.
 
 ## davidluky.com Catalog Entry
 
@@ -224,7 +215,7 @@ pnpm dlx wrangler@4 deploy --dry-run
 
 ## Notes
 
-During rollout, `matheus.davidluky.com/` initially returned the main homepage because Static Assets handled `/index.html` before the Worker script. The fix is `run_worker_first = ["/", "/index.html"]`.
+During rollout, `matheus.davidluky.com/` initially returned the main homepage because Static Assets handled `/index.html` before the Worker script. The current hostname-aware gate uses `run_worker_first = true` so no Matheus-host path can bypass the Worker.
 
 The temporary/fallback URL `manual-matheus.davidluky.com/matheus/` worked while diagnosing this behavior and can remain useful as a backup check, but the public URL should be `https://matheus.davidluky.com/`.
 
@@ -234,6 +225,9 @@ The Matheus site is now protected server-side by the Cloudflare Worker. Session 
 primitives live in `src/matheus-gate.ts`; production uses the Worker secrets `MATHEUS_PASSWORD` and
 `MATHEUS_SESSION_SECRET`. The Worker withholds the site and its image assets until the visitor has a
 valid signed-cookie session.
+
+`wrangler.toml` uses `run_worker_first = true`; this is required because selective path patterns cannot
+gate unknown or newly added paths on only one hostname.
 
 The `/` route is now the hand-authored photography-book edition. The former style selector is gone;
 `/livro/` and `/revista/` remain unchanged as alternate editions linked from the colophon.

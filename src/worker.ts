@@ -452,19 +452,9 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
     method: request.method,
   });
   const response = await env.ASSETS.fetch(assetRequest);
-
-  if (response.status !== 404 || url.pathname === "/404.html") {
-    return withMatheusHeaders(response);
-  }
-
-  const notFoundUrl = new URL(request.url);
-  notFoundUrl.pathname = `${MATHEUS_ASSET_PREFIX}/404.html`;
-  const notFound = await env.ASSETS.fetch(
-    new Request(notFoundUrl.toString(), { headers: request.headers }),
-  );
-  return withMatheusHeaders(
-    new Response(notFound.body, { status: 404, headers: notFound.headers }),
-  );
+  // With `not_found_handling = "404-page"`, Assets already returns the nearest
+  // nested 404 page. Preserve that response instead of fetching /404.html again.
+  return withMatheusHeaders(response);
 }
 
 export default {

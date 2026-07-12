@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
 import worker from "../src/worker";
 import { SESSION_COOKIE_NAME, signSession } from "../src/matheus-gate";
 
@@ -23,6 +24,11 @@ async function authCookie(): Promise<string> {
 }
 
 describe("matheus gate", () => {
+  it("routes every asset path through the hostname-aware Worker", () => {
+    const wrangler = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
+    expect(wrangler).toMatch(/^run_worker_first\s*=\s*true$/m);
+  });
+
   it("redirects unauthenticated visitors to /entrar/ without caching", async () => {
     const response = await worker.fetch(
       new Request("https://matheus.davidluky.com/"),
@@ -80,6 +86,31 @@ describe("matheus gate", () => {
     expect(await response.text()).toBe("asset:/matheus/");
     expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
     expect(response.headers.get("cache-control")).toBe("private, max-age=600");
+  });
+
+  it("preserves the nearest nested 404 returned by Assets", async () => {
+    let assetFetches = 0;
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/nao-existe", {
+        headers: { cookie: await authCookie() },
+      }),
+      makeEnv({
+        ASSETS: {
+          fetch: async (request: Request) => {
+            assetFetches += 1;
+            const path = new URL(request.url).pathname;
+            if (path === "/matheus/nao-existe") {
+              return new Response("matheus-404", { status: 404 });
+            }
+            throw new Error(`Unexpected asset request: ${path}`);
+          },
+        },
+      }),
+    );
+    expect(response.status).toBe(404);
+    expect(await response.text()).toBe("matheus-404");
+    expect(assetFetches).toBe(1);
+    expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
   });
 
   it("gates the local development hostname", async () => {

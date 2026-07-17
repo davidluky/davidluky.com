@@ -2,6 +2,67 @@
 
 Chronological log of the portfolio quality pass. Newest session appended at top of each section.
 
+## 2026-07-12 portfolio audit
+
+### Context and protection
+
+- Started clean on `main` at `64c5eaa`, three commits ahead of `origin/main`.
+- Provider-native deployment safeguards later advanced the branch to
+  `9a60ce8` while this audited batch remained preserved in the worktree.
+- Audited the Astro/static site, Cloudflare Worker, Matheus gate, eBay deletion
+  callback, CI/package gates, and the cross-project DigiPets privacy page.
+- Preserved the generated `public/matheus/livro/` and
+  `public/matheus/revista/` trees exactly. No secret, external account,
+  provider callback, commit, push, or deployment was used.
+
+### Findings and changes
+
+- eBay POST and Matheus login bodies were unbounded. Added 256 KiB and 16 KiB
+  streamed limits respectively, including early declared-length rejection.
+- eBay OAuth/public-key fetches had no deadline and followed redirects. Added a
+  ten-second timeout and redirect rejection.
+- OAuth/public-key caches were not scoped to environment/API identity. Added
+  environment/client and API-host cache keys.
+- Unknown digest values silently fell back to SHA-1. Verification now accepts
+  only supported SHA-1/SHA-256 metadata, requires matching key/header digests,
+  and accepts documented ECDSA algorithm naming without loose fallback.
+- Content-type checks used substring/prefix matching. They now compare the
+  parsed media type exactly, and eBay JSON responses are explicitly no-store.
+- The eBay POST path had no full signature regression. Added a generated P-256
+  key/signature fixture: the original raw body returns `204`; a tampered body
+  with the same signature returns `412`. Added size/media/digest/method tests.
+- The public DigiPets policy still claimed data was used only for game progress,
+  despite the shipped Friends/visits model. Updated EN/PT-BR collection, use,
+  Firebase, and child-directed wording and locked the social disclosure with a
+  regression test.
+
+### Verification
+
+- Baseline `npm run verify`: 37 tests, seven pages, validator and audit passed.
+- Post-change Astro diagnostics: zero errors/warnings/hints.
+- Five Vitest files / 47 tests pass.
+- Seven-page production build and `npm run validate:site` pass.
+- `npm ls --all`, full audit, and production-only audit pass with zero
+  vulnerabilities.
+- Wrangler 4.110.0 dry-run compiled the Worker and enumerated 961 static assets;
+  no deployment occurred and the temporary output was removed.
+- A focused local browser pass rendered the updated DigiPets disclosure in
+  English and PT-BR and found no console warnings or errors.
+- A 2026-07-17 production binding-name check found both Matheus bindings but
+  none of the three required eBay bindings. Values were not accessed; restoring
+  and live-testing those bindings remains an owner/provider action.
+- Generated Matheus edition comparison and `git diff --check` pass (line-ending
+  notices only).
+
+### Remaining boundary
+
+- Source changes are not live until an authorized push/deploy.
+- Reconcile the corrected policy with Google Play Data safety and run an
+  authorized eBay test notification after deployment.
+- The shared Matheus gate still intentionally lacks an application rate limiter,
+  logout, per-user identity, and per-user revocation. Treat provider-side rate
+  limiting as an owner/account decision.
+
 ## 2026-06-02 session
 
 ### Context

@@ -21,16 +21,19 @@ npm run verify         # Run all of the above in order
 
 ## Deploy
 
-```bash
-npm run build
-npx wrangler deploy
+GitHub stores the source, but repository Actions is disabled. Cloudflare Workers
+Builds is the normal production path from `main`; see
+`docs/LOCAL-DEPLOYMENT.md` for the provider setup and guarded fallback.
+
+Verify a clean candidate locally without deploying:
+
+```powershell
+.\scripts\deploy-production.ps1 -CheckOnly
 ```
 
-GitHub Actions runs the same quality path on pull requests and pushes to `main`; deploy runs only after the quality job passes on `main`.
-
-Required GitHub secret:
-
-- `CLOUDFLARE_API_TOKEN` — Cloudflare API token with Worker deploy permissions.
+After the exact commit is pushed and explicitly approved, use
+`-ApproveProduction` only as the documented manual recovery path. Routine
+pushes deploy through Cloudflare's own build infrastructure.
 
 Required Cloudflare Worker secrets:
 

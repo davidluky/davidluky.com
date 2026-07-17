@@ -209,6 +209,35 @@ describe("matheus gate", () => {
     expect(response.headers.get("cache-control")).toBe("private, no-store");
   });
 
+  it("rejects unsupported login form types without parsing them", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ senha: PASSWORD }),
+      }),
+      makeEnv(),
+    );
+    expect(response.status).toBe(415);
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  it("rejects oversized login forms before parsing them", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/", {
+        method: "POST",
+        headers: {
+          "content-length": String(16 * 1024 + 1),
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: "senha=x",
+      }),
+      makeEnv(),
+    );
+    expect(response.status).toBe(413);
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
   it.each([
     { MATHEUS_PASSWORD: undefined, MATHEUS_SESSION_SECRET: undefined },
     { MATHEUS_PASSWORD: undefined },

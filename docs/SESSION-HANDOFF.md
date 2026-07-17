@@ -1,77 +1,109 @@
-# Session Handoff
+# Session handoff
 
-Last updated: 2026-07-05
+Last updated: 2026-07-17
 
-## What Was Done
+## Current position
 
-- Added real optimized WebP project previews to the portfolio cards and homepage intro screenshot for The Room Web.
-- Created `src/components/ProjectImage.astro` for consistent image/fallback rendering.
-- Extended `src/data/projects.ts` with optional `image`, `imageAlt`, and `imageAltPt` fields.
-- Captured/processed approved imagery for The Room, The Room Web, Matemática Elementar, Tibia Services, DigiPets, Megaman X, CCB Hinos Rock Suno, Alisson David Frangullys, Manual de Pescados, and Frank's Stories.
-- Left projects without a trustworthy source image on the fallback visual; the Game Library dashboard capture is documented as blocked in the campaign notes.
-- Ran a conservative maintenance heartbeat scoped to `davidluky.com` only.
-- Reviewed the Astro + Tailwind site structure, Cloudflare Worker entrypoint, docs, CI workflow, package scripts, custom validator, and generated-artifact conventions.
-- Confirmed the repo starts clean on `main` tracking `origin/main`.
-- Installed locked dependencies with `npm ci` for local verification.
-- Ran the full project quality gate with optional external gaming data env vars unset so the build stayed local-only.
-- Checked dependency freshness with `npm outdated --long`; routine semver-allowed updates are available for Astro/Tailwind, and TypeScript has a newer major, but there is no audit pressure.
-- Updated this handoff with the current maintenance state and retro.
-- Audited every public route (`/`, `/projects`, `/gaming`, `/about`, `/privacy/digipets`) against live HTTP responses, public Steam/Tibia evidence, and sibling project ledgers.
-- Refreshed stale portfolio/profile facts: The Room game count, The Room Web route-count wording, TCG test count, Steam profile year/games/Dota/friends, Tibia level/achievement points, and the DigiPets privacy-policy no-analytics/no-crash-SDK claim.
-- Added a `/gaming` data freshness note for fallback snapshot builds and recorded FR-024 for public stat drift.
+- Repository: `davidluky.com`, branch `main`. The audit began at `64c5eaa`;
+  provider-native deployment safeguards were subsequently committed at
+  `9a60ce8` while this batch remained in the worktree.
+- This portfolio-audit release candidate has not been pushed or deployed and
+  did not change Cloudflare/eBay/Google Play or use production secrets.
+- The generated `public/matheus/livro/` and `public/matheus/revista/` trees are
+  unchanged from the starting head.
 
-## In Progress
+## Local improvements in this batch
 
-- July 2026 visual campaign is in progress on branch `melhorias-2026-07`; finish visual verification, docs polish, and deploy after `npm run verify` stays green.
+- Bounded eBay notification bodies at 256 KiB and Matheus login forms at 16
+  KiB, checking both declared and streamed sizes.
+- Added ten-second timeouts and redirect rejection to eBay OAuth/public-key
+  fetches.
+- Scoped OAuth and public-key caches by environment/client or API host so
+  sandbox/production state cannot collide inside one Worker instance.
+- Strictly validated supported ECDSA algorithm/digest metadata instead of
+  treating every unknown digest as SHA-1.
+- Validated exact request media types and added `Cache-Control: no-store` to
+  eBay JSON responses.
+- Added a real generated P-256 signature test. It proves a valid raw payload
+  returns `204` and the same signature over a tampered payload returns `412`.
+- Added callback tests for body limits, content types, supported methods, and
+  digest rejection, plus login tests for form type and size.
+- Updated the EN/PT-BR DigiPets privacy disclosure for the already-shipped
+  Friends/visits feature: friend code, active-pet summary, relationships,
+  requests, visits, house summary, and kudos. A regression test prevents the
+  obsolete progress-only claim from returning.
 
-## Current State
+## Verification
 
-- Branch `melhorias-2026-07` contains the project-preview work in progress.
-- New published image assets live under `public/projects/` and should stay WebP, <= 200 KB, with EN/PT alt text in `projects.ts`.
-- `npm ci`: succeeded; 389 packages installed, 0 vulnerabilities. `prebuild-install@7.1.3` emitted an upstream deprecation warning through the locked dependency tree.
-- `npm run verify`: passed.
-  - `npm run check`: 20 files checked, 0 errors, 0 warnings, 0 hints.
-  - `npm run build`: 6 pages built successfully.
-  - `npm run validate:site`: passed.
-  - `npm run audit:high`: 0 vulnerabilities.
-- `npm outdated --long`: reports non-security updates:
-  - `@tailwindcss/vite` 4.2.4 -> 4.3.0
-  - `astro` 6.2.1 -> 6.3.1
-  - `tailwindcss` 4.2.4 -> 4.3.0
-  - `typescript` 5.9.3 -> 6.0.3 latest, but 5.9.3 remains the semver-wanted version.
-- Generated local artifacts from verification are expected to be removed before commit: `.astro/`, `dist/`, and `node_modules/`.
-- 2026-05-14 live URL status checks returned HTTP 200 for `davidluky.com` public pages plus `play.davidluky.com`, `matematica.davidluky.com`, `tibia.davidluky.com`, and `alisson.davidluky.com`.
-- 2026-05-14 public-source checks used Steam public profile/XML and TibiaData v4. Steam owned-games/library totals that require private API access are labeled as snapshot data when fallback is active.
-- 2026-05-14 `npm run verify`: passed after the information-audit edits.
-  - `npm run check`: 20 files checked, 0 errors, 0 warnings, 0 hints.
-  - `npm run build`: 6 pages built successfully.
-  - `npm run validate:site`: passed.
-  - `npm run audit:high`: 0 vulnerabilities.
+- Runtime used locally: Node 26.2.0 / npm 11.13.0; the package supports Node
+  24 and newer and CI uses Node 24.
+- Baseline `npm run verify`: passed with 37 tests, seven pages, site validation,
+  and zero audit vulnerabilities.
+- Post-change focused gate: Astro diagnostics clean; five Vitest files / 47
+  tests pass; seven-page build and site validator pass.
+- `npm ls --all`: valid dependency tree. Full and production-only npm audits:
+  zero vulnerabilities.
+- `npm outdated`: only separate majors (Astro 7 and TypeScript 7); do not mix
+  them into this Worker/privacy batch.
+- Wrangler 4.110.0 deployment dry-run passed, reading 961 assets and compiling
+  the Worker without deploying it. The generated dry-run directory was removed.
+- A production binding-name check on 2026-07-17 listed
+  `MATHEUS_PASSWORD` and `MATHEUS_SESSION_SECRET`, but not the three required
+  eBay bindings. No secret values were read or printed.
+- Focused local browser QA rendered the DigiPets policy in English and PT-BR,
+  confirmed the Friends disclosure and July 12 effective date in both states,
+  and found no browser console warnings or errors.
+- `git diff --check`: passes with line-ending notices only.
 
-## What's Next
+Run `npm run verify` once more after any documentation or code change and
+before any future commit.
 
-1. Keep watching hardcoded portfolio stats in `src/data/projects.ts` and `src/data/stats.ts`; FR-023 and FR-024 document the drift risk.
-2. Consider a future small validator that compares The Room game count and TCG test-count evidence against sibling project files.
-3. Consider a separate dependency refresh PR/commit for routine Astro and Tailwind semver updates, followed by the full `npm run verify` path and a quick visual smoke test.
+## Release disposition
 
-## Decisions Made
+Local source is verified, but production is owner-gated. The live Worker and
+privacy page do not contain these changes until an authorized push completes a
+Cloudflare Workers Build for the exact source commit.
 
-- Exact route counts should be phrased defensively unless a source file generates the claim. The Room Web now says "40+ route modules."
-- Build-time gaming data may use a fallback snapshot, but the page must label that source clearly.
-- Dependency versions were not updated in this pass because available updates were routine and unrelated to a failing check or vulnerability.
+High-priority production follow-up:
 
-## Retro
+1. Restore `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, and
+   `EBAY_CLIENT_SECRET` through an authorized provider flow without printing
+   values. Until then, the eBay challenge/callback cannot be claimed live.
+2. Review the complete diff and confirm the revised DigiPets disclosure matches
+   the current Google Play Data safety answers.
+3. Run `npm ci`, `npm run verify`, and `npx wrangler deploy --dry-run` on the
+   exact intended commit.
+4. With explicit deployment approval, push `main` and monitor the Cloudflare
+   Workers Build verification and deploy for that exact SHA. Keep GitHub
+   Actions disabled.
+5. Smoke the public site, DigiPets privacy page, Matheus guest/login/protected
+   routes, normal main-site pass-through, and eBay challenge endpoint without
+   printing any secrets or cookies.
+6. Use eBay's authorized test-notification tool to prove a real provider-signed
+   callback. The generated local fixture is strong offline evidence, not live
+   provider evidence.
 
-**What went well:**
-- The repo's `verify` script gives a useful single-command health check: type diagnostics, static build, custom site validation, and high-severity audit all passed.
-- The custom validator still covers project-specific risks that generic tooling would miss, including mojibake, missing JSON-LD, CSP directives, internal links, and hardcoded eBay token regressions.
-- Live/public checks caught real drift quickly once the site was compared against Steam, TibiaData, and sibling project docs.
+## Remaining decisions and debt
 
-**What could be better:**
-- There is no lint script. Astro check covers TypeScript/Astro diagnostics, but style and broader static analysis are currently limited to review plus the custom validator.
-- Dependency freshness is manual. `npm outdated` found routine updates that are safe candidates for a deliberate follow-up, but this pass did not roll them into the lockfile.
-- There is still no automated stat-sync contract between sibling projects and this site's marketing copy.
+- The shared Matheus password gate still has no application-level rate limiter,
+  logout route, per-user identity, or per-user revocation. Cloudflare rate
+  limiting is the preferred owner/account decision before adding stateful code.
+- Changing `MATHEUS_PASSWORD` does not revoke existing sessions; rotate
+  `MATHEUS_SESSION_SECRET` for global revocation.
+- Astro 7 and TypeScript 7 are separate major migrations requiring their own
+  visual/build review.
+- Static portfolio statistics still depend on manual/sibling-project freshness.
+- There is no lint/format gate beyond Astro diagnostics, tests, and the custom
+  site validator.
 
-**Risks:**
-- Build-time gaming data intentionally falls back when `GAME_LIBRARY_DB`, `STEAM_API_KEY`, and `STEAM_ID` are absent. That keeps local builds safe, but fallback numbers can drift.
-- Project stats embedded in descriptions can become stale again as sibling projects evolve.
+## Safety boundaries
+
+- Never print, copy, or commit real Matheus/eBay secrets, login bodies, cookies,
+  or ignored local secret files.
+- A push to `main` is a production deployment.
+- Keep `[assets] run_worker_first = true`; it is part of the Matheus access
+  boundary.
+- Preserve `public/matheus/livro/` and `public/matheus/revista/` during unrelated
+  changes.
+- Do not call the eBay tester, mutate Cloudflare bindings, or edit Google Play
+  declarations without an authorized owner session.

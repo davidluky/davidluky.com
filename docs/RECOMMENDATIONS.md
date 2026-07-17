@@ -1,5 +1,58 @@
 # Recommendations
 
+## 2026-07-12 portfolio audit
+
+### P0 — owner-gated before the next DigiPets release
+
+1. **Publish the corrected DigiPets privacy disclosure and reconcile Play Data
+   safety.**
+   - The live policy predates Friends and visits. Source now discloses friend
+     codes, active-pet summaries, relationships, requests, visits, house
+     summaries, and kudos in EN/PT-BR.
+   - Deployment and Play Console review require an authorized owner session;
+     neither occurred in this local audit.
+
+2. **Restore the three required eBay Worker secret bindings before claiming
+   that endpoint production-ready.**
+   - The 2026-07-17 binding-name check listed the two Matheus secrets but not
+     `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, or `EBAY_CLIENT_SECRET`.
+   - Set them through the authorized provider flow without printing values,
+     then run the eBay challenge and signed test-notification checks.
+
+### P1
+
+1. **Deploy and live-test the Worker hardening through Cloudflare Workers Builds.**
+   - Local code now bounds callback/login bodies, times out eBay dependencies,
+     isolates caches, validates media/algorithm/digest metadata, and has a real
+     generated signature/tamper test.
+   - After an approved push, verify the exact source SHA in Cloudflare, public
+     routes, Matheus guest/auth behavior, and eBay challenge behavior.
+
+2. **Run an authorized eBay test notification.**
+   - The local test proves WebCrypto verification with a generated P-256 key and
+     raw payload, but provider credentials, public-key lookup, and delivery
+     remain unverified live.
+
+3. **Choose the Matheus brute-force/logout boundary.**
+   - The accepted shared-password design still has no application rate limiter,
+     logout route, per-user identity, or per-user revocation.
+   - Prefer a Cloudflare rate-limiting rule if the account supports it; retain
+     session-secret rotation as the documented global-revocation control.
+
+### P2
+
+1. **Keep Astro 7 and TypeScript 7 as separate major migrations.** The current
+   Astro 6 / TypeScript 5 line builds and audits cleanly; framework/toolchain
+   majors need their own browser and Worker review.
+2. **Add a focused lint/format gate.** Astro diagnostics and the custom validator
+   are strong project checks but do not replace general static analysis.
+3. **Automate sibling-project statistic freshness.** Portfolio counts and claims
+   still drift unless compared with their source projects.
+
+The older 2026-06-02 section below is historical. Its eBay-fixture and Node-pin
+recommendations are now closed: the generated signature suite exists and the
+package/CI use the Node 24+ line.
+
 ## 2026-06-02 session
 
 Prioritized follow-ups. P0 = do before next deploy; P1 = soon; P2 = nice-to-have.

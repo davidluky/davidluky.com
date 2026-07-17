@@ -2,7 +2,7 @@
 
 Evergreen operating checklist for changing and deploying the gated Matheus editions safely.
 
-Last updated: 2026-07-12
+Last updated: 2026-07-17
 
 ## Purpose
 
@@ -39,8 +39,8 @@ but two later decisions supersede their original assumptions:
 | Login | `/entrar/` |
 | Public login assets | `/gate_assets/*` only |
 | Worker config | `run_worker_first = true`, nested Assets `404` handling |
-| Tests | `matheus-gate`, `worker-matheus`, and `matheus-editions` suites |
-| Deploy path | Push to `main` → GitHub quality job → Cloudflare deploy job |
+| Tests | `matheus-gate`, `worker-matheus`, `matheus-editions`, `worker-ebay`, and `digipets-privacy` suites |
+| Deploy path | Push to `main` → Cloudflare Workers Build (`npm run verify`) → strict Wrangler deploy |
 
 ## Non-negotiable invariants
 
@@ -130,6 +130,8 @@ prove behavior with a login—not by printing or comparing plaintext.
 | `tests/matheus-gate.test.ts` | Pure gate/security primitives |
 | `tests/worker-matheus.test.ts` | Worker routes, config, headers, failures, and regressions |
 | `tests/matheus-editions.test.ts` | Selector targets and photobook structure |
+| `tests/worker-ebay.test.ts` | Signed eBay callback, body limits, media types, methods, and digest regressions |
+| `tests/digipets-privacy.test.ts` | EN/PT Friends-data disclosure and obsolete-copy regressions |
 
 ## Route and authentication matrix
 
@@ -186,6 +188,7 @@ Session operations:
 npx vitest run tests/matheus-gate.test.ts
 npx vitest run tests/worker-matheus.test.ts
 npx vitest run tests/matheus-editions.test.ts
+npx vitest run tests/worker-ebay.test.ts
 ```
 
 For Worker changes, always retain tests for:
@@ -197,7 +200,8 @@ For Worker changes, always retain tests for:
 - Nearest nested `404` preservation.
 - Main-host `/matheus` and `/matheus/*` redirects.
 - Main-site pass-through.
-- eBay regression behavior.
+- eBay regression behavior, including a generated valid ECDSA signature and a
+  tampered payload that must return `412`.
 
 ### 3. Protect the generated editions
 
@@ -337,13 +341,15 @@ changes after approval, re-run the gates and obtain fresh approval.
 ```powershell
 git push origin main
 $DeploySha = git rev-parse HEAD
-gh run list --commit $DeploySha --workflow "Check and Deploy" --limit 1 `
-  --json databaseId,headSha,status,conclusion,url
-gh run watch <run-id> --exit-status
+npx.cmd --yes wrangler@4.110.0 deployments list
 ```
 
-Confirm the returned `headSha` equals the explicitly approved `$DeploySha`. Do not bypass failed CI
-with a direct Wrangler deployment. Wait for both `quality` and `deploy` on that exact SHA.
+GitHub Actions stays disabled. Monitor the Cloudflare Workers Build for the
+explicitly approved `$DeploySha` and confirm the build ran `npm run verify`
+before the strict deploy. If Workers Builds is unavailable, follow
+`docs/LOCAL-DEPLOYMENT.md`: run the clean/synchronized `-CheckOnly` preflight,
+obtain approval for that exact commit, and only then use the guarded
+`-ApproveProduction` fallback. Never deploy an unpushed or dirty revision.
 
 ## Production smoke
 
@@ -445,14 +451,21 @@ it. After rotation, verify binding names and authentication without printing val
 - The gate intentionally uses one shared password. It has no per-user identity/revocation, application
   rate limiter, or logout route. Clear the host's site data for local logout; rotate the session secret
   only when global revocation is required.
+- Login and eBay request bodies are bounded in the Worker, and eBay OAuth/key
+  lookups have a ten-second timeout. Provider-side rate limiting and a real
+  eBay test notification remain production/account checks, not local proof.
+- The DigiPets privacy page must continue to disclose Friends codes, active-pet
+  summaries, relationships, requests, visits, house summaries, and kudos in EN
+  and PT-BR. Reconcile Google Play Data safety whenever that data model changes.
 - The 2026-07-12 Task 10 pass refreshed the three-card portfolio screenshot and completed the five
   sibling-site audits. Future cross-site work should remain separately time-boxed per repository.
 - The historical implementation plan's unchecked boxes are not a reliable completion ledger. Use Git,
   tests, the retrospective, and this deck for current state.
 - The image generator needs explicit stale-output and duplicate-basename review on future source
   refreshes.
-- GitHub Actions currently emits upstream Node runtime deprecation notices for some action versions.
-  They were non-blocking, but action upgrades should be handled in a focused maintenance change.
+- GitHub Actions is intentionally disabled. Recheck the Cloudflare Git
+  connection and Workers Build settings after provider/account changes; keep
+  the guarded local script as a recovery path, not a parallel default deploy.
 - Any future fourth edition requires an explicit selector/route decision, a new static structure test,
   and a full gate audit before deploy.
 
@@ -463,7 +476,7 @@ it. After rotation, verify binding names and authentication without printing val
 - Generated-edition invariants passed or an explicitly requested refresh was reviewed separately.
 - No secret or cookie appeared in source, diffs, commits, logs, screenshots, or chat.
 - Explicit production approval covered the exact final state.
-- Quality and deploy succeeded for the exact pushed SHA.
+- The Cloudflare verification build and deploy succeeded for the exact pushed SHA.
 - Guest and authenticated production smoke checks passed.
 - Main-site and eBay behavior remained intact.
 - Working tree is clean and synchronized with `origin/main`.

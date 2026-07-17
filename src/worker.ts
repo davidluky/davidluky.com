@@ -16,6 +16,10 @@ const EBAY_SANDBOX_OAUTH = "https://api.sandbox.ebay.com/identity/v1/oauth2/toke
 const EBAY_SCOPE = "https://api.ebay.com/oauth/api_scope";
 const PUBLIC_KEY_CACHE_TTL_MS = 60 * 60 * 1000;
 const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
+const EBAY_FETCH_TIMEOUT_MS = 10 * 1000;
+const MAX_EBAY_BODY_BYTES = 256 * 1024;
+const MAX_EBAY_CHALLENGE_LENGTH = 512;
+const MAX_MATHEUS_LOGIN_BODY_BYTES = 16 * 1024;
 const MATHEUS_HOSTS = new Set([
   "matheus.davidluky.com",
   "manual-matheus.davidluky.com",
@@ -66,7 +70,7 @@ interface EbayDeletionPayload {
   };
 }
 
-let cachedAccessToken: { token: string; expiresAt: number } | null = null;
+let cachedAccessToken: { cacheKey: string; token: string; expiresAt: number } | null = null;
 const publicKeyCache = new Map<string, { key: EbayPublicKey; expiresAt: number }>();
 
 function json(data: unknown, init?: ResponseInit): Response {
@@ -74,6 +78,7 @@ function json(data: unknown, init?: ResponseInit): Response {
     ...init,
     headers: {
       "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store",
       ...init?.headers,
     },
   });
@@ -130,8 +135,60 @@ function getEbayHosts(env: Env): { api: string; oauth: string } {
     : { api: EBAY_PRODUCTION_API, oauth: EBAY_PRODUCTION_OAUTH };
 }
 
+function ebayFetch(input: string, init?: RequestInit): Promise<Response> {
+  return fetch(input, {
+    ...init,
+    redirect: "error",
+    signal: AbortSignal.timeout(EBAY_FETCH_TIMEOUT_MS),
+  });
+}
+
+async function readRequestTextWithinLimit(
+  request: Request,
+  maxBytes: number,
+): Promise<{ ok: true; text: string } | { ok: false }> {
+  const contentLength = request.headers.get("content-length");
+  if (contentLength !== null) {
+    const declaredBytes = Number(contentLength);
+    if (Number.isFinite(declaredBytes) && declaredBytes > maxBytes) return { ok: false };
+  }
+
+  if (!request.body) return { ok: true, text: "" };
+
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      totalBytes += value.byteLength;
+      if (totalBytes > maxBytes) {
+        await reader.cancel();
+        return { ok: false };
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const body = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return { ok: true, text: new TextDecoder().decode(body) };
+}
+
 async function getAccessToken(env: Env): Promise<string> {
-  if (cachedAccessToken && cachedAccessToken.expiresAt > Date.now()) {
+  const cacheKey = `${env.EBAY_ENVIRONMENT || "production"}:${env.EBAY_CLIENT_ID || ""}`;
+  if (
+    cachedAccessToken &&
+    cachedAccessToken.cacheKey === cacheKey &&
+    cachedAccessToken.expiresAt > Date.now()
+  ) {
     return cachedAccessToken.token;
   }
 
@@ -141,7 +198,7 @@ async function getAccessToken(env: Env): Promise<string> {
 
   const { oauth } = getEbayHosts(env);
   const credentials = btoa(`${env.EBAY_CLIENT_ID}:${env.EBAY_CLIENT_SECRET}`);
-  const response = await fetch(oauth, {
+  const response = await ebayFetch(oauth, {
     method: "POST",
     headers: {
       authorization: `Basic ${credentials}`,
@@ -158,11 +215,17 @@ async function getAccessToken(env: Env): Promise<string> {
   }
 
   const token = (await response.json()) as { access_token?: string; expires_in?: number };
-  if (!token.access_token || !token.expires_in) {
+  if (
+    !token.access_token ||
+    typeof token.expires_in !== "number" ||
+    !Number.isFinite(token.expires_in) ||
+    token.expires_in <= 0
+  ) {
     throw new Error("eBay OAuth returned an invalid access token response.");
   }
 
   cachedAccessToken = {
+    cacheKey,
     token: token.access_token,
     expiresAt: Date.now() + token.expires_in * 1000 - ACCESS_TOKEN_CACHE_SKEW_MS,
   };
@@ -170,12 +233,13 @@ async function getAccessToken(env: Env): Promise<string> {
 }
 
 async function getPublicKey(kid: string, env: Env): Promise<EbayPublicKey> {
-  const cached = publicKeyCache.get(kid);
+  const { api } = getEbayHosts(env);
+  const cacheKey = `${api}:${kid}`;
+  const cached = publicKeyCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) return cached.key;
 
   const token = await getAccessToken(env);
-  const { api } = getEbayHosts(env);
-  const response = await fetch(`${api}/commerce/notification/v1/public_key/${encodeURIComponent(kid)}`, {
+  const response = await ebayFetch(`${api}/commerce/notification/v1/public_key/${encodeURIComponent(kid)}`, {
     headers: {
       authorization: `Bearer ${token}`,
       accept: "application/json",
@@ -191,7 +255,7 @@ async function getPublicKey(kid: string, env: Env): Promise<EbayPublicKey> {
     throw new Error("eBay public key response is missing required fields.");
   }
 
-  publicKeyCache.set(kid, {
+  publicKeyCache.set(cacheKey, {
     key: publicKey,
     expiresAt: Date.now() + PUBLIC_KEY_CACHE_TTL_MS,
   });
@@ -231,14 +295,30 @@ function derEcdsaSignatureToRaw(signature: Uint8Array): Uint8Array {
   return raw;
 }
 
-function signatureHash(digest: string): "SHA-1" | "SHA-256" {
-  return digest.toUpperCase().replace("-", "") === "SHA256" ? "SHA-256" : "SHA-1";
+function signatureHash(digest: string): "SHA-1" | "SHA-256" | null {
+  const normalized = digest.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if (normalized === "SHA256") return "SHA-256";
+  if (normalized === "SHA1") return "SHA-1";
+  return null;
+}
+
+function isEcdsaAlgorithm(algorithm: string): boolean {
+  const normalized = algorithm.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return (
+    normalized === "ECDSA" ||
+    normalized === "ELLIPTICCURVEDIGITALSIGNATUREALGORITHM" ||
+    normalized === "ELLIPTICCURVEDIGITALSIGNATUREALGORITHMECDSA"
+  );
 }
 
 async function verifyEbaySignature(signatureHeader: EbaySignatureHeader, body: string, env: Env): Promise<boolean> {
-  if (signatureHeader.alg.toUpperCase() !== "ECDSA") return false;
+  if (!isEcdsaAlgorithm(signatureHeader.alg)) return false;
 
   const publicKey = await getPublicKey(signatureHeader.kid, env);
+  if (!isEcdsaAlgorithm(publicKey.algorithm)) return false;
+  const headerHash = signatureHash(signatureHeader.digest);
+  const publicKeyHash = signatureHash(publicKey.digest);
+  if (!headerHash || !publicKeyHash || headerHash !== publicKeyHash) return false;
   const key = await crypto.subtle.importKey(
     "spki",
     pemToArrayBuffer(publicKey.key),
@@ -249,7 +329,7 @@ async function verifyEbaySignature(signatureHeader: EbaySignatureHeader, body: s
   const signature = derEcdsaSignatureToRaw(decodeBase64UrlOrBase64(signatureHeader.signature));
 
   return crypto.subtle.verify(
-    { name: "ECDSA", hash: signatureHash(signatureHeader.digest || publicKey.digest) },
+    { name: "ECDSA", hash: headerHash },
     key,
     toArrayBuffer(signature),
     new TextEncoder().encode(body),
@@ -258,6 +338,13 @@ async function verifyEbaySignature(signatureHeader: EbaySignatureHeader, body: s
 
 function isString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function requestMediaType(request: Request): string {
+  return (request.headers.get("content-type") || "")
+    .split(";", 1)[0]
+    .trim()
+    .toLowerCase();
 }
 
 function isEbayDeletionPayload(value: unknown): value is EbayDeletionPayload {
@@ -287,7 +374,7 @@ async function handleEbayChallenge(request: Request, env: Env): Promise<Response
 
   const url = new URL(request.url);
   const challengeCode = url.searchParams.get("challenge_code");
-  if (!challengeCode) {
+  if (!challengeCode || challengeCode.length > MAX_EBAY_CHALLENGE_LENGTH) {
     return json({ error: "missing challenge_code" }, { status: 400 });
   }
 
@@ -301,12 +388,15 @@ async function handleEbayDeletionNotification(request: Request, env: Env): Promi
     return json({ error: "missing or invalid x-ebay-signature" }, { status: 412 });
   }
 
-  const contentType = request.headers.get("content-type") || "";
-  if (!contentType.toLowerCase().includes("application/json")) {
+  if (requestMediaType(request) !== "application/json") {
     return json({ error: "content-type must be application/json" }, { status: 415 });
   }
 
-  const body = await request.text();
+  const limitedBody = await readRequestTextWithinLimit(request, MAX_EBAY_BODY_BYTES);
+  if (!limitedBody.ok) {
+    return json({ error: "request body too large" }, { status: 413 });
+  }
+  const body = limitedBody.text;
   let parsed: unknown;
   try {
     parsed = JSON.parse(body);
@@ -367,8 +457,20 @@ function withMatheusHeaders(
 
 async function handleMatheusLogin(request: Request, env: Env, url: URL): Promise<Response> {
   const voltar = safeReturnPath(url.searchParams.get("voltar"));
-  const form = await request.formData().catch(() => null);
-  const senha = form?.get("senha");
+  if (requestMediaType(request) !== "application/x-www-form-urlencoded") {
+    return withMatheusHeaders(
+      new Response("Tipo de formulario invalido.", { status: 415 }),
+      MATHEUS_NO_STORE,
+    );
+  }
+  const limitedBody = await readRequestTextWithinLimit(request, MAX_MATHEUS_LOGIN_BODY_BYTES);
+  if (!limitedBody.ok) {
+    return withMatheusHeaders(
+      new Response("Formulario muito grande.", { status: 413 }),
+      MATHEUS_NO_STORE,
+    );
+  }
+  const senha = new URLSearchParams(limitedBody.text).get("senha");
 
   if (typeof senha === "string" && (await verifyPassword(env.MATHEUS_PASSWORD as string, senha))) {
     const expiresAtMs = Date.now() + SESSION_DURATION_MS;

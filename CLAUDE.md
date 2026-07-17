@@ -19,7 +19,8 @@
 - `src/worker.ts` — Cloudflare Worker entrypoint for eBay marketplace account deletion challenge + signed notification validation
 - `scripts/validate-site.mjs` — content/build guard for links, JSON-LD, headers, mojibake, and Worker secret regressions
 - `public/_headers` — Cloudflare security headers and CSP
-- `.github/workflows/deploy.yml` — PR/push quality job and protected production deploy
+- `.github/workflows/deploy.yml` — dormant, SHA-pinned legacy workflow; repository Actions stays disabled
+- `docs/LOCAL-DEPLOYMENT.md` — Cloudflare Workers Builds release path and guarded local fallback
 
 ## Commands
 - `npm run dev` — Dev server at localhost:4321
@@ -28,14 +29,15 @@
 - `npm run validate:site` — Site/content/security guard
 - `npm run audit:high` — Fail on high/critical npm advisories
 - `npm run verify` — check + build + validate + audit
-- `npx wrangler deploy` — Deploy to Cloudflare Workers
+- `.\scripts\deploy-production.ps1 -CheckOnly` — Verify a clean, pushed production candidate without deploying
+- `.\scripts\deploy-production.ps1 -ApproveProduction` — Explicitly approved local fallback deploy
 - `node scripts/generate-og.mjs` — Regenerate OG image PNG
 
 ## Deployment
 - **Live**: https://davidluky.com
 - **Repo**: github.com/davidluky/davidluky.com
-- **CI/CD**: GitHub Actions on PR and push to `main`; deploy only after quality passes on `main`
-- **GitHub secret**: `CLOUDFLARE_API_TOKEN`
+- **CI/CD**: GitHub Actions is disabled; Cloudflare Workers Builds verifies and deploys pushes to `main`
+- **Local fallback**: guarded, version-pinned Wrangler flow in `scripts/deploy-production.ps1`
 - **Worker secrets**: `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`
 - **Worker vars**: `EBAY_ENDPOINT_URL`, `EBAY_ENVIRONMENT`
 - **Analytics**: Cloudflare Web Analytics, allowed in CSP

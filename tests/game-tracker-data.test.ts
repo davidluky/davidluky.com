@@ -9,7 +9,9 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 describe("gameTracker.json integrity", () => {
   it("has a current UTF-8 payload without mojibake", () => {
     const raw = readFileSync("src/data/gameTracker.json", "utf8");
-    expect(raw).not.toContain("Ã"); // "Ã" — the classic cp1252 double-encode tell
+    // U+00C3 (capital A-tilde) is the classic cp1252 double-encode tell; kept as an
+    // escape so this file itself stays clean for the repo mojibake guard.
+    expect(raw).not.toContain("\u00c3");
     expect(tracker.updated).toMatch(ISO_DATE);
     expect(tracker.generatedFrom).toContain("REVISADA");
   });

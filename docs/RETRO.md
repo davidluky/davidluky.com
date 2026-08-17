@@ -54,3 +54,75 @@ No change was made to this logic. Modifying correct, security-load-bearing code 
 - A dynamic `import()` guarded by a runtime flag is still statically resolved by the bundler; making a native dependency "optional" requires telling Vite/Rollup it is external, not just moving it in `package.json`. The two changes have to land together or the build breaks.
 - An exit code of 0 from a backgrounded `npm install` can be misleading when an optional-dependency lifecycle script fails — verify the actual install (e.g. that `node_modules/astro` exists) rather than trusting the wrapper status.
 - The fastest way to be sure about security-critical hashing is an empirical test against the vendor's published test vector, not just code reading.
+
+## 2026-08-17 session — GameTracker REVISADA refresh + Astro 7 deploy gate
+
+### What shipped
+
+`/game-tracker` refreshed from "Video Jogos 2026 - Organized - REVISADA.xlsx" after two months of
+stale data: a 147-game queue (128 backlog / 12 "2026 target" / 7 in progress), the unified 34-row
+2022-2026 played log, a Forecast panel (0.52 finished/month → all clear ~May 2050, or Dec 2038 at
+1/month), a 3-segment donut, an "In progress" queue status with its own filter chip,
+accent-insensitive backlog search, and filter chips / year chart derived from data instead of
+hardcoded lists. The data pipeline is now reproducible: `scripts/generate-game-tracker.py`
+(header-name-keyed, fails loudly on workbook layout changes) plus
+`tests/game-tracker-data.test.ts`. Unblocking the deploy additionally landed `astro ~7.2.2`, the
+vite override raised to `^8.2.1`, and an `npm audit fix` — verify fully green, 0 vulnerabilities.
+Commits `bd8e41f..ddb4df7` on `main`, deployed and live-verified (tracker, home, gaming).
+
+### Process
+
+Three-role flow: a planner wrote an executable plan with hard acceptance numbers for every
+extracted figure; an implementer executed it in an isolated worktree off `origin/main` — chosen
+because the owner's checkout carries ~25 uncommitted July-audit files that must not ride along to
+production; a reviewer then ran an eight-angle code review plus an independent second extraction
+of the workbook before anything was pushed.
+
+### What went well
+
+- **Independent re-derivation beat code reading.** The reviewer extracted the workbook separately
+  and diffed against the generated JSON: 0 mismatches across every row, status, date, and join.
+  For data-refresh work this is the strongest cheap check that exists.
+- **Acceptance numbers as hard gates.** Seventeen expected figures were written into the plan
+  before implementation; all matched on the first run, so "green" carried real information.
+- **The multi-angle review earned its cost**: 10 confirmed findings, including two visible-on-page
+  count contradictions (8 vs 7 "in progress", 20 vs 12 "finish this year") and two defects planted
+  by the plan itself — the pre-1990 date cutoff (FR-035) and the Pokemon row filter. All fixed and
+  re-verified before deploy.
+- **Behavior proven, not assumed.** The implementer extracted the built page's real inline script
+  and ran it against the real card attributes (accented and unaccented queries), and byte-compared
+  two generator runs to prove determinism.
+- **The worktree pattern worked.** The owner's dirty checkout was never touched; his pending
+  `game-tracker.astro` cleanup was adopted as the branch's first commit, retiring that local diff
+  instead of conflicting with it.
+
+### What went wrong
+
+- **A known-red gate was treated as background noise.** Baseline verify showed `audit:high`
+  failing (7 advisories) and it was filed as "pre-existing — ignore" — but Workers Builds runs
+  that same `npm run verify`, so the first push failed exactly as the baseline predicted (FR-031).
+  The prediction was available in-repo before the push.
+- **The Astro bump tripped on the repo's own vite override** — a misleading bundler error and a
+  ten-minute detour that reading `overrides` first would have avoided (FR-032).
+- **The plan's verbatim test snippet violated the repo's mojibake guard** it was meant to echo
+  (FR-034); caught at final verify, cost one extra commit.
+
+### Lessons
+
+- A red stage in baseline verification is a deploy blocker by definition when the deployer runs
+  the same command. "Pre-existing" describes blame, not impact.
+- Plans that embed exact code must be checked against the target repo's own gates before an
+  implementer runs them verbatim.
+- When a framework major fails inside the bundler with an error matching nothing in your config,
+  read `package.json` `overrides` first.
+
+### Follow-ups (owner)
+
+- Rebase the local checkout (now behind `origin/main`): the `game-tracker.astro` diff disappears;
+  `package.json`/lockfile conflict with `ddb4df7` is small (eslint and friends remain to land).
+- Workbook: add Eldest Souls to "Quero jogar" so the queue/log in-progress counts reconcile
+  (the page labels the two scopes in the meantime).
+- Optional: `.gitignore` entry for `scripts/__pycache__/`; a one-line `grid-column: 1 / -1` if the
+  empty dashboard cell beside In Progress bothers; the "2026 target" vocabulary and
+  `queue2026Targets` field roll over in January 2027 (accepted tripwire — the generator's status
+  map fails loudly when the workbook moves to "Meta 2027").

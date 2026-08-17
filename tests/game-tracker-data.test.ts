@@ -1,19 +1,19 @@
-import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import tracker from "../src/data/gameTracker.json";
 
-const QUEUE_STATUSES = ["Backlog", "Finish this year", "In progress"];
+const QUEUE_STATUSES = ["Backlog", "2026 target", "In progress"];
 const PLAYED_STATUSES = ["Finished", "In progress"];
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 describe("gameTracker.json integrity", () => {
-  it("has a current UTF-8 payload without mojibake", () => {
-    const raw = readFileSync("src/data/gameTracker.json", "utf8");
-    // U+00C3 (capital A-tilde) is the classic cp1252 double-encode tell; kept as an
-    // escape so this file itself stays clean for the repo mojibake guard.
-    expect(raw).not.toContain("\u00c3");
+  it("declares a current, correctly stamped source workbook", () => {
+    // No mojibake assertion here on purpose: scripts/validate-site.mjs already scans
+    // every source file in the repo (this JSON included) against a pattern list that
+    // covers the cp1252 double-encode tells. A local copy would also false-positive on
+    // legitimate uppercase Portuguese (NAO / SAO, written here without their tildes for
+    // exactly that reason).
     expect(tracker.updated).toMatch(ISO_DATE);
-    expect(tracker.generatedFrom).toContain("REVISADA");
+    expect(tracker.generatedFrom).toMatch(/\.xlsx \(\d{4}-\d{2}-\d{2}\)$/);
   });
 
   it("summary counts match the section arrays", () => {
@@ -27,7 +27,7 @@ describe("gameTracker.json integrity", () => {
       tracker.playOrder.filter((row) => row.status === "Backlog").length,
     );
     expect(tracker.summary.queue2026Targets).toBe(
-      tracker.playOrder.filter((row) => row.status === "Finish this year").length,
+      tracker.playOrder.filter((row) => row.status === "2026 target").length,
     );
     expect(tracker.summary.queueInProgress).toBe(
       tracker.playOrder.filter((row) => row.status === "In progress").length,

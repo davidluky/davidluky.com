@@ -662,7 +662,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release page",
       "pokeNumber": null
@@ -690,7 +690,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: Supergiant/Wired",
       "pokeNumber": null
@@ -760,7 +760,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: IMDb",
       "pokeNumber": null
@@ -970,7 +970,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
@@ -1082,7 +1082,7 @@
       "decade": "2010s",
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": "Pokemon",
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 14
@@ -1166,7 +1166,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: Capcom release page",
       "pokeNumber": null
@@ -1180,7 +1180,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
@@ -1236,7 +1236,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
@@ -1348,7 +1348,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
@@ -1628,7 +1628,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Nintendo Switch cloud",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: remake selected by user",
       "pokeNumber": null
@@ -1656,7 +1656,7 @@
       "decade": "2010s",
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
@@ -1922,7 +1922,7 @@
       "decade": "2020s",
       "whereToPlay": "Nintendo Switch / Switch 2",
       "trilha": "Pokemon",
-      "status": "Finish this year",
+      "status": "2026 target",
       "queueRank": null,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 19
@@ -2304,8 +2304,8 @@
     {
       "game": "Eldest Souls",
       "started": "2026-07-21",
-      "releaseDate": null,
-      "whereToPlay": null,
+      "releaseDate": "2021-07-29",
+      "whereToPlay": "PC/Steam; PlayStation; Xbox; Nintendo Switch",
       "notes": "Comecado ha ~3 semanas (11/08/2026). Data aproximada - ajuste se souber o dia.",
       "source": "voce, 11/08/2026"
     }
@@ -2433,7 +2433,7 @@
       "platform": "Nintendo 3DS remake",
       "releaseDate": "2014-11-21",
       "whereToPlay": "Nintendo 3DS; emulation",
-      "status": "Finish this year"
+      "status": "2026 target"
     },
     {
       "rank": 15,
@@ -2473,7 +2473,7 @@
       "platform": "Nintendo Switch",
       "releaseDate": "2022-01-28",
       "whereToPlay": "Nintendo Switch / Switch 2",
-      "status": "Finish this year"
+      "status": "2026 target"
     },
     {
       "rank": 20,

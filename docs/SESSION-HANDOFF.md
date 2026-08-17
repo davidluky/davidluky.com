@@ -1,6 +1,26 @@
 # Session handoff
 
-Last updated: 2026-07-17
+Last updated: 2026-08-17
+
+## 2026-08-17 — branch `gt-refresh-2026-08-17` (GameTracker refresh)
+
+- A separate worktree branch off `origin/main` refreshes `/game-tracker` from
+  "Video Jogos 2026 - Organized - REVISADA.xlsx": regenerated
+  `src/data/gameTracker.json`, a new `scripts/generate-game-tracker.py` generator,
+  a new `tests/game-tracker-data.test.ts` suite, a Forecast panel, three-way donut,
+  data-derived filters, and accent-insensitive backlog search.
+- Reviewed (multi-angle code review + independent data cross-check) and pushed to
+  `main` on 2026-08-17 with David's prior authorization; the push deploys to
+  production via Cloudflare Workers Builds.
+- The July portfolio-audit work still uncommitted in David's own checkout was
+  deliberately left untouched. The one exception is `src/pages/game-tracker.astro`:
+  its pending type-safety cleanup was copied in as this branch's first commit so the
+  later edits build on it, which retires his local diff for that single file instead
+  of conflicting with it. No other file he has open was read from or written to.
+- `npm run audit:high` fails on this branch exactly as it does on untouched
+  `origin/main` (seven high advisories from the July lockfile). Dependency work is
+  David's separate batch and was not attempted here.
+- The sections below still describe the earlier July audit batch and are unchanged.
 
 ## Current position
 

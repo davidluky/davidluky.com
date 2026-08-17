@@ -114,3 +114,16 @@ SQLite handles are closed in `finally` so build failures do not leak native reso
 ## TN-010: Google Fonts
 
 Fonts use preconnect plus a non-render-blocking `media="print"` stylesheet swap. The `onload` handler uses `setAttribute("media", "all")` so Astro's checker does not treat `media` as an unused identifier.
+
+## GameTracker data pipeline (2026-08-17)
+
+`/game-tracker` is fully static, fed by `src/data/gameTracker.json` (committed).
+To refresh it when David updates the workbook:
+
+    python scripts/generate-game-tracker.py "C:\Users\DavidLuky\Downloads\<current Video Jogos workbook>.xlsx"
+
+- Dev-machine only (needs Python + openpyxl); nothing at build time runs it.
+- The script reads cached formula values, so the workbook must have been saved by Excel.
+- `tests/game-tracker-data.test.ts` validates the JSON's internal consistency in `npm run test`.
+- PT->EN status maps and sheet layout assumptions live at the top of the script; it fails loudly
+  if the workbook layout changes.

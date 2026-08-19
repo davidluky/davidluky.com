@@ -2,6 +2,23 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-08-17
+
+### Added
+- `scripts/generate-game-tracker.py`, a dev-machine generator that rebuilds `src/data/gameTracker.json` from David's "Video Jogos" workbook. Nothing runs it at build or deploy time; the committed JSON stays the only source `/game-tracker` reads.
+- `tests/game-tracker-data.test.ts`, validating the tracker JSON's internal consistency: summary counts against section arrays, a contiguous release-ordered play order, the 1..N finish priorities, and the forecast fields.
+- A Forecast panel on `/game-tracker` showing the 2022-2025 finishing pace, the projected completion dates at that pace and at one game per month, and the total mapped acervo.
+
+### Changed
+- Refreshed `/game-tracker` from the revised 2026 workbook: 147 queue rows (128 backlog, 12 2026 targets, 7 in progress), 20 finish-this-year targets, 21 Pokemon-route games, and 34 history records across 2022-2026.
+- The backlog donut now splits three ways (backlog / 2026 target / in progress) and the queue carries an In progress status pill.
+- Status filter chips, decade chips, the year chart's columns, and its year-range badge all derive from the data instead of hardcoded lists.
+- Backlog search is accent-insensitive, so "pokemon" matches "Pokémon", and the filter index is built once at startup instead of re-reading the DOM on every keystroke.
+
+### Fixed
+- In-progress rows no longer render dangling separators when a game has no release date or platform, and games tracked only on the "Terminar este ano" sheet now inherit their release date and platform list.
+- Dropped page references to the retired `sourceText` field and to `whereToPlay` on finished-log rows, which do not carry it.
+
 ## [Unreleased] — 2026-07-05
 
 ### Added

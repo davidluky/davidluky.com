@@ -38,7 +38,8 @@ function daysOpen(value?: string | null) {
   return Math.max(0, Math.round((updatedDate.getTime() - started.getTime()) / 86400000));
 }
 
-const historyYears = [2022, 2023, 2024, 2025, 2026].map((year) => {
+const historyYearList = [...new Set(history.map((row) => row.year))].sort((a, b) => a - b);
+const historyYears = historyYearList.map((year) => {
   const rows = history.filter((row) => row.year === year);
   return {
     year,
@@ -53,9 +54,25 @@ const decadeRows = Object.entries(tracker.decadeCounts as Record<string, number>
   .map(([decade, count]) => ({ decade, count }));
 const maxDecadeValue = Math.max(...decadeRows.map((row) => row.count), 1);
 
-const backlogAngle = Math.round((tracker.summary.backlogRows / tracker.summary.activePlayOrderRows) * 360);
-const statusOptions = ["Backlog", "Finish this year"];
-const decadeOptions = ["1990s", "2000s", "2010s", "2020s"];
+const segBacklog = Math.round((tracker.summary.backlogRows / tracker.summary.activePlayOrderRows) * 360);
+const segTarget =
+  segBacklog + Math.round((tracker.summary.queue2026Targets / tracker.summary.activePlayOrderRows) * 360);
+// Known statuses first, in reading order; anything new in the data still gets a chip.
+const STATUS_ORDER = ["Backlog", "2026 target", "In progress"];
+const statusOptions = STATUS_ORDER.filter((status) =>
+  playOrder.some((row) => row.status === status),
+).concat(
+  [...new Set(playOrder.map((row) => row.status))].filter((status) => !STATUS_ORDER.includes(status)),
+);
+const STATUS_CLASS: Record<string, string> = {
+  Backlog: "backlog",
+  "2026 target": "target",
+  "In progress": "active",
+};
+const decadeOptions = decadeRows.map((row) => row.decade);
+const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+const yearMonth = (value?: string | null) =>
+  value ? monthFormatter.format(new Date(`${value}T00:00:00.000Z`)) : "—";
 const historyByYear = historyYears.map((yearRow) => ({
   ...yearRow,
   rows: history.filter((row) => row.year === yearRow.year),
@@ -64,7 +81,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Dataset",
   name: "GameTracker 2026",
-  description: "Release-order game backlog dashboard generated from David Luky's corrected 2026 spreadsheet.",
+  description: "Release-order game backlog dashboard generated from David Luky's revised 2026 workbook.",
   dateModified: tracker.updated,
   creator: {
     "@type": "Person",
@@ -75,7 +92,7 @@ const structuredData = {
 
 <Base
   title="GameTracker 2026 - David Luky"
-  description="A corrected oldest-first game backlog dashboard with 2026 targets, Pokemon handheld route, and completion history."
+  description="A revised oldest-first game backlog dashboard with 2026 targets, Pokemon handheld route, and completion history."
   structuredData={structuredData}
 >
   <Header currentPath="/game-tracker" />
@@ -101,7 +118,7 @@ const structuredData = {
 
     <div class="tracker-main">
       <section id="overview" class="tracker-hero">
-        <div class="hero-kicker">Corrected workbook dashboard</div>
+        <div class="hero-kicker">Revised workbook dashboard</div>
         <div class="hero-row">
           <div>
             <h1>GameTracker <span>2026</span></h1>
@@ -131,7 +148,7 @@ const structuredData = {
           <span class="stat-icon">03</span>
           <strong>{fmt(tracker.summary.inProgress)}</strong>
           <span>In Progress</span>
-          <small>carryovers with start dates</small>
+          <small>from the played log</small>
         </article>
         <article class="stat-card tone-green">
           <span class="stat-icon">04</span>
@@ -148,9 +165,9 @@ const structuredData = {
               <h2>Progress by Year</h2>
               <p>Started rows vs finished rows from the history log</p>
             </div>
-            <span class="panel-badge">2022-2026</span>
+            <span class="panel-badge">{historyYearList[0]}-{historyYearList.at(-1)}</span>
           </div>
-          <div class="year-chart" style={`--max-year:${maxYearValue};`}>
+          <div class="year-chart" style={`--max-year:${maxYearValue}; --year-count:${historyYears.length};`}>
             {historyYears.map((row) => (
               <div class="year-group">
                 <div class="bars">
@@ -172,17 +189,18 @@ const structuredData = {
           <div class="panel-heading">
             <div>
               <h2>Backlog State</h2>
-              <p>{fmt(tracker.summary.activePlayOrderRows)} active rows</p>
+              <p>{fmt(tracker.summary.activePlayOrderRows)} queue rows</p>
             </div>
           </div>
           <div class="donut-wrap">
-            <div class="donut" style={`--backlog-angle:${backlogAngle}deg;`}>
+            <div class="donut" style={`--seg-backlog:${segBacklog}deg; --seg-target:${segTarget}deg;`}>
               <span>{fmt(tracker.summary.activePlayOrderRows)}</span>
             </div>
           </div>
           <div class="split-list">
             <span><i class="legend-backlog"></i>Backlog <strong>{fmt(tracker.summary.backlogRows)}</strong></span>
-            <span><i class="legend-target"></i>Finish this year <strong>{fmt(tracker.summary.finishThisYear)}</strong></span>
+            <span><i class="legend-target"></i>2026 target <strong>{fmt(tracker.summary.queue2026Targets)}</strong></span>
+            <span><i class="legend-progress"></i>In progress <strong>{fmt(tracker.summary.queueInProgress)}</strong></span>
           </div>
         </article>
 
@@ -206,6 +224,21 @@ const structuredData = {
           </div>
         </article>
 
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Forecast</h2>
+              <p>{fmt(tracker.summary.remainingToFinish)} games left to clear</p>
+            </div>
+          </div>
+          <div class="mini-stats">
+            <span><strong>{tracker.summary.paceFinishedPerMonth}</strong>finished/month, 2022-2025 pace</span>
+            <span><strong>{yearMonth(tracker.summary.projectedFinishCurrentPace)}</strong>all done at today's pace</span>
+            <span><strong>{yearMonth(tracker.summary.projectedFinishOnePerMonth)}</strong>at {tracker.summary.scenarioPerMonth}/month</span>
+            <span><strong>{fmt(tracker.summary.totalMapped)}</strong>games mapped since 2022</span>
+          </div>
+        </article>
+
         <article class="panel panel-wide">
           <div class="panel-heading">
             <div>
@@ -220,7 +253,11 @@ const structuredData = {
                 <span class="dot"></span>
                 <div>
                   <strong>{game.game}</strong>
-                  <small>Started {formatDate(game.started)} · {yearOnly(game.releaseDate)} · {game.whereToPlay}</small>
+                  <small>
+                    {[`Started ${formatDate(game.started)}`, yearOnly(game.releaseDate), game.whereToPlay]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </small>
                 </div>
                 <span class="status-pill">{daysOpen(game.started)}d</span>
               </article>
@@ -243,7 +280,7 @@ const structuredData = {
               <span class="priority">{game.priority}</span>
               <div class="target-main">
                 <h3>{game.game}</h3>
-                <p>{game.notes ?? game.sourceText}</p>
+                {game.notes && <p>{game.notes}</p>}
                 <div class="target-meta">
                   <span>{formatDate(game.releaseDate)}</span>
                   <span>{game.whereToPlay}</span>
@@ -273,7 +310,7 @@ const structuredData = {
                 <span class="done-star">*</span>
                 <div>
                   <strong>{game.game}</strong>
-                  <small>Finished {formatDate(game.finished)} · Started {formatDate(game.started)} · {game.whereToPlay}</small>
+                  <small>Finished {formatDate(game.finished)} · Started {formatDate(game.started)}</small>
                 </div>
                 <span class="target-state done">Done</span>
               </article>
@@ -323,7 +360,7 @@ const structuredData = {
             <article
               class="tracker-card"
               data-tracker-card
-              data-title={`${game.game} ${game.notes ?? ""} ${game.whereToPlay ?? ""}`.toLowerCase()}
+              data-title={`${game.game} ${game.notes ?? ""} ${game.whereToPlay ?? ""}`}
               data-decade={game.decade}
               data-status={game.status}
             >
@@ -331,9 +368,11 @@ const structuredData = {
               <div class="card-body">
                 <div class="card-title-row">
                   <h3>{game.game}</h3>
-                  <span class:list={["card-status", game.status === "Finish this year" ? "target" : "backlog"]}>{game.status}</span>
+                  <span class:list={["card-status", STATUS_CLASS[game.status] ?? "backlog"]}>
+                    {game.status}
+                  </span>
                 </div>
-                <p>{game.notes ?? game.sourceText}</p>
+                {game.notes && <p>{game.notes}</p>}
                 <div class="card-meta">
                   <span>{formatDate(game.releaseDate)}</span>
                   <span>{game.whereToPlay}</span>
@@ -373,7 +412,7 @@ const structuredData = {
             <span>Source history</span>
             <h2>History</h2>
           </div>
-          <p>{fmt(history.length)} rows from previous yearly sheets.</p>
+          <p>{fmt(history.length)} rows from the unified {historyYearList[0]}-{historyYearList.at(-1)} log.</p>
         </div>
         <div class="history-grid">
           {historyByYear.map((year) => (
@@ -410,12 +449,25 @@ const structuredData = {
 
 <script is:inline>
   document.addEventListener("DOMContentLoaded", function () {
+    function normalize(value) {
+      return value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     const root = document.querySelector("[data-game-tracker]");
     if (!root) return;
 
     const search = document.getElementById("game-search");
     const count = document.getElementById("backlog-count");
     const cards = Array.prototype.slice.call(root.querySelectorAll("[data-tracker-card]"));
+    // Normalize once at startup so keystrokes never re-read the DOM.
+    const items = cards.map(function (el) {
+      return {
+        el: el,
+        title: normalize(el.getAttribute("data-title") || ""),
+        decade: el.getAttribute("data-decade"),
+        status: el.getAttribute("data-status"),
+      };
+    });
     const filters = { decade: "all", status: "all" };
 
     function syncButtons(kind) {
@@ -425,14 +477,14 @@ const structuredData = {
     }
 
     function render() {
-      const q = search ? search.value.trim().toLowerCase() : "";
+      const q = search ? normalize(search.value) : "";
       let shown = 0;
-      cards.forEach(function (card) {
-        const matchesSearch = !q || (card.getAttribute("data-title") || "").indexOf(q) !== -1;
-        const matchesDecade = filters.decade === "all" || card.getAttribute("data-decade") === filters.decade;
-        const matchesStatus = filters.status === "all" || card.getAttribute("data-status") === filters.status;
+      items.forEach(function (item) {
+        const matchesSearch = !q || item.title.indexOf(q) !== -1;
+        const matchesDecade = filters.decade === "all" || item.decade === filters.decade;
+        const matchesStatus = filters.status === "all" || item.status === filters.status;
         const visible = matchesSearch && matchesDecade && matchesStatus;
-        card.hidden = !visible;
+        if (item.el.hidden === visible) item.el.hidden = !visible;
         if (visible) shown += 1;
       });
       if (count) count.textContent = shown.toLocaleString("en-US");
@@ -779,7 +831,7 @@ const structuredData = {
 
   .year-chart {
     display: grid;
-    grid-template-columns: repeat(5, minmax(64px, 1fr));
+    grid-template-columns: repeat(var(--year-count, 5), minmax(64px, 1fr));
     gap: 14px;
     height: 230px;
     margin-top: 24px;
@@ -853,6 +905,7 @@ const structuredData = {
   .legend-backlog { background: #3b82f6; }
   .legend-finished,
   .legend-target { background: #f59e0b; }
+  .legend-progress { background: #8b5cf6; }
 
   .split-list {
     display: grid;
@@ -881,7 +934,11 @@ const structuredData = {
     height: 148px;
     place-items: center;
     border-radius: 999px;
-    background: conic-gradient(#3b82f6 0 var(--backlog-angle), #f59e0b var(--backlog-angle) 360deg);
+    background: conic-gradient(
+      #3b82f6 0 var(--seg-backlog),
+      #f59e0b var(--seg-backlog) var(--seg-target),
+      #8b5cf6 var(--seg-target) 360deg
+    );
     position: relative;
   }
 
@@ -1065,6 +1122,12 @@ const structuredData = {
     border-color: rgba(59, 130, 246, 0.35);
     color: #60a5fa;
     background: rgba(59, 130, 246, 0.1);
+  }
+
+  .card-status.active {
+    border-color: rgba(139, 92, 246, 0.35);
+    color: #a78bfa;
+    background: rgba(139, 92, 246, 0.1);
   }
 
   .target-state.pending,
@@ -1350,7 +1413,7 @@ const structuredData = {
     }
 
     .year-chart {
-      grid-template-columns: repeat(5, 70px);
+      grid-template-columns: repeat(var(--year-count, 5), 70px);
       overflow-x: auto;
       padding-bottom: 8px;
     }

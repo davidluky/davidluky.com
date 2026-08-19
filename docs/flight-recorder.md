@@ -394,3 +394,97 @@ body with exactly one Assets fetch.
 
 **Lesson**: Understand platform fallback semantics before layering custom fallback logic. Test unknown
 paths and fetch counts, not only the final status code.
+
+---
+
+## FR-031: The Deploy Gate Rots Between Pushes (2026-08-17)
+
+**What happened**: The first push to `main` since July 17 (the GameTracker refresh) failed its
+Workers Build. Nothing in the change was at fault: the build command is `npm run verify`, and
+`audit:high` had accumulated 7 high advisories during a month with no pushes. Any push would have
+failed identically.
+
+**The trap**: The local baseline verify run had already shown `audit:high` red, and it was filed as
+"pre-existing — ignore." But the deploy pipeline runs the same command, so a red local baseline is a
+guaranteed red deploy. The information to predict the failure was in the repo
+(`docs/LOCAL-DEPLOYMENT.md` documents the build command) and in the baseline output.
+
+**Fix**: `astro ^6.2.1 -> ~7.2.2` (the advisory range was `astro <=7.0.9`), vite override raised for
+it (see FR-032), `npm audit fix` for the rest. Verify fully green, 0 vulnerabilities, deploy clean.
+
+**Lesson**: "Pre-existing failure" only means "not caused by this change" — it never means "won't
+block this change." Before pushing after a gap, run `npm audit --audit-level=high`; a red audit is a
+deploy blocker by definition here.
+
+---
+
+## FR-032: Astro 7 Requires Vite 8 — and the Security Override Pinned Vite 7 (2026-08-17)
+
+**What happened**: Bumping `astro` to 7.2.2 made `astro build` die with
+`rollupOptions.input should not be an html file when building for SSR. Please specify a dedicated
+SSR entry.` — while `astro.config.mjs` is vanilla and sets no `rollupOptions` anywhere.
+
+**Root cause**: `package.json` `overrides` pinned `"vite": "^7.2.7"` (a July security floor). Astro 7
+requires Vite 8; npm obeyed the override and installed vite 7.3.5, which Astro 7's static build
+cannot drive. The July working-tree migration had made the same discovery (its lockfile carries
+vite 8.2.1).
+
+**Fix**: Raise the override to `"^8.2.1"`. The security-floor intent survives; the framework gets the
+major it needs.
+
+**Lesson**: Version overrides are invisible co-authors of every upgrade. When a framework major fails
+with an internal bundler error that matches nothing in your config, read `overrides` before
+debugging the config.
+
+---
+
+## FR-033: Workers Builds Check-Runs Tell You Nothing About the Failure (2026-08-17)
+
+**What happened**: The failed build's GitHub check-run had `started_at == completed_at` (same second)
+and an empty `output.text`, which read like an instant control-plane/config failure. The real cause
+was the verify gate several minutes in.
+
+**Lesson**: Cloudflare creates the check-run at webhook time and backfills both timestamps — neither
+duration nor failing stage can be inferred from GitHub. The build log exists only in the Cloudflare
+dashboard. Don't diagnose from the check-run's shape; go read the log (or reproduce locally with
+`npm ci && npm run verify`, which is the same pipeline).
+
+---
+
+## FR-034: The Mojibake Guard Scans Tests and Docs Too (2026-08-17)
+
+**What happened**: A new test meant to guard against cp1252 mojibake contained the sentinel
+character (U+00C3) literally — in a comment and in its own assertion string. `validate:site` scans
+every source extension in the repo (including `tests/*.ts`, `docs/*.md`, and `src/data/*.json`)
+for U+00C3 followed by any character, so the guard failed on itself.
+
+**Also**: a bare U+00C3 check false-positives on legitimate uppercase Portuguese (NAO / SAO with
+tildes — spelled here without them for exactly this reason).
+
+**Fix**: Write sentinels as escape sequences (backslash-u00c3 in string literals, "U+00C3" in
+prose), and don't duplicate the repo-wide guard in unit tests at all — `validate:site` already
+covers the committed JSON in the same `npm run verify`.
+
+**Lesson**: Any file that *talks about* a forbidden byte pattern is also *scanned for* it. Escape
+sequences in code and circumlocution in prose.
+
+---
+
+## FR-035: Excel Import — Blank Formula Dates, Sentinel Cutoffs, and Positional Reads (2026-08-17)
+
+**What happened** (GameTracker workbook pipeline): three near-misses in one importer.
+1. Empty formula results in date columns surface in openpyxl as `datetime.time(0, 0)` (renders
+   "00:00:00"), not `None` — date parsing must treat non-date values as null.
+2. The first null-guard used `year >= 1990`, which would have silently nulled legitimate pre-1990
+   retro releases (e.g. Mega Man 2, 1988). The Excel blank-cell sentinels are 1899-12-30 /
+   1900-01-01, so the correct cutoff is `year > 1900`.
+3. The Pokemon sheet's trailing rows keep formula-driven rank numbers with every other cell empty,
+   and all sheets were initially read by positional column index — a routine column insert in Excel
+   would have silently shifted every field.
+
+**Fix**: null anything that isn't a date after 1900; key data rows on the *name* column, not the
+numeric one; resolve columns from the header row by name and `SystemExit` listing the headers found
+when an expected one is missing.
+
+**Lesson**: For spreadsheet importers, assume the owner will insert columns and leave formula blanks.
+Header-name resolution plus loud failures turns silent corruption into a one-line error message.

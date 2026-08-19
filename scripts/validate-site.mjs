@@ -50,6 +50,22 @@ walk(root, (filePath) => {
   }
 });
 
+const workflows = path.join(root, ".github", "workflows");
+if (existsSync(workflows)) {
+  walk(workflows, (filePath) => {
+    if (![".yaml", ".yml"].includes(path.extname(filePath))) return;
+
+    const workflow = readText(filePath);
+    for (const match of workflow.matchAll(/^\s*-?\s*uses:\s*([^@\s]+)@([^\s#]+)/gm)) {
+      const [, action, revision] = match;
+      if (action.startsWith("./") || action.startsWith("docker://")) continue;
+      if (!/^[0-9a-f]{40}$/.test(revision)) {
+        failures.push(`${relative(filePath)} action ${action} must use an immutable 40-character commit SHA.`);
+      }
+    }
+  });
+}
+
 const workerPath = path.join(root, "src", "worker.ts");
 if (existsSync(workerPath)) {
   const worker = readText(workerPath);
@@ -112,8 +128,21 @@ if (existsSync(dist)) {
       }
     }
 
-    if (!htmlRelativePath.startsWith("dist/matheus/") && !html.includes('type="application/ld+json"')) {
-      failures.push(`${htmlRelativePath} is missing JSON-LD structured data.`);
+    if (!htmlRelativePath.startsWith("dist/matheus/")) {
+      if (!html.includes('type="application/ld+json"')) {
+        failures.push(`${htmlRelativePath} is missing JSON-LD structured data.`);
+      }
+      if (!html.includes('href="#main-content"') || !html.includes('id="main-content"')) {
+        failures.push(`${htmlRelativePath} is missing the skip-to-content contract.`);
+      }
+    }
+
+    const expectedPageType = new Map([
+      ["dist/about/index.html", "AboutPage"],
+      ["dist/gaming/index.html", "ProfilePage"],
+    ]).get(htmlRelativePath);
+    if (expectedPageType && !html.includes(`"@type":"${expectedPageType}"`)) {
+      failures.push(`${htmlRelativePath} is missing its ${expectedPageType} structured data.`);
     }
   }
 }

@@ -7,6 +7,19 @@ import { loadGamingData } from "../data/gaming";
 
 const gaming = await loadGamingData();
 
+const gamingStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: "Gaming profiles — David Luky",
+  url: new URL("/gaming/", Astro.site).toString(),
+  mainEntity: {
+    "@type": "Person",
+    name: "David Luky",
+    url: new URL("/", Astro.site).toString(),
+    knowsAbout: ["Video games", "Game development", "Steam", "Xbox", "Tibia"],
+  },
+};
+
 const fmt = (n: number) => n.toLocaleString("en-US");
 
 const platformColors: Record<string, string> = {
@@ -40,7 +53,7 @@ const dataNotePt =
     : `Dados vindos de ${gaming.source === "game-library" ? "Game Library" : "Steam API"} no build. Última sincronização: ${new Date().toISOString().slice(0, 10)}.`;
 ---
 
-<Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, Epic Games, and Tibia gaming profiles.">
+<Base title="Gaming — David Luky" description="Where I play: Steam, Xbox, Epic Games, and Tibia gaming profiles." structuredData={gamingStructuredData}>
   <Header currentPath="/gaming" />
 
   <section class="mx-auto max-w-[1280px] px-12 pt-36 pb-20 max-md:px-6 max-md:pt-20">

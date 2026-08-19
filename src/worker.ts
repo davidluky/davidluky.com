@@ -15,11 +15,19 @@ const EBAY_PRODUCTION_OAUTH = "https://api.ebay.com/identity/v1/oauth2/token";
 const EBAY_SANDBOX_OAUTH = "https://api.sandbox.ebay.com/identity/v1/oauth2/token";
 const EBAY_SCOPE = "https://api.ebay.com/oauth/api_scope";
 const PUBLIC_KEY_CACHE_TTL_MS = 60 * 60 * 1000;
+const PUBLIC_KEY_NEGATIVE_CACHE_TTL_MS = 5 * 60 * 1000;
+const MAX_PUBLIC_KEY_CACHE_ENTRIES = 64;
+const MAX_PUBLIC_KEY_LOOKUP_FAILURES = 10;
+const PUBLIC_KEY_FAILURE_WINDOW_MS = 60 * 1000;
+// eBay key ids are opaque UUID-style tokens. The kid arrives inside an unauthenticated
+// header, so anything outside that shape is rejected before it can cost a subrequest.
+const EBAY_KID_PATTERN = /^[A-Za-z0-9_-]{8,64}$/;
 const ACCESS_TOKEN_CACHE_SKEW_MS = 60 * 1000;
 const EBAY_FETCH_TIMEOUT_MS = 10 * 1000;
 const MAX_EBAY_BODY_BYTES = 256 * 1024;
 const MAX_EBAY_CHALLENGE_LENGTH = 512;
 const MAX_MATHEUS_LOGIN_BODY_BYTES = 16 * 1024;
+const DEFAULT_MATHEUS_SESSION_EPOCH = "1";
 const MATHEUS_HOSTS = new Set([
   "matheus.davidluky.com",
   "manual-matheus.davidluky.com",
@@ -27,10 +35,17 @@ const MATHEUS_HOSTS = new Set([
 ]);
 const MATHEUS_ASSET_PREFIX = "/matheus";
 
+// Cloudflare rate-limiting binding, declared as `[[ratelimits]]` in wrangler.toml.
+interface RateLimiter {
+  limit(options: { key: string }): Promise<{ success: boolean }>;
+}
+
 interface Env {
   ASSETS: { fetch: typeof fetch };
   MATHEUS_PASSWORD?: string;
   MATHEUS_SESSION_SECRET?: string;
+  MATHEUS_SESSION_EPOCH?: string;
+  MATHEUS_LOGIN_LIMITER?: RateLimiter;
   EBAY_VERIFICATION_TOKEN?: string;
   EBAY_ENDPOINT_URL?: string;
   EBAY_CLIENT_ID?: string;
@@ -71,7 +86,10 @@ interface EbayDeletionPayload {
 }
 
 let cachedAccessToken: { cacheKey: string; token: string; expiresAt: number } | null = null;
-const publicKeyCache = new Map<string, { key: EbayPublicKey; expiresAt: number }>();
+// A null key is a cached failure: it keeps a replayed bad kid from re-hitting eBay.
+const publicKeyCache = new Map<string, { key: EbayPublicKey | null; expiresAt: number }>();
+let publicKeyLookupFailures = 0;
+let publicKeyFailureWindowStartedAt = 0;
 
 function json(data: unknown, init?: ResponseInit): Response {
   return Response.json(data, {
@@ -117,6 +135,7 @@ function parseSignatureHeader(header: string | null): EbaySignatureHeader | null
     if (
       typeof parsed.alg === "string" &&
       typeof parsed.kid === "string" &&
+      EBAY_KID_PATTERN.test(parsed.kid) &&
       typeof parsed.signature === "string" &&
       typeof parsed.digest === "string"
     ) {
@@ -232,12 +251,39 @@ async function getAccessToken(env: Env): Promise<string> {
   return cachedAccessToken.token;
 }
 
-async function getPublicKey(kid: string, env: Env): Promise<EbayPublicKey> {
-  const { api } = getEbayHosts(env);
-  const cacheKey = `${api}:${kid}`;
-  const cached = publicKeyCache.get(cacheKey);
-  if (cached && cached.expiresAt > Date.now()) return cached.key;
+function cachePublicKey(cacheKey: string, key: EbayPublicKey | null, ttlMs: number): void {
+  if (!publicKeyCache.has(cacheKey) && publicKeyCache.size >= MAX_PUBLIC_KEY_CACHE_ENTRIES) {
+    const oldest = publicKeyCache.keys().next().value;
+    if (oldest !== undefined) publicKeyCache.delete(oldest);
+  }
+  publicKeyCache.set(cacheKey, { key, expiresAt: Date.now() + ttlMs });
+}
 
+// Forged notifications can carry an unlimited supply of unseen kids, and every miss
+// would otherwise become one or two live eBay calls. Cap the failures this isolate is
+// willing to pay for per minute so the real compliance endpoint is not rate-limited.
+function allowPublicKeyLookup(): boolean {
+  const now = Date.now();
+  if (now - publicKeyFailureWindowStartedAt > PUBLIC_KEY_FAILURE_WINDOW_MS) {
+    publicKeyFailureWindowStartedAt = now;
+    publicKeyLookupFailures = 0;
+  }
+  return publicKeyLookupFailures < MAX_PUBLIC_KEY_LOOKUP_FAILURES;
+}
+
+// `unknownKid` separates "eBay says this key id does not exist" from a transient
+// failure: only the former is safe to remember, so a real notification retried after
+// an eBay outage is not answered from a stale negative cache entry.
+class EbayPublicKeyError extends Error {
+  readonly unknownKid: boolean;
+
+  constructor(message: string, unknownKid: boolean) {
+    super(message);
+    this.unknownKid = unknownKid;
+  }
+}
+
+async function fetchPublicKey(api: string, kid: string, env: Env): Promise<EbayPublicKey> {
   const token = await getAccessToken(env);
   const response = await ebayFetch(`${api}/commerce/notification/v1/public_key/${encodeURIComponent(kid)}`, {
     headers: {
@@ -247,18 +293,44 @@ async function getPublicKey(kid: string, env: Env): Promise<EbayPublicKey> {
   });
 
   if (!response.ok) {
-    throw new Error(`eBay public key lookup failed with HTTP ${response.status}.`);
+    throw new EbayPublicKeyError(
+      `eBay public key lookup failed with HTTP ${response.status}.`,
+      response.status === 400 || response.status === 404,
+    );
   }
 
   const publicKey = (await response.json()) as EbayPublicKey;
   if (!publicKey.key || !publicKey.algorithm || !publicKey.digest) {
     throw new Error("eBay public key response is missing required fields.");
   }
+  return publicKey;
+}
 
-  publicKeyCache.set(cacheKey, {
-    key: publicKey,
-    expiresAt: Date.now() + PUBLIC_KEY_CACHE_TTL_MS,
-  });
+async function getPublicKey(kid: string, env: Env): Promise<EbayPublicKey> {
+  const { api } = getEbayHosts(env);
+  const cacheKey = `${api}:${kid}`;
+  const cached = publicKeyCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) {
+    if (!cached.key) throw new Error("eBay public key lookup already failed for this kid.");
+    return cached.key;
+  }
+
+  if (!allowPublicKeyLookup()) {
+    throw new Error("Too many failed eBay public key lookups; not calling eBay again yet.");
+  }
+
+  let publicKey: EbayPublicKey;
+  try {
+    publicKey = await fetchPublicKey(api, kid, env);
+  } catch (error) {
+    publicKeyLookupFailures += 1;
+    if (error instanceof EbayPublicKeyError && error.unknownKid) {
+      cachePublicKey(cacheKey, null, PUBLIC_KEY_NEGATIVE_CACHE_TTL_MS);
+    }
+    throw error;
+  }
+
+  cachePublicKey(cacheKey, publicKey, PUBLIC_KEY_CACHE_TTL_MS);
   return publicKey;
 }
 
@@ -312,13 +384,16 @@ function isEcdsaAlgorithm(algorithm: string): boolean {
 }
 
 async function verifyEbaySignature(signatureHeader: EbaySignatureHeader, body: string, env: Env): Promise<boolean> {
+  // Everything the header alone can invalidate is checked before the key lookup, so a
+  // forged header never buys an outbound eBay call.
   if (!isEcdsaAlgorithm(signatureHeader.alg)) return false;
+  const headerHash = signatureHash(signatureHeader.digest);
+  if (!headerHash) return false;
 
   const publicKey = await getPublicKey(signatureHeader.kid, env);
   if (!isEcdsaAlgorithm(publicKey.algorithm)) return false;
-  const headerHash = signatureHash(signatureHeader.digest);
   const publicKeyHash = signatureHash(publicKey.digest);
-  if (!headerHash || !publicKeyHash || headerHash !== publicKeyHash) return false;
+  if (!publicKeyHash || headerHash !== publicKeyHash) return false;
   const key = await crypto.subtle.importKey(
     "spki",
     pemToArrayBuffer(publicKey.key),
@@ -433,6 +508,7 @@ async function handleEbayDeletion(request: Request, env: Env): Promise<Response>
 }
 
 const GATE_OPEN_PATHS = new Set(["/entrar", "/entrar/", "/entrar/index.html"]);
+const GATE_LOGOUT_PATHS = new Set(["/sair", "/sair/"]);
 const GATE_OPEN_PREFIXES = ["/gate_assets/"];
 const MATHEUS_CACHE_CONTROL = "private, max-age=600";
 const MATHEUS_NO_STORE = "private, no-store";
@@ -455,8 +531,56 @@ function withMatheusHeaders(
   });
 }
 
+function matheusSessionEpoch(env: Env): string {
+  return env.MATHEUS_SESSION_EPOCH || DEFAULT_MATHEUS_SESSION_EPOCH;
+}
+
+function matheusSessionCookie(value: string, maxAgeSeconds: number): string {
+  return [
+    `${SESSION_COOKIE_NAME}=${value}`,
+    `Max-Age=${maxAgeSeconds}`,
+    "Path=/",
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+  ].join("; ");
+}
+
+// Brute-force brake on the single shared gate password, keyed on the client IP.
+// The binding is declared in wrangler.toml. Missing or failing infrastructure is an
+// unknown state on a security-critical path, so both cases fail closed.
+async function allowLoginAttempt(request: Request, env: Env): Promise<boolean> {
+  if (!env.MATHEUS_LOGIN_LIMITER) return false;
+  try {
+    const { success } = await env.MATHEUS_LOGIN_LIMITER.limit({
+      key: request.headers.get("cf-connecting-ip") || "sem-ip",
+    });
+    return success;
+  } catch (error) {
+    console.error("[worker] login rate limiter unavailable:", (error as Error).message);
+    return false;
+  }
+}
+
+// Clearing the cookie is idempotent, so /sair/ works with or without a session.
+function handleMatheusLogout(): Response {
+  return withMatheusHeaders(
+    redirect("/entrar/", 303, { "set-cookie": matheusSessionCookie("", 0) }),
+    MATHEUS_NO_STORE,
+  );
+}
+
 async function handleMatheusLogin(request: Request, env: Env, url: URL): Promise<Response> {
   const voltar = safeReturnPath(url.searchParams.get("voltar"));
+  if (!(await allowLoginAttempt(request, env))) {
+    return withMatheusHeaders(
+      new Response("Muitas tentativas. Aguarde um minuto e tente novamente.", {
+        status: 429,
+        headers: { "content-type": "text/plain; charset=utf-8", "retry-after": "60" },
+      }),
+      MATHEUS_NO_STORE,
+    );
+  }
   if (requestMediaType(request) !== "application/x-www-form-urlencoded") {
     return withMatheusHeaders(
       new Response("Tipo de formulario invalido.", { status: 415 }),
@@ -474,14 +598,14 @@ async function handleMatheusLogin(request: Request, env: Env, url: URL): Promise
 
   if (typeof senha === "string" && (await verifyPassword(env.MATHEUS_PASSWORD as string, senha))) {
     const expiresAtMs = Date.now() + SESSION_DURATION_MS;
-    const cookie = [
-      `${SESSION_COOKIE_NAME}=${await signSession(env.MATHEUS_SESSION_SECRET as string, expiresAtMs)}`,
-      `Max-Age=${Math.floor(SESSION_DURATION_MS / 1000)}`,
-      "Path=/",
-      "HttpOnly",
-      "Secure",
-      "SameSite=Lax",
-    ].join("; ");
+    const cookie = matheusSessionCookie(
+      await signSession(
+        env.MATHEUS_SESSION_SECRET as string,
+        expiresAtMs,
+        matheusSessionEpoch(env),
+      ),
+      Math.floor(SESSION_DURATION_MS / 1000),
+    );
     return withMatheusHeaders(
       redirect(voltar, 303, { "set-cookie": cookie }),
       MATHEUS_NO_STORE,
@@ -510,11 +634,22 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
     return handleMatheusLogin(request, env, url);
   }
 
+  if (GATE_LOGOUT_PATHS.has(url.pathname)) {
+    if (request.method !== "POST") {
+      return withMatheusHeaders(
+        new Response("Use POST para sair.", { status: 405, headers: { allow: "POST" } }),
+        MATHEUS_NO_STORE,
+      );
+    }
+    return handleMatheusLogout();
+  }
+
   const cookies = parseCookies(request.headers.get("cookie"));
   const authenticated = await verifySession(
     env.MATHEUS_SESSION_SECRET,
     cookies.get(SESSION_COOKIE_NAME),
     Date.now(),
+    matheusSessionEpoch(env),
   );
   const isOpenPath =
     GATE_OPEN_PATHS.has(url.pathname) ||

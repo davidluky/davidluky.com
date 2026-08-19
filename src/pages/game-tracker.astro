@@ -4,13 +4,13 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import trackerRaw from "../data/gameTracker.json";
 
-const tracker = trackerRaw as any;
-const playOrder = tracker.playOrder as any[];
-const finishThisYear = tracker.finishThisYear as any[];
-const inProgress = tracker.inProgress as any[];
-const finishedThisYear = tracker.finishedThisYear as any[];
-const pokemon = tracker.pokemon as any[];
-const history = tracker.history as any[];
+const tracker = trackerRaw;
+const playOrder = tracker.playOrder;
+const finishThisYear = tracker.finishThisYear;
+const inProgress = tracker.inProgress;
+const finishedThisYear = tracker.finishedThisYear;
+const pokemon = tracker.pokemon;
+const history = tracker.history;
 
 const fmt = (value: number) => value.toLocaleString("en-US");
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -410,13 +410,13 @@ const structuredData = {
 
 <script is:inline>
   document.addEventListener("DOMContentLoaded", function () {
-    var root = document.querySelector("[data-game-tracker]");
+    const root = document.querySelector("[data-game-tracker]");
     if (!root) return;
 
-    var search = document.getElementById("game-search");
-    var count = document.getElementById("backlog-count");
-    var cards = Array.prototype.slice.call(root.querySelectorAll("[data-tracker-card]"));
-    var filters = { decade: "all", status: "all" };
+    const search = document.getElementById("game-search");
+    const count = document.getElementById("backlog-count");
+    const cards = Array.prototype.slice.call(root.querySelectorAll("[data-tracker-card]"));
+    const filters = { decade: "all", status: "all" };
 
     function syncButtons(kind) {
       root.querySelectorAll('[data-filter-kind="' + kind + '"]').forEach(function (button) {
@@ -425,13 +425,13 @@ const structuredData = {
     }
 
     function render() {
-      var q = search ? search.value.trim().toLowerCase() : "";
-      var shown = 0;
+      const q = search ? search.value.trim().toLowerCase() : "";
+      let shown = 0;
       cards.forEach(function (card) {
-        var matchesSearch = !q || (card.getAttribute("data-title") || "").indexOf(q) !== -1;
-        var matchesDecade = filters.decade === "all" || card.getAttribute("data-decade") === filters.decade;
-        var matchesStatus = filters.status === "all" || card.getAttribute("data-status") === filters.status;
-        var visible = matchesSearch && matchesDecade && matchesStatus;
+        const matchesSearch = !q || (card.getAttribute("data-title") || "").indexOf(q) !== -1;
+        const matchesDecade = filters.decade === "all" || card.getAttribute("data-decade") === filters.decade;
+        const matchesStatus = filters.status === "all" || card.getAttribute("data-status") === filters.status;
+        const visible = matchesSearch && matchesDecade && matchesStatus;
         card.hidden = !visible;
         if (visible) shown += 1;
       });
@@ -440,8 +440,8 @@ const structuredData = {
 
     root.querySelectorAll("[data-filter-kind]").forEach(function (button) {
       button.addEventListener("click", function () {
-        var kind = button.getAttribute("data-filter-kind");
-        var value = button.getAttribute("data-filter-value");
+        const kind = button.getAttribute("data-filter-kind");
+        const value = button.getAttribute("data-filter-value");
         if (!kind || !value) return;
         filters[kind] = value;
         syncButtons(kind);

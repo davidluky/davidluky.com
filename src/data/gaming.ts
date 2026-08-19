@@ -22,6 +22,12 @@ export interface GamingData {
   distribution: { over100h: number; h10to100: number; h1to10: number; under1h: number };
 }
 
+interface SteamOwnedGame {
+  name: string;
+  playtime_forever: number;
+  playtime_2weeks?: number;
+}
+
 const GAME_LIBRARY_DB = import.meta.env.GAME_LIBRARY_DB;
 const STEAM_CACHE = ".cache/steam-games.json";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
@@ -132,13 +138,13 @@ async function fromSteamAPI(): Promise<GamingData | null> {
     const res = await fetch(url);
     if (!res.ok) return null;
 
-    const json = await res.json();
+    const json = (await res.json()) as { response?: { games?: SteamOwnedGame[] } };
     const games = json.response?.games ?? [];
 
-    const sorted = [...games].sort((a: any, b: any) => b.playtime_forever - a.playtime_forever);
-    const totalMinutes = games.reduce((s: number, g: any) => s + g.playtime_forever, 0);
+    const sorted = [...games].sort((a, b) => b.playtime_forever - a.playtime_forever);
+    const totalMinutes = games.reduce((sum, game) => sum + game.playtime_forever, 0);
 
-    const toEntry = (g: any): GameEntry => ({
+    const toEntry = (g: SteamOwnedGame): GameEntry => ({
       name: g.name,
       platform: "steam",
       hours: Math.round(g.playtime_forever / 60),
@@ -146,8 +152,8 @@ async function fromSteamAPI(): Promise<GamingData | null> {
     });
 
     const recentRaw = [...games]
-      .filter((g: any) => g.playtime_2weeks)
-      .sort((a: any, b: any) => b.playtime_2weeks - a.playtime_2weeks);
+      .filter((game) => game.playtime_2weeks !== undefined && game.playtime_2weeks > 0)
+      .sort((a, b) => (b.playtime_2weeks ?? 0) - (a.playtime_2weeks ?? 0));
 
     const steamHours = Math.round(totalMinutes / 60);
     const data: GamingData = {
@@ -161,10 +167,10 @@ async function fromSteamAPI(): Promise<GamingData | null> {
       recentGames: recentRaw.slice(0, 8).map(toEntry),
       mostPlayed: sorted.slice(0, 25).map(toEntry),
       distribution: {
-        over100h: games.filter((g: any) => g.playtime_forever >= 6000).length,
-        h10to100: games.filter((g: any) => g.playtime_forever >= 600 && g.playtime_forever < 6000).length,
-        h1to10: games.filter((g: any) => g.playtime_forever >= 60 && g.playtime_forever < 600).length,
-        under1h: games.filter((g: any) => g.playtime_forever > 0 && g.playtime_forever < 60).length,
+        over100h: games.filter((game) => game.playtime_forever >= 6000).length,
+        h10to100: games.filter((game) => game.playtime_forever >= 600 && game.playtime_forever < 6000).length,
+        h1to10: games.filter((game) => game.playtime_forever >= 60 && game.playtime_forever < 600).length,
+        under1h: games.filter((game) => game.playtime_forever > 0 && game.playtime_forever < 60).length,
       },
     };
 

@@ -180,17 +180,8 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
     },
   };
 
-  function updateHeroAndPills(lang: string) {
-    const s = pageStrings[lang as keyof typeof pageStrings];
-    const heroH1 = document.querySelector('section.text-center h1');
-    const heroP = document.querySelector('section.text-center p');
-    const heroCta = document.querySelector('section.text-center a');
-    if (heroH1) heroH1.innerHTML = s.hero_title;
-    if (heroP) heroP.textContent = s.hero_subtitle;
-    if (heroCta) {
-      heroCta.innerHTML = s.hero_cta + ' <span class="text-lg">&darr;</span>';
-    }
-
+  // The hero itself is translated by applyI18n through Hero.astro's data-i18n hooks.
+  function updateDynamicCopy(lang: string) {
     const enPill = document.getElementById('lang-en');
     const ptPill = document.getElementById('lang-pt');
     if (enPill && ptPill) {
@@ -215,12 +206,12 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
   }
 
   let lang = applyI18n(pageStrings);
-  updateHeroAndPills(lang);
+  updateDynamicCopy(lang);
 
   document.getElementById('lang-toggle')?.addEventListener('click', () => {
     lang = lang === 'en' ? 'pt' : 'en';
     setLanguage(lang);
     applyI18n(pageStrings);
-    updateHeroAndPills(lang);
+    updateDynamicCopy(lang);
   });
 </script>

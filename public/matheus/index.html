@@ -188,6 +188,22 @@
         text-underline-offset: 3px;
       }
 
+      .sair {
+        margin-top: 14px;
+      }
+
+      .sair button {
+        padding: 7px 14px;
+        border: 1px solid rgba(255, 255, 255, .3);
+        border-radius: 999px;
+        color: rgba(255, 255, 255, .86);
+        background: rgba(0, 0, 0, .18);
+        font: inherit;
+        font-size: .76rem;
+        font-weight: 750;
+        cursor: pointer;
+      }
+
       @media (max-width: 980px) {
         .choices {
           grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -285,6 +301,10 @@
           Texto e fotografias de Matheus Felipe Silverio. Publicado por
           <a href="https://davidluky.com/">davidluky.com</a>.
         </p>
+
+        <form class="sair" method="post" action="/sair/">
+          <button type="submit">Sair deste dispositivo</button>
+        </form>
       </div>
     </main>
   </body>

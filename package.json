@@ -8,11 +8,12 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "lint": "eslint eslint.config.mjs src scripts tests --max-warnings=0",
     "test": "vitest run",
     "images:matheus": "node scripts/optimize-matheus-images.mjs",
     "validate:site": "node scripts/validate-site.mjs",
     "audit:high": "npm audit --audit-level=high",
-    "verify": "npm run check && npm run test && npm run build && npm run validate:site && npm run audit:high"
+    "verify": "npm run check && npm run lint && npm run test && npm run build && npm run validate:site && npm run audit:high"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -26,9 +27,15 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@fontsource/fraunces": "^5.2.9",
     "@resvg/resvg-js": "^2.6.2",
+    "eslint": "^9.39.5",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "globals": "^17.9.0",
     "sharp": "^0.35.3",
+    "typescript-eslint": "^8.66.0",
     "vitest": "^4.1.10"
   },
   "engines": {
@@ -36,12 +43,9 @@
   },
   "overrides": {
     "esbuild": "^0.28.1",
+    "fast-uri": "3.1.5",
+    "svgo": "4.0.2",
     "vite": "^8.2.1",
     "yaml": "^2.8.3"
-  },
-  "allowScripts": {
-    "esbuild@0.28.1": true,
-    "sharp@0.34.5": true,
-    "sharp@0.35.3": true
   }
 }

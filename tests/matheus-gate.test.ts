@@ -9,31 +9,36 @@ import {
 
 describe("signSession / verifySession", () => {
   it("accepts a valid unexpired session", async () => {
-    const value = await signSession("secret", 2_000_000);
-    expect(await verifySession("secret", value, 1_000_000)).toBe(true);
+    const value = await signSession("secret", 2_000_000, "1");
+    expect(await verifySession("secret", value, 1_000_000, "1")).toBe(true);
   });
 
   it("rejects an expired session", async () => {
-    const value = await signSession("secret", 2_000_000);
-    expect(await verifySession("secret", value, 3_000_000)).toBe(false);
+    const value = await signSession("secret", 2_000_000, "1");
+    expect(await verifySession("secret", value, 3_000_000, "1")).toBe(false);
   });
 
   it("rejects a tampered expiry", async () => {
-    const value = await signSession("secret", 2_000_000);
+    const value = await signSession("secret", 2_000_000, "1");
     const tampered = `9999999999999.${value.split(".")[1]}`;
-    expect(await verifySession("secret", tampered, 1_000_000)).toBe(false);
+    expect(await verifySession("secret", tampered, 1_000_000, "1")).toBe(false);
   });
 
   it("rejects a cookie signed with another secret", async () => {
-    const value = await signSession("other-secret", 2_000_000);
-    expect(await verifySession("secret", value, 1_000_000)).toBe(false);
+    const value = await signSession("other-secret", 2_000_000, "1");
+    expect(await verifySession("secret", value, 1_000_000, "1")).toBe(false);
+  });
+
+  it("rejects a cookie signed under an earlier session epoch", async () => {
+    const value = await signSession("secret", 2_000_000, "1");
+    expect(await verifySession("secret", value, 1_000_000, "2")).toBe(false);
   });
 
   it("rejects undefined and malformed values", async () => {
-    expect(await verifySession("secret", undefined, 0)).toBe(false);
-    expect(await verifySession("secret", "", 0)).toBe(false);
-    expect(await verifySession("secret", "no-separator", 0)).toBe(false);
-    expect(await verifySession("secret", ".only-mac", 0)).toBe(false);
+    expect(await verifySession("secret", undefined, 0, "1")).toBe(false);
+    expect(await verifySession("secret", "", 0, "1")).toBe(false);
+    expect(await verifySession("secret", "no-separator", 0, "1")).toBe(false);
+    expect(await verifySession("secret", ".only-mac", 0, "1")).toBe(false);
   });
 });
 
@@ -69,6 +74,14 @@ describe("safeReturnPath", () => {
     expect(safeReturnPath("//evil.example")).toBe("/");
     expect(safeReturnPath("https://evil.example/")).toBe("/");
     expect(safeReturnPath("/x\\y")).toBe("/");
+  });
+
+  it("rejects control characters browsers strip before parsing the URL", () => {
+    expect(safeReturnPath("/\t/evil.example")).toBe("/");
+    expect(safeReturnPath("/\r\n/evil.example")).toBe("/");
+    expect(safeReturnPath("/\n/evil.example")).toBe("/");
+    expect(safeReturnPath("/\u0000/evil.example")).toBe("/");
+    expect(safeReturnPath("/ /evil.example")).toBe("/");
   });
 
   it("keeps a normal local path", () => {

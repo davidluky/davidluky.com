@@ -171,19 +171,9 @@ describe("eBay deletion notifications", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("rejects unsupported signature digests instead of falling back to SHA-1", async () => {
+  it("rejects unsupported signature digests without calling eBay at all", async () => {
     const body = JSON.stringify(payload);
-    const fetchMock = vi.fn(async (input: string | URL | Request) => {
-      const url = String(input);
-      if (url.endsWith("/identity/v1/oauth2/token")) {
-        return Response.json({ access_token: "access-token", expires_in: 3600 });
-      }
-      return Response.json({
-        algorithm: "ECDSA",
-        digest: "SHA512",
-        key: "unused because the digest is rejected",
-      });
-    });
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
     const response = await worker.fetch(
@@ -199,7 +189,7 @@ describe("eBay deletion notifications", () => {
     );
 
     expect(response.status).toBe(412);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("advertises the supported methods", async () => {
@@ -225,5 +215,89 @@ describe("eBay deletion notifications", () => {
     );
     expect(response.status).toBe(415);
     expect(response.headers.get("cache-control")).toBe("no-store");
+  });
+
+  it("rejects an implausible key id before any eBay call", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const response = await worker.fetch(
+      new Request("https://davidluky.com/ebay/deletion", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-ebay-signature": signatureHeader("../../etc/passwd"),
+        },
+        body: JSON.stringify(payload),
+      }),
+      makeEnv(),
+    );
+
+    expect(response.status).toBe(412);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("caches a failed public key lookup instead of retrying eBay", async () => {
+    const body = JSON.stringify(payload);
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      if (String(input).endsWith("/identity/v1/oauth2/token")) {
+        return Response.json({ access_token: "access-token", expires_in: 3600 });
+      }
+      return new Response("not found", { status: 404 });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const request = () =>
+      worker.fetch(
+        new Request("https://davidluky.com/ebay/deletion", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-ebay-signature": signatureHeader("cached-failure-kid"),
+          },
+          body,
+        }),
+        makeEnv({ EBAY_CLIENT_ID: "cached-failure-client" }),
+      );
+
+    expect((await request()).status).toBe(503);
+    const callsAfterFirst = fetchMock.mock.calls.length;
+    expect(callsAfterFirst).toBe(2);
+
+    expect((await request()).status).toBe(503);
+    expect(fetchMock.mock.calls.length).toBe(callsAfterFirst);
+  });
+
+  // Runs last: the failure counter it trips is isolate-level state shared by this file.
+  it("stops calling eBay once unknown key ids keep failing", async () => {
+    const body = JSON.stringify(payload);
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      if (String(input).endsWith("/identity/v1/oauth2/token")) {
+        return Response.json({ access_token: "access-token", expires_in: 3600 });
+      }
+      return new Response("not found", { status: 404 });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const attempt = (kid: string) =>
+      worker.fetch(
+        new Request("https://davidluky.com/ebay/deletion", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "x-ebay-signature": signatureHeader(kid),
+          },
+          body,
+        }),
+        makeEnv({ EBAY_CLIENT_ID: "flood-client" }),
+      );
+
+    for (let index = 0; index < 20; index += 1) {
+      expect((await attempt(`flood-kid-${index}`)).status).toBe(503);
+    }
+
+    const callsAfterFlood = fetchMock.mock.calls.length;
+    expect(callsAfterFlood).toBeLessThan(20);
+    expect((await attempt("flood-kid-last")).status).toBe(503);
+    expect(fetchMock.mock.calls.length).toBe(callsAfterFlood);
   });
 });

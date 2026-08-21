@@ -11,6 +11,16 @@ routes = [
 [vars]
 EBAY_ENDPOINT_URL = "https://davidluky.com/ebay/deletion"
 EBAY_ENVIRONMENT = "production"
+# Bump this after rotating MATHEUS_PASSWORD: it is part of the signed session payload,
+# so every cookie issued under the previous epoch stops verifying immediately.
+MATHEUS_SESSION_EPOCH = "1"
+
+# Brute-force brake on the Matheus gate password. namespace_id is a local identifier
+# for this Worker's limiters; period must be 10 or 60 seconds.
+[[ratelimits]]
+name = "MATHEUS_LOGIN_LIMITER"
+namespace_id = "1001"
+simple = { limit = 8, period = 60 }
 
 [assets]
 directory = "./dist"

@@ -113,22 +113,22 @@ const navLinks = [
   import { syncLanguageControls, toggleLanguage } from '../i18n/shared';
 
   document.addEventListener('DOMContentLoaded', function() {
-    var header = document.getElementById('site-header');
-    var menuBtn = document.getElementById('mobile-menu-btn');
-    var mobileMenu = document.getElementById('mobile-menu');
-    var menuIcon = document.getElementById('menu-icon');
-    var closeIcon = document.getElementById('close-icon');
+    const header = document.getElementById('site-header');
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
 
     // Scroll morph — higher threshold on mobile so the full name is visible longer
     if (header) {
-      var headerEl = header;
-      var scrolled = false;
-      var threshold = window.innerWidth < 768 ? 150 : 60;
+      const headerEl = header;
+      let scrolled = false;
+      let threshold = window.innerWidth < 768 ? 150 : 60;
       window.addEventListener('resize', function() {
         threshold = window.innerWidth < 768 ? 150 : 60;
       }, { passive: true });
       function onScroll() {
-        var past = window.scrollY > threshold;
+        const past = window.scrollY > threshold;
         if (past !== scrolled) {
           scrolled = past;
           headerEl.classList.toggle('header-scrolled', past);
@@ -143,17 +143,17 @@ const navLinks = [
       toggleLanguage();
       location.reload();
     }
-    var langSwitch = document.getElementById('lang-switch');
-    var langSwitchMobile = document.getElementById('lang-switch-mobile');
+    const langSwitch = document.getElementById('lang-switch');
+    const langSwitchMobile = document.getElementById('lang-switch-mobile');
     if (langSwitch) langSwitch.addEventListener('click', switchLang);
     if (langSwitchMobile) langSwitchMobile.addEventListener('click', switchLang);
 
     // Mobile menu toggle
     if (menuBtn && mobileMenu) {
-      var menuButton = menuBtn;
-      var menuPanel = mobileMenu;
+      const menuButton = menuBtn;
+      const menuPanel = mobileMenu;
       menuButton.addEventListener('click', function() {
-        var open = menuPanel.classList.contains('mobile-menu-open');
+        const open = menuPanel.classList.contains('mobile-menu-open');
         menuPanel.classList.toggle('mobile-menu-closed', open);
         menuPanel.classList.toggle('mobile-menu-open', !open);
         menuButton.setAttribute('aria-expanded', String(!open));

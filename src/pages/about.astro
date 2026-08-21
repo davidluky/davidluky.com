@@ -7,6 +7,19 @@ import { stats } from "../data/stats";
 const techCategories = ["Languages", "Frontend", "Backend", "Tools"];
 const techCategoriesPt = ["Linguagens", "Frontend", "Backend", "Ferramentas"];
 
+const aboutStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About David Luky",
+  url: new URL("/about/", Astro.site).toString(),
+  mainEntity: {
+    "@type": "Person",
+    name: "David Luky",
+    alternateName: "Alisson David Frangullys",
+    url: new URL("/", Astro.site).toString(),
+  },
+};
+
 const techStack: Record<string, string[]> = {
   Languages: ["TypeScript", "C++17", "C", "Python", "Dart", "Lua", "Bash", "SQL"],
   Frontend: ["React 19", "Astro", "Next.js", "Tailwind CSS", "Vite", "Electron", "Flutter", "raylib"],
@@ -24,7 +37,7 @@ const timeline = [
 ];
 ---
 
-<Base title="About — David Luky" description="Developer and lifelong gamer based in Richmond, Virginia. Learn more about David Luky.">
+<Base title="About — David Luky" description="Developer and lifelong gamer based in Richmond, Virginia. Learn more about David Luky." structuredData={aboutStructuredData}>
   <Header currentPath="/about" />
 
   <!-- Hero -->

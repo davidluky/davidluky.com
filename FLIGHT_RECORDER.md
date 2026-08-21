@@ -2,6 +2,33 @@
 
 Chronological log of the portfolio quality pass. Newest session appended at top of each section.
 
+## 2026-08-07 campaign closeout
+
+- Preserved the full Matheus/eBay/content/workflow WIP while completing the
+  Astro 6.2.1 -> 7.2.0 migration from the live registry.
+- Rejected the incompatible ESLint 10/plugin pairing and selected the supported
+  ESLint 9 + `eslint-plugin-astro` 1.7 line. Frozen install then passed without
+  peer or engine warnings.
+- The first lint run found 45 errors. Mechanical `var` fixes and concrete Steam/
+  tracker types reduced that to zero without a blanket rule suppression.
+- Closed the missing-limiter decision fail-closed and added the 34th focused
+  Worker test. Added skip navigation and tailored About/Gaming JSON-LD.
+- Final gates: 31 Astro files/zero diagnostics, ESLint zero warnings, 61/61
+  Vitest, seven routes built, validator passed, full audit zero.
+- Desktop and 390x844 browser smokes covered every route with no overflow or
+  broken images. No provider, live callback, deploy, commit, or push occurred.
+
+## 2026-08-07 code/project review
+
+- Preserved the existing Matheus, eBay, portfolio, workflow, and Worker WIP.
+- Functional gate passed: Astro check clean, 60 tests passed, seven-page build
+  passed, and site validation passed.
+- Live high-severity audit found six advisories in Astro/transitives. The
+  breaking Astro 7.2.x migration remains a release blocker; registry access was
+  not reliable enough to produce a verified lockfile.
+- No source fix, provider action, deployment, commit, or push was performed.
+- Detailed findings: `docs/CODE_PROJECT_REVIEW_2026-08-07.md`.
+
 ## 2026-07-12 portfolio audit
 
 ### Context and protection
@@ -133,3 +160,23 @@ Conclusion: eBay endpoint is correct and genuinely authenticated. No security bu
 - All four documented Quality Gates pass; `npm run verify` is green and now works on a fresh clone regardless of platform/Node (optional native dep no longer blocks install or build).
 - eBay compliance endpoint reviewed and confirmed correct + secure; unchanged.
 - Changed files: `package.json`, `package-lock.json`, `astro.config.mjs`, `src/layouts/Base.astro`. Pre-existing `src/data/projects.ts` working-tree change left untouched. No commit, no deploy.
+
+## 2026-08-07 — Immutable gitleaks action
+
+- Queried the upstream GitHub release and commit APIs for the immutable
+  `gitleaks/gitleaks-action` v3.0.0 release. The resolved commit is
+  `e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e`; its `action.yml` declares the
+  Node 24 runtime.
+- Replaced the moving `@v2` workflow reference with that full commit SHA and
+  retained `# v3.0.0` for human review.
+- Extended `scripts/validate-site.mjs` so every third-party workflow action must
+  use a lowercase 40-character commit SHA. Local and `docker://` actions remain
+  intentionally exempt.
+- Node 24 verification passed: Astro check reported 30 files with no
+  diagnostics, Vitest passed 60/60 tests, the seven-page build completed, and
+  the site validator accepted all six immutable action references.
+- The fresh production audit remains release-blocking with seven high-severity
+  advisories and recommends the breaking Astro 7.2.0 line; it was not suppressed
+  or presented as green.
+- GitHub Actions remains disabled and no workflow, provider, deploy, secret,
+  commit, or push was invoked.

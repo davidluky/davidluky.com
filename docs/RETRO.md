@@ -1,5 +1,51 @@
 # Retro
 
+## 2026-08-07 campaign closeout
+
+### What worked
+
+Treating dependency resolution, static analysis, runtime support, and browser
+QA as one migration gate made the Astro major upgrade measurable. The custom
+site validator was inexpensive to extend for the new skip-link and structured-
+data invariants, while focused Worker tests made the fail-closed limiter change
+low risk.
+
+### What changed during the run
+
+The newest Astro ESLint plugin line required Node patch releases newer than the
+available 24.14/26.2 runtimes and its optional accessibility peer did not yet
+accept ESLint 10. The supported ESLint 9 / plugin 1.7 combination produced a
+clean install and retained the Astro accessibility rules. Fixing the 45 initial
+findings was clearer than weakening the recommended rules.
+
+### Next iteration
+
+Keep provider/deploy/eBay/Play Console validation owner-gated. Decide whether
+the public game count includes the conditional raylib RPG entry before adding a
+cross-repo statistics synchronizer. Split Worker routes only when real growth,
+not a speculative abstraction, warrants it.
+
+## 2026-08-07 review
+
+### What worked
+
+The Matheus session/logout tests, eBay callback tests, Astro checks, static
+build, and custom validator give the mixed static/Worker site a strong local
+safety net. Existing WIP remained intact.
+
+### What changed our release decision
+
+The live audit exposed six high-severity Astro/transitive advisories. Because
+the supported fix crosses into Astro 7 and registry access was unreliable, the
+review recorded an explicit blocker instead of making an unverifiable major
+upgrade.
+
+### Next iteration
+
+Perform the Astro 7.2.x migration with live registry access, then rerun the
+entire gate and visual/provider smokes. Split the Worker only along its existing
+Matheus/eBay/router boundaries as those areas grow.
+
 ## 2026-06-02 session
 
 ### What this project is
@@ -55,6 +101,16 @@ No change was made to this logic. Modifying correct, security-load-bearing code 
 - An exit code of 0 from a backgrounded `npm install` can be misleading when an optional-dependency lifecycle script fails — verify the actual install (e.g. that `node_modules/astro` exists) rather than trusting the wrapper status.
 - The fastest way to be sure about security-critical hashing is an empirical test against the vendor's published test vector, not just code reading.
 
+## 2026-08-07 — Workflow dependency pinning
+
+A human comment beside a moving action tag documents intent but does not secure
+the fetched code. The durable fix is a full commit SHA plus a local invariant
+that rejects future tag-based references. Pinning the upstream v3.0.0 commit
+also avoids leaving this disabled-but-still-triggerable workflow on the Node 20
+runtime that the action author is retiring.
+
+This remains a source-only safety improvement: the workflow was not enabled or
+run, and no GitHub or Cloudflare state changed.
 ## 2026-08-17 session — GameTracker REVISADA refresh + Astro 7 deploy gate
 
 ### What shipped

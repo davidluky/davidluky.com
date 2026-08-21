@@ -1,7 +1,7 @@
 # davidluky.com — Personal Website
 
 ## Tech Stack
-- **Astro 6.x** — static site generator
+- **Astro 7.x** — static site generator
 - **Tailwind CSS 4.x** — via `@tailwindcss/vite`, theme in `src/styles/global.css`
 - **TypeScript** — strict Astro config
 - **Cloudflare Workers** — static assets plus `src/worker.ts` for `/ebay/deletion`
@@ -19,16 +19,18 @@
 - `src/worker.ts` — Cloudflare Worker entrypoint for eBay marketplace account deletion challenge + signed notification validation
 - `scripts/validate-site.mjs` — content/build guard for links, JSON-LD, headers, mojibake, and Worker secret regressions
 - `public/_headers` — Cloudflare security headers and CSP
-- `.github/workflows/deploy.yml` — dormant, SHA-pinned legacy workflow; repository Actions stays disabled
+- `.github/workflows/deploy.yml` — legacy workflow kept only because repository Actions is disabled; it still triggers on every push to `main` if Actions is ever re-enabled. Every third-party action is pinned to an immutable commit SHA; gitleaks uses the Node 24-compatible v3.0.0 release.
 - `docs/LOCAL-DEPLOYMENT.md` — Cloudflare Workers Builds release path and guarded local fallback
 
 ## Commands
 - `npm run dev` — Dev server at localhost:4321
 - `npm run check` — Astro TypeScript check
+- `npm run lint` — ESLint for Astro, TypeScript, scripts, and tests (zero warnings)
+- `npm run test` — Vitest unit and Worker regression suite
 - `npm run build` — Build to `dist/`
 - `npm run validate:site` — Site/content/security guard
 - `npm run audit:high` — Fail on high/critical npm advisories
-- `npm run verify` — check + build + validate + audit
+- `npm run verify` — check + lint + test + build + validate + audit
 - `.\scripts\deploy-production.ps1 -CheckOnly` — Verify a clean, pushed production candidate without deploying
 - `.\scripts\deploy-production.ps1 -ApproveProduction` — Explicitly approved local fallback deploy
 - `node scripts/generate-og.mjs` — Regenerate OG image PNG
@@ -38,8 +40,9 @@
 - **Repo**: github.com/davidluky/davidluky.com
 - **CI/CD**: GitHub Actions is disabled; Cloudflare Workers Builds verifies and deploys pushes to `main`
 - **Local fallback**: guarded, version-pinned Wrangler flow in `scripts/deploy-production.ps1`
-- **Worker secrets**: `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`
-- **Worker vars**: `EBAY_ENDPOINT_URL`, `EBAY_ENVIRONMENT`
+- **Worker secrets**: `EBAY_VERIFICATION_TOKEN`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `MATHEUS_PASSWORD`, `MATHEUS_SESSION_SECRET`
+- **Worker vars**: `EBAY_ENDPOINT_URL`, `EBAY_ENVIRONMENT`, `MATHEUS_SESSION_EPOCH`
+- **Revoking Matheus access**: rotating `MATHEUS_PASSWORD` alone leaves cookies valid for up to 30 days. Bump `MATHEUS_SESSION_EPOCH` in `wrangler.toml` and redeploy to invalidate every session at once; guests can sign out themselves with the "Sair" button (`POST /sair/`)
 - **Analytics**: Cloudflare Web Analytics, allowed in CSP
 
 ## Related Sites

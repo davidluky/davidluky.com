@@ -14,19 +14,27 @@ function makeEnv(overrides: Record<string, unknown> = {}) {
     },
     MATHEUS_PASSWORD: PASSWORD,
     MATHEUS_SESSION_SECRET: SECRET,
+    MATHEUS_LOGIN_LIMITER: { limit: async () => ({ success: true }) },
     ...overrides,
     // Cast: tests only exercise paths whose required environment fields are supplied.
   } as Parameters<typeof worker.fetch>[1];
 }
 
-async function authCookie(): Promise<string> {
-  return `${SESSION_COOKIE_NAME}=${await signSession(SECRET, Date.now() + 60_000)}`;
+// "1" is the default MATHEUS_SESSION_EPOCH the Worker signs with.
+async function authCookie(epoch = "1"): Promise<string> {
+  return `${SESSION_COOKIE_NAME}=${await signSession(SECRET, Date.now() + 60_000, epoch)}`;
 }
 
 describe("matheus gate", () => {
   it("routes every asset path through the hostname-aware Worker", () => {
     const wrangler = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
     expect(wrangler).toMatch(/^run_worker_first\s*=\s*true$/m);
+  });
+
+  it("declares the login rate limiter the gate enforces", () => {
+    const wrangler = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
+    expect(wrangler).toMatch(/^\[\[ratelimits\]\]$/m);
+    expect(wrangler).toMatch(/^name\s*=\s*"MATHEUS_LOGIN_LIMITER"$/m);
   });
 
   it("redirects unauthenticated visitors to /entrar/ without caching", async () => {
@@ -207,6 +215,116 @@ describe("matheus gate", () => {
     expect(response.headers.get("location")).toContain("erro=1");
     expect(response.headers.get("set-cookie")).toBeNull();
     expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  it("rate limits login attempts before checking the password", async () => {
+    const limited = { limit: async () => ({ success: false }) };
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/", {
+        method: "POST",
+        body: new URLSearchParams({ senha: PASSWORD }),
+      }),
+      makeEnv({ MATHEUS_LOGIN_LIMITER: limited }),
+    );
+    expect(response.status).toBe(429);
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(response.headers.get("retry-after")).toBe("60");
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  it("fails closed when the configured login limiter binding is missing", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/", {
+        method: "POST",
+        body: new URLSearchParams({ senha: PASSWORD }),
+      }),
+      makeEnv({ MATHEUS_LOGIN_LIMITER: undefined }),
+    );
+    expect(response.status).toBe(429);
+    expect(response.headers.get("set-cookie")).toBeNull();
+    expect(response.headers.get("retry-after")).toBe("60");
+  });
+
+  it("keys the login rate limiter on the client IP", async () => {
+    const keys: string[] = [];
+    const limiter = {
+      limit: async ({ key }: { key: string }) => {
+        keys.push(key);
+        return { success: true };
+      },
+    };
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/", {
+        method: "POST",
+        headers: { "cf-connecting-ip": "203.0.113.7" },
+        body: new URLSearchParams({ senha: PASSWORD }),
+      }),
+      makeEnv({ MATHEUS_LOGIN_LIMITER: limiter }),
+    );
+    expect(response.status).toBe(303);
+    expect(keys).toEqual(["203.0.113.7"]);
+  });
+
+  it("clears the session cookie on POST /sair/", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/sair/", {
+        method: "POST",
+        headers: { cookie: await authCookie() },
+      }),
+      makeEnv(),
+    );
+    const cookie = response.headers.get("set-cookie");
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/entrar/");
+    expect(cookie).toContain(`${SESSION_COOKIE_NAME}=;`);
+    expect(cookie).toContain("Max-Age=0");
+    expect(cookie).toContain("HttpOnly");
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  it("only accepts POST on /sair/", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/sair/", {
+        headers: { cookie: await authCookie() },
+      }),
+      makeEnv(),
+    );
+    expect(response.status).toBe(405);
+    expect(response.headers.get("allow")).toBe("POST");
+  });
+
+  it("rejects sessions issued under a superseded session epoch", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/livro/", {
+        headers: { cookie: await authCookie("1") },
+      }),
+      makeEnv({ MATHEUS_SESSION_EPOCH: "2" }),
+    );
+    expect(response.status).toBe(302);
+    expect(response.headers.get("location")).toContain("/entrar/?voltar=");
+  });
+
+  it("keeps serving sessions issued under the current session epoch", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/", {
+        headers: { cookie: await authCookie("2") },
+      }),
+      makeEnv({ MATHEUS_SESSION_EPOCH: "2" }),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe("asset:/matheus/");
+  });
+
+  it("refuses a tab-smuggled absolute redirect in ?voltar=", async () => {
+    const response = await worker.fetch(
+      new Request("https://matheus.davidluky.com/entrar/?voltar=%2F%09%2Fevil.example", {
+        method: "POST",
+        body: new URLSearchParams({ senha: PASSWORD }),
+      }),
+      makeEnv(),
+    );
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe("/");
   });
 
   it("rejects unsupported login form types without parsing them", async () => {

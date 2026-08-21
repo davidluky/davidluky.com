@@ -1,5 +1,35 @@
 # Recommendations
 
+## 2026-08-07 campaign closeout (current)
+
+All confirmed safe local recommendations are closed:
+
+- Astro 7.2.0 is installed from a reproducible lock; the complete audit is zero.
+- `verify` now includes a zero-warning Astro/TypeScript ESLint gate and 61 tests.
+- `/about/` and `/gaming/` emit page-specific JSON-LD; every page has a
+  focusable skip-to-content link and the validator protects both contracts.
+- The Matheus login limiter is declared in Wrangler and fails closed if the
+  binding is missing or unavailable. Logout and session-epoch revocation remain
+  covered by the preserved Worker tests.
+- Desktop and 390x844 mobile browser smokes passed across all seven routes with
+  no horizontal overflow or broken images. Local Fontsource assets remain in
+  use; no Google Fonts origin was reintroduced.
+
+Remaining work is not safely executable from this local session:
+
+1. **OWNER-GATED:** deploy/push, Cloudflare binding verification, production
+   route checks, eBay credential restoration/test notification, and Google Play
+   privacy/Data safety reconciliation.
+2. **OWNER DECISION:** choose whether the public The Room game count means the
+   14 normal registry entries or 15 with the conditional raylib RPG variant
+   before automating cross-repo statistic freshness.
+3. **CONDITIONAL:** split `src/worker.ts` only when another independent route or
+   meaningful growth makes that refactor pay for itself.
+
+The dated sections below are historical evidence and are superseded wherever
+they describe Astro 6, a clean pre-migration audit, a missing lint/skip-link/
+structured-data gate, or a fail-open limiter.
+
 ## 2026-07-12 portfolio audit
 
 ### P0 — owner-gated before the next DigiPets release

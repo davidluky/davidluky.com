@@ -6,6 +6,7 @@ All notable changes to davidluky.com are documented here.
 
 ### Changed
 - Removed the excluded LessWrong profile from `src/data/socials.ts`, so it no longer appears in the homepage Online Presence grid or in the JSON-LD `sameAs` identity metadata. The now-unused `thinking` profile kind went with it.
+- Dropped the obsolete `svgo` and `fast-uri` exact-pin overrides. Both dependencies already resolve to patched releases through their parents' own ranges (`astro` asks for `svgo@^4.0.1`, `ajv` for `fast-uri@^3.0.1`), so the pins no longer forced an upgrade — they only froze a version that could drift back into an advisory range, which is exactly what `fast-uri` pinned at `3.1.5` did.
 
 ### Added
 - A documented profile-content boundary in `CLAUDE.md` and a `scripts/validate-site.mjs` check that fails the build if any generated page reintroduces LessWrong or GreaterWrong content.

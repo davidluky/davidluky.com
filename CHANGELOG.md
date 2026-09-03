@@ -2,6 +2,14 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [Unreleased] — 2026-09-02
+
+### Changed
+- Removed the excluded LessWrong profile from `src/data/socials.ts`, so it no longer appears in the homepage Online Presence grid or in the JSON-LD `sameAs` identity metadata. The now-unused `thinking` profile kind went with it.
+
+### Added
+- A documented profile-content boundary in `CLAUDE.md` and a `scripts/validate-site.mjs` check that fails the build if any generated page reintroduces LessWrong or GreaterWrong content.
+
 ## [Unreleased] — 2026-08-17
 
 ### Added

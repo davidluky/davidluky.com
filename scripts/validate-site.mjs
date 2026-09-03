@@ -15,6 +15,7 @@ const mojibakePatterns = [
   new RegExp("\\u00e2\\u20ac\\u201c"),
   new RegExp("\\u00e2\\u2020\\u2019"),
 ];
+const excludedPublicProfileTerms = ["lesswrong", "greaterwrong"];
 const failures = [];
 
 function walk(directory, visitor) {
@@ -97,6 +98,14 @@ if (existsSync(dist)) {
   for (const htmlFile of htmlFiles) {
     const html = readText(htmlFile);
     const htmlRelativePath = relative(htmlFile);
+    const normalizedHtml = html.toLowerCase();
+
+    for (const term of excludedPublicProfileTerms) {
+      if (normalizedHtml.includes(term)) {
+        failures.push(`${htmlRelativePath} contains excluded public-profile content: ${term}.`);
+      }
+    }
+
     const links = [...html.matchAll(/\s(?:href|src)="([^"]+)"/g)].map((match) => match[1]);
 
     for (const link of links) {

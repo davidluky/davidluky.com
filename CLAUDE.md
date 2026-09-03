@@ -17,7 +17,7 @@
 - `src/i18n/shared.ts` — shared i18n strings plus language-state helpers
 - `src/layouts/Base.astro` — HTML shell, metadata, OG, JSON-LD, fonts
 - `src/worker.ts` — Cloudflare Worker entrypoint for eBay marketplace account deletion challenge + signed notification validation
-- `scripts/validate-site.mjs` — content/build guard for links, JSON-LD, headers, mojibake, and Worker secret regressions
+- `scripts/validate-site.mjs` — content/build guard for links, JSON-LD, headers, mojibake, excluded profile content, and Worker secret regressions
 - `public/_headers` — Cloudflare security headers and CSP
 - `.github/workflows/deploy.yml` — legacy workflow kept only because repository Actions is disabled; it still triggers on every push to `main` if Actions is ever re-enabled. Every third-party action is pinned to an immutable commit SHA; gitleaks uses the Node 24-compatible v3.0.0 release.
 - `docs/LOCAL-DEPLOYMENT.md` — Cloudflare Workers Builds release path and guarded local fallback
@@ -65,4 +65,5 @@
 - Add projects only through `src/data/projects.ts`; counts and live-site lists derive from it.
 - Public live links must resolve before they are added as `liveUrl`. Internal dashboards use `visibility: "internal"` and no public `liveUrl`.
 - Never hardcode eBay or Cloudflare credentials. `scripts/validate-site.mjs` and gitleaks both guard this.
+- **Profile-content boundary:** Do not use LessWrong or GreaterWrong profile information, activity, links, or research anywhere on this site — social cards, footer links, metadata, JSON-LD `sameAs`, or future copy. The site owner determined that this information adds no value here. `scripts/validate-site.mjs` enforces this boundary in generated HTML.
 - Run `npm run verify` before commit/deploy.

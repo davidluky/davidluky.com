@@ -4,7 +4,7 @@ export interface SocialProfile {
   url: string;
   role: string;
   rolePt: string;
-  kind: "code" | "professional" | "writing" | "video" | "thinking" | "personal";
+  kind: "code" | "professional" | "writing" | "video" | "personal";
 }
 
 export const socialProfiles: readonly SocialProfile[] = [
@@ -47,14 +47,6 @@ export const socialProfiles: readonly SocialProfile[] = [
     role: "Videos, stories, and experiments",
     rolePt: "Vídeos, histórias e experimentos",
     kind: "video",
-  },
-  {
-    platform: "LessWrong",
-    handle: "alisson-frangullys",
-    url: "https://www.lesswrong.com/users/alisson-frangullys",
-    role: "AI, reasoning, and long-form thinking",
-    rolePt: "IA, raciocínio e pensamento longo",
-    kind: "thinking",
   },
   {
     platform: "Personal",

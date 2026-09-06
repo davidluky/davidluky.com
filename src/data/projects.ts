@@ -395,6 +395,23 @@ export const projects: readonly Project[] = [
     imageAltPt: "Hero do site pessoal Alisson David Frangullys",
   },
   {
+    id: "painel-da-vida",
+    name: "Painel da Vida",
+    year: 2026,
+    description:
+      "Browser life-balance game: split the 24 hours of your day between work, study, leisure, sleep and relationships, survive illness, layoffs, weddings and grief, and reach the month when 1% savings interest covers every fixed cost plus R$ 1,000.",
+    descriptionPt:
+      "Jogo de equilíbrio de vida no navegador: distribua as 24 horas do dia entre trabalho, estudo, lazer, sono e relacionamento, sobreviva a doença, demissão, casamento e luto, e chegue ao mês em que 1% de rendimento da poupança cobre todos os custos fixos mais R$ 1.000.",
+    tech: ["Astro", "TypeScript", "Tailwind", "Cloudflare"],
+    tag: "web-app",
+    status: "live",
+    visibility: "public",
+    liveUrl: "https://vida.davidluky.com",
+    image: "/projects/painel-da-vida.webp",
+    imageAlt: "Painel da Vida dashboard with hour sliders, colored level bars and the monthly budget",
+    imageAltPt: "Painel da Vida com controles de horas, barras de nível coloridas e o orçamento do mês",
+  },
+  {
     id: "matheus-manual-pescados",
     name: "Manual de Pescados - Matheus",
     year: 2026,

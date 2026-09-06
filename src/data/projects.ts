@@ -395,6 +395,25 @@ export const projects: readonly Project[] = [
     imageAltPt: "Hero do site pessoal Alisson David Frangullys",
   },
   {
+    id: "painel-da-vida",
+    name: "Painel da Vida",
+    year: 2026,
+    description:
+      "Browser time-management game in Portuguese: distribute each day's 24 hours across work, study, leisure, sleep, and relationship, one turn per month, from age 18 to 65, racing toward financial freedom. Deterministic seed-based engine, 100% client-side, with no back-end, account, or telemetry.",
+    descriptionPt:
+      "Jogo de gestão de tempo em português: distribua as 24 horas do dia entre trabalho, estudo, lazer, sono e relacionamento, um turno por mês, dos 18 aos 65 anos, rumo à liberdade financeira. Motor determinístico por seed, 100% no cliente, sem back-end, conta ou telemetria.",
+    tech: ["Astro", "TypeScript", "Tailwind", "Vitest", "Cloudflare Workers"],
+    tag: "game-dev",
+    status: "wip",
+    visibility: "private",
+    liveUrl: "https://vida.davidluky.com",
+    image: "/projects/painel-da-vida.webp",
+    imageAlt: "Painel da Vida opening turn with time-allocation sliders",
+    imageAltPt: "Turno inicial do Painel da Vida com os controles de alocação de horas",
+    metrics: ["18 to 65 in monthly turns", "Seeded deterministic engine", "Zero back-end/telemetry"],
+    metricsPt: ["Dos 18 aos 65 em turnos mensais", "Motor determinístico por seed", "Zero back-end/telemetria"],
+  },
+  {
     id: "matheus-manual-pescados",
     name: "Manual de Pescados - Matheus",
     year: 2026,

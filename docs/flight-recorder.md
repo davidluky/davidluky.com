@@ -1,5 +1,24 @@
 # Flight Recorder
 
+## FR-037: Release the catalog without overwriting preserved privacy work (2026-09-08)
+
+The catalog update had been blocked by three unstaged files and a local branch two
+commits behind GitHub. The privacy WIP differs from the published policy, so resetting
+or publishing that checkout could remove newer disclosures. An independent clone
+was advanced to `origin/main`; only catalog copy and canonical records changed there.
+The original files were fingerprinted before work and remain in place. The release
+keeps `src/pages/privacy/digipets.astro` identical to `c9d5b66`.
+
+The full gate passed with 69 tests and zero vulnerabilities. Browser inspection found
+that catalog rows truncate the description, so the new copy puts the seven origins
+and more than 40 events first. Desktop/mobile checks and anonymous production checks
+are separate from the build result; the deployment receipt belongs in SESSION-HANDOFF.
+
+Lesson: unrelated WIP does not block a scoped release when the candidate starts from
+the current remote branch. Preserve the WIP and reconcile documents without replacing
+newer production content with an older local draft.
+
+
 Failed approaches, dev gotchas, and hard-won lessons. Check here before trying something new — it might have already been tried and failed.
 
 ---
@@ -488,3 +507,23 @@ when an expected one is missing.
 
 **Lesson**: For spreadsheet importers, assume the owner will insert columns and leave formula blanks.
 Header-name resolution plus loud failures turns silent corruption into a one-line error message.
+
+---
+
+## FR-036: Verify the Published Route Boundary Without Reusing Local State (2026-09-08)
+
+**What happened**: A privacy-policy patch was reviewed in an isolated worktree and published from
+`main`. The working checkout still had an unstaged policy WIP and was one commit behind the pushed
+branch, so local HTML could not prove what production served.
+
+**Fix**: Verify the deployed commit and Cloudflare deployment first, then run anonymous HTTP checks
+against the public home, the DigiPets policy, and representative protected Matheus routes. The live
+home and policy returned `200`; the protected root and photobook returned `302` to the login route,
+including the encoded return path for the photobook. The policy's effective date, deletion anchor,
+Google profile disclosure, FID disclosure, and Play Integrity/App Check disclosure were checked in
+the response body. The protected-root response retained `Cache-Control: private, no-store` and
+`X-Robots-Tag: noindex, nofollow` and did not set a cookie.
+
+**Lesson**: When a checkout contains preserved WIP, production verification must use the public
+origin and record the exact deployed commit and provider deployment ID. Status-only checks on a local
+checkout can validate the wrong source and must not replace an anonymous route smoke test.

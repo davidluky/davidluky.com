@@ -1,6 +1,48 @@
 # Session handoff
 
-Last updated: 2026-08-17
+Last updated: 2026-09-08
+
+## 2026-09-08 — Painel da Vida catalog release
+
+- The catalog descriptions now cover seven origins, starting-age choice, 43 available
+  events, optional adult content, the Venezuela hyperinflation mode and mobile UI.
+  The copy leads with the origins and events because catalog rows truncate descriptions.
+- Release prepared on `main` in the isolated clone
+  `_codex_tmp/davidluky-catalog-release-20260908`, based on `c9d5b66` from GitHub.
+  The published DigiPets policy is retained exactly; the original checkout's three
+  unstaged files remain untouched. Its earlier publication notes are preserved below
+  and in FR-036 rather than lost during the isolated release.
+- Verification: `npm ci` and full `npm run verify` passed (69 tests, check, lint,
+  seven-page build, site validation and zero audit vulnerabilities). Browser checks
+  covered EN/PT copy, search, and desktop/mobile presentation without horizontal overflow.
+- Publication is authorized by the current user request. Record the actual deployment
+  and anonymous production checks after the push; a successful local build is not a receipt.
+
+
+## 2026-09-08 — DigiPets privacy publication and public verification
+
+- The reviewed DigiPets privacy-policy change was published from commit
+  `268c1a5fab619c2482ada4a3327979f857f7dddf` on `main` after the site gate
+  passed. Cloudflare deployment `e2cd15ec-3a1f-4157-8f6f-5521a96f546f` reached
+  100% and was created at `2026-09-08T14:58:04.033Z`.
+- Anonymous public checks on 2026-09-08 returned `200` for
+  `https://davidluky.com/` (title: `David Luky - Projects, Games, and Online
+  Presence`) and `https://davidluky.com/privacy/digipets/` (title: `DigiPets —
+  Privacy Policy`). The live policy contains the September 8, 2026 effective
+  date, the `href="#data-deletion"` link and `id="data-deletion"` target, the
+  Google basic-profile disclosure, and the FID and Play Integrity/App Check
+  disclosures.
+- Anonymous requests to the protected Matheus host remained gated:
+  `https://matheus.davidluky.com/` returned `302` to `/entrar/`, and
+  `/fotolivro` returned `302` to `/entrar/?voltar=%2Ffotolivro`. No cookies or
+  credentials were used or printed. The protected-root response also retained
+  `Cache-Control: private, no-store` and `X-Robots-Tag: noindex, nofollow` and
+  did not set a cookie.
+- The local `main` checkout is intentionally preserved at
+  `0157f8e2666131d88132a41e376e88685f580aaa`, one commit behind
+  `origin/main` (`268c1a5fab619c2482ada4a3327979f857f7dddf`), with its pre-existing unstaged
+  `src/pages/privacy/digipets.astro` WIP untouched. Do not reset or overwrite
+  that file while reconciling the published state.
 
 ## 2026-08-17 — branch `gt-refresh-2026-08-17` (GameTracker refresh)
 

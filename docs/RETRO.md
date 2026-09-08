@@ -182,3 +182,16 @@ of the workbook before anything was pushed.
   empty dashboard cell beside In Progress bothers; the "2026 target" vocabulary and
   `queue2026Targets` field roll over in January 2027 (accepted tripwire — the generator's status
   map fails loudly when the workbook moves to "Meta 2027").
+## 2026-09-08 — Painel da Vida catalog release
+
+The earlier catalog work stopped because the main checkout contained unrelated privacy
+work. A separate clone of the current remote branch allowed the authorized release to
+proceed while preserving all three original files. The published privacy policy stays
+byte-identical to the reviewed remote version, and the prior local publication notes
+are incorporated into the existing handoff and flight recorder.
+
+The 69-test verification gate and EN/PT desktop/mobile browser checks passed. The
+catalog's one-line truncation made the original sentence order ineffective; putting
+the origins and event count first makes the update useful even in the compact row.
+Lesson: scope the release around the current published source and verify the place
+where the copy is actually displayed, including its truncation behavior.

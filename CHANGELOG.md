@@ -2,6 +2,14 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [2026-09-08] — Painel da Vida catalog
+
+### Changed
+- Updated the English and Portuguese Painel da Vida descriptions for the
+  seven origins, starting-age choice, more than 40 events, optional adult content,
+  Venezuela hyperinflation mode, and mobile interface. Removed the obsolete fixed
+  R$ 1,000 victory description because the goal now follows each origin's cost of living.
+
 ## [Unreleased] — 2026-09-02
 
 ### Changed

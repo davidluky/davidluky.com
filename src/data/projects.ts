@@ -399,9 +399,9 @@ export const projects: readonly Project[] = [
     name: "Painel da Vida",
     year: 2026,
     description:
-      "Browser life-balance game: split the 24 hours of your day between work, study, leisure, sleep and relationships, survive illness, layoffs, weddings and grief, and reach the month when 1% savings interest covers every fixed cost plus R$ 1,000.",
+      "Seven origins and over 40 events in a life simulation built for mobile. Choose your starting age in Brazil, India, Somalia or Venezuela, balance your 24-hour day and work toward financial freedom. Includes optional adult content and an impossible hyperinflation mode.",
     descriptionPt:
-      "Jogo de equilíbrio de vida no navegador: distribua as 24 horas do dia entre trabalho, estudo, lazer, sono e relacionamento, sobreviva a doença, demissão, casamento e luto, e chegue ao mês em que 1% de rendimento da poupança cobre todos os custos fixos mais R$ 1.000.",
+      "Sete origens e mais de 40 eventos em um simulador de vida feito para o celular. Escolha a idade inicial no Brasil, Índia, Somália ou Venezuela, equilibre as 24 horas do dia e busque a liberdade financeira. Inclui conteúdo adulto opcional e um modo impossível de hiperinflação.",
     tech: ["Astro", "TypeScript", "Tailwind", "Cloudflare"],
     tag: "web-app",
     status: "live",

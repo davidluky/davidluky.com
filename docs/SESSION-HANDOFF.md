@@ -15,8 +15,15 @@ Last updated: 2026-09-08
 - Verification: `npm ci` and full `npm run verify` passed (69 tests, check, lint,
   seven-page build, site validation and zero audit vulnerabilities). Browser checks
   covered EN/PT copy, search, and desktop/mobile presentation without horizontal overflow.
-- Publication is authorized by the current user request. Record the actual deployment
-  and anonymous production checks after the push; a successful local build is not a receipt.
+- Published commit `ddcf44c8dbf474ccde3d55401281b019aa40bb22` through Cloudflare
+  Workers Builds, build `f888de02-d479-47a5-862c-d08bc67abb2c` (GitHub check: success),
+  version `25f77e3e-e974-4a64-bd4f-b6cf7990d573`, deployed at 17:28:13 UTC.
+  Anonymous `/projects/` returned 200 and contains both new descriptions; the live
+  DigiPets policy retains the September 8 date and safety-report disclosures.
+  The protected Matheus root still returns 302 to `/entrar/`.
+- SHA-256 verification confirmed that all three original unstaged files are unchanged.
+  The original checkout intentionally remains at `0157f8e` with that WIP; this release
+  clone is clean and synchronized after each push. No privacy source was changed.
 
 
 ## 2026-09-08 — DigiPets privacy publication and public verification

@@ -19,8 +19,9 @@ violations. The lock refresh was needed because npm ci exposed five findings;
 npm audit fix cleared them without --force or package.json changes.
 
 Validation: full npm run verify passed (69 tests, check, lint, seven-page build,
-site validation and zero vulnerabilities). Publication receipts and the final
-browser checks belong in SESSION-HANDOFF when the portfolio deployment is live.
+site validation and zero vulnerabilities). Desktop/mobile browser checks passed;
+Workers Builds succeeded, and anonymous live pages/assets match the release.
+Publication receipts and the final browser checks are in SESSION-HANDOFF.
 
 Lesson: a public project page and a public source repository are separate choices.
 Verify the page's real domain before adding it to catalog-derived public links.

@@ -21,7 +21,15 @@ Last updated: 2026-09-10
 - Local browser checks passed at 1280x900 and 390x844: search narrows to the
   Mega Man X entry, EN/PT copy renders, the card/footer link uses the verified
   custom hostname, and mobile client/scroll widths match at 382px. Desktop and
-  mobile card screenshots were inspected. Portfolio deployment receipt follows.
+  mobile card screenshots were inspected.
+- Published 62e651e2cd7d399b574029daedbf9ab2816b2465 through Workers Builds,
+  build 7bf3d224-1339-42c1-b26b-f9fe3756e310 (success at 13:25:30 UTC).
+  Worker deployment 3dcaddd2-e94a-4cd1-ad0f-4641897b3602 serves version
+  fb998308-3788-4c42-9836-c431f3b5c6de at 100% since 13:25:25 UTC.
+  Anonymous home, /projects/ and the DigiPets policy returned 200; all six
+  checked CSS/JS/image assets match the local build. The live catalog contains
+  the new EN/PT copy and correct project URL, with no public game repoUrl.
+  Receipt: Websites/megaman.davidluky.com/build/portfolio-live-release.json.
   Preserve the original checkout's three unrelated unstaged files.
 
 ## 2026-09-08 — Painel da Vida catalog release

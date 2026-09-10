@@ -2,6 +2,22 @@
 
 Last updated: 2026-09-10
 
+## 2026-09-10 — Public Mega Man X source reference (R374)
+
+- Public source: https://github.com/davidluky/megaman-x-engine, MIT, initial
+  commit79306933ee9c1859575df39fd770f9a7f062affd. The original research
+  repository stays private. The source-only core and15 contracts passed in
+  an anonymous fresh Windows clone; full game assets are not distributed.
+- The project Site v5 is live. This independent portfolio update changes the
+  Mega Man X entry from private/access-by-request to public/fork/PR, with the
+  actual repoUrl and matching EN/PT limits. Only catalog and canonical records
+  change. Original checkout WIP remains preserved in its own worktree.
+- Full npm run verify passed with69 tests and zero vulnerabilities. No new
+  browser run is claimed for this catalog copy/link change.
+- Workers Builds and anonymous live checks will be recorded after the push.
+  Local log: verify-r374.log in the isolated portfolio worktree. Keep the
+  portfolio's release receipt separate from the Sites v5 receipt.
+
 ## 2026-09-10 — Mega Man X project site reference
 
 - The project site is live at `https://megaman.davidluky.com/`: roadmap, verified

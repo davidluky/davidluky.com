@@ -1,5 +1,25 @@
 # Flight Recorder
 
+## FR-039: Reconcile the portfolio after public source publication (2026-09-10)
+
+David approved the separate public Mega Man X source repository and selected
+MIT. GitHub now reports davidluky/megaman-x-engine as PUBLIC/MIT; an anonymous
+clone compiled its core and passed15 contracts without game assets. The earlier
+portfolio copy still asked contributors to request source access.
+
+Updated only the Mega Man X catalog entry: matching EN/PT copy explains public
+MIT source and the missing full-game/assets boundary, visibility is public,
+and repoUrl points to the verified repository. Existing liveUrl remains the
+project site. The isolated worktree started at remote-exact7a651e3 and preserves
+the original checkout's privacy/document WIP.
+
+Validation: npm run verify passed, including69 tests, check/lint, seven-page
+build, site validation and zero vulnerabilities. No Worker, dependency, privacy
+or authentication change. Publication evidence is recorded in SESSION-HANDOFF.
+
+Lesson: a source-access change needs the portfolio's catalog metadata and copy
+updated as well as the project's own site; otherwise the two entry paths conflict.
+
 ## FR-038: Link the Mega Man X site after verifying its custom domain (2026-09-10)
 
 David requested a public roadmap/checklist site and a reference on the portfolio.

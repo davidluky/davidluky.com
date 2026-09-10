@@ -14,9 +14,15 @@ Last updated: 2026-09-10
   change. Original checkout WIP remains preserved in its own worktree.
 - Full npm run verify passed with69 tests and zero vulnerabilities. No new
   browser run is claimed for this catalog copy/link change.
-- Workers Builds and anonymous live checks will be recorded after the push.
-  Local log: verify-r374.log in the isolated portfolio worktree. Keep the
-  portfolio's release receipt separate from the Sites v5 receipt.
+- Published source4cfb4feddda49bddedc8af89c68f7b2bde67edc5 through Workers
+  Builds9f0aa027-9e31-4a37-a407-816aa589a700, success at19:21:37 UTC.
+  Anonymous home, /projects/ and DigiPets privacy HTML match the local build
+  byte-for-byte, as do all six checked CSS/JS/image assets. The served catalog
+  has the new GitHub button, public visibility and EN/PT MIT text; Portuguese
+  copy is also present in the served language-switch script.
+  Local log: verify-r374.log. Independent receipt:
+  Websites/megaman.davidluky.com/build/r374/portfolio-live-release.json.
+  This closing documentation changes no deployed product files.
 
 ## 2026-09-10 — Mega Man X project site reference
 

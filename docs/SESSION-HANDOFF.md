@@ -1,6 +1,28 @@
 # Session handoff
 
-Last updated: 2026-09-08
+Last updated: 2026-09-10
+
+## 2026-09-10 — Mega Man X project site reference
+
+- The project site is live at `https://megaman.davidluky.com/`: roadmap, verified
+  checklist, current development status, GitHub link and contribution guidance.
+  Sites version 1 uses source `fe2d6e4915fa8f0a6876541106d614d1c0bfec16`;
+  deployment `appgdep_6aa2ad452bb4819198f24c432cf74bba` succeeded. Custom domain
+  and SSL are active, and anonymous HTML plus six asset requests returned 200.
+  The GitHub game repository remains private. Site release evidence is separate
+  from this portfolio release in `Websites/megaman.davidluky.com/build/`.
+- Portfolio candidate: branch `megaman-site-reference-20260910`, isolated worktree
+  at `Websites/megaman.davidluky.com/build/portfolio`, based on origin/main 85c7cb0.
+  The Mega Man X entry now links the site and uses matching EN/PT copy/metrics;
+  private visibility and the absence of a public repoUrl are preserved.
+- npm run verify passed: 69 tests, typecheck, lint, build, site validation and
+  audit with zero vulnerabilities. The lock refresh stays within existing
+  ranges; package.json, Worker configuration and privacy content are unchanged.
+- Local browser checks passed at 1280x900 and 390x844: search narrows to the
+  Mega Man X entry, EN/PT copy renders, the card/footer link uses the verified
+  custom hostname, and mobile client/scroll widths match at 382px. Desktop and
+  mobile card screenshots were inspected. Portfolio deployment receipt follows.
+  Preserve the original checkout's three unrelated unstaged files.
 
 ## 2026-09-08 — Painel da Vida catalog release
 

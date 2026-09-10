@@ -1,5 +1,30 @@
 # Flight Recorder
 
+## FR-038: Link the Mega Man X site after verifying its custom domain (2026-09-10)
+
+David requested a public roadmap/checklist site and a reference on the portfolio.
+The new site is independently published through Sites at megaman.davidluky.com.
+Its TLS and custom-domain status are active; anonymous checks returned 200 for
+the HTML and six assets. The six assets are byte-exact, and HTML matches after
+excluding Cloudflare's injected challenge script. No game repository visibility
+change was made; the contribution path explains private-source access requests.
+
+The portfolio candidate uses an isolated worktree from origin/main 85c7cb0.
+Only the Mega Man X catalog entry, the audited lockfile and canonical records
+change here. The original checkout's privacy and document WIP remain untouched.
+The liveUrl also supplies the homepage, footer, live-project count and JSON-LD;
+it was held until the real hostname was verified. Independent review confirmed
+private visibility, aligned English/Portuguese fields and no dependency range
+violations. The lock refresh was needed because npm ci exposed five findings;
+npm audit fix cleared them without --force or package.json changes.
+
+Validation: full npm run verify passed (69 tests, check, lint, seven-page build,
+site validation and zero vulnerabilities). Publication receipts and the final
+browser checks belong in SESSION-HANDOFF when the portfolio deployment is live.
+
+Lesson: a public project page and a public source repository are separate choices.
+Verify the page's real domain before adding it to catalog-derived public links.
+
 ## FR-037: Release the catalog without overwriting preserved privacy work (2026-09-08)
 
 The catalog update had been blocked by three unstaged files and a local branch two

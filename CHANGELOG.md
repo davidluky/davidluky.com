@@ -2,6 +2,19 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [2026-09-10] — Mega Man X project site
+
+### Added
+- Linked Mega Man X Engine to `https://megaman.davidluky.com/` from the project
+  catalog and its derived homepage/footer entries. English and Portuguese copy
+  now point visitors to verified progress, the roadmap and contribution guidance.
+  The game repository remains private, with source access by request.
+
+### Fixed
+- Refreshed the dependency lock within the existing package ranges to clear
+  five audit findings. Astro, sharp, js-yaml and Vitest now use patched versions;
+  package declarations, Worker configuration and privacy content are unchanged.
+
 ## [2026-09-08] — Painel da Vida catalog
 
 ### Changed

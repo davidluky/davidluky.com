@@ -273,17 +273,20 @@ export const projects: readonly Project[] = [
   },
   {
     id: "megaman-x",
-    name: "Megaman X",
+    name: "Mega Man X Engine",
     year: 2026,
     description:
-      "Game engine and remake project built from scratch with raylib. Content-driven architecture with JSON-based level and entity definitions, custom physics, and sprite animation system.",
+      "Rebuilding Mega Man X with C++17 and raylib. Follow verified gameplay fixes, the public roadmap and the contribution guide on the project site. The game is still in development; source access is by request.",
     descriptionPt:
-      "Engine de jogo e projeto de remake feito do zero com raylib. Arquitetura orientada a conteúdo com definições de níveis e entidades em JSON, física customizada e sistema de animação de sprites.",
+      "Reconstrução de Mega Man X com C++17 e raylib. Acompanhe as correções verificadas, o roadmap público e o guia de contribuição no site do projeto. O jogo segue em desenvolvimento; o acesso ao código é por solicitação.",
     tech: ["C++17", "raylib", "CMake", "JSON"],
     tag: "game-dev",
     status: "active",
     visibility: "private",
     image: "/projects/megaman-x.webp",
+    liveUrl: "https://megaman.davidluky.com/",
+    metrics: ["Playable test scenarios", "Public roadmap", "Contribution guide"],
+    metricsPt: ["Cenários de teste jogáveis", "Roadmap público", "Guia de contribuição"],
     imageAlt: "Autotest frames from the custom Megaman X raylib engine",
     imageAltPt: "Frames de autoteste da engine customizada de Megaman X em raylib",
   },

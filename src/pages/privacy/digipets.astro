@@ -38,6 +38,7 @@ import Footer from "../../components/Footer.astro";
           <li data-i18n="pp_c4">If you use Friends, social data such as your shareable friend code, active pet name and summary, friendships, requests, visits, house summary, and kudos activity.</li>
           <li data-i18n="pp_c5">Firebase may process a per-installation identifier (FID). Firebase App Check may also process Play Integrity app/device integrity signals to protect backend requests from abuse. This information is not used for advertising or user tracking.</li>
           <li data-i18n="pp_c6">When you block or report a player, the App stores the account IDs involved. Safety reports also contain the selected reason, report status, and timestamps. We use this information to prevent abuse and review reports.</li>
+          <li data-i18n="pp_c7">If you enable Android push notifications, a Firebase Cloud Messaging (FCM) registration token associated with your account, selected locale, and last update time.</li>
         </ul>
       </div>
 
@@ -56,6 +57,13 @@ import Footer from "../../components/Footer.astro";
         <h2 data-i18n="pp_h_use" class="mb-3 text-[13px] font-semibold uppercase tracking-wider text-text">How we use your data</h2>
         <p data-i18n="pp_use" class="text-[15px] leading-[1.85] text-text-2">
           We use your data to save game progress, support optional Google sign-in and email/password account linking, and provide Friends, requests, and visits. We do not sell or monetize your data. Limited social profile details are shown through friend-code and accepted-friend flows; friend, request, and visit records are scoped to the involved accounts.
+        </p>
+      </div>
+
+      <div>
+        <h2 data-i18n="pp_h_notifications" class="mb-3 text-[13px] font-semibold uppercase tracking-wider text-text">Notifications and push delivery</h2>
+        <p data-i18n="pp_notifications" class="text-[15px] leading-[1.85] text-text-2">
+          Push notifications are optional on Android. If you enable them, Firebase Cloud Messaging (FCM) uses the registration token associated with your DigiPets account, selected locale, and last update time to deliver account and game notifications. The App also stores private inbox messages and whether you have read or dismissed them. Disabling push stops delivery to this installation. The App tries to remove the server registration when connected, and removes tokens reported invalid by Firebase during delivery attempts. Notification delivery is not used for marketing or notification analytics. The notification content shown on a device is generic and does not include a pet name. Device and installation identifiers described above remain used only for App functionality, not advertising or user tracking.
         </p>
       </div>
 
@@ -117,6 +125,7 @@ import Footer from "../../components/Footer.astro";
       pp_c4: 'If you use Friends, social data such as your shareable friend code, active pet name and summary, friendships, requests, visits, house summary, and kudos activity.',
       pp_c5: 'Firebase may process a per-installation identifier (FID). Firebase App Check may also process Play Integrity app/device integrity signals to protect backend requests from abuse. This information is not used for advertising or user tracking.',
       pp_c6: 'When you block or report a player, the App stores the account IDs involved. Safety reports also contain the selected reason, report status, and timestamps. We use this information to prevent abuse and review reports.',
+      pp_c7: 'If you enable Android push notifications, a Firebase Cloud Messaging (FCM) registration token associated with your account, selected locale, and last update time.',
       pp_h_not_collect: 'What we do not collect',
       pp_nc1: 'Location data',
       pp_nc2: 'Your device address book or phone number',
@@ -125,6 +134,8 @@ import Footer from "../../components/Footer.astro";
       pp_nc5: 'Third-party analytics, advertising tracking, or crash-reporting SDKs',
       pp_h_use: 'How we use your data',
       pp_use: 'We use your data to save game progress, support optional Google sign-in and email/password account linking, and provide Friends, requests, and visits. We do not sell or monetize your data. Limited social profile details are shown through friend-code and accepted-friend flows; friend, request, and visit records are scoped to the involved accounts.',
+      pp_h_notifications: 'Notifications and push delivery',
+      pp_notifications: 'Push notifications are optional on Android. If you enable them, Firebase Cloud Messaging (FCM) uses the registration token associated with your DigiPets account, selected locale, and last update time to deliver account and game notifications. The App also stores private inbox messages and whether you have read or dismissed them. Disabling push stops delivery to this installation. The App tries to remove the server registration when connected, and removes tokens reported invalid by Firebase during delivery attempts. Notification delivery is not used for marketing or notification analytics. The notification content shown on a device is generic and does not include a pet name. Device and installation identifiers described above remain used only for App functionality, not advertising or user tracking.',
       pp_h_thirdparty: 'Third-party services',
       pp_tp: 'The App uses <a href="https://firebase.google.com/support/privacy" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">Google Firebase</a> for authentication, cloud data storage, and server-side game and social commands. Firebase\'s own privacy policy applies to data processed by its infrastructure.',
       pp_h_children: "Children's privacy",
@@ -150,6 +161,7 @@ import Footer from "../../components/Footer.astro";
       pp_c4: 'Se você usar Amigos, dados sociais como seu código de amigo compartilhável, nome e resumo do pet ativo, amizades, solicitações, visitas, resumo da casa e atividade de kudos.',
       pp_c5: 'O Firebase pode processar um identificador por instalação (FID). O Firebase App Check também pode processar sinais de integridade do app/dispositivo do Play Integrity para proteger as solicitações ao backend contra abuso. Essas informações não são usadas para publicidade nem rastreamento de usuários.',
       pp_c6: 'Quando você bloqueia ou denuncia um jogador, o App armazena os IDs das contas envolvidas. As denúncias também contêm o motivo escolhido, o status e as datas de registro. Usamos essas informações para prevenir abusos e analisar denúncias.',
+      pp_c7: 'Se você ativar as notificações push no Android, um token de registro do Firebase Cloud Messaging (FCM) associado à sua conta, ao idioma escolhido e ao horário da última atualização.',
       pp_h_not_collect: 'O que não coletamos',
       pp_nc1: 'Dados de localização',
       pp_nc2: 'A agenda de contatos do seu dispositivo ou número de telefone',
@@ -158,6 +170,8 @@ import Footer from "../../components/Footer.astro";
       pp_nc5: 'Analytics de terceiros, rastreamento de publicidade ou SDKs de relatório de crashes',
       pp_h_use: 'Como usamos seus dados',
       pp_use: 'Usamos seus dados para salvar o progresso, oferecer entrada opcional com o Google e vinculação de conta com email/senha, além de fornecer Amigos, solicitações e visitas. Não vendemos nem monetizamos seus dados. Detalhes limitados do perfil social são mostrados nos fluxos de código de amigo e amizade aceita; registros de amizades, solicitações e visitas ficam restritos às contas envolvidas.',
+      pp_h_notifications: 'Notificações e entrega por push',
+      pp_notifications: 'As notificações push são opcionais no Android. Se você ativá-las, o Firebase Cloud Messaging (FCM) usa o token de registro associado à sua conta DigiPets, ao idioma escolhido e ao horário da última atualização para entregar notificações da conta e do jogo. O App também armazena mensagens privadas da caixa de entrada e se você as leu ou descartou. Desativar o push interrompe a entrega para esta instalação. O App tenta remover o registro no servidor quando estiver conectado e remove os tokens que o Firebase informar como inválidos durante as tentativas de entrega. A entrega de notificações não é usada para marketing nem analytics de notificações. O conteúdo mostrado no dispositivo é genérico e não inclui o nome do pet. Os identificadores de dispositivo e de instalação descritos acima continuam sendo usados apenas para o funcionamento do App, não para publicidade ou rastreamento de usuários.',
       pp_h_thirdparty: 'Serviços de terceiros',
       pp_tp: 'O App utiliza o <a href="https://firebase.google.com/support/privacy" class="border-b border-accent/30 text-accent no-underline transition-colors hover:border-accent">Google Firebase</a> para autenticação, armazenamento de dados na nuvem e comandos de jogo e sociais no servidor. A política de privacidade do Firebase se aplica aos dados processados por sua infraestrutura.',
       pp_h_children: 'Privacidade de crianças',

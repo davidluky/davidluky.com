@@ -118,9 +118,9 @@ export const projects: readonly Project[] = [
     name: "The Room",
     year: 2020,
     description:
-      `Multiplayer social platform with ${stats.theRoomGames} games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, ${stats.theRoomAchievements} achievements, tournaments, economy, and admin dashboard. The native v1.78 RPG pass now includes bilingual absurdist field notes, first-encounter writing, NPC/shop polish, and the Pombo Sniper enemy with sprite/data support.`,
+      `Multiplayer social platform with ${stats.theRoomGames} games, a full turn-based RPG with graphical mode (7 zones, endgame boss), real-time chat, ${stats.theRoomAchievements} achievements, tournaments, economy, and admin dashboard. Native v1.85 improves shutdown reliability in standard and graphical builds and refreshes the contributor guides.`,
     descriptionPt:
-      `Plataforma social multiplayer com ${stats.theRoomGames} jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, ${stats.theRoomAchievements} conquistas, torneios, economia e painel admin. O passe nativo v1.78 do RPG agora inclui notas de bestiário e primeiros encontros em PT-BR/EN, polimento de NPCs/lojas e o inimigo Pombo Sniper com sprite e dados próprios.`,
+      `Plataforma social multiplayer com ${stats.theRoomGames} jogos, um RPG por turnos completo com modo gráfico (7 zonas, boss endgame), chat em tempo real, ${stats.theRoomAchievements} conquistas, torneios, economia e painel admin. A versão nativa v1.85 melhora a confiabilidade ao fechar os aplicativos padrão e gráfico e atualiza os guias para colaboradores.`,
     tech: ["C++17", "Firebase", "libcurl", "raylib", "Windows API"],
     tag: "game-platform",
     status: "active",
@@ -129,8 +129,8 @@ export const projects: readonly Project[] = [
     image: "/projects/the-room.webp",
     imageAlt: "Pixel art RPG monsters from The Room sprite set",
     imageAltPt: "Monstros de RPG em pixel art do acervo de sprites do The Room",
-    metrics: [`${stats.theRoomGames} games`, `${stats.theRoomAchievements} achievements`, "RPG v1.78 content pass"],
-    metricsPt: [`${stats.theRoomGames} jogos`, `${stats.theRoomAchievements} conquistas`, "Passe RPG v1.78"],
+    metrics: [`${stats.theRoomGames} games`, `${stats.theRoomAchievements} achievements`, "Native v1.85 maintainability"],
+    metricsPt: [`${stats.theRoomGames} jogos`, `${stats.theRoomAchievements} conquistas`, "Manutenção nativa v1.85"],
   },
   {
     id: "the-room-web",

@@ -2,6 +2,20 @@
 
 Chronological log of the portfolio quality pass. Newest session appended at top of each section.
 
+## 2026-09-12 — The Room native v1.85 catalog release
+
+Prepared in an isolated canonical main clone from `fc9039e`, preserving the
+original checkout's unrelated WIP. Updated only the native The Room EN/PT copy
+and current version metric. Native v1.85 is published at `6da39a1`; updater
+workflow `34707957392` succeeded, and both public executable hashes plus
+pre-login metadata were verified. Native receipts remain in that repository.
+
+The final `npm run verify` passed: check/lint, 69 tests, seven-page build,
+site validation and zero audit findings. Receipt: `maintainability-verify.log`.
+Browser review covered EN/PT text, working language switch and the updated
+card on desktop and 390x844 phone; there was no horizontal overflow.
+Provider and live checks for this independent portfolio release follow below.
+
 ## 2026-08-07 campaign closeout
 
 - Preserved the full Matheus/eBay/content/workflow WIP while completing the

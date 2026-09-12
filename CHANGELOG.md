@@ -2,6 +2,14 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [2026-09-12] — The Room native v1.85 catalog
+
+### Changed
+- Updated the English and Portuguese The Room catalog copy to describe the
+  published v1.85 shutdown reliability improvements and contributor guides.
+  Existing product scope, private repository visibility, the Web entry and
+  the already-current Mega Man X links are preserved.
+
 ## [2026-09-10] — Mega Man X project site
 
 ### Added

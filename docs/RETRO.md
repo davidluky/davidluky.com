@@ -1,5 +1,13 @@
 # Retro
 
+## 2026-09-12 — The Room native v1.85 catalog release
+
+Use a clean clone of current main when the original checkout is behind and
+contains unrelated work. Verify native delivery before announcing the version,
+then verify the portfolio separately. Keep the card focused on the player's
+shutdown reliability and contributor guidance; detailed test counts and
+release receipts belong in the existing engineering records.
+
 ## 2026-08-07 campaign closeout
 
 ### What worked

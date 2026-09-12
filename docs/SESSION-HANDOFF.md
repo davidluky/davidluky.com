@@ -1,6 +1,17 @@
 # Session handoff
 
-Last updated: 2026-09-10
+Last updated: 2026-09-12
+
+## 2026-09-12 — Native v1.85 catalog publication
+
+The Room catalog now reflects the verified native v1.85 release in EN/PT.
+Source `c323280` passed the 69-test full site gate and desktop/phone review;
+Workers Build `736ac156-3d13-440a-b852-366adbd9d13a` succeeded. Three public
+pages and six assets match the build (HTML excludes provider analytics).
+Exact receipt and original-checkout WIP boundary: [flight recorder](../FLIGHT_RECORDER.md#2026-09-12--the-room-native-v185-catalog-release).
+Mega Man X links were already current; its independently published Site is
+now version 8. This portfolio release does not publish the Room Web review
+branch, which still requires administrator recovery and coordinated cutover.
 
 ## 2026-09-10 — Public Mega Man X source reference (R374)
 

@@ -14,7 +14,15 @@ The final `npm run verify` passed: check/lint, 69 tests, seven-page build,
 site validation and zero audit findings. Receipt: `maintainability-verify.log`.
 Browser review covered EN/PT text, working language switch and the updated
 card on desktop and 390x844 phone; there was no horizontal overflow.
-Provider and live checks for this independent portfolio release follow below.
+Published source `c323280879fb42abd5d208bc9c21561572eac413`. Cloudflare Workers
+Builds `736ac156-3d13-440a-b852-366adbd9d13a` succeeded at 2026-09-12 17:30:40 UTC.
+Anonymous home, projects and DigiPets privacy pages returned HTTP 200 and
+matched the build after removing one observed Cloudflare analytics injection.
+All six referenced CSS/JS/image assets matched byte-for-byte, including the
+bilingual catalog script. Receipt:
+`_codex_tmp/maintainability-portfolio-live-release-20260912.json` in the parent
+Alisson workspace. GitHub Actions remains disabled. The closing documentation
+changes no published product files.
 
 ## 2026-08-07 campaign closeout
 

@@ -88,6 +88,30 @@ describe("matheus gate", () => {
     expect(response.headers.get("cache-control")).toBe("private, max-age=600");
   });
 
+  it("never serves a gated asset through an encoded separator under an open prefix", async () => {
+    for (const path of [
+      "/gate_assets/..%2findex.html",
+      "/gate_assets/..%2Ffotolivro.html",
+      "/gate_assets/..%5cindex.html",
+    ]) {
+      const fetched: string[] = [];
+      const env = makeEnv({
+        ASSETS: {
+          fetch: async (request: Request) => {
+            fetched.push(new URL(request.url).pathname);
+            return new Response("gated content", { status: 200 });
+          },
+        },
+      });
+      const response = await worker.fetch(
+        new Request(`https://matheus.davidluky.com${path}`),
+        env,
+      );
+      expect(response.status, path).not.toBe(200);
+      expect(fetched, path).toEqual([]);
+    }
+  });
+
   it("does not expose the Matheus 404 page without a session", async () => {
     const response = await worker.fetch(
       new Request("https://matheus.davidluky.com/404.html"),

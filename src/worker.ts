@@ -630,6 +630,19 @@ async function handleMatheusSite(request: Request, env: Env, url: URL): Promise<
     );
   }
 
+  // The gate checks the still-encoded pathname, but Assets decodes it afterwards, so an
+  // encoded separator under an open prefix (/gate_assets/..%2f...) would reach gated files.
+  // No real asset name contains one: refuse them before any gate decision.
+  if (/%2f|%5c/i.test(url.pathname)) {
+    return withMatheusHeaders(
+      new Response("Bad request.", {
+        status: 400,
+        headers: { "content-type": "text/plain; charset=utf-8" },
+      }),
+      MATHEUS_NO_STORE,
+    );
+  }
+
   if (request.method === "POST" && GATE_OPEN_PATHS.has(url.pathname)) {
     return handleMatheusLogin(request, env, url);
   }

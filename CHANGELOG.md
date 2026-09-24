@@ -2,6 +2,15 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [2026-09-23] — Matheus gate fix
+
+### Security
+- The Matheus Worker now refuses paths containing an encoded `/` or `\`
+  (`%2f`, `%5c`) with a 400 before any gate decision. The open-path check ran on
+  the still-encoded pathname while Assets decoded it afterwards, so an encoded
+  separator under `/gate_assets/` could reach gated pages without a session.
+  Regression test in `tests/worker-matheus.test.ts`.
+
 ## [2026-09-23] — Game tracker refresh
 
 ### Changed

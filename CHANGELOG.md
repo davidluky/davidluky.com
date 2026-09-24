@@ -2,6 +2,16 @@
 
 All notable changes to davidluky.com are documented here.
 
+## [2026-09-23] — Game tracker refresh
+
+### Changed
+- Regenerated `src/data/gameTracker.json` from `Video Jogos 2026.xlsx` with
+  `scripts/generate-game-tracker.py`. The queue gains Ghosts 'n Goblins (1985,
+  now the oldest entry), Marvel's Wolverine and Grand Theft Auto VI; Baldur's
+  Gate 3 joins the finish-this-year list and shows as a 2026 target in the queue.
+  Release dates and platforms were checked on 2026-09-23 (Wikipedia, PlayStation
+  Blog, Rockstar Newswire). No game was newly finished since the 2026-08-17 refresh.
+
 ## [2026-09-12] — The Room native v1.85 catalog
 
 ### Changed

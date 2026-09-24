@@ -1,30 +1,44 @@
 {
-  "updated": "2026-08-17",
-  "generatedFrom": "Video Jogos 2026 - Organized - REVISADA.xlsx (2026-08-17)",
+  "updated": "2026-09-23",
+  "generatedFrom": "Video Jogos 2026.xlsx (2026-09-23)",
   "summary": {
-    "activePlayOrderRows": 147,
-    "backlogRows": 128,
-    "queue2026Targets": 12,
+    "activePlayOrderRows": 150,
+    "backlogRows": 130,
+    "queue2026Targets": 13,
     "queueInProgress": 7,
-    "finishThisYear": 20,
+    "finishThisYear": 21,
     "inProgress": 8,
     "finishedThisYear": 1,
     "previousFinished": 25,
     "pokemonRows": 21,
     "historyRecords": 34,
-    "oldestActiveGame": "Pokémon Red / Green / Blue",
-    "oldestReleaseYear": 1996,
+    "oldestActiveGame": "Ghosts 'n Goblins",
+    "oldestReleaseYear": 1985,
     "nextFinishTarget": "Devil May Cry",
-    "totalMapped": 183,
-    "remainingToFinish": 148,
+    "totalMapped": 186,
+    "remainingToFinish": 151,
     "paceFinishedPerMonth": 0.52,
     "scenarioPerMonth": 1,
-    "projectedFinishCurrentPace": "2050-05-07",
-    "projectedFinishOnePerMonth": "2038-12-17"
+    "projectedFinishCurrentPace": "2050-12-05",
+    "projectedFinishOnePerMonth": "2039-04-24"
   },
   "playOrder": [
     {
       "rank": 1,
+      "game": "Ghosts 'n Goblins",
+      "notes": "Arcade 1985 (original)",
+      "releaseDate": "1985-09-05",
+      "year": 1985,
+      "decade": "1980s",
+      "whereToPlay": "Capcom Arcade Stadium (add-on): Switch, PC/Steam, PlayStation, Xbox",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 1,
+      "dateSource": "Manual: Wikipedia (arcade JP 05/09/1985; outras fontes citam 07/07 ou 19/09/1985), 23/09/2026",
+      "pokeNumber": null
+    },
+    {
+      "rank": 2,
       "game": "Pokémon Red / Green / Blue",
       "notes": "Game Boy",
       "releaseDate": "1996-02-27",
@@ -33,12 +47,12 @@
       "whereToPlay": "Game Boy / Game Boy Color; 3DS Virtual Console if owned; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 1,
+      "queueRank": 2,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 1
     },
     {
-      "rank": 2,
+      "rank": 3,
       "game": "Pokémon Yellow",
       "notes": "Game Boy",
       "releaseDate": "1998-09-12",
@@ -47,12 +61,12 @@
       "whereToPlay": "Game Boy / Game Boy Color; 3DS Virtual Console if owned; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 2,
+      "queueRank": 3,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 2
     },
     {
-      "rank": 3,
+      "rank": 4,
       "game": "Pokémon Gold / Silver",
       "notes": "Game Boy Color",
       "releaseDate": "1999-11-21",
@@ -61,12 +75,12 @@
       "whereToPlay": "Game Boy Color; 3DS Virtual Console if owned; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 3,
+      "queueRank": 4,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 3
     },
     {
-      "rank": 4,
+      "rank": 5,
       "game": "Pokémon Crystal",
       "notes": "Game Boy Color",
       "releaseDate": "2000-12-14",
@@ -75,12 +89,12 @@
       "whereToPlay": "Game Boy Color; 3DS Virtual Console if owned; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 4,
+      "queueRank": 5,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 4
     },
     {
-      "rank": 5,
+      "rank": 6,
       "game": "Devil May Cry",
       "notes": null,
       "releaseDate": "2001-08-23",
@@ -94,7 +108,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 6,
+      "rank": 7,
       "game": "Kingdom Hearts",
       "notes": null,
       "releaseDate": "2002-09-17",
@@ -103,12 +117,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 5,
+      "queueRank": 6,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 7,
+      "rank": 8,
       "game": "Pokémon Ruby / Sapphire",
       "notes": "Game Boy Advance",
       "releaseDate": "2002-11-21",
@@ -117,12 +131,12 @@
       "whereToPlay": "Game Boy Advance; Nintendo DS / DS Lite; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 6,
+      "queueRank": 7,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 5
     },
     {
-      "rank": 8,
+      "rank": 9,
       "game": "Pokémon FireRed / LeafGreen",
       "notes": "Game Boy Advance remake",
       "releaseDate": "2004-01-29",
@@ -131,12 +145,12 @@
       "whereToPlay": "Game Boy Advance; Nintendo DS / DS Lite; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 7,
+      "queueRank": 8,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 6
     },
     {
-      "rank": 9,
+      "rank": 10,
       "game": "Pokémon Emerald",
       "notes": "Game Boy Advance",
       "releaseDate": "2004-09-16",
@@ -145,12 +159,12 @@
       "whereToPlay": "Game Boy Advance; Nintendo DS / DS Lite; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 8,
+      "queueRank": 9,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 7
     },
     {
-      "rank": 10,
+      "rank": 11,
       "game": "Kingdom Hearts: Chain Of Memories (GBA)",
       "notes": null,
       "releaseDate": "2004-12-07",
@@ -159,12 +173,12 @@
       "whereToPlay": "Game Boy Advance; Nintendo DS / DS Lite; emulation",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 9,
+      "queueRank": 10,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 11,
+      "rank": 12,
       "game": "Devil May Cry 3: Special Edition",
       "notes": "Vergil / Special Edition",
       "releaseDate": "2006-01-24",
@@ -178,7 +192,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 12,
+      "rank": 13,
       "game": "Disgaea 2: Cursed Memories",
       "notes": null,
       "releaseDate": "2006-02-23",
@@ -187,12 +201,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 10,
+      "queueRank": 11,
       "dateSource": "Wikidata Q2597204",
       "pokeNumber": null
     },
     {
-      "rank": 13,
+      "rank": 14,
       "game": "Kingdom Hearts II",
       "notes": null,
       "releaseDate": "2006-03-28",
@@ -201,12 +215,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 11,
+      "queueRank": 12,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 14,
+      "rank": 15,
       "game": "Yakuza",
       "notes": "PS2 original",
       "releaseDate": "2006-09-05",
@@ -215,12 +229,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 12,
+      "queueRank": 13,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 15,
+      "rank": 16,
       "game": "Just Cause",
       "notes": null,
       "releaseDate": "2006-09-22",
@@ -229,12 +243,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 13,
+      "queueRank": 14,
       "dateSource": "Wikidata Q1538087",
       "pokeNumber": null
     },
     {
-      "rank": 16,
+      "rank": 17,
       "game": "Pokémon Diamond / Pearl",
       "notes": "Nintendo DS",
       "releaseDate": "2006-09-28",
@@ -243,12 +257,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 14,
+      "queueRank": 15,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 8
     },
     {
-      "rank": 17,
+      "rank": 18,
       "game": "Bully",
       "notes": null,
       "releaseDate": "2006-10-17",
@@ -257,12 +271,12 @@
       "whereToPlay": "PC/Steam/Rockstar; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 15,
+      "queueRank": 16,
       "dateSource": "Wikidata Q822849",
       "pokeNumber": null
     },
     {
-      "rank": 18,
+      "rank": 19,
       "game": "Portal",
       "notes": "The Orange Box",
       "releaseDate": "2007-10-09",
@@ -271,12 +285,12 @@
       "whereToPlay": "PC/Steam; console ports where available",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 16,
+      "queueRank": 17,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 19,
+      "rank": 20,
       "game": "Assassin's Creed",
       "notes": null,
       "releaseDate": "2007-11-13",
@@ -285,12 +299,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 17,
+      "queueRank": 18,
       "dateSource": "Wikidata Q200864",
       "pokeNumber": null
     },
     {
-      "rank": 20,
+      "rank": 21,
       "game": "Mass Effect",
       "notes": null,
       "releaseDate": "2007-11-20",
@@ -299,12 +313,12 @@
       "whereToPlay": "PC/Steam/EA app; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 18,
+      "queueRank": 19,
       "dateSource": "Wikidata Q275960",
       "pokeNumber": null
     },
     {
-      "rank": 21,
+      "rank": 22,
       "game": "Braid",
       "notes": "Xbox Live Arcade",
       "releaseDate": "2008-08-06",
@@ -313,12 +327,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 19,
+      "queueRank": 20,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
     },
     {
-      "rank": 22,
+      "rank": 23,
       "game": "Yakuza 2",
       "notes": "PS2 original",
       "releaseDate": "2008-09-09",
@@ -327,12 +341,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 20,
+      "queueRank": 21,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 23,
+      "rank": 24,
       "game": "Pokémon Platinum",
       "notes": "Nintendo DS",
       "releaseDate": "2008-09-13",
@@ -341,12 +355,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 21,
+      "queueRank": 22,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 9
     },
     {
-      "rank": 24,
+      "rank": 25,
       "game": "Batman: Arkham Asylum",
       "notes": null,
       "releaseDate": "2009-08-25",
@@ -355,12 +369,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch collection for trilogy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 22,
+      "queueRank": 23,
       "dateSource": "Wikidata Q746228",
       "pokeNumber": null
     },
     {
-      "rank": 25,
+      "rank": 26,
       "game": "Pokémon HeartGold / SoulSilver",
       "notes": "Nintendo DS remake",
       "releaseDate": "2009-09-12",
@@ -369,12 +383,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 23,
+      "queueRank": 24,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 10
     },
     {
-      "rank": 26,
+      "rank": 27,
       "game": "Kingdom Hearts 358/2 Days",
       "notes": "DS",
       "releaseDate": "2009-09-29",
@@ -383,12 +397,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 24,
+      "queueRank": 25,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 27,
+      "rank": 28,
       "game": "Bayonetta",
       "notes": null,
       "releaseDate": "2009-10-29",
@@ -397,12 +411,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 25,
+      "queueRank": 26,
       "dateSource": "Wikidata Q791569",
       "pokeNumber": null
     },
     {
-      "rank": 28,
+      "rank": 29,
       "game": "Dragon Age: Origins",
       "notes": null,
       "releaseDate": "2009-11-03",
@@ -411,12 +425,12 @@
       "whereToPlay": "PC/Steam/EA app; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 26,
+      "queueRank": 27,
       "dateSource": "Wikidata Q735926",
       "pokeNumber": null
     },
     {
-      "rank": 29,
+      "rank": 30,
       "game": "Call of Duty: Modern Warfare 2",
       "notes": "2009 game",
       "releaseDate": "2009-11-10",
@@ -425,12 +439,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 27,
+      "queueRank": 28,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
     },
     {
-      "rank": 30,
+      "rank": 31,
       "game": "Assassin's Creed II",
       "notes": null,
       "releaseDate": "2009-11-17",
@@ -439,12 +453,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 28,
+      "queueRank": 29,
       "dateSource": "Wikidata Q211735",
       "pokeNumber": null
     },
     {
-      "rank": 31,
+      "rank": 32,
       "game": "Darksiders",
       "notes": null,
       "releaseDate": "2010-01-05",
@@ -453,12 +467,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 29,
+      "queueRank": 30,
       "dateSource": "Wikidata Q1166313",
       "pokeNumber": null
     },
     {
-      "rank": 32,
+      "rank": 33,
       "game": "Mass Effect 2",
       "notes": null,
       "releaseDate": "2010-01-26",
@@ -467,12 +481,12 @@
       "whereToPlay": "PC/Steam/EA app; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 30,
+      "queueRank": 31,
       "dateSource": "Wikidata Q725057",
       "pokeNumber": null
     },
     {
-      "rank": 33,
+      "rank": 34,
       "game": "BioShock 2",
       "notes": null,
       "releaseDate": "2010-02-09",
@@ -481,12 +495,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 31,
+      "queueRank": 32,
       "dateSource": "Wikidata Q302839",
       "pokeNumber": null
     },
     {
-      "rank": 34,
+      "rank": 35,
       "game": "Dante's Inferno",
       "notes": null,
       "releaseDate": "2010-02-09",
@@ -500,7 +514,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 35,
+      "rank": 36,
       "game": "Yakuza 3",
       "notes": null,
       "releaseDate": "2010-03-09",
@@ -509,12 +523,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 32,
+      "queueRank": 33,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 36,
+      "rank": 37,
       "game": "God of War III",
       "notes": null,
       "releaseDate": "2010-03-16",
@@ -523,12 +537,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 33,
+      "queueRank": 34,
       "dateSource": "Wikidata Q1129452",
       "pokeNumber": null
     },
     {
-      "rank": 37,
+      "rank": 38,
       "game": "Red Dead Redemption",
       "notes": null,
       "releaseDate": "2010-05-18",
@@ -537,12 +551,12 @@
       "whereToPlay": "PC/Steam/Rockstar; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 34,
+      "queueRank": 35,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 38,
+      "rank": 39,
       "game": "Kingdom Hearts Birth By Sleep (PSP)",
       "notes": null,
       "releaseDate": "2010-09-07",
@@ -551,12 +565,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 35,
+      "queueRank": 36,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 39,
+      "rank": 40,
       "game": "Pokémon Black / White",
       "notes": "Nintendo DS",
       "releaseDate": "2010-09-18",
@@ -565,12 +579,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 36,
+      "queueRank": 37,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 11
     },
     {
-      "rank": 40,
+      "rank": 41,
       "game": "Fallout: New Vegas",
       "notes": null,
       "releaseDate": "2010-10-19",
@@ -579,12 +593,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 37,
+      "queueRank": 38,
       "dateSource": "Wikidata Q753749",
       "pokeNumber": null
     },
     {
-      "rank": 41,
+      "rank": 42,
       "game": "Assassin's Creed: Brotherhood",
       "notes": null,
       "releaseDate": "2010-11-16",
@@ -593,12 +607,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 38,
+      "queueRank": 39,
       "dateSource": "Wikidata Q677351",
       "pokeNumber": null
     },
     {
-      "rank": 42,
+      "rank": 43,
       "game": "Kingdom Hearts Re:coded",
       "notes": "DS",
       "releaseDate": "2011-01-11",
@@ -607,12 +621,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 39,
+      "queueRank": 40,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 43,
+      "rank": 44,
       "game": "Dead Space 2",
       "notes": null,
       "releaseDate": "2011-01-25",
@@ -621,12 +635,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 40,
+      "queueRank": 41,
       "dateSource": "Wikidata Q842431",
       "pokeNumber": null
     },
     {
-      "rank": 44,
+      "rank": 45,
       "game": "Yakuza 4",
       "notes": null,
       "releaseDate": "2011-03-15",
@@ -635,12 +649,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 41,
+      "queueRank": 42,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 45,
+      "rank": 46,
       "game": "Portal 2",
       "notes": null,
       "releaseDate": "2011-04-19",
@@ -649,12 +663,12 @@
       "whereToPlay": "PC/Steam; console ports where available",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 42,
+      "queueRank": 43,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 46,
+      "rank": 47,
       "game": "Capsized",
       "notes": null,
       "releaseDate": "2011-04-29",
@@ -668,7 +682,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 47,
+      "rank": 48,
       "game": "Alice: Madness Returns",
       "notes": null,
       "releaseDate": "2011-06-14",
@@ -677,12 +691,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 43,
+      "queueRank": 44,
       "dateSource": "Wikidata Q648980",
       "pokeNumber": null
     },
     {
-      "rank": 48,
+      "rank": 49,
       "game": "Bastion",
       "notes": null,
       "releaseDate": "2011-07-20",
@@ -696,7 +710,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 49,
+      "rank": 50,
       "game": "Batman: Arkham City",
       "notes": null,
       "releaseDate": "2011-10-18",
@@ -705,12 +719,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch collection for trilogy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 44,
+      "queueRank": 45,
       "dateSource": "Wikidata Q288811",
       "pokeNumber": null
     },
     {
-      "rank": 50,
+      "rank": 51,
       "game": "The Elder Scrolls V: Skyrim",
       "notes": null,
       "releaseDate": "2011-11-11",
@@ -719,12 +733,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 45,
+      "queueRank": 46,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 51,
+      "rank": 52,
       "game": "Saints Row: The Third",
       "notes": null,
       "releaseDate": "2011-11-15",
@@ -733,12 +747,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 46,
+      "queueRank": 47,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 52,
+      "rank": 53,
       "game": "Mass Effect 3",
       "notes": null,
       "releaseDate": "2012-03-06",
@@ -747,12 +761,12 @@
       "whereToPlay": "PC/Steam/EA app; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 47,
+      "queueRank": 48,
       "dateSource": "Wikidata Q753511",
       "pokeNumber": null
     },
     {
-      "rank": 53,
+      "rank": 54,
       "game": "Lone Survivor",
       "notes": null,
       "releaseDate": "2012-03-27",
@@ -766,7 +780,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 54,
+      "rank": 55,
       "game": "The Walking Dead",
       "notes": null,
       "releaseDate": "2012-04-24",
@@ -780,7 +794,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 55,
+      "rank": 56,
       "game": "Dragon's Dogma",
       "notes": null,
       "releaseDate": "2012-05-22",
@@ -789,12 +803,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 48,
+      "queueRank": 49,
       "dateSource": "Wikidata Q3083413",
       "pokeNumber": null
     },
     {
-      "rank": 56,
+      "rank": 57,
       "game": "Pokémon Black 2 / White 2",
       "notes": "Nintendo DS",
       "releaseDate": "2012-06-23",
@@ -803,12 +817,12 @@
       "whereToPlay": "Nintendo DS / 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 49,
+      "queueRank": 50,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 12
     },
     {
-      "rank": 57,
+      "rank": 58,
       "game": "Kingdom Hearts 3D: Dream Drop Distance",
       "notes": "3DS",
       "releaseDate": "2012-07-31",
@@ -817,12 +831,12 @@
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 50,
+      "queueRank": 51,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 58,
+      "rank": 59,
       "game": "Darksiders II",
       "notes": null,
       "releaseDate": "2012-08-14",
@@ -831,12 +845,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 51,
+      "queueRank": 52,
       "dateSource": "Wikidata Q1166314",
       "pokeNumber": null
     },
     {
-      "rank": 59,
+      "rank": 60,
       "game": "Dishonored",
       "notes": null,
       "releaseDate": "2012-10-09",
@@ -845,12 +859,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 52,
+      "queueRank": 53,
       "dateSource": "Wikidata Q323264",
       "pokeNumber": null
     },
     {
-      "rank": 60,
+      "rank": 61,
       "game": "Assassin's Creed III",
       "notes": null,
       "releaseDate": "2012-10-30",
@@ -859,12 +873,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 53,
+      "queueRank": 54,
       "dateSource": "Wikidata Q40166",
       "pokeNumber": null
     },
     {
-      "rank": 61,
+      "rank": 62,
       "game": "Far Cry 3",
       "notes": null,
       "releaseDate": "2012-11-29",
@@ -873,12 +887,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 54,
+      "queueRank": 55,
       "dateSource": "Wikidata Q796529",
       "pokeNumber": null
     },
     {
-      "rank": 62,
+      "rank": 63,
       "game": "DmC: Devil May Cry",
       "notes": null,
       "releaseDate": "2013-01-15",
@@ -887,12 +901,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 55,
+      "queueRank": 56,
       "dateSource": "Wikidata Q1826997",
       "pokeNumber": null
     },
     {
-      "rank": 63,
+      "rank": 64,
       "game": "Metal Gear Rising: Revengeance",
       "notes": null,
       "releaseDate": "2013-02-19",
@@ -901,12 +915,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 56,
+      "queueRank": 57,
       "dateSource": "Wikidata Q930345",
       "pokeNumber": null
     },
     {
-      "rank": 64,
+      "rank": 65,
       "game": "Tomb Raider",
       "notes": "2013 reboot",
       "releaseDate": "2013-03-05",
@@ -915,12 +929,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 57,
+      "queueRank": 58,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 65,
+      "rank": 66,
       "game": "BioShock Infinite",
       "notes": null,
       "releaseDate": "2013-03-26",
@@ -929,12 +943,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 58,
+      "queueRank": 59,
       "dateSource": "Wikidata Q2074746",
       "pokeNumber": null
     },
     {
-      "rank": 66,
+      "rank": 67,
       "game": "Metro: Last Light",
       "notes": null,
       "releaseDate": "2013-05-14",
@@ -943,12 +957,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 59,
+      "queueRank": 60,
       "dateSource": "Wikidata Q569898",
       "pokeNumber": null
     },
     {
-      "rank": 67,
+      "rank": 68,
       "game": "Remember Me",
       "notes": "Resgatado: estava em 2023!M28 e 2024!M63 e sumiu de todas as versoes seguintes.",
       "releaseDate": "2013-06-04",
@@ -957,12 +971,12 @@
       "whereToPlay": "PC/Steam; PlayStation 3; Xbox 360",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 60,
+      "queueRank": 61,
       "dateSource": "resgate da consolidacao",
       "pokeNumber": null
     },
     {
-      "rank": 68,
+      "rank": 69,
       "game": "Rogue Legacy",
       "notes": null,
       "releaseDate": "2013-06-27",
@@ -976,7 +990,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 69,
+      "rank": 70,
       "game": "Pokémon X / Y",
       "notes": "Nintendo 3DS",
       "releaseDate": "2013-10-12",
@@ -985,12 +999,12 @@
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 61,
+      "queueRank": 62,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 13
     },
     {
-      "rank": 70,
+      "rank": 71,
       "game": "Batman: Arkham Origins",
       "notes": null,
       "releaseDate": "2013-10-25",
@@ -999,12 +1013,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch collection for trilogy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 62,
+      "queueRank": 63,
       "dateSource": "Wikidata Q10826261",
       "pokeNumber": null
     },
     {
-      "rank": 71,
+      "rank": 72,
       "game": "Thief",
       "notes": "2014 reboot",
       "releaseDate": "2014-02-25",
@@ -1013,29 +1027,15 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 63,
+      "queueRank": 64,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
     },
     {
-      "rank": 72,
+      "rank": 73,
       "game": "Middle-earth: Shadow of Mordor",
       "notes": null,
       "releaseDate": "2014-09-30",
-      "year": 2014,
-      "decade": "2010s",
-      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
-      "trilha": null,
-      "status": "Backlog",
-      "queueRank": 64,
-      "dateSource": "Parsed prior release-date text",
-      "pokeNumber": null
-    },
-    {
-      "rank": 73,
-      "game": "The Evil Within",
-      "notes": null,
-      "releaseDate": "2014-10-14",
       "year": 2014,
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
@@ -1047,9 +1047,9 @@
     },
     {
       "rank": 74,
-      "game": "This War of Mine",
+      "game": "The Evil Within",
       "notes": null,
-      "releaseDate": "2014-11-14",
+      "releaseDate": "2014-10-14",
       "year": 2014,
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
@@ -1061,6 +1061,20 @@
     },
     {
       "rank": 75,
+      "game": "This War of Mine",
+      "notes": null,
+      "releaseDate": "2014-11-14",
+      "year": 2014,
+      "decade": "2010s",
+      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 67,
+      "dateSource": "Parsed prior release-date text",
+      "pokeNumber": null
+    },
+    {
+      "rank": 76,
       "game": "Far Cry 4",
       "notes": null,
       "releaseDate": "2014-11-18",
@@ -1069,12 +1083,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 67,
+      "queueRank": 68,
       "dateSource": "Wikidata Q15992359",
       "pokeNumber": null
     },
     {
-      "rank": 76,
+      "rank": 77,
       "game": "Pokémon Omega Ruby / Alpha Sapphire",
       "notes": "Nintendo 3DS remake",
       "releaseDate": "2014-11-21",
@@ -1088,7 +1102,7 @@
       "pokeNumber": 14
     },
     {
-      "rank": 77,
+      "rank": 78,
       "game": "Axiom Verge",
       "notes": "PS4, later on Xbox",
       "releaseDate": "2015-01-01",
@@ -1097,12 +1111,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 68,
+      "queueRank": 69,
       "dateSource": "Wikidata Q4830546",
       "pokeNumber": null
     },
     {
-      "rank": 78,
+      "rank": 79,
       "game": "Resident Evil HD Remaster",
       "notes": "HD remaster, not the 1996 original",
       "releaseDate": "2015-01-20",
@@ -1111,12 +1125,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 69,
+      "queueRank": 70,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 79,
+      "rank": 80,
       "game": "Battlefield Hardline",
       "notes": null,
       "releaseDate": "2015-03-17",
@@ -1125,12 +1139,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 70,
+      "queueRank": 71,
       "dateSource": "Wikidata Q16968699",
       "pokeNumber": null
     },
     {
-      "rank": 80,
+      "rank": 81,
       "game": "The Witcher 3: Wild Hunt",
       "notes": null,
       "releaseDate": "2015-05-19",
@@ -1139,12 +1153,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 71,
+      "queueRank": 72,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
     },
     {
-      "rank": 81,
+      "rank": 82,
       "game": "Batman: Arkham Knight",
       "notes": null,
       "releaseDate": "2015-06-23",
@@ -1153,12 +1167,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch collection for trilogy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 72,
+      "queueRank": 73,
       "dateSource": "Wikidata Q15891648",
       "pokeNumber": null
     },
     {
-      "rank": 82,
+      "rank": 83,
       "game": "Devil May Cry 4: Special Edition",
       "notes": "Special Edition / extra characters",
       "releaseDate": "2015-06-23",
@@ -1172,7 +1186,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 83,
+      "rank": 84,
       "game": "Metal Gear Solid V: The Phantom Pain",
       "notes": null,
       "releaseDate": "2015-09-01",
@@ -1186,7 +1200,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 84,
+      "rank": 85,
       "game": "Undertale",
       "notes": "PC",
       "releaseDate": "2015-09-15",
@@ -1195,12 +1209,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 73,
+      "queueRank": 74,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 85,
+      "rank": 86,
       "game": "Fallout 4",
       "notes": null,
       "releaseDate": "2015-11-09",
@@ -1209,12 +1223,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 74,
+      "queueRank": 75,
       "dateSource": "Wikidata Q10493813",
       "pokeNumber": null
     },
     {
-      "rank": 86,
+      "rank": 87,
       "game": "Yakuza 5",
       "notes": "PS3 Digital Release",
       "releaseDate": "2015-12-08",
@@ -1223,12 +1237,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 75,
+      "queueRank": 76,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 87,
+      "rank": 88,
       "game": "Unravel",
       "notes": null,
       "releaseDate": "2016-02-09",
@@ -1242,7 +1256,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 88,
+      "rank": 89,
       "game": "Far Cry Primal",
       "notes": null,
       "releaseDate": "2016-02-23",
@@ -1251,29 +1265,15 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 76,
+      "queueRank": 77,
       "dateSource": "Wikidata Q21072291",
       "pokeNumber": null
     },
     {
-      "rank": 89,
+      "rank": 90,
       "game": "Stardew Valley",
       "notes": "PC",
       "releaseDate": "2016-02-26",
-      "year": 2016,
-      "decade": "2010s",
-      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
-      "trilha": null,
-      "status": "Backlog",
-      "queueRank": 77,
-      "dateSource": "Parsed prior release-date text",
-      "pokeNumber": null
-    },
-    {
-      "rank": 90,
-      "game": "Quantum Break",
-      "notes": null,
-      "releaseDate": "2016-04-05",
       "year": 2016,
       "decade": "2010s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
@@ -1285,6 +1285,20 @@
     },
     {
       "rank": 91,
+      "game": "Quantum Break",
+      "notes": null,
+      "releaseDate": "2016-04-05",
+      "year": 2016,
+      "decade": "2010s",
+      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 79,
+      "dateSource": "Parsed prior release-date text",
+      "pokeNumber": null
+    },
+    {
+      "rank": 92,
       "game": "Doom",
       "notes": "2016 reboot",
       "releaseDate": "2016-05-13",
@@ -1293,12 +1307,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 79,
+      "queueRank": 80,
       "dateSource": "Wikidata Q513867",
       "pokeNumber": null
     },
     {
-      "rank": 92,
+      "rank": 93,
       "game": "Dishonored 2",
       "notes": null,
       "releaseDate": "2016-11-11",
@@ -1307,12 +1321,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 80,
+      "queueRank": 81,
       "dateSource": "Wikidata Q20095751",
       "pokeNumber": null
     },
     {
-      "rank": 93,
+      "rank": 94,
       "game": "Watch Dogs 2",
       "notes": null,
       "releaseDate": "2016-11-15",
@@ -1321,12 +1335,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 81,
+      "queueRank": 82,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 94,
+      "rank": 95,
       "game": "Pokémon Sun / Moon",
       "notes": "Nintendo 3DS",
       "releaseDate": "2016-11-18",
@@ -1335,12 +1349,12 @@
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 82,
+      "queueRank": 83,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 15
     },
     {
-      "rank": 95,
+      "rank": 96,
       "game": "Final Fantasy XV",
       "notes": null,
       "releaseDate": "2016-11-29",
@@ -1354,7 +1368,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 96,
+      "rank": 97,
       "game": "Kingdom Hearts HD 2.8 Final Chapter Prologue",
       "notes": null,
       "releaseDate": "2017-01-24",
@@ -1363,12 +1377,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 83,
+      "queueRank": 84,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 97,
+      "rank": 98,
       "game": "Resident Evil 7: Biohazard",
       "notes": null,
       "releaseDate": "2017-01-24",
@@ -1377,12 +1391,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 84,
+      "queueRank": 85,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 98,
+      "rank": 99,
       "game": "Yakuza 0",
       "notes": null,
       "releaseDate": "2017-01-24",
@@ -1391,12 +1405,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 85,
+      "queueRank": 86,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 99,
+      "rank": 100,
       "game": "Hollow Knight",
       "notes": "PC Initial Release",
       "releaseDate": "2017-02-24",
@@ -1405,12 +1419,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 86,
+      "queueRank": 87,
       "dateSource": "Wikidata Q29300592",
       "pokeNumber": null
     },
     {
-      "rank": 100,
+      "rank": 101,
       "game": "Yakuza Kiwami (Remake Of Yakuza 1)",
       "notes": null,
       "releaseDate": "2017-08-29",
@@ -1419,12 +1433,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 87,
+      "queueRank": 88,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 101,
+      "rank": 102,
       "game": "Metroid: Samus Returns",
       "notes": "Nintendo 3DS",
       "releaseDate": "2017-09-15",
@@ -1433,12 +1447,12 @@
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 88,
+      "queueRank": 89,
       "dateSource": "Wikidata Q30325600",
       "pokeNumber": null
     },
     {
-      "rank": 102,
+      "rank": 103,
       "game": "The Evil Within 2",
       "notes": null,
       "releaseDate": "2017-10-13",
@@ -1447,12 +1461,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 89,
+      "queueRank": 90,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 103,
+      "rank": 104,
       "game": "Pokémon Ultra Sun / Ultra Moon",
       "notes": "Nintendo 3DS",
       "releaseDate": "2017-11-17",
@@ -1461,12 +1475,12 @@
       "whereToPlay": "Nintendo 3DS; emulation",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 90,
+      "queueRank": 91,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 16
     },
     {
-      "rank": 104,
+      "rank": 105,
       "game": "Celeste",
       "notes": null,
       "releaseDate": "2018-01-25",
@@ -1475,12 +1489,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 91,
+      "queueRank": 92,
       "dateSource": "Wikidata Q28451532",
       "pokeNumber": null
     },
     {
-      "rank": 105,
+      "rank": 106,
       "game": "Monster Hunter: World",
       "notes": null,
       "releaseDate": "2018-01-26",
@@ -1489,12 +1503,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 92,
+      "queueRank": 93,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 106,
+      "rank": 107,
       "game": "Far Cry 5",
       "notes": null,
       "releaseDate": "2018-03-27",
@@ -1503,12 +1517,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 93,
+      "queueRank": 94,
       "dateSource": "Wikidata Q30015130",
       "pokeNumber": null
     },
     {
-      "rank": 107,
+      "rank": 108,
       "game": "Yakuza 6: The Song Of Life",
       "notes": null,
       "releaseDate": "2018-04-17",
@@ -1517,12 +1531,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 94,
+      "queueRank": 95,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 108,
+      "rank": 109,
       "game": "Detroit: Become Human",
       "notes": null,
       "releaseDate": "2018-05-25",
@@ -1531,12 +1545,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 95,
+      "queueRank": 96,
       "dateSource": "Wikidata Q21246348",
       "pokeNumber": null
     },
     {
-      "rank": 109,
+      "rank": 110,
       "game": "Graveyard Keeper",
       "notes": null,
       "releaseDate": "2018-08-15",
@@ -1545,12 +1559,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 96,
+      "queueRank": 97,
       "dateSource": "Wikidata Q56278431",
       "pokeNumber": null
     },
     {
-      "rank": 110,
+      "rank": 111,
       "game": "Yakuza Kiwami 2 (Remake Of Yakuza 2)",
       "notes": null,
       "releaseDate": "2018-08-28",
@@ -1559,12 +1573,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 97,
+      "queueRank": 98,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 111,
+      "rank": 112,
       "game": "Red Dead Redemption 2",
       "notes": null,
       "releaseDate": "2018-10-26",
@@ -1573,12 +1587,12 @@
       "whereToPlay": "PC/Steam/Rockstar; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 98,
+      "queueRank": 99,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 112,
+      "rank": 113,
       "game": "Pokémon: Let's Go, Pikachu! / Eevee!",
       "notes": "Nintendo Switch",
       "releaseDate": "2018-11-16",
@@ -1587,12 +1601,12 @@
       "whereToPlay": "Nintendo Switch / Switch 2",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 99,
+      "queueRank": 100,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 17
     },
     {
-      "rank": 113,
+      "rank": 114,
       "game": "Darksiders III",
       "notes": null,
       "releaseDate": "2018-11-27",
@@ -1601,12 +1615,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 100,
+      "queueRank": 101,
       "dateSource": "Wikidata Q29704664",
       "pokeNumber": null
     },
     {
-      "rank": 114,
+      "rank": 115,
       "game": "Hades",
       "notes": "Full v1.0 Release",
       "releaseDate": "2018-12-06",
@@ -1615,12 +1629,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 101,
+      "queueRank": 102,
       "dateSource": "Wikidata Q59756366",
       "pokeNumber": null
     },
     {
-      "rank": 115,
+      "rank": 116,
       "game": "Resident Evil 2",
       "notes": "2019 remake",
       "releaseDate": "2019-01-25",
@@ -1634,7 +1648,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 116,
+      "rank": 117,
       "game": "Kingdom Hearts III",
       "notes": null,
       "releaseDate": "2019-01-29",
@@ -1643,12 +1657,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 102,
+      "queueRank": 103,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 117,
+      "rank": 118,
       "game": "Devil May Cry 5",
       "notes": "Hard/Vergil cleanup",
       "releaseDate": "2019-03-08",
@@ -1662,7 +1676,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 118,
+      "rank": 119,
       "game": "Control",
       "notes": null,
       "releaseDate": "2019-08-27",
@@ -1671,12 +1685,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 103,
+      "queueRank": 104,
       "dateSource": "Wikidata Q54935655",
       "pokeNumber": null
     },
     {
-      "rank": 119,
+      "rank": 120,
       "game": "Blasphemous",
       "notes": null,
       "releaseDate": "2019-09-10",
@@ -1685,12 +1699,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 104,
+      "queueRank": 105,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 120,
+      "rank": 121,
       "game": "John Wick Hex",
       "notes": null,
       "releaseDate": "2019-10-08",
@@ -1704,7 +1718,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 121,
+      "rank": 122,
       "game": "Death Stranding",
       "notes": null,
       "releaseDate": "2019-11-08",
@@ -1713,12 +1727,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 105,
+      "queueRank": 106,
       "dateSource": "Wikidata Q24666782",
       "pokeNumber": null
     },
     {
-      "rank": 122,
+      "rank": 123,
       "game": "Dragon Ball Z: Kakarot",
       "notes": null,
       "releaseDate": "2020-01-16",
@@ -1727,12 +1741,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 106,
+      "queueRank": 107,
       "dateSource": "Wikidata Q67387574",
       "pokeNumber": null
     },
     {
-      "rank": 123,
+      "rank": 124,
       "game": "Doom Eternal",
       "notes": null,
       "releaseDate": "2020-03-20",
@@ -1741,12 +1755,12 @@
       "whereToPlay": "PC/Steam; Xbox; PlayStation; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 107,
+      "queueRank": 108,
       "dateSource": "Wikidata Q55662649",
       "pokeNumber": null
     },
     {
-      "rank": 124,
+      "rank": 125,
       "game": "Resident Evil 3",
       "notes": "2020 remake",
       "releaseDate": "2020-04-03",
@@ -1755,12 +1769,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 108,
+      "queueRank": 109,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 125,
+      "rank": 126,
       "game": "Final Fantasy VII Remake",
       "notes": null,
       "releaseDate": "2020-04-10",
@@ -1769,29 +1783,15 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 109,
+      "queueRank": 110,
       "dateSource": "Wikidata Q20155152",
       "pokeNumber": null
     },
     {
-      "rank": 126,
+      "rank": 127,
       "game": "The Last of Us Part II",
       "notes": null,
       "releaseDate": "2020-06-19",
-      "year": 2020,
-      "decade": "2020s",
-      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
-      "trilha": null,
-      "status": "Backlog",
-      "queueRank": 110,
-      "dateSource": "Manual: release-date check",
-      "pokeNumber": null
-    },
-    {
-      "rank": 127,
-      "game": "Ghost of Tsushima",
-      "notes": null,
-      "releaseDate": "2020-07-17",
       "year": 2020,
       "decade": "2020s",
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
@@ -1803,6 +1803,20 @@
     },
     {
       "rank": 128,
+      "game": "Ghost of Tsushima",
+      "notes": null,
+      "releaseDate": "2020-07-17",
+      "year": 2020,
+      "decade": "2020s",
+      "whereToPlay": "PC/Steam where available; verify console/store for your copy",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 112,
+      "dateSource": "Manual: release-date check",
+      "pokeNumber": null
+    },
+    {
+      "rank": 129,
       "game": "Yakuza: Like A Dragon",
       "notes": null,
       "releaseDate": "2020-11-10",
@@ -1811,12 +1825,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 112,
+      "queueRank": 113,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 129,
+      "rank": 130,
       "game": "Kingdom Hearts: Melody Of Memory",
       "notes": null,
       "releaseDate": "2020-11-13",
@@ -1825,12 +1839,12 @@
       "whereToPlay": "PC/Steam/Epic; PlayStation; Xbox; Switch cloud",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 113,
+      "queueRank": 114,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 130,
+      "rank": 131,
       "game": "Monster Sanctuary",
       "notes": null,
       "releaseDate": "2020-12-08",
@@ -1844,7 +1858,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 131,
+      "rank": 132,
       "game": "Cyberpunk 2077",
       "notes": null,
       "releaseDate": "2020-12-10",
@@ -1853,12 +1867,12 @@
       "whereToPlay": "PC/Steam/GOG; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 114,
+      "queueRank": 115,
       "dateSource": "Wikidata Q3182559",
       "pokeNumber": null
     },
     {
-      "rank": 132,
+      "rank": 133,
       "game": "Resident Evil Village",
       "notes": null,
       "releaseDate": "2021-05-07",
@@ -1867,12 +1881,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 115,
+      "queueRank": 116,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 133,
+      "rank": 134,
       "game": "Far Cry 6",
       "notes": null,
       "releaseDate": "2021-10-07",
@@ -1881,12 +1895,12 @@
       "whereToPlay": "PC/Ubisoft Connect/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 116,
+      "queueRank": 117,
       "dateSource": "Wikidata Q97120062",
       "pokeNumber": null
     },
     {
-      "rank": 134,
+      "rank": 135,
       "game": "Metroid Dread",
       "notes": null,
       "releaseDate": "2021-10-08",
@@ -1895,12 +1909,12 @@
       "whereToPlay": "Nintendo Switch / Switch 2",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 117,
+      "queueRank": 118,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 135,
+      "rank": 136,
       "game": "Pokémon Brilliant Diamond / Shining Pearl",
       "notes": "Nintendo Switch remake",
       "releaseDate": "2021-11-19",
@@ -1909,12 +1923,12 @@
       "whereToPlay": "Nintendo Switch / Switch 2",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 118,
+      "queueRank": 119,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 18
     },
     {
-      "rank": 136,
+      "rank": 137,
       "game": "Pokémon Legends: Arceus",
       "notes": "Nintendo Switch",
       "releaseDate": "2022-01-28",
@@ -1928,7 +1942,7 @@
       "pokeNumber": 19
     },
     {
-      "rank": 137,
+      "rank": 138,
       "game": "God of War Ragnarök",
       "notes": null,
       "releaseDate": "2022-11-09",
@@ -1937,12 +1951,12 @@
       "whereToPlay": "PC/Steam where available; verify console/store for your copy",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 119,
+      "queueRank": 120,
       "dateSource": "Wikidata Q99397916",
       "pokeNumber": null
     },
     {
-      "rank": 138,
+      "rank": 139,
       "game": "Pokémon Scarlet / Violet",
       "notes": "Nintendo Switch",
       "releaseDate": "2022-11-18",
@@ -1951,12 +1965,12 @@
       "whereToPlay": "Nintendo Switch / Switch 2",
       "trilha": "Pokemon",
       "status": "Backlog",
-      "queueRank": 120,
+      "queueRank": 121,
       "dateSource": "Pokemon handheld plan",
       "pokeNumber": 20
     },
     {
-      "rank": 139,
+      "rank": 140,
       "game": "Like A Dragon: Ishin! (Remake)",
       "notes": null,
       "releaseDate": "2023-02-21",
@@ -1965,12 +1979,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 121,
+      "queueRank": 122,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 140,
+      "rank": 141,
       "game": "Resident Evil 4",
       "notes": "2023 remake",
       "releaseDate": "2023-03-24",
@@ -1979,12 +1993,12 @@
       "whereToPlay": "PC/Steam; PlayStation; Xbox; Switch for some entries",
       "trilha": null,
       "status": "Backlog",
-      "queueRank": 122,
+      "queueRank": 123,
       "dateSource": "Parsed prior release-date text",
       "pokeNumber": null
     },
     {
-      "rank": 141,
+      "rank": 142,
       "game": "Baldur's Gate 3",
       "notes": null,
       "releaseDate": "2023-08-03",
@@ -1992,13 +2006,13 @@
       "decade": "2020s",
       "whereToPlay": "PC/Steam/GOG; PlayStation; Xbox",
       "trilha": null,
-      "status": "Backlog",
-      "queueRank": 123,
+      "status": "2026 target",
+      "queueRank": null,
       "dateSource": "Manual: release-date check",
       "pokeNumber": null
     },
     {
-      "rank": 142,
+      "rank": 143,
       "game": "Blasphemous 2",
       "notes": null,
       "releaseDate": "2023-08-24",
@@ -2012,7 +2026,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 143,
+      "rank": 144,
       "game": "Like A Dragon Gaiden: The Man Who Erased His Name",
       "notes": null,
       "releaseDate": "2023-11-09",
@@ -2026,7 +2040,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 144,
+      "rank": 145,
       "game": "Like A Dragon: Infinite Wealth",
       "notes": null,
       "releaseDate": "2024-01-26",
@@ -2040,7 +2054,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 145,
+      "rank": 146,
       "game": "Black Myth: Wukong",
       "notes": null,
       "releaseDate": "2024-08-20",
@@ -2054,7 +2068,7 @@
       "pokeNumber": null
     },
     {
-      "rank": 146,
+      "rank": 147,
       "game": "Pokémon Legends: Z-A",
       "notes": "Nintendo Switch / Switch 2",
       "releaseDate": "2025-10-16",
@@ -2068,7 +2082,7 @@
       "pokeNumber": 21
     },
     {
-      "rank": 147,
+      "rank": 148,
       "game": "Super Fantasy Kingdom",
       "notes": null,
       "releaseDate": "2025-10-24",
@@ -2079,6 +2093,34 @@
       "status": "In progress",
       "queueRank": null,
       "dateSource": "Manual: Steam",
+      "pokeNumber": null
+    },
+    {
+      "rank": 149,
+      "game": "Marvel's Wolverine",
+      "notes": "PlayStation 5",
+      "releaseDate": "2026-09-15",
+      "year": 2026,
+      "decade": "2020s",
+      "whereToPlay": "PlayStation 5",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 129,
+      "dateSource": "Manual: PlayStation Blog / Wikipedia, 23/09/2026",
+      "pokeNumber": null
+    },
+    {
+      "rank": 150,
+      "game": "Grand Theft Auto VI",
+      "notes": "PlayStation 5 / Xbox Series X|S",
+      "releaseDate": "2026-11-19",
+      "year": 2026,
+      "decade": "2020s",
+      "whereToPlay": "PlayStation 5; Xbox Series X|S",
+      "trilha": null,
+      "status": "Backlog",
+      "queueRank": 130,
+      "dateSource": "Manual: Rockstar Newswire (lancamento previsto), 23/09/2026",
       "pokeNumber": null
     }
   ],
@@ -2237,6 +2279,14 @@
     },
     {
       "priority": 20,
+      "game": "Baldur's Gate 3",
+      "notes": "Adicionado por voce: comecado em 22/08/2026.",
+      "releaseDate": "2023-08-03",
+      "whereToPlay": "PC/Steam/GOG; PlayStation 5; Xbox Series X|S; macOS",
+      "started": "2026-08-22"
+    },
+    {
+      "priority": 21,
       "game": "Super Fantasy Kingdom",
       "notes": null,
       "releaseDate": "2025-10-24",
@@ -2835,9 +2885,10 @@
     }
   ],
   "decadeCounts": {
+    "1980s": 1,
     "1990s": 3,
     "2000s": 27,
     "2010s": 91,
-    "2020s": 26
+    "2020s": 28
   }
 }

@@ -137,9 +137,9 @@ export const projects: readonly Project[] = [
     name: "The Room Web Client",
     year: 2024,
     description:
-      "Full React web companion to The Room, sharing the same Firebase backend. The latest RPG parity pass mirrors the native content update with shared encounter/bestiary text, Pombo Sniper assets, canonical bestiary unlock flags, hidden locked-zone names, tutorial/image fixes, 3 themes, and PWA-ready architecture.",
+      "Browser companion to The Room, with shared accounts and progress, real-time chat, games, an RPG, and three visual themes. A coordinated update to account protection and game-state privacy is in development; those changes have not been released to the live web client.",
     descriptionPt:
-      "Companion web completo em React para o The Room, compartilhando o mesmo backend Firebase. O passe mais recente de paridade do RPG espelha o conteúdo nativo com textos de encontro/bestiário compartilhados, assets do Pombo Sniper, flags canônicas de desbloqueio, zonas bloqueadas sem spoilers, correções de tutorial/imagens, 3 temas e arquitetura pronta para PWA.",
+      "Versão de navegador do The Room, com contas e progresso compartilhados, chat em tempo real, jogos, RPG e três temas visuais. Uma atualização coordenada de proteção das contas e privacidade das partidas está em desenvolvimento; essas mudanças ainda não foram publicadas no cliente web.",
     tech: ["React 19", "TypeScript", "Tailwind", "Firebase", "Vite"],
     tag: "web-app",
     status: "live",
@@ -149,17 +149,17 @@ export const projects: readonly Project[] = [
     image: "/projects/the-room-web.webp",
     imageAlt: "The Room Web login screen with language selector",
     imageAltPt: "Tela de login do The Room Web com seletor de idioma",
-    metrics: ["Native RPG parity", "3 themes", "Shared Firebase backend"],
-    metricsPt: ["Paridade com RPG nativo", "3 temas", "Backend Firebase compartilhado"],
+    metrics: ["Shared progress", "3 themes", "Update in development"],
+    metricsPt: ["Progresso compartilhado", "3 temas", "Atualização em desenvolvimento"],
   },
   {
     id: "matematica-elementar",
     name: "Matemática Elementar",
     year: 2026,
     description:
-      "Dual-curriculum math practice site: BNCC for Brazilian students (6th-9th grade plus Ensino Médio) and US Common Core K-8 plus Algebra 1, Geometry, and Algebra 2. 281 audited sets, 2,864 problems, local progress, no account required.",
+      "Math practice with 281 audited sets across BNCC and US Common Core curricula, worked answers, and progress saved in your browser. The quick explanations include an interactive LCM/GCF illustration: follow two repeating cycles or try equal ribbon cuts. No account required.",
     descriptionPt:
-      "Site de prática de matemática com currículo duplo: BNCC para estudantes brasileiros (6º ao 9º ano + Ensino Médio) e US Common Core K-8 com Algebra 1, Geometry e Algebra 2. 281 sets auditados, 2.864 problemas, progresso local e sem conta.",
+      "Prática de matemática com 281 listas auditadas nos currículos BNCC e US Common Core, gabaritos explicados e progresso salvo no navegador. As explicações rápidas incluem uma ilustração interativa de MMC/MDC: acompanhe dois ciclos ou experimente cortes iguais em fitas. Sem precisar de conta.",
     tech: ["Next.js 16", "React 19", "TypeScript", "Tailwind", "KaTeX"],
     tag: "web-app",
     status: "live",
@@ -169,8 +169,8 @@ export const projects: readonly Project[] = [
     image: "/projects/matematica-elementar.webp",
     imageAlt: "Matemática Elementar home page with grade selection cards",
     imageAltPt: "Página inicial do Matemática Elementar com cards de seleção de série",
-    metrics: ["281 audited sets", "2,864 problems", "BNCC + US Common Core"],
-    metricsPt: ["281 sets auditados", "2.864 problemas", "BNCC + US Common Core"],
+    metrics: ["281 audited sets", "Animated LCM / GCF", "BNCC + US Common Core"],
+    metricsPt: ["281 listas auditadas", "MMC / MDC animados", "BNCC + US Common Core"],
   },
   {
     id: "tibia-services",
@@ -276,9 +276,9 @@ export const projects: readonly Project[] = [
     name: "Mega Man X Engine",
     year: 2026,
     description:
-      "Rebuilding Mega Man X with C++17 and raylib. Follow verified gameplay fixes and the public roadmap. Original engine source is open under MIT: fork the repository and contribute with code, research or AI assistance. The full game and its assets are not distributed in the source repository.",
+      "A C++ project that runs the original Mega Man X cartridge's code, with recorded gameplay compared frame by frame against the original. The public site has short gameplay videos, a dated news timeline, and the X1 checklist with verified and unfinished work. The checklist is an index, not a percentage of playable content. Original engine source is available under MIT; game assets are not included.",
     descriptionPt:
-      "Reconstrução de Mega Man X com C++17 e raylib. Acompanhe as correções verificadas e o roadmap público. O código original da engine está aberto sob MIT: faça um fork e contribua com código, pesquisa ou ajuda de IA. O jogo completo e seus assets não são distribuídos no repositório de código.",
+      "Projeto em C++ que executa o código do cartucho original de Mega Man X, com gravações comparadas quadro a quadro com o original. O site público reúne vídeos do jogo, uma timeline de novidades e o checklist do X1 com o que já foi verificado e o que falta. O checklist é um índice, não uma porcentagem do conteúdo jogável. O código original da engine está disponível sob MIT; os assets do jogo não estão incluídos.",
     tech: ["C++17", "raylib", "CMake", "JSON"],
     tag: "game-dev",
     status: "active",
@@ -286,8 +286,8 @@ export const projects: readonly Project[] = [
     image: "/projects/megaman-x.webp",
     liveUrl: "https://megaman.davidluky.com/",
     repoUrl: "https://github.com/davidluky/megaman-x-engine",
-    metrics: ["Playable test scenarios", "Public roadmap", "Contribution guide"],
-    metricsPt: ["Cenários de teste jogáveis", "Roadmap público", "Guia de contribuição"],
+    metrics: ["Gameplay videos", "Verified X1 checklist", "PT / EN news"],
+    metricsPt: ["Vídeos do jogo", "Checklist verificado do X1", "Novidades PT / EN"],
     imageAlt: "Autotest frames from the custom Megaman X raylib engine",
     imageAltPt: "Frames de autoteste da engine customizada de Megaman X em raylib",
   },
@@ -386,9 +386,9 @@ export const projects: readonly Project[] = [
     name: "Alisson David Frangullys",
     year: 2026,
     description:
-      "Astro microsite for a personal RPG-style profile, built as a sibling branded site under alisson.davidluky.com. Tabletop RPG aesthetic framing a developer portfolio with chaptered storytelling and bilingual content.",
+      "A bilingual personal site told through an RPG character sheet: life chapters, engineering, games, and writing. The textos di.versos archive brings together the daily texts from 2022 and newer pieces, with reading by date, themes, and search.",
     descriptionPt:
-      "Microsite em Astro para um perfil pessoal em estilo RPG, criado como site irmão em alisson.davidluky.com. Estética de RPG de mesa enquadrando um portfólio de desenvolvedor com storytelling em capítulos e conteúdo bilíngue.",
+      "Site pessoal bilíngue contado como uma ficha de personagem de RPG: capítulos de vida, engenharia, jogos e escrita. O acervo textos di.versos reúne os textos diários de 2022 e escritos mais recentes, com leitura por data, temas e busca.",
     tech: ["Astro", "Tailwind", "TypeScript", "Cloudflare"],
     tag: "website",
     status: "live",
@@ -403,9 +403,9 @@ export const projects: readonly Project[] = [
     name: "Painel da Vida",
     year: 2026,
     description:
-      "Seven origins and over 40 events in a life simulation built for mobile. Choose your starting age in Brazil, India, Somalia or Venezuela, balance your 24-hour day and work toward financial freedom. Includes optional adult content and an impossible hyperinflation mode.",
+      "Seven origins in a life simulation built for mobile. Balance your 24-hour day and work toward financial freedom in Brazil, India, Somalia or Venezuela. Advance a month or a year, stop at decisions, and see the actual costs and effects of events. Progress stays in your browser. Includes optional adult content and a hyperinflation challenge.",
     descriptionPt:
-      "Sete origens e mais de 40 eventos em um simulador de vida feito para o celular. Escolha a idade inicial no Brasil, Índia, Somália ou Venezuela, equilibre as 24 horas do dia e busque a liberdade financeira. Inclui conteúdo adulto opcional e um modo impossível de hiperinflação.",
+      "Sete origens em um simulador de vida feito para o celular. Equilibre as 24 horas do dia e busque a liberdade financeira no Brasil, Índia, Somália ou Venezuela. Avance um mês ou um ano, pare nas decisões e veja os custos e efeitos reais dos eventos. O progresso fica no navegador. Inclui conteúdo adulto opcional e um desafio de hiperinflação.",
     tech: ["Astro", "TypeScript", "Tailwind", "Cloudflare"],
     tag: "web-app",
     status: "live",
@@ -465,10 +465,10 @@ export const projects: readonly Project[] = [
     name: "Frank's Stories",
     year: 2025,
     description:
-      "Static family storytelling site with a decade-based timeline and book-style story reader. Current source reads curated JSON story files, includes the first two recovered stories, and keeps DOCX artifacts plus an add-story helper for source-controlled updates.",
+      "Family memories presented as a timeline by decade and a book-style reader. The first two recovered stories, from 1943 and 1946, are available to read on desktop or mobile.",
     descriptionPt:
-      "Site estático de histórias familiares com timeline por década e leitura em estilo livro. O código atual lê histórias em JSON, inclui as duas primeiras histórias recuperadas e preserva artefatos DOCX com um helper add-story para atualizações versionadas.",
-    tech: ["Next.js 15", "JSON", "Tailwind", "mammoth.js"],
+      "Memórias de família em uma linha do tempo por década e um leitor em estilo livro. As duas primeiras histórias recuperadas, de 1943 e 1946, estão disponíveis para ler no computador ou no celular.",
+    tech: ["Next.js 16", "JSON", "Tailwind", "mammoth.js"],
     tag: "web-app",
     status: "live",
     visibility: "private",

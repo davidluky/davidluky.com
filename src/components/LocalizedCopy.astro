@@ -1,0 +1,6 @@
+---
+import type { Bilingual } from '../data/project-stories';
+interface Props { text: Bilingual; }
+const { text } = Astro.props;
+---
+<span data-copy-en={text.en} data-copy-pt={text.pt}>{text.en}</span>

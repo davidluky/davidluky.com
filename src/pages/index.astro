@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import Footer from "../components/Footer.astro";
 import ProjectImage from "../components/ProjectImage.astro";
-import { liveProjects, projects } from "../data/projects";
+import { featuredProjects, getProjectAvailability, publicWebProjects, projects } from "../data/projects";
 import { socialProfiles } from "../data/socials";
 import { stats } from "../data/stats";
 
@@ -17,8 +17,31 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
   <Hero
     title="Developer. Gamer.<br>Builder of things."
     subtitle="Portfolio hub for the projects, games, tools, writing, and public profiles I keep shaping."
-    cta={{ label: "Continue reading", href: "#intro" }}
+    cta={{ label: "Explore the projects", href: "#selected-projects" }}
   />
+
+  <section id="selected-projects" class="mx-auto max-w-[1280px] scroll-mt-24 px-12 pb-24 max-md:px-6">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-5">
+      <div><p data-i18n="selected_label" class="mb-3 text-[11px] font-semibold uppercase tracking-[2.5px] text-accent">Selected projects</p>
+      <h2 data-i18n="selected_title" class="text-3xl font-light tracking-tight">Games, useful tools, and a little curiosity.</h2></div>
+      <a href="/projects" data-i18n="selected_all" class="text-sm text-accent">Explore the catalog →</a>
+    </div>
+    <div class="grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+      {featuredProjects.map(project => (
+        <article>
+          <a href={project.detailSlug ? `/projects/${project.detailSlug}/` : project.liveUrl} class="block no-underline">
+            <ProjectImage project={project} />
+            <div class="mt-4 flex items-baseline justify-between gap-3">
+              <h3 class="text-lg font-medium">{project.name}</h3>
+              <span class="text-xs text-accent" data-selected-access={project.id}>{getProjectAvailability(project).label}</span>
+            </div>
+          </a>
+          <p class="mt-2 text-sm leading-relaxed text-text-2" data-selected-description={project.id}>{project.summary || project.description}</p>
+          {["digipets", "the-room"].includes(project.id) && <p class="mt-2 text-xs text-text-2" data-i18n="selected_art">Promotional illustration</p>}
+        </article>
+      ))}
+    </div>
+  </section>
 
   <section id="intro" class="mx-auto max-w-[1280px] px-12 py-[88px] max-md:px-6 max-md:py-16">
     <div class="flex items-start gap-16 max-md:flex-col">
@@ -62,14 +85,14 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
         </a>
         <details class="live-sites-tile relative rounded-xl bg-[#0f0f0e] p-6 transition-colors hover:bg-[#141413]">
           <summary class="stat-tile-summary cursor-pointer">
-            <div class="text-4xl font-light tracking-tight text-text mb-2">{liveProjects.length}</div>
-            <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
+            <div class="text-4xl font-light tracking-tight text-text mb-2">{publicWebProjects.length}</div>
+            <div data-i18n="stat_sites" class="text-[12px] font-medium uppercase tracking-wider text-text-3">Public websites</div>
           </summary>
           <div id="live-sites-tooltip" class="live-sites-tooltip">
-            {liveProjects.map(p => (
+            {publicWebProjects.map(p => (
               <a href={p.liveUrl!} target="_blank" rel="noopener noreferrer" class="live-sites-link">
                 <span class="live-sites-name">{p.name}</span>
-                <span class="live-sites-url">{p.liveUrl!.replace("https://", "")}</span>
+                <span class="live-sites-url">{new URL(p.liveUrl, Astro.site).href.replace("https://", "").replace(/\/$/, "")}</span>
               </a>
             ))}
           </div>
@@ -138,12 +161,17 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
 <script>
   import { applyI18n, setLanguage } from '../i18n/shared';
   import { socialProfiles } from '../data/socials';
+  import { projects, getProjectAvailability } from '../data/projects';
 
   const pageStrings = {
     en: {
       hero_title: 'Developer. Gamer.<br>Builder of things.',
       hero_subtitle: 'Portfolio hub for the projects, games, tools, writing, and public profiles I keep shaping.',
-      hero_cta: 'Continue reading',
+      hero_cta: 'Explore the projects',
+      selected_label: 'Selected projects',
+      selected_title: 'Games, useful tools, and a little curiosity.',
+      selected_all: 'Explore the catalog →',
+      selected_art: 'Promotional illustration',
       intro_label: 'Introduction',
       intro_heading: 'Most of what I build starts as something I want to use myself.',
       intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> is a multiplayer RPG platform - ${window.__stats.roomGames} games, achievements, economy, tournaments. It started as a C++ desktop application and has since expanded to a <em class="not-italic font-medium text-text">full web client</em> built with React, TypeScript, and Firebase.`,
@@ -151,7 +179,7 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
       stat_projects: 'Projects',
       stat_games_room: 'Games in The Room',
       stat_coding: 'Years Coding',
-      stat_sites: 'Live Sites',
+      stat_sites: 'Public websites',
       stat_achievements: 'Achievements',
       stat_achievements_tip: 'The real achievements are the traumas we acquired along the way!',
       stat_lang: 'Languages',
@@ -162,7 +190,11 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
     pt: {
       hero_title: 'Desenvolvedor. Gamer.<br>Construtor de coisas.',
       hero_subtitle: 'Hub de portfólio para os projetos, jogos, ferramentas, escrita e perfis públicos que continuo moldando.',
-      hero_cta: 'Continue lendo',
+      hero_cta: 'Explorar os projetos',
+      selected_label: 'Projetos em destaque',
+      selected_title: 'Jogos, ferramentas úteis e um pouco de curiosidade.',
+      selected_all: 'Explorar o catálogo →',
+      selected_art: 'Arte promocional',
       intro_label: 'Introdução',
       intro_heading: 'A maioria do que eu construo começa como algo que eu mesmo quero usar.',
       intro_p1: `<a href="https://play.davidluky.com" class="border-b border-accent/30 font-medium text-text no-underline transition-colors hover:border-accent">The Room</a> é uma plataforma RPG multiplayer - ${window.__stats.roomGames} jogos, conquistas, economia e torneios. Começou como um aplicativo desktop em C++ e desde então se expandiu para um <em class="not-italic font-medium text-text">cliente web completo</em> feito com React, TypeScript e Firebase.`,
@@ -170,7 +202,7 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
       stat_projects: 'Projetos',
       stat_games_room: 'Jogos em The Room',
       stat_coding: 'Anos Programando',
-      stat_sites: 'Sites Online',
+      stat_sites: 'Sites públicos',
       stat_achievements: 'Conquistas',
       stat_achievements_tip: 'As verdadeiras conquistas são os traumas que adquirimos pelo caminho!',
       stat_lang: 'Idiomas',
@@ -182,6 +214,14 @@ const roomWebProject = projects.find((project) => project.id === "the-room-web")
 
   // The hero itself is translated by applyI18n through Hero.astro's data-i18n hooks.
   function updateDynamicCopy(lang: string) {
+    document.querySelectorAll<HTMLElement>('[data-selected-description]').forEach(el => {
+      const project = projects.find(p => p.id === el.dataset.selectedDescription);
+      if (project) el.textContent = lang === 'pt' ? project.summaryPt || project.descriptionPt : project.summary || project.description;
+    });
+    document.querySelectorAll<HTMLElement>('[data-selected-access]').forEach(el => {
+      const project = projects.find(p => p.id === el.dataset.selectedAccess);
+      if (project) el.textContent = lang === 'pt' ? getProjectAvailability(project).labelPt : getProjectAvailability(project).label;
+    });
     const enPill = document.getElementById('lang-en');
     const ptPill = document.getElementById('lang-pt');
     if (enPill && ptPill) {

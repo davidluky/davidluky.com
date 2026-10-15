@@ -6,17 +6,19 @@ import ProjectImage from "../components/ProjectImage.astro";
 import type { ProjectStatus } from "../data/projects";
 import {
   featuredProjects,
+  getProjectAvailability,
+  projectAvailabilities,
   getProjectStatus,
   getProjectTag,
   getProjectVisibility,
-  liveProjects,
+  publicWebProjects,
   projects,
   projectStatuses,
   projectTags,
   projectVisibilities,
 } from "../data/projects";
 
-const activeProjects = projects.filter((project) => project.status !== "archived").length;
+const activeProjects = projects.filter((project) => ["active", "maintained", "live"].includes(project.status)).length;
 const desktopApps = projects.filter((project) => project.tag === "desktop-app").length;
 const technologies = new Set(projects.flatMap((project) => project.tech)).size;
 const remainingProjects = projects.filter((project) => !project.featured);
@@ -31,17 +33,15 @@ const projectsStructuredData = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: "David Luky Projects",
-  itemListElement: liveProjects.map((project, index) => ({
+  itemListElement: projects.filter(p => p.detailSlug || p.liveUrl || p.repoUrl).map((project, index) => ({
     "@type": "ListItem",
     position: index + 1,
     item: {
-      "@type": "SoftwareApplication",
+      "@type": "CreativeWork",
       name: project.name,
       description: project.description,
-      url: project.liveUrl,
-      applicationCategory: getProjectTag(project).label,
-      programmingLanguage: project.tech,
-      ...(project.repoUrl ? { codeRepository: project.repoUrl } : {}),
+      url: project.detailSlug ? `https://davidluky.com/projects/${project.detailSlug}/` : new URL(project.liveUrl || project.repoUrl!, "https://davidluky.com").href,
+      keywords: project.tech.join(", "),
     },
   })),
 };
@@ -56,6 +56,8 @@ const searchableText = (project: (typeof projects)[number]) => [
   getProjectTag(project).label,
   getProjectStatus(project).label,
   getProjectVisibility(project).label,
+  getProjectAvailability(project).label,
+  getProjectAvailability(project).labelPt,
 ].join(" ").toLowerCase();
 ---
 
@@ -85,118 +87,13 @@ const searchableText = (project: (typeof projects)[number]) => [
         <div data-i18n="p_stat_active" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Active / Maintained</div>
       </div>
       <div class="rounded-lg bg-[#0f0f0e] p-6">
-        <div class="mb-1 text-3xl font-light tracking-tight text-text">{liveProjects.length}</div>
-        <div data-i18n="p_stat_live" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Live Sites</div>
+        <div class="mb-1 text-3xl font-light tracking-tight text-text">{publicWebProjects.length}</div>
+        <div data-i18n="p_stat_live" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Public websites</div>
       </div>
       <div class="rounded-lg bg-[#0f0f0e] p-6">
         <div class="mb-1 text-3xl font-light tracking-tight text-text">{technologies}</div>
         <div data-i18n="p_stat_tech" class="text-[11px] font-medium uppercase tracking-wider text-text-3">Technologies</div>
       </div>
-    </div>
-  </section>
-
-  <section class="mx-auto max-w-[1280px] px-12 pb-18 max-md:px-6">
-    <div class="mb-7 flex items-end justify-between gap-6 max-sm:flex-col max-sm:items-start">
-      <div>
-        <h2 data-i18n="p_featured_title" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
-          Featured
-        </h2>
-        <p data-i18n="p_featured_desc" class="max-w-[560px] text-[14px] leading-relaxed text-text-2">
-          The highest-signal projects: shipped products, active systems, and work that best represents how I build.
-        </p>
-      </div>
-      <div class="font-mono text-[12px] text-text-3">{featuredProjects.length} / {projects.length}</div>
-    </div>
-
-    <div class="grid gap-4 lg:grid-cols-2">
-      {featuredProjects.map((project) => {
-        const tag = getProjectTag(project);
-        const status = getProjectStatus(project);
-        const visibility = getProjectVisibility(project);
-        return (
-          <article
-            class="rounded-lg border border-border bg-bg-card p-6"
-            data-project-card
-            data-project-featured="true"
-            data-project-search={searchableText(project)}
-            data-project-tag-value={project.tag}
-            data-project-status-value={project.status}
-            data-project-visibility-value={project.visibility}
-          >
-            <ProjectImage project={project} class="mb-5" />
-
-            <div class="mb-4 flex flex-wrap items-center gap-2">
-              <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
-                {tag.label}
-              </span>
-              <span class="text-border">/</span>
-              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-status={project.id}>
-                {status.label}
-              </span>
-              <span class="text-border">/</span>
-              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-visibility={project.id}>
-                {visibility.label}
-              </span>
-            </div>
-
-            <div class="mb-3 flex items-start justify-between gap-5">
-              <h3 class="text-xl font-medium leading-snug">{project.name}</h3>
-              <span class="shrink-0 font-mono text-[12px] text-text-3">{project.year}</span>
-            </div>
-
-            <p class="mb-5 text-[15px] leading-relaxed text-text-2" data-project-desc={project.id}>
-              {project.description}
-            </p>
-
-            {project.metrics && (
-              <div class="mb-5 flex flex-wrap gap-2">
-                {project.metrics.map((metric, metricIndex) => (
-                  <span
-                    class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3"
-                    data-project-metric={`${project.id}:${metricIndex}`}
-                  >
-                    {metric}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div class="flex flex-wrap gap-2">
-                {project.tech.map((tech) => (
-                  <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <div class="flex shrink-0 gap-3">
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target={externalTarget(project.liveUrl)}
-                    rel={externalRel(project.liveUrl)}
-                    data-i18n="p_live"
-                    class="text-sm font-medium text-accent no-underline transition-colors hover:text-text"
-                  >
-                    Live
-                  </a>
-                )}
-                {project.repoUrl && (
-                  <a
-                    href={project.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-i18n="p_source"
-                    class="text-sm font-medium text-text-2 no-underline transition-colors hover:text-text"
-                  >
-                    Source
-                  </a>
-                )}
-              </div>
-            </div>
-          </article>
-        );
-      })}
     </div>
   </section>
 
@@ -208,7 +105,7 @@ const searchableText = (project: (typeof projects)[number]) => [
             Find a Project
           </h2>
           <p data-i18n="p_filter_desc" class="mt-2 text-[13px] leading-relaxed text-text-2">
-            Search by name, technology, status, project type, or public/private visibility.
+            Search by name, technology, project type or availability. Product access and source visibility are separate.
           </p>
         </div>
         <button id="project-filter-clear" data-i18n="p_filter_clear" class="text-sm font-medium text-accent transition-colors hover:text-text">
@@ -216,7 +113,7 @@ const searchableText = (project: (typeof projects)[number]) => [
         </button>
       </div>
 
-      <div class="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
         <label class="block">
           <span data-i18n="p_filter_search" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Search</span>
           <input
@@ -246,12 +143,19 @@ const searchableText = (project: (typeof projects)[number]) => [
           </select>
         </label>
         <label class="block">
-          <span data-i18n="p_filter_visibility" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Visibility</span>
+          <span data-i18n="p_filter_visibility" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Repository</span>
           <select id="project-visibility-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text outline-none transition-colors focus:border-accent">
             <option value="" data-i18n="p_filter_all_visibility">All visibility</option>
             {Object.entries(projectVisibilities).map(([value, visibility]) => (
               <option value={value}>{visibility.label}</option>
             ))}
+          </select>
+        </label>
+        <label class="block">
+          <span data-i18n="p_filter_access" class="mb-2 block font-mono text-[11px] uppercase tracking-wider text-text-3">Access</span>
+          <select id="project-access-filter" class="w-full rounded-md border border-border bg-[#0f0f0e] px-3 py-2.5 text-sm text-text focus:border-accent">
+            <option value="" data-i18n="p_filter_all_access">All access types</option>
+            {Object.entries(projectAvailabilities).map(([value, access]) => <option value={value}>{access.label}</option>)}
           </select>
         </label>
       </div>
@@ -260,6 +164,116 @@ const searchableText = (project: (typeof projects)[number]) => [
       <p id="project-filter-empty" data-i18n="p_filter_empty" class="mt-4 hidden text-sm text-text-2">
         No projects match these filters.
       </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-[1280px] px-12 pb-18 max-md:px-6" data-project-group>
+    <div class="mb-7 flex items-end justify-between gap-6 max-sm:flex-col max-sm:items-start">
+      <div>
+        <h2 data-i18n="p_featured_title" class="mb-2 text-[11px] font-semibold uppercase tracking-[2.5px] text-text-3">
+          Featured
+        </h2>
+        <p data-i18n="p_featured_desc" class="max-w-[560px] text-[14px] leading-relaxed text-text-2">
+          A selection of games, useful tools and product studies. Each project explains what you can explore today.
+        </p>
+      </div>
+      <div class="font-mono text-[12px] text-text-3">{featuredProjects.length} / {projects.length}</div>
+    </div>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      {featuredProjects.map((project) => {
+        const tag = getProjectTag(project);
+        const status = getProjectStatus(project);
+        const visibility = getProjectVisibility(project);
+        return (
+          <article
+            class="rounded-lg border border-border bg-bg-card p-6"
+            data-project-card
+            data-project-featured="true"
+            data-project-search={searchableText(project)}
+            data-project-tag-value={project.tag}
+            data-project-status-value={project.status}
+            data-project-visibility-value={project.visibility}
+            data-project-availability-value={project.availability}
+          >
+            <ProjectImage project={project} class="mb-3" />
+            {["digipets", "the-room"].includes(project.id) && <p data-i18n="p_art" class="mb-4 text-xs text-text-2">Promotional illustration</p>}
+            <p class="mb-4 text-xs font-medium text-accent" data-project-access={project.id}>{getProjectAvailability(project).label}</p>
+
+            <div class="mb-4 flex flex-wrap items-center gap-2">
+              <span class={`text-[11px] font-medium uppercase tracking-wider ${tag.colorClass}`} data-project-tag={project.id}>
+                {tag.label}
+              </span>
+              <span class="text-border">/</span>
+              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-status={project.id}>
+                {status.label}
+              </span>
+              <span class="text-border">/</span>
+              <span class="text-[11px] font-medium uppercase tracking-wider text-text-3" data-project-visibility={project.id}>
+                {visibility.label}
+              </span>
+            </div>
+
+            <div class="mb-3 flex items-start justify-between gap-5">
+              <h3 class="text-xl font-medium leading-snug">{project.name}</h3>
+              <span class="shrink-0 font-mono text-[12px] text-text-3">{project.year}</span>
+            </div>
+
+            <p class="mb-5 text-[15px] leading-relaxed text-text-2" data-project-desc={project.id}>
+              {project.description}
+            </p>
+
+            {project.latestMilestone && <p class="mb-5 border-l-2 border-accent/40 pl-3 text-sm leading-relaxed text-text-2" data-project-milestone={project.id}>{project.latestMilestone}</p>}
+            {project.metrics && (
+              <div class="mb-5 flex flex-wrap gap-2">
+                {project.metrics.map((metric, metricIndex) => (
+                  <span
+                    class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3"
+                    data-project-metric={`${project.id}:${metricIndex}`}
+                  >
+                    {metric}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap gap-2">
+                {project.tech.map((tech) => (
+                  <span class="rounded bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-text-3">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              <div class="flex shrink-0 gap-3">
+                {project.detailSlug && <a href={`/projects/${project.detailSlug}/`} data-i18n="p_details" class="text-sm font-medium text-accent">Project story</a>}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target={externalTarget(project.liveUrl)}
+                    rel={externalRel(project.liveUrl)}
+                    data-project-visit={project.id}
+                    class="text-sm font-medium text-accent no-underline transition-colors hover:text-text"
+                  >
+                    {project.availability === "demo" ? "Open demo" : project.availability === "restricted" ? "Restricted site" : "Visit"}
+                  </a>
+                )}
+                {project.repoUrl && (
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-i18n="p_source"
+                    class="text-sm font-medium text-text-2 no-underline transition-colors hover:text-text"
+                  >
+                    Source
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </section>
 
@@ -297,6 +311,7 @@ const searchableText = (project: (typeof projects)[number]) => [
                   data-project-tag-value={project.tag}
                   data-project-status-value={project.status}
                   data-project-visibility-value={project.visibility}
+                  data-project-availability-value={project.availability}
                 >
                   <ProjectImage project={project} compact class="md:row-span-3 lg:row-span-1" />
 
@@ -312,10 +327,11 @@ const searchableText = (project: (typeof projects)[number]) => [
                         {visibility.label}
                       </span>
                     </div>
-                    <h4 class="truncate text-[17px] font-medium leading-snug">{project.name}</h4>
+                    <h4 class="text-[17px] font-medium leading-snug">{project.name}</h4>
+                    <p class="mt-2 text-xs text-accent" data-project-access={project.id}>{getProjectAvailability(project).label}</p>
                   </div>
 
-                  <p class="min-w-0 truncate text-[14px] leading-relaxed text-text-2" data-project-desc={project.id}>
+                  <p class="min-w-0 text-[14px] leading-relaxed text-text-2" data-project-desc={project.id}>
                     {project.description}
                   </p>
 
@@ -328,15 +344,16 @@ const searchableText = (project: (typeof projects)[number]) => [
                   </div>
 
                   <div class="flex shrink-0 gap-3 md:justify-end">
+                    {project.detailSlug && <a href={`/projects/${project.detailSlug}/`} data-i18n="p_details" class="text-sm font-medium text-accent">Project story</a>}
                     {project.liveUrl && (
                       <a
                         href={project.liveUrl}
                         target={externalTarget(project.liveUrl)}
                         rel={externalRel(project.liveUrl)}
-                        data-i18n="p_live"
+                        data-project-visit={project.id}
                         class="text-sm font-medium text-accent no-underline transition-colors hover:text-text"
                       >
-                        Live
+                        {project.availability === "demo" ? "Open demo" : project.availability === "restricted" ? "Restricted site" : "Visit"}
                       </a>
                     )}
                     {project.repoUrl && (
@@ -365,21 +382,25 @@ const searchableText = (project: (typeof projects)[number]) => [
 
 <script>
   import { applyI18n } from '../i18n/shared';
-  import { projectStatuses, projectTags, projectVisibilities, projects } from '../data/projects';
+  import { projectStatuses, projectTags, projectVisibilities, projectAvailabilities, getProjectAvailability, projects } from '../data/projects';
 
   const desktopApps = projects.filter((project) => project.tag === 'desktop-app').length;
 
   const lang = applyI18n({
     en: {
+      p_art: 'Promotional illustration',
+      p_details: 'Project story',
+      p_filter_access: 'Access',
+      p_filter_all_access: 'All access types',
       p_label: 'Projects',
       p_title: 'Things I\'ve built',
       p_subtitle: 'A curated map of the systems, games, utilities, and experiments I keep shaping: live products first, then the useful internal machinery behind them.',
       p_stat_total: 'Total Projects',
       p_stat_active: 'Active / Maintained',
-      p_stat_live: 'Live Sites',
+      p_stat_live: 'Public websites',
       p_stat_tech: 'Technologies',
       p_filter_title: 'Find a Project',
-      p_filter_desc: 'Search by name, technology, status, project type, or public/private visibility.',
+      p_filter_desc: 'Search by name, technology, project type or availability. Product access and source visibility are separate.',
       p_filter_clear: 'Clear filters',
       p_filter_search: 'Search',
       p_filter_search_placeholder: 'Try Firebase, AI, games, automation...',
@@ -387,26 +408,30 @@ const searchableText = (project: (typeof projects)[number]) => [
       p_filter_all_types: 'All types',
       p_filter_status: 'Status',
       p_filter_all_statuses: 'All statuses',
-      p_filter_visibility: 'Visibility',
+      p_filter_visibility: 'Repository',
       p_filter_all_visibility: 'All visibility',
       p_filter_empty: 'No projects match these filters.',
       p_featured_title: 'Featured',
-      p_featured_desc: 'The highest-signal projects: shipped products, active systems, and work that best represents how I build.',
+      p_featured_desc: 'A selection of games, useful tools and product studies. Each project explains what you can explore today.',
       p_all_title: 'By Status',
       p_desktop_note: `${desktopApps} desktop apps in the mix`,
       p_live: 'Live',
       p_source: 'Source',
     },
     pt: {
+      p_art: 'Arte promocional',
+      p_details: 'Conhecer o projeto',
+      p_filter_access: 'Acesso',
+      p_filter_all_access: 'Todos os acessos',
       p_label: 'Projetos',
       p_title: 'Coisas que construí',
       p_subtitle: 'Um mapa curado dos sistemas, jogos, utilitários e experimentos que continuo moldando: produtos online primeiro, depois a maquinaria interna útil por trás deles.',
       p_stat_total: 'Projetos no Total',
       p_stat_active: 'Ativos / Mantidos',
-      p_stat_live: 'Sites Online',
+      p_stat_live: 'Sites públicos',
       p_stat_tech: 'Tecnologias',
       p_filter_title: 'Encontrar Projeto',
-      p_filter_desc: 'Busque por nome, tecnologia, status, tipo de projeto ou visibilidade pública/privada.',
+      p_filter_desc: 'Busque por nome, tecnologia, tipo ou disponibilidade. Acesso ao produto e visibilidade do código são separados.',
       p_filter_clear: 'Limpar filtros',
       p_filter_search: 'Busca',
       p_filter_search_placeholder: 'Tente Firebase, IA, jogos, automação...',
@@ -414,11 +439,11 @@ const searchableText = (project: (typeof projects)[number]) => [
       p_filter_all_types: 'Todos os tipos',
       p_filter_status: 'Status',
       p_filter_all_statuses: 'Todos os status',
-      p_filter_visibility: 'Visibilidade',
+      p_filter_visibility: 'Repositório',
       p_filter_all_visibility: 'Todas as visibilidades',
       p_filter_empty: 'Nenhum projeto combina com estes filtros.',
       p_featured_title: 'Destaques',
-      p_featured_desc: 'Os projetos de maior sinal: produtos publicados, sistemas ativos e trabalhos que melhor representam como eu construo.',
+      p_featured_desc: 'Uma seleção de jogos, ferramentas úteis e estudos de produto. Cada projeto explica o que você pode conhecer hoje.',
       p_all_title: 'Por Status',
       p_desktop_note: `${desktopApps} apps desktop na mistura`,
       p_live: 'Online',
@@ -426,7 +451,24 @@ const searchableText = (project: (typeof projects)[number]) => [
     },
   });
 
+  document.querySelectorAll<HTMLElement>('[data-project-access]').forEach(el => {
+    const project = projects.find(p => p.id === el.dataset.projectAccess);
+    if (project) el.textContent = lang === 'pt' ? getProjectAvailability(project).labelPt : getProjectAvailability(project).label;
+  });
+  document.querySelectorAll<HTMLElement>('[data-project-milestone]').forEach(el => {
+    const project = projects.find(p => p.id === el.dataset.projectMilestone);
+    if (project) el.textContent = (lang === 'pt' ? project.latestMilestonePt : project.latestMilestone) || '';
+  });
+  document.querySelectorAll<HTMLElement>('[data-project-visit]').forEach(el => {
+    const project = projects.find(p => p.id === el.dataset.projectVisit);
+    const demo = project?.availability === 'demo';
+    const restricted = project?.availability === 'restricted';
+    el.textContent = lang === 'pt' ? (demo ? 'Abrir demo' : restricted ? 'Acesso restrito' : 'Visitar') : (demo ? 'Open demo' : restricted ? 'Restricted site' : 'Visit');
+  });
   if (lang === 'pt') {
+    document.querySelectorAll<HTMLOptionElement>('#project-access-filter option[value]').forEach(option => {
+      if (option.value in projectAvailabilities) option.textContent = projectAvailabilities[option.value as keyof typeof projectAvailabilities].labelPt;
+    });
     document.querySelectorAll('[data-project-desc]').forEach((el) => {
       const project = projects.find((item) => item.id === el.getAttribute('data-project-desc'));
       if (project) el.textContent = project.descriptionPt;
@@ -482,6 +524,7 @@ const searchableText = (project: (typeof projects)[number]) => [
   const tag = document.getElementById('project-tag-filter') as HTMLSelectElement | null;
   const status = document.getElementById('project-status-filter') as HTMLSelectElement | null;
   const visibility = document.getElementById('project-visibility-filter') as HTMLSelectElement | null;
+  const access = document.getElementById('project-access-filter') as HTMLSelectElement | null;
   const clear = document.getElementById('project-filter-clear');
   const count = document.getElementById('project-filter-count');
   const empty = document.getElementById('project-filter-empty');
@@ -492,6 +535,7 @@ const searchableText = (project: (typeof projects)[number]) => [
     const query = search?.value.trim().toLowerCase() ?? '';
     const tagValue = tag?.value ?? '';
     const statusValue = status?.value ?? '';
+    const accessValue = access?.value ?? '';
     const visibilityValue = visibility?.value ?? '';
     let visibleProjects = 0;
 
@@ -500,7 +544,8 @@ const searchableText = (project: (typeof projects)[number]) => [
         (!query || (card.dataset.projectSearch ?? '').includes(query)) &&
         (!tagValue || card.dataset.projectTagValue === tagValue) &&
         (!statusValue || card.dataset.projectStatusValue === statusValue) &&
-        (!visibilityValue || card.dataset.projectVisibilityValue === visibilityValue);
+        (!visibilityValue || card.dataset.projectVisibilityValue === visibilityValue) &&
+        (!accessValue || card.dataset.projectAvailabilityValue === accessValue);
 
       card.hidden = !matches;
       if (matches) visibleProjects += 1;
@@ -520,7 +565,7 @@ const searchableText = (project: (typeof projects)[number]) => [
     empty?.classList.toggle('hidden', visibleProjects !== 0);
   }
 
-  [search, tag, status, visibility].forEach((control) => {
+  [search, tag, status, visibility, access].forEach((control) => {
     control?.addEventListener('input', updateProjectFilters);
     control?.addEventListener('change', updateProjectFilters);
   });
@@ -530,6 +575,7 @@ const searchableText = (project: (typeof projects)[number]) => [
     if (tag) tag.value = '';
     if (status) status.value = '';
     if (visibility) visibility.value = '';
+    if (access) access.value = '';
     updateProjectFilters();
   });
 

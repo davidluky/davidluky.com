@@ -2,6 +2,37 @@
 
 Chronological log of the portfolio quality pass. Newest session appended at top of each section.
 
+## 2026-10-15 — Project catalog, stories and refreshed media
+
+Prepared from published main `7a23b7f` in the existing isolated checkout,
+preserving the original checkout's unrelated changes. Reconciled all 30 old
+cards, added four projects, and introduced explicit access/release states,
+six illustrated home highlights and bilingual DigiPets/The Room/PosOp stories.
+Nine optimized images total 805,768 bytes. Generated covers are labelled as
+promotional illustrations; actual DigiPets captures disclose synthetic demo
+progress. The current privacy policy and Worker/access controls are preserved.
+
+The public Google Play page now identifies DigiPets 0.1.150 (checked 15/10),
+superseding the earlier pending-review note only for nominal public availability.
+Build-code rollout and installed devices were not verified. The Room's new
+campaign/market and PosOp's clinical pilot remain explicitly future work.
+
+The release gate exposed an unpatched legacy lint dependency chain. Migrated
+to the supported ESLint 10/Astro 3 accessibility presets and pinned Node 24.22.0
+without weakening the rules. Fresh install and full `npm run verify` passed:
+36 Astro files with zero diagnostics, zero lint warnings, 72 tests, 10 built
+pages, site validation and zero audit findings. Desktop 1280x900 and phone
+390x844 review passed in EN/PT, including filters, empty search, canonical/social
+metadata, illustration captions, actual app gallery, menu and project anchor;
+no horizontal overflow or console warnings/errors were observed.
+
+Candidate evidence and publication readback are recorded once in the canonical
+workspace execution receipt: `_ops/docs/websites-update-2026-10-15/EXECUTION.md`.
+Editorial facts and media sources are maintained in
+[the catalog guide](docs/CATALOG-EDITORIAL-GUIDE.md) and
+[media record](docs/PROJECT-MEDIA.md). This entry records local readiness;
+provider/live confirmation must be added from the completed release receipt.
+
 ## 2026-09-12 — The Room native v1.85 catalog release
 
 Prepared in an isolated canonical main clone from `fc9039e`, preserving the

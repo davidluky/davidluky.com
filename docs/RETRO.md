@@ -1,5 +1,19 @@
 # Retro
 
+## 2026-10-15 — Publish evidence, not development status
+
+A source repository, a store submission and a public product have different
+states. Live Google Play evidence advanced DigiPets beyond its earlier handoff,
+while the new Room campaign and PosOp pilot still could not be announced as
+available. Separate access from source visibility so a private repository does
+not hide a public product, and a demo is not counted as a production service.
+
+Keep generated artwork visibly labelled and pair it with sourced screenshots.
+Small WebP derivatives refreshed the presentation without replacing original
+masters. The dependency gate also caught a stale lint chain: removing the old
+plugin dependency required a compatible runtime and accessibility preset,
+not an audit suppression. Verify that combination before pushing to CI.
+
 ## 2026-09-12 — The Room native v1.85 catalog release
 
 Use a clean clone of current main when the original checkout is behind and

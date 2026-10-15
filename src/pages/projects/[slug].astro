@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Copy from '../../components/LocalizedCopy.astro';
+import { projectStories } from '../../data/project-stories';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projectStories.map(story => ({ params: { slug: story.id }, props: { story } }));
+}
+const { story } = Astro.props;
+const project = projects.find(p => p.id === story.id)!;
+const structuredData = {
+  '@context': 'https://schema.org', '@type': 'CreativeWork',
+  name: project.name, description: story.intro.en,
+  url: `https://davidluky.com/projects/${story.id}/`,
+  image: `https://davidluky.com${story.cover}`,
+  inLanguage: ['en', 'pt'], author: { '@type': 'Person', name: 'David Luky' },
+};
+---
+<Base title={`${project.name} — David Luky`} description={story.intro.en} structuredData={structuredData} image={story.cover} imageAlt={story.coverAlt.en} imageHeight={675}>
+  <Header currentPath="/projects" />
+  <article class="mx-auto max-w-[1280px] px-12 pt-16 pb-24 max-md:px-6 max-md:pt-10">
+    <a href="/projects" data-i18n="story_back" class="text-sm text-text-2 hover:text-accent">← All projects</a>
+    <div class="mt-12 grid items-end gap-8 lg:grid-cols-[1.25fr_1fr]">
+      <div>
+        <p class="mb-5 text-xs font-semibold uppercase tracking-[2px] text-accent"><Copy text={story.eyebrow} /></p>
+        <p class="mb-3 font-mono text-sm text-text-2">{project.name}</p>
+        <h1 class="max-w-[760px] text-5xl font-light leading-[1.12] tracking-tight max-md:text-4xl"><Copy text={story.headline} /></h1>
+      </div>
+      <div>
+        <p class="text-lg leading-relaxed text-text-2"><Copy text={story.intro} /></p>
+        <div class="mt-6 flex flex-wrap items-center gap-5">
+          {story.links.map((link, i) => <a href={link.href} class:list={[i === 0 ? 'rounded-md bg-accent px-5 py-3 font-medium text-bg hover:opacity-90' : 'text-accent hover:text-text', 'text-sm no-underline']}><Copy text={link.text} /></a>)}
+        </div>
+      </div>
+    </div>
+    <figure class="mt-12">
+      <img src={story.cover} width="1200" height="675" alt={story.coverAlt.en} data-alt-en={story.coverAlt.en} data-alt-pt={story.coverAlt.pt} class="aspect-video w-full rounded-xl border border-border object-cover" fetchpriority="high" decoding="async" />
+      <figcaption class="mt-3 text-xs leading-relaxed text-text-2"><Copy text={story.caption} /></figcaption>
+    </figure>
+    <div class="mt-16 grid gap-8 md:grid-cols-3">
+      {story.features.map((feature, i) => <section class="border-t border-border pt-5">
+        <p class="mb-6 font-mono text-xs text-accent">0{i+1}</p>
+        <h2 class="mb-3 text-xl font-medium"><Copy text={feature.title} /></h2>
+        <p class="text-base leading-relaxed text-text-2"><Copy text={feature.body} /></p>
+      </section>)}
+    </div>
+    {story.gallery.length > 0 && <section class="mt-20">
+      <h2 data-i18n="story_screens" class="mb-8 text-2xl font-light">A look inside</h2>
+      <div class="grid grid-cols-3 gap-5 max-sm:grid-cols-1">
+        {story.gallery.map(item => <figure class="mx-auto w-full max-w-[280px]">
+          <img src={item.src} width="540" height="1200" loading="lazy" decoding="async" alt={item.alt.en} data-alt-en={item.alt.en} data-alt-pt={item.alt.pt} class="w-full rounded-2xl border border-border" />
+          <figcaption class="mt-4 text-sm text-text-2"><Copy text={item.title} /></figcaption>
+        </figure>)}
+      </div>
+      <p class="mt-6 max-w-[800px] text-xs leading-relaxed text-text-2"><Copy text={story.galleryCaption} /></p>
+    </section>}
+    <section class="mt-20 grid gap-8 rounded-xl border border-border bg-bg-card p-8 md:grid-cols-2 max-sm:p-5">
+      <div>
+        <p data-i18n="story_today" class="mb-3 text-xs uppercase tracking-wider text-accent">Available today</p>
+        <h2 class="mb-3 text-xl"><Copy text={story.statusTitle} /></h2>
+        <p class="text-sm leading-relaxed text-text-2"><Copy text={story.statusBody} /></p>
+      </div>
+      <div>
+        <p data-i18n="story_next" class="mb-3 text-xs uppercase tracking-wider text-accent">What comes next</p>
+        <p class="text-sm leading-relaxed text-text-2"><Copy text={story.next} /></p>
+        <p class="mt-4 text-xs text-text-2"><span data-i18n="story_reviewed">Information reviewed:</span> <time datetime="2026-10-15">2026-10-15</time></p>
+      </div>
+    </section>
+  </article>
+  <Footer />
+</Base>
+<script>
+  import { applyI18n } from '../../i18n/shared';
+  const lang = applyI18n({
+    en: { story_back: '← All projects', story_screens: 'A look inside', story_today: 'Available today', story_next: 'What comes next', story_reviewed: 'Information reviewed:' },
+    pt: { story_back: '← Todos os projetos', story_screens: 'Por dentro do app', story_today: 'Disponível hoje', story_next: 'Próximos passos', story_reviewed: 'Informações revisadas em:' },
+  });
+  document.querySelectorAll<HTMLElement>('[data-copy-en]').forEach(el => { el.textContent = (lang === 'pt' ? el.dataset.copyPt : el.dataset.copyEn) || ''; });
+  document.querySelectorAll<HTMLImageElement>('[data-alt-en]').forEach(el => { el.alt = (lang === 'pt' ? el.dataset.altPt : el.dataset.altEn) || el.alt; });
+</script>

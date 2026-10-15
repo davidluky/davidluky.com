@@ -14,6 +14,12 @@ masters. The dependency gate also caught a stale lint chain: removing the old
 plugin dependency required a compatible runtime and accessibility preset,
 not an audit suppression. Verify that combination before pushing to CI.
 
+Provider success preceded consistent public reads by a short propagation
+interval. Preserve the first observation, compare again before redeploying,
+and normalize only differences actually identified: the injected analytics
+script/newline and Windows-versus-Linux text line endings. A safe 503 from an
+unconfigured integration must remain an explicit limitation, not a success claim.
+
 ## 2026-09-12 — The Room native v1.85 catalog release
 
 Use a clean clone of current main when the original checkout is behind and

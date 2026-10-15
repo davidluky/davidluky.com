@@ -2,9 +2,9 @@
 
 Last updated: 2026-10-15
 
-## 2026-10-15 — Catalog and visual refresh candidate
+## 2026-10-15 — Catalog and visual refresh published
 
-Current candidate: 34 cards (all 30 original IDs retained), six featured
+Published source `e200e06`: 34 cards (all 30 original IDs retained), six featured
 projects, nine optimized images and `/projects/digipets/`, `/projects/the-room/`,
 `/projects/posop/`. EN/PT access labels and filters distinguish public, demo,
 restricted and internal work. Home counts nine public websites; mobile store
@@ -15,8 +15,12 @@ limits are linked by the newest [flight recorder](../FLIGHT_RECORDER.md) entry.
 Use Node 24.22.0 (`.node-version`) or a compatible engine from `package.json`.
 The original checkout's WIP is untouched. Normal publication remains a clean
 reviewed push to main through Cloudflare Workers Builds, followed by public
-byte comparison and anonymous route checks. Follow the workspace execution
-receipt for the actual provider result; readiness is not a deployment receipt.
+comparison and anonymous route checks. Build `a104f589-aa53-491f-be2f-ac9f627f90d6`
+succeeded; six pages and 23 assets match, with only observed provider analytics
+and text line-ending normalization. Matheus remains protected. eBay's missing
+bindings are a known pre-existing limitation; its callback is not operational.
+Exact provider version, rollback and verification limits are in the recorder
+and workspace execution receipt. Closing documentation changes no site assets.
 
 Next editorial triggers: actual new Room campaign activation, PosOp pilot,
 DigiPets store/build confirmation when needed, and physical chess-set acceptance.

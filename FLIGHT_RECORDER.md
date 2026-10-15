@@ -31,7 +31,28 @@ workspace execution receipt: `_ops/docs/websites-update-2026-10-15/EXECUTION.md`
 Editorial facts and media sources are maintained in
 [the catalog guide](docs/CATALOG-EDITORIAL-GUIDE.md) and
 [media record](docs/PROJECT-MEDIA.md). This entry records local readiness;
-provider/live confirmation must be added from the completed release receipt.
+provider/live confirmation follows below.
+
+Published source `e200e0660f546eb6bc0f4894c0eb307034fd2fb7` through Workers
+Build `a104f589-aa53-491f-be2f-ac9f627f90d6`, completed successfully at
+2026-10-15 20:58:38 UTC. Worker version `c5787dca-4896-4eba-b787-7eeaec48343e`
+was deployed at 20:58:33 UTC. The known rollback version is
+`6be07f09-8507-437c-997a-f57501e64e23`.
+
+Public readback passed for six pages, 23 referenced assets and an unknown-route
+404. HTML matches after removal of the observed Cloudflare analytics script
+and its inserted newline, plus CRLF normalization. Binary assets match exactly;
+the favicon's sole difference is CRLF versus LF. The first read briefly saw
+mixed old/new assets during propagation; a later read passed without redeploy.
+The live PT home and its six loaded images were also reviewed in the browser.
+
+Anonymous Matheus pages and protected image still redirect to login with
+private cache/noindex headers; the login and legacy redirect work. eBay rejects
+OPTIONS with 405 and remains unavailable with 503: the three required bindings
+were absent in the July record and are still absent in a names-only provider
+read. This pre-existing integration limit was not changed by this release.
+No login, notification, secret/config mutation or backend activation occurred.
+The closing documentation changes no product source or generated assets.
 
 ## 2026-09-12 — The Room native v1.85 catalog release
 

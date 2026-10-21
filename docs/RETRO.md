@@ -1,5 +1,13 @@
 # Retro
 
+## 2026-10-02 — Reconcile facts and preserve divergent work
+
+A stale, dirty primary checkout is not a safe release base. Build from fresh remote main in an isolated registered worktree, preserve the original changes and leave an explicit handoff. Describe visitor-visible capabilities with current evidence; checklist percentage, simulation outcomes and unpublished security work need their actual limits in both languages.
+
+## 2026-09-12 — Astra instruction optimization
+
+Keep domain invariants in the canonical entrypoint and load detailed maps/history only for the relevant task. Verify actual Codex discovery after editing configuration; file presence alone does not establish loaded guidance. This documentation-only pass used link/config/skill checks rather than unrelated product suites. [Workspace audit and receipts](../../../_ops/docs/CODEX-ASTRA-AUDIT-2026-09-12.md).
+
 ## 2026-10-15 — Publish evidence, not development status
 
 A source repository, a store submission and a public product have different

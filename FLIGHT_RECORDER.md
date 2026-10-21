@@ -2,6 +2,28 @@
 
 Chronological log of the portfolio quality pass. Newest session appended at top of each section.
 
+## 2026-10-21 — alisson2, Terraria ClaudeBuilder and flash cards in the catalog
+
+David noticed alisson2.davidluky.com was missing from the portfolio. Swept every
+live *.davidluky.com host (all 11 answer; matheus redirects to its gate) and the
+workspace projects against `projects.ts`: alisson2 was the only live site absent.
+Added it as a public design preview (cover is a 1200x675 capture of the live
+home), plus two internal projects not yet listed: Terraria ClaudeBuilder and
+Vocabulary Flash Cards. Built from fresh origin/main in an isolated worktree;
+`npm run verify` passed. The two local-only Codex entries below (2026-10-02 and
+2026-09-12) were carried over from the stale primary checkout so it can be
+fast-forwarded without losing them.
+
+## 2026-10-02 — Portfolio reconciled and published from isolated main
+
+- Refreshed EN/PT catalog claims for Matemática (281 audited lists and MMC/MDC animation), Mega Man X (cartridge-code translation and checklist limits), Vida (seven origins and decision stops), Alisson's writing archive, Frank's two stories and the Room Web release hold. Patched compatible dependencies; full verify passed 70 tests, build/validator and audit zero.
+- The primary checkout is divergent and contains unrelated work. Used registered worktree `_codex_tmp/websites-20261002-hub`, branch `update/websites-20261002`, based on fresh origin/main; pushed `7a23b7f` to main. Cloudflare Workers Build `e314bf05-9370-452c-a3a8-f80f84fc76d3` succeeded. Live PT/EN desktop/mobile copy verified; Matheus still redirects anonymous visits to /entrar/.
+- Primary checkout source/WIP was not merged or reset. These local canonical records point to the released worktree. [Verification log](../../_codex_tmp/websites-20261002/hub-verify.log), [public routes/assets](../../_codex_tmp/websites-20261002/final-live-check.json). Authentication/transaction flows were outside this public check.
+
+## 2026-09-12 — Astra instruction optimization
+
+Optimized agent instruction routing under the user-approved workspace audit. Canonical rules and task-specific references replace duplicate/bulky startup guidance; existing product safeguards and unrelated WIP are preserved. Instruction/skill/config validation passed; no product code, live service or release was exercised. [Workspace audit and receipts](../../_ops/docs/CODEX-ASTRA-AUDIT-2026-09-12.md).
+
 ## 2026-10-15 — Project catalog, stories and refreshed media
 
 Prepared from published main `7a23b7f` in the existing isolated checkout,
